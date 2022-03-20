@@ -1,0 +1,65 @@
+<section class="main pb-5">
+  <div class="section-heading">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <div class="d-flex">
+          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" [routerLink]="['/page/home/category/5']" routerLinkActive="router-link-active">
+          <h4>
+            Maintenance visit
+          </h4>
+        </div>
+      </div>
+      <div>
+        <img src="assets/img/icons/search-icon.svg" alt="back" [routerLink]="['/page/search']" routerLinkActive="router-link-active">
+      </div>
+    </div>
+  </div>
+
+  <div class="c-tabs">
+    <div class="item " [class.active]="step == 1" (click)="step = 1">
+      <div class="d-flex align-items-center justify-content-center ">
+        <p>
+          Pending
+        </p>
+        <span class="badge ms-2">3</span>
+      </div>
+    </div>
+    <div class="item " [class.active]="step == 2" (click)="step = 2">
+      <div class="d-flex align-items-center justify-content-center">
+        <p>
+          Completed
+        </p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="step == 1" [@slideInOut1]>
+    <app-pending></app-pending>
+  </div>
+  <div *ngIf="step == 2" [@slideInOut2]>
+    <app-completed></app-completed>
+  </div>
+  <div class="fixed-btn" data-bs-toggle="modal" data-bs-target="#newModal">
+    <img src="assets/img/icons/add.svg" alt="add">
+  </div>
+</section>
+
+<div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-center p-2 ">
+        <h5 class="modal-title" id="deleteLabel">Start new form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating ">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Name">
+          <label for="floatingInput"> Form name</label>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+          <button type="button" class="btn btn-primary w-100 mt-4 ms-2">Start</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

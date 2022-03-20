@@ -1,0 +1,29 @@
+<section class="main">
+  <div class="section-heading">
+    <div class="d-flex">
+      <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" [routerLink]="['/page/home']" routerLinkActive="router-link-active">
+      <h4>
+        Category name
+      </h4>
+    </div>
+  </div>
+
+  <div class="content px-3 py-4">
+    <div class="mb-3" *ngFor="let item of items">
+      <div class="white-box" [routerLink]="['/page/visits']" routerLinkActive="router-link-active">
+        <div class="box-content">
+          <h5 class="font-14">
+            Maintenance visit form
+          </h5>
+        </div>
+        <div class="box-side">
+          <div class="d-flex align-items-center">
+            <p class="badge me-2">3</p>
+            <img src="assets/img/icons/add-button.svg" alt="open">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

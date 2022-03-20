@@ -1,0 +1,62 @@
+<div class="content px-3 py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3 filter">
+    <p>
+      Completed forms
+    </p>
+    <div data-bs-toggle="modal" data-bs-target="#filter">
+      <span>List filter</span>
+      <img src="assets/img/icons/filter.svg" alt="filter" class="ms-2">
+    </div>
+  </div>
+  <div class="mb-3" *ngFor="let item of items">
+    <div class="white-box py-2">
+      <div class="box-content">
+        <p class="number">
+          #2342
+        </p>
+        <h5 class="font-14">
+          Maintenance visit form
+        </h5>
+        <p class="date">27 March 2021</p>
+      </div>
+      <div class="box-side">
+        <div class="d-flex align-items-center">
+          <p class="badge me-2">Completed</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="filter" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-center p-2 ">
+        <h5 class="modal-title" id="filterLabel">Pending forms Filter</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <h6>
+          Filter by date range
+        </h6>
+
+        <div class="d-flex justify-content-between align-items-center  mb-3 mt-3">
+          <div class="form-floating me-2 w-100">
+            <input type="date" class="form-control " id="From" placeholder="">
+            <label for="From">From</label>
+          </div>
+          <div class="form-floating ms-2 w-100">
+            <input type="date" class="form-control " id="to" placeholder="">
+            <label for="to">To</label>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary w-100 mt-4">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>

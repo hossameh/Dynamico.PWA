@@ -1,0 +1,37 @@
+@import "style.scss";
+.box {
+  padding: 16px 30px 16px 16px;
+  background-color: #fff;
+  margin-bottom: 15px;
+  border: 1px solid #efefef;
+  border-radius: 12px;
+  position: relative;
+  font-size: 14px;
+  color: #000;
+  opacity: 0.6;
+  p {
+    font-weight: 500;
+    font-family: "avenir-medium";
+
+  }
+
+  &.unread {
+    box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
+    opacity: 1;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      background-color: $second;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      right: 8px;
+    }
+    p {
+      b {
+        font-family: "avenir-black";
+      }
+    }
+  }
+}

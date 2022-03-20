@@ -1,0 +1,46 @@
+@import 'style.scss';
+nav{
+  background-color: #fff;
+  border-radius: 20px 20px 0 0 ;
+  padding: 23px;
+  box-shadow: 0 5px 20px 0px rgba($color: #000000, $alpha: 0.05);
+  color: #000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ul{
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 10px;
+    li{
+      position: relative;
+      a{
+        .dots{
+          position: absolute;
+          top: -15px;
+          background-color: $second;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          left: 8px;
+        }
+        img{
+          filter: contrast(0.2);
+          transition: all 0.3s ease-in-out;
+        }
+        &.active{
+          img{
+            filter: unset;
+          }
+        }
+      }
+    }
+  }
+}

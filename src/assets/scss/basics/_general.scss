@@ -1,0 +1,250 @@
+a {
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: unset;
+}
+.dropdown-item {
+  img {
+    margin-inline-start: 20px;
+  }
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.form-control {
+  color: $text !important;
+  border-radius: 10px;
+  // border: 1px solid #d3d3d3;
+}
+
+.form-floating {
+  label {
+    color: #707070;
+    font-weight: 500;
+  }
+}
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+  font-weight: 900;
+}
+
+.btn {
+  border-radius: 5px;
+}
+.has-icon {
+  position: relative;
+  .form-control {
+    padding-right: calc(1.5em + 0.75rem);
+  }
+  .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+  }
+}
+
+.form-help {
+  padding: 8px;
+  color: $text;
+  border-radius: 5px;
+  background-color: #6eeac9;
+  font-size: 12px;
+  text-align: left;
+}
+
+.section-heading {
+  background-color: #fafdfe;
+  border-radius: 0 0 20px 20px;
+  padding: 25px;
+  box-shadow: 0 5px 20px 0px rgba($color: #000000, $alpha: 0.05);
+  color: #000;
+  h4 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+  }
+}
+
+.main {
+  padding-bottom: 95px;
+}
+
+.white-box {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px 15px;
+  box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .box-side {
+    .badge {
+      background-color: $second;
+      border-radius: 55px;
+      min-width: 30px;
+      min-height: 20px;
+      line-height: 20px;
+      padding: 0 10px;
+    }
+  }
+}
+
+.dropdown-menu {
+  box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
+  border: unset;
+  border-radius: 10px;
+  min-width: 8rem !important;
+}
+
+.box-content {
+  .number {
+    font-size: 12px;
+    color: #848484;
+  }
+  .date {
+    font-size: 10px;
+    color: #848484;
+  }
+}
+
+.fixed-btn {
+  position: fixed;
+  bottom: 0px;
+  right: 10px;
+  transition: all 0.3s ease-in-out;
+}
+.c-tabs {
+  border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  .item {
+    text-align: center;
+    width: 50%;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    opacity: 0.4;
+    &:after {
+      transition: all 0.3s ease-in-out;
+      content: "";
+      position: absolute;
+      height: 3px;
+      border-radius: 30px;
+      width: 100%;
+      bottom: -18px;
+      left: 0;
+    }
+    &.active {
+      opacity: 1;
+
+      &:after {
+        background-color: $main;
+      }
+    }
+    .badge {
+      background-color: $second;
+      border-radius: 55px;
+      min-width: 30px;
+      min-height: 20px;
+      line-height: 20px;
+      padding: 0 10px;
+    }
+    &:first-child {
+      border-right: 2px solid rgba($color: #000000, $alpha: 0.1);
+    }
+  }
+}
+.filter {
+  p {
+    color: #000000;
+    font-size: 16px;
+  }
+  span {
+    color: #848484;
+    font-size: 12px;
+  }
+}
+.modal-content {
+  border-radius: 15px;
+}
+.modal-header {
+  justify-content: center;
+  position: relative;
+  border: unset;
+  h5 {
+    font-size: 16px;
+  }
+  .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transform: scale(0.8);
+  }
+}
+
+.modal-body {
+  h6 {
+    font-size: 16px;
+  }
+}
+
+input::-webkit-datetime-edit {
+  font-size: 12px;
+}
+input[type="date" i]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  opacity: 0;
+}
+
+.logo {
+  img {
+    max-height: 110px;
+  }
+}
+.form-control.no-shadow{
+  transition: all 0.3s ease-in-out;
+  &:focus{
+    box-shadow: unset ;
+    border-color: #ced4da;
+    padding-inline-start: 45px;
+  }
+
+}
+.form-control::placeholder {
+  color: #766861;
+  opacity: 0.5;
+}
+.form-check-input:focus {
+  box-shadow: unset;
+}

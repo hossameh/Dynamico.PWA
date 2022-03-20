@@ -1,0 +1,4 @@
+<svg id="arrow-left-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="Rectangle_49" data-name="Rectangle 49" width="24" height="24" fill="none"/>
+  <path id="arrow-left" d="M3.414,7.657l3.95,3.95A1,1,0,0,1,5.95,13.02L.293,7.364a1,1,0,0,1,0-1.414L5.95.293A1,1,0,1,1,7.364,1.707l-3.95,3.95H13a1,1,0,0,1,0,2Z" transform="translate(5.001 5)"/>
+</svg>

@@ -1,0 +1,27 @@
+.label {
+  font-size: 12px;
+  color: #707070;
+  text-transform: uppercase;
+}
+.data {
+  font-size: 14px;
+  color: #3e3e3e;
+}
+.control {
+  h6 {
+    font-size: 14px;
+    color: #000000;
+  }
+  p {
+    font-size: 11px;
+    color: #000000;
+    opacity: 0.6;
+  text-transform: uppercase;
+  }
+}
+.text-danger{
+  color: #F27474;
+}
+.dropdown-toggle::after{
+  content: unset;
+}

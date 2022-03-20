@@ -1,0 +1,24 @@
+@import "style.scss";
+.white-box {
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    background-color: $second;
+    height: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    border-radius: 50px;
+  }
+}
+.content {
+  &:nth-child(2n) {
+    .white-box {
+      &:before {
+        background-color: $main;
+      }
+    }
+  }
+}

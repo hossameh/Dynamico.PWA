@@ -1,0 +1,24 @@
+<section class="login">
+  <div class="w-100">
+    <div class="logo">
+      <img src="assets/img/logo.png" alt="logo">
+    </div>
+    <form>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+      </div>
+      <div class="form-floating has-icon">
+        <input type="password" class="form-control " id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+        <div class="icon">
+          <img src="assets/img/icons/view-icon.svg" alt="view">
+        </div>
+      </div>
+      <div class="mb-4 d-flex justify-content-end">
+        <a class="text-white mt-2" [routerLink]="['/forgot']" routerLinkActive="router-link-active"> Forgot password?</a>
+      </div>
+      <button [routerLink]="['/page/home']" routerLinkActive="router-link-active" class="btn btn-secondary w-100 py-3">Login</button>
+    </form>
+  </div>
+</section>
