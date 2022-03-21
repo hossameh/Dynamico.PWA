@@ -1,3 +1,4 @@
+import { TokenInterceptor } from './core/interceptors/token.interceptors';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -22,6 +23,9 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
 import { PagesComponent } from './pages/pages.component';
 import { CardViewComponent } from './pages/calendar/card-view/card-view.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -47,6 +51,11 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSlideToggleModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      positionClass:'toast-bottom-center',
+    }),
+    ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
@@ -54,7 +63,13 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

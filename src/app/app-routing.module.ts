@@ -1,3 +1,4 @@
+import { AuthGard } from './core/gaurds/auth.guard';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { NotificationComponent } from './pages/notification/notification.component';
 import { PagesComponent } from './pages/pages.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
   {
     path:'page',
     component: PagesComponent,
+    canActivateChild:[AuthGard],
     children:[
       {
         path:'home',

@@ -279,3 +279,21 @@ input[type="date" i]::-webkit-calendar-picker-indicator {
 .accordion-body{
   padding: unset;
 }
+
+
+.toast-container.toast-top-center .ngx-toastr, .toast-container.toast-bottom-center .ngx-toastr{
+  border-radius: 55px;
+  padding: 5px 15px;
+  box-shadow: unset;
+  font-size: 14px;
+  text-align: center;
+  width: auto;
+  background-image:unset
+}
+.toast-bottom-center {
+  bottom: 0;
+  right: 50%;
+  width: unset;
+  transform: translate(50%);
+
+}

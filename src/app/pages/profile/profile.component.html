@@ -11,7 +11,7 @@
           Username
         </p>
         <p class="data">
-          Assem Mostafa
+          {{userData?.username}}
         </p>
       </div>
       <div class="mb-2">
@@ -19,7 +19,7 @@
           Email address
         </p>
         <p class="data">
-          assem.mostafa@gmail.com
+          {{userData?.userEmail}}
         </p>
       </div>
       <div class="d-flex justify-content-between align-items-center control mt-4">
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="mt-4">
-        <h6 class="text-danger font-14" [routerLink]="['/login']" routerLinkActive="router-link-active">LOGOUT</h6>
+        <h6 class="text-danger font-14" [routerLink]="['/login']" (click)="logout()" routerLinkActive="router-link-active">LOGOUT</h6>
       </div>
     </div>
   </div>

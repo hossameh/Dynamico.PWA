@@ -14,7 +14,6 @@ export class PagesComponent implements OnInit {
   constructor(private router:Router,) {
     router.events.subscribe((el:any) => {
       if(el as NavigationEnd){
-        console.log('l.url?.includes)',el.url?.includes('page/visits'));
         this.hideMenu = el.url?.includes('page/visits') ||  el.url?.includes('home/pending/');
       }else{
         this.hideMenu = false;
