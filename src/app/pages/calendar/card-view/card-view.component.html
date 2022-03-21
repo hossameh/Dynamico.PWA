@@ -1,0 +1,53 @@
+<div class="p-3 ">
+  <div class="d-flex justify-content-between heading mb-4">
+    <p>
+      Show completed forms
+    </p>
+    <mat-slide-toggle></mat-slide-toggle>
+  </div>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item" *ngFor="let item of items ; let i = index">
+      <h2 class="accordion-header" [id]="'heading' + i">
+        <p class="header" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+          {{17 + i}} May 2021 <span *ngIf="i == 0" class="badge">2</span>
+        </p>
+      </h2>
+      <div [id]="'collapse' + i" class="accordion-collapse collapse " [class.show]="i == 0" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="mb-3" *ngFor="let item of items">
+            <div class="white-box py-2">
+              <div class="box-content">
+                <p class="number">
+                  #2342
+                </p>
+                <h5 class="font-14">
+                  Maintenance visit form
+                </h5>
+                <p class="date">27 March 2021</p>
+              </div>
+              <div class="box-side">
+                <div class="d-flex align-items-center">
+                  <p class="badge me-2">Pending</p>
+                  <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item py-0 px-2">
+                        <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
+                        Edit</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete">
+                        <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
+                        Delete</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -20,6 +20,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotificationComponent } from './pages/notification/notification.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { PagesComponent } from './pages/pages.component';
+import { CardViewComponent } from './pages/calendar/card-view/card-view.component';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,11 +40,13 @@ import { PagesComponent } from './pages/pages.component';
     NotificationComponent,
     CalendarComponent,
     PagesComponent,
+    CardViewComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSlideToggleModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

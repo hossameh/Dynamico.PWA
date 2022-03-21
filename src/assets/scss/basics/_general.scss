@@ -85,6 +85,8 @@ input[type="number"] {
   padding: 25px;
   box-shadow: 0 5px 20px 0px rgba($color: #000000, $alpha: 0.05);
   color: #000;
+  position: relative;
+  z-index: 9;
   h4 {
     font-size: 20px;
     font-weight: bold;
@@ -105,18 +107,15 @@ input[type="number"] {
   justify-content: space-between;
   align-items: center;
 
-  .box-side {
-    .badge {
-      background-color: $second;
-      border-radius: 55px;
-      min-width: 30px;
-      min-height: 20px;
-      line-height: 20px;
-      padding: 0 10px;
-    }
-  }
 }
-
+.badge {
+  background-color: $second;
+  border-radius: 55px;
+  min-width: 30px;
+  min-height: 20px;
+  line-height: 20px;
+  padding: 0 10px;
+}
 .dropdown-menu {
   box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
   border: unset;
@@ -247,4 +246,36 @@ input[type="date" i]::-webkit-calendar-picker-indicator {
 }
 .form-check-input:focus {
   box-shadow: unset;
+}
+
+.page-bar {
+  background-color: rgba($color: #ffffff, $alpha: 0.6);
+  box-shadow: 0 2px 20px 0px rgba($color: #000000, $alpha: 0.06);
+  border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+  margin-top: -20px;
+  padding: 20px;
+  padding-top: 40px;
+}
+.mat-slide-toggle-bar{
+  background-color: #F0EFEF !important;
+}
+.mat-slide-toggle-thumb{
+  background-color: #D0D1D1;
+}
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
+  background-color: #143955;
+}
+.accordion-item{
+  background-color: unset;
+  padding: unset;
+  border: unset;
+  // margin-top: 15px;
+  p.header{
+    color: #707070;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+}
+.accordion-body{
+  padding: unset;
 }
