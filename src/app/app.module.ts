@@ -1,3 +1,4 @@
+import { DateViewComponent } from './pages/calendar/date-view/date-view.component';
 import { TokenInterceptor } from './core/interceptors/token.interceptors';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -45,6 +46,7 @@ import { ToastrModule } from 'ngx-toastr';
     CalendarComponent,
     PagesComponent,
     CardViewComponent,
+    DateViewComponent
   ],
   imports: [
     BrowserModule,
