@@ -27,6 +27,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { FormioEditorModule } from '@davebaol/angular-formio-editor'; 
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     MatSlideToggleModule,
     HttpClientModule,
+    FormioEditorModule,
     ToastrModule.forRoot({
       positionClass:'toast-bottom-center',
     }),

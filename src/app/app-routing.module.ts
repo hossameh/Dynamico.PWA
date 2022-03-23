@@ -1,3 +1,4 @@
+import { ChecklistComponent } from './pages/checklist/checklist.component';
 import { AuthGard } from './core/gaurds/auth.guard';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { NotificationComponent } from './pages/notification/notification.component';
@@ -55,6 +56,10 @@ const routes: Routes = [
       {
         path:'profile',
         component:ProfileComponent
+      },
+      {
+        path:'checklist',
+        component:ChecklistComponent
       },
       {
         path:'notification',

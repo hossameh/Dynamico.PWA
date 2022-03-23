@@ -1,1 +1,6 @@
-<p>checklist works!</p>
+<div class="content" role="main">
+  <div class="col-10 m-4">
+    {{form | json}}
+    <formio-editor [form]="form" [options]="options"></formio-editor>
+  </div>
+</div>
