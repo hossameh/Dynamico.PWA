@@ -1,3 +1,4 @@
+import { LoadingService } from './services/loading/loading.service';
 import { HelperService } from './services/helper.service';
 import { Component } from '@angular/core';
 import { routingAnimation } from './router.animations';
@@ -12,10 +13,16 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class AppComponent {
   currentLang!:any
-
-  constructor(private helper:HelperService,private router: Router) {}
+  show = false;
+  constructor(private helper:HelperService,private router: Router,private loadingService:LoadingService) {}
 
   ngOnInit(): void {
+    this.loadingService.isLoading.subscribe(isLoading => {
+      setTimeout(() => {
+        this.show = isLoading;
+      });
+    });
+
     window.scrollTo(0, 0);
     this.currentLang = localStorage.getItem('lang');
     if (!this.currentLang) {

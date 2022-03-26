@@ -1,3 +1,10 @@
 <main [@routing]="outletRef.isActivated ? outletRef.activatedRoute : ''">
   <router-outlet #outletRef="outlet"></router-outlet>
 </main>
+
+<div class="preload" *ngIf="show">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
