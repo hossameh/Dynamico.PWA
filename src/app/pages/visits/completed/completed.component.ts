@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-completed',
@@ -6,11 +6,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./completed.component.scss']
 })
 export class CompletedComponent implements OnInit {
-  items = [1,1,1,1]
+  @ViewChild('closeModal') closeModal!: ElementRef
+
+  @Input() items:any = [];
+  @Output() date:any = new EventEmitter()
+
+  id!:number
+
+  rangeDate = {
+    FromCreationDate:'',
+    ToCreationDate:''
+  }
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+
+  apply(){
+    this.date.emit(this.rangeDate);
+    this.closeModal.nativeElement.click()
+
   }
 
 }

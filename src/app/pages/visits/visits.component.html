@@ -16,7 +16,7 @@
   </div>
 
   <div class="c-tabs">
-    <div class="item " [class.active]="step == 1" (click)="step = 1">
+    <div class="item " [class.active]="step == 1" (click)="change(1)">
       <div class="d-flex align-items-center justify-content-center ">
         <p>
           Pending
@@ -24,7 +24,7 @@
         <span class="badge ms-2">3</span>
       </div>
     </div>
-    <div class="item " [class.active]="step == 2" (click)="step = 2">
+    <div class="item " [class.active]="step == 2" (click)="change(2)">
       <div class="d-flex align-items-center justify-content-center">
         <p>
           Completed
@@ -33,10 +33,10 @@
     </div>
   </div>
   <div *ngIf="step == 1" [@slideInOut1]>
-    <app-pending></app-pending>
+    <app-pending [items]="pendingItems" (date)="filterPending($event)"></app-pending>
   </div>
   <div *ngIf="step == 2" [@slideInOut2]>
-    <app-completed></app-completed>
+    <app-completed [items]="completeItems" (date)="filterComplete($event)"></app-completed>
   </div>
   <div class="fixed-btn" data-bs-toggle="modal" data-bs-target="#newModal">
     <img src="assets/img/icons/add.svg" alt="add">

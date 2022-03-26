@@ -12,12 +12,12 @@
     <div class="white-box py-2">
       <div class="box-content">
         <p class="number">
-          #2342
+          #{{item.record_Id}}
         </p>
         <h5 class="font-14">
-          Maintenance visit form
+          {{item.form_Title}}
         </h5>
-        <p class="date">27 March 2021</p>
+        <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
       </div>
       <div class="box-side">
         <div class="d-flex align-items-center">
@@ -30,13 +30,17 @@
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete">
+            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete" (click)="id  = item.record_Id">
                 <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
                 Delete</a></li>
           </ul>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="text-center mt-5 pt-5" *ngIf="items.length == 0">
+    <p>There's No Data Found</p>
   </div>
 </div>
 
@@ -47,7 +51,7 @@
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
         <h5 class="modal-title" id="filterLabel">Pending forms Filter</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal2></button>
       </div>
       <div class="modal-body">
 
@@ -57,16 +61,16 @@
 
         <div class="d-flex justify-content-between align-items-center  mb-3 mt-3">
           <div class="form-floating me-2 w-100">
-            <input type="date" class="form-control " id="From" placeholder="">
+            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From" placeholder="">
             <label for="From">From</label>
           </div>
           <div class="form-floating ms-2 w-100">
-            <input type="date" class="form-control " id="to" placeholder="">
+            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate" [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
             <label for="to">To</label>
           </div>
         </div>
 
-        <button type="button" class="btn btn-primary w-100 mt-4">Apply</button>
+        <button type="button" class="btn btn-primary w-100 mt-4" (click)="apply()">Apply</button>
       </div>
     </div>
   </div>
@@ -77,7 +81,7 @@
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
         <h5 class="modal-title" id="deleteLabel">Delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
       </div>
       <div class="modal-body">
 
@@ -88,7 +92,7 @@
 
         <div class="d-flex justify-content-between align-items-center">
           <button type="button" class="btn btn-outline-primary w-50 mt-4 me-2" data-bs-dismiss="modal" aria-label="Close">No</button>
-          <button type="button" class="btn btn-primary w-50 mt-4 ms-2">Yes</button>
+          <button type="button" class="btn btn-primary w-50 mt-4 ms-2" (click)="delete()">Yes</button>
         </div>
       </div>
     </div>

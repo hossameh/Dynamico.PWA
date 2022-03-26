@@ -17,14 +17,14 @@ export class HttpService {
 
   constructor(private http: HttpClient, private alertService: AlertService) { }
 
-  get<T>(APIName: string): Observable<T> {
-    return this.http.get<API>(`${this.serverUrl}${APIName}`).pipe(map((event) => {
+  get<T>(APIName: string, params?:any): Observable<T> {
+    return this.http.get<API>(`${this.serverUrl}${APIName}`,{params}).pipe(map((event) => {
       return event.data;
     }));
   }
 
-  post<T>(APIName: string, body?: any, showAlert = true): Observable<T> {
-    return this.http.post<API>(`${this.serverUrl}${APIName}`, body ? body : null).pipe(map((event: any) => {
+  post<T>(APIName: string, body?: any, showAlert = true,params?:any): Observable<T> {
+    return this.http.post<API>(`${this.serverUrl}${APIName}`, body ? body : null,{params}).pipe(map((event: any) => {
       showAlert ? this.alertHandling(event) : '';
       return event;
     }));

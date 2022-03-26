@@ -24,10 +24,10 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
 import { PagesComponent } from './pages/pages.component';
 import { CardViewComponent } from './pages/calendar/card-view/card-view.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
-import { FormioEditorModule } from '@davebaol/angular-formio-editor'; 
+import { FormioEditorModule } from '@davebaol/angular-formio-editor';
 
 @NgModule({
   declarations: [
@@ -55,6 +55,7 @@ import { FormioEditorModule } from '@davebaol/angular-formio-editor';
     BrowserAnimationsModule,
     MatSlideToggleModule,
     HttpClientModule,
+    FormsModule,
     FormioEditorModule,
     ToastrModule.forRoot({
       positionClass:'toast-bottom-center',

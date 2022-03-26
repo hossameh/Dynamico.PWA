@@ -27,6 +27,10 @@
     </div>
 
   </div>
+
+  <div class="text-center mt-5 pt-5" *ngIf="items.length == 0">
+    <p>There's No Data Found</p>
+  </div>
 </div>
 
 
@@ -36,7 +40,7 @@
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
         <h5 class="modal-title" id="filterLabel">Pending forms Filter</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" #closeModal data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
@@ -55,7 +59,7 @@
           </div>
         </div>
 
-        <button type="button" class="btn btn-primary w-100 mt-4">Apply</button>
+        <button type="button" class="btn btn-primary w-100 mt-4" (click)="apply()">Apply</button>
       </div>
     </div>
   </div>
