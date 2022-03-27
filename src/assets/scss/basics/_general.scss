@@ -218,7 +218,7 @@ input[type="number"] {
 input::-webkit-datetime-edit {
   font-size: 12px;
 }
-input[type="date" i]::-webkit-calendar-picker-indicator {
+#filter input[type="date" i]::-webkit-calendar-picker-indicator {
   position: absolute;
   left: 0;
   right: 0;
@@ -347,4 +347,17 @@ input[type="date" i]::-webkit-calendar-picker-indicator {
   justify-content: center;
   align-items: center;
   inset: 0;
+}
+#renderer-tab{
+  display: none;
+}
+
+#myTab{
+  border: unset;
+}
+formio{
+  button[type="submit"]{
+    margin-top: 20px;
+    width: 100%;
+  }
 }

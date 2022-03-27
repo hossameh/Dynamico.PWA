@@ -24,13 +24,13 @@
           <p class="badge me-2">Pending</p>
           <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item py-0 px-2">
+            <li><a class="dropdown-item py-0 px-2" [routerLink]="['/checklist/'+item.form_Id]" routerLinkActive="router-link-active">
                 <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
                 Edit</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete" (click)="id  = item.record_Id">
+            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete" (click)="selectedItem  = item">
                 <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
                 Delete</a></li>
           </ul>
@@ -87,7 +87,7 @@
 
         <h6 class="font-14 text-center px-5">
           Are you sure you want to delete
-          #2342 Mohamed Ahmed
+          {{selectedItem?.form_Title}} ?
         </h6>
 
         <div class="d-flex justify-content-between align-items-center">

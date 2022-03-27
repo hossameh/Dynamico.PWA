@@ -1,3 +1,6 @@
+import { HelperService } from './../../services/helper.service';
+import { AlertService } from './../../services/alert/alert.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from './../../services/http/http.service';
 import {
   trigger,
@@ -54,13 +57,25 @@ export class VisitsComponent implements OnInit {
   body = {
     FromCreationDate:'',
     ToCreationDate:'',
+    FormId:0,
     Record_Status:0
-
   }
+
+  params:any
+  formId!:number
+  id!:number
   constructor(
+    private route:ActivatedRoute,
+    private router:Router,
+    private alert:AlertService,
+    private helper:HelperService,
     private http: HttpService) { }
 
   ngOnInit(): void {
+
+    this.id =  this.route.snapshot.params.id;
+    this.id ? this.body.FormId = +this.id:'';
+    this.params =  this.route.snapshot.queryParams;
     this.getAllPending()
   }
 
@@ -77,6 +92,7 @@ export class VisitsComponent implements OnInit {
       this.completeItems = [...value]
     })
   }
+
 
   change(step:number){
     step == 1 ? this.step = 1 : this.step = 2;

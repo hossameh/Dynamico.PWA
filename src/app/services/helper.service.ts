@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 export class HelperService {
 
   currentLang: BehaviorSubject<string>  = new BehaviorSubject('ar');
+  checklistData: BehaviorSubject<any>  = new BehaviorSubject(null);
   constructor( ) { }
 
 }

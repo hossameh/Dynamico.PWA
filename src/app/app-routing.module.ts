@@ -38,7 +38,7 @@ const routes: Routes = [
         component:CategoryComponent
       },
       {
-        path:'visits',
+        path:'visits/:id',
         component:VisitsComponent
       },
       {
@@ -58,7 +58,7 @@ const routes: Routes = [
         component:ProfileComponent
       },
       {
-        path:'checklist',
+        path:'checklist/:id',
         component:ChecklistComponent
       },
       {

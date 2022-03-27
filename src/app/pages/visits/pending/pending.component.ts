@@ -15,6 +15,7 @@ export class PendingComponent implements OnInit {
   @Output() date:any = new EventEmitter()
 
   id!:number
+  selectedItem:any
 
   rangeDate = {
     FromCreationDate:'',
@@ -27,7 +28,7 @@ export class PendingComponent implements OnInit {
   }
 
   delete(){
-    this.http.post('Records/DeleteFormRecord',null,true,{Record_Id: this.id}).subscribe((res:any) => {
+    this.http.post('Records/DeleteFormRecord',null,true,{Record_Id: this.selectedItem.record_Id}).subscribe((res:any) => {
 
       if(res.isPassed){
         this.closeModal.nativeElement.click()

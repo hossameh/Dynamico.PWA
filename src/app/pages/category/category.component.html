@@ -3,23 +3,24 @@
     <div class="d-flex">
       <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" [routerLink]="['/page/home']" routerLinkActive="router-link-active">
       <h4>
-        Category name
+        {{name ? name :'Category name'}}
       </h4>
     </div>
   </div>
 
   <div class="content px-3 py-4">
     <div class="mb-3" *ngFor="let item of items">
-      <div class="white-box" [routerLink]="['/page/visits']" routerLinkActive="router-link-active">
-        <div class="box-content">
+      <div class="white-box">
+        <div class="box-content" [routerLink]="['/page/visits/'+item.formId]" [queryParams]="{categoryName: name, listName:item.formTitle , categoryId:item.categoryId}"
+             routerLinkActive="router-link-active">
           <h5 class="font-14">
-            Maintenance visit form
+            {{item.formTitle}}
           </h5>
         </div>
         <div class="box-side">
           <div class="d-flex align-items-center">
-            <p class="badge me-2">3</p>
-            <img src="assets/img/icons/add-button.svg" alt="open">
+            <p class="badge me-2" *ngIf="item.totalRecords">{{item.totalRecords}}</p>
+            <img src="assets/img/icons/add-button.svg" alt="open" [routerLink]="['/page/checklist/'+item.formId]">
           </div>
         </div>
       </div>

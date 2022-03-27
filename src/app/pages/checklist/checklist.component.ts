@@ -1,5 +1,9 @@
+import { AlertService } from './../../services/alert/alert.service';
+import { HttpService } from './../../services/http/http.service';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
+import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-checklist',
@@ -7,252 +11,23 @@ import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
   styleUrls: ['./checklist.component.scss']
 })
 export class ChecklistComponent implements OnInit {
-
-
-
   form: any;
-  options: FormioEditorOptions;
+  options!: FormioEditorOptions;
+  data:any
+  id!:number;
+  constructor(private route:ActivatedRoute,
+    private http: HttpService,
+    private location: Location,
+    private alert:AlertService
+    ) {
 
-  constructor() {
+
+  }
+  ngOnInit(): void {
     this.form = {
-      "display": "form",
-      "components": [
-        {
-          "type": "panel",
-          "label": "Panel",
-          "title": "Page 1",
-          "key": "panel",
-          "theme": "default",
-          "input": false,
-          "placeholder": "",
-          "prefix": "",
-          "customClass": "",
-          "suffix": "",
-          "multiple": false,
-          "defaultValue": null,
-          "protected": false,
-          "unique": false,
-          "persistent": false,
-          "hidden": false,
-          "clearOnHide": false,
-          "refreshOn": "",
-          "redrawOn": "",
-          "tableView": false,
-          "modalEdit": false,
-          "labelPosition": "top",
-          "description": "",
-          "errorLabel": "",
-          "tooltip": "",
-          "hideLabel": false,
-          "tabindex": "",
-          "disabled": false,
-          "autofocus": false,
-          "dbIndex": false,
-          "customDefaultValue": "",
-          "calculateValue": "",
-          "widget": null,
-          "attributes": {},
-          "validateOn": "change",
-          "validate": {
-            "required": false,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false
-          },
-          "conditional": {
-            "show": null,
-            "when": null,
-            "eq": "",
-            "json": ""
-          },
-          "overlay": {
-            "style": "",
-            "left": "",
-            "top": "",
-            "width": "",
-            "height": "",
-            "page": ""
-          },
-          "allowCalculateOverride": false,
-          "encrypted": false,
-          "showCharCount": false,
-          "showWordCount": false,
-          "properties": {},
-          "allowMultipleMasks": false,
-          "tree": false,
-          "breadcrumb": "default",
-          "components": [
-            {
-              "input": true,
-              "key": "firstName",
-              "placeholder": "",
-              "prefix": "",
-              "customClass": "",
-              "suffix": "",
-              "multiple": false,
-              "defaultValue": "",
-              "protected": false,
-              "unique": false,
-              "persistent": true,
-              "hidden": false,
-              "clearOnHide": true,
-              "refreshOn": "",
-              "redrawOn": "",
-              "tableView": true,
-              "modalEdit": false,
-              "label": "First name",
-              "labelPosition": "top",
-              "description": "",
-              "errorLabel": "",
-              "tooltip": "",
-              "hideLabel": false,
-              "tabindex": "",
-              "disabled": false,
-              "autofocus": false,
-              "dbIndex": false,
-              "customDefaultValue": "",
-              "calculateValue": "",
-              "widget": {
-                "type": "input"
-              },
-              "attributes": {},
-              "validateOn": "change",
-              "validate": {
-                "required": false,
-                "custom": "",
-                "customPrivate": false,
-                "strictDateValidation": false,
-                "multiple": false,
-                "unique": false,
-                "minLength": "",
-                "maxLength": "",
-                "pattern": "",
-                "customMessage": "",
-                "json": ""
-              },
-              "conditional": {
-                "show": null,
-                "when": null,
-                "eq": "",
-                "json": ""
-              },
-              "overlay": {
-                "style": "",
-                "left": "",
-                "top": "",
-                "width": "",
-                "height": "",
-                "page": ""
-              },
-              "allowCalculateOverride": false,
-              "encrypted": false,
-              "showCharCount": false,
-              "showWordCount": false,
-              "properties": {},
-              "allowMultipleMasks": false,
-              "type": "textfield",
-              "mask": false,
-              "inputType": "text",
-              "inputFormat": "plain",
-              "inputMask": "",
-              "id": "e1z95vn",
-              "spellcheck": true,
-              "case": "",
-              "calculateServer": false,
-              "tags": [],
-              "customConditional": "",
-              "logic": []
-            }
-          ],
-          "id": "e8dmzgg",
-          "collapsible": false,
-          "tags": [],
-          "customConditional": "",
-          "logic": [],
-          "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
-          "nextPage": ""
-        },
-        {
-          "type": "button",
-          "label": "Submit",
-          "key": "submit",
-          "size": "md",
-          "block": false,
-          "action": "submit",
-          "disableOnInvalid": true,
-          "theme": "primary",
-          "input": true,
-          "placeholder": "",
-          "prefix": "",
-          "customClass": "",
-          "suffix": "",
-          "multiple": false,
-          "defaultValue": null,
-          "protected": false,
-          "unique": false,
-          "persistent": false,
-          "hidden": false,
-          "clearOnHide": true,
-          "refreshOn": "",
-          "redrawOn": "",
-          "tableView": false,
-          "modalEdit": false,
-          "labelPosition": "top",
-          "description": "",
-          "errorLabel": "",
-          "tooltip": "",
-          "hideLabel": false,
-          "tabindex": "",
-          "disabled": false,
-          "autofocus": false,
-          "dbIndex": false,
-          "customDefaultValue": "",
-          "calculateValue": "",
-          "widget": {
-            "type": "input"
-          },
-          "attributes": {},
-          "validateOn": "change",
-          "validate": {
-            "required": false,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false
-          },
-          "conditional": {
-            "show": null,
-            "when": null,
-            "eq": ""
-          },
-          "overlay": {
-            "style": "",
-            "left": "",
-            "top": "",
-            "width": "",
-            "height": ""
-          },
-          "allowCalculateOverride": false,
-          "encrypted": false,
-          "showCharCount": false,
-          "showWordCount": false,
-          "properties": {},
-          "allowMultipleMasks": false,
-          "leftIcon": "",
-          "rightIcon": "",
-          "dataGridLabel": true,
-          "id": "eirhzrm"
-        }
-      ]
-    }
+      display: "form",
+      components: []
+    };
     this.options = {
       builder: {
         hideTab: true,
@@ -265,7 +40,7 @@ export class ChecklistComponent implements OnInit {
         input: {
 
         },
-    
+
       },
       renderer: {
         defaultTab: true,
@@ -277,10 +52,10 @@ export class ChecklistComponent implements OnInit {
           resourceJsonEditor: {
 
             input: {
-              
+
             },
             output: {
-             
+
             }
           },
           schemaJsonEditor: {
@@ -293,7 +68,7 @@ export class ChecklistComponent implements OnInit {
           }
         },
         output: {
-          submit: (event) => { console.log(event) },
+          submit: (event) => { this.submission(event) },
         },
         input: {
           //submission: {
@@ -306,12 +81,29 @@ export class ChecklistComponent implements OnInit {
           //  }
           //},
           //readOnly: true,
-        
-     
+
+
         }
       }
     };
+    this.id = this.route.snapshot.params.id;
+    if(this.id){
+      this.getById();
+    }
   }
-  ngOnInit(): void {
+
+
+  submission(event:any){
+console.log('event',event);
+  }
+
+  back(): void {
+    this.location.back()
+  }
+  getById(){
+    this.http.get('Checklist/GetChecklistById',{Id:this.id}).subscribe((res:any) =>{
+        this.data = res;
+        this.form.components = JSON.parse(res.formControls);
+    });
   }
 }

@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
   login() {
 
     this.http.post('User/authenticate', this.authForm.value, true).subscribe((res: any) => {
-      console.log('res.isPassed', res.isPassed);
       if (res.isPassed) {
         localStorage.setItem('userData', JSON.stringify(res.data));
         localStorage.setItem('token', JSON.stringify(res.data.resetToken));
