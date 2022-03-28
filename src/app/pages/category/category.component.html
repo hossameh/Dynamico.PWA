@@ -20,7 +20,7 @@
         <div class="box-side">
           <div class="d-flex align-items-center">
             <p class="badge me-2" *ngIf="item.totalRecords">{{item.totalRecords}}</p>
-            <img src="assets/img/icons/add-button.svg" alt="open" [routerLink]="['/page/checklist/'+item.formId]">
+            <img src="assets/img/icons/add-button.svg" alt="open" [routerLink]="['/page/checklist/'+item.formId]" [queryParams]="{editMode: false ,Record_Id:item.record_Id}">
           </div>
         </div>
       </div>

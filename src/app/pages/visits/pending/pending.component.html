@@ -24,7 +24,8 @@
           <p class="badge me-2">Pending</p>
           <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item py-0 px-2" [routerLink]="['/checklist/'+item.form_Id]" routerLinkActive="router-link-active">
+            <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]" [queryParams]="{editMode: true, Record_Id:item.record_Id}"
+                 routerLinkActive="router-link-active">
                 <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
                 Edit</a></li>
             <li>
