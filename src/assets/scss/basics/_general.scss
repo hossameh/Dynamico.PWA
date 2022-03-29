@@ -360,4 +360,17 @@ formio{
     margin: 20px 0;
     width: 100%;
   }
+  formio-alerts{
+    .alert-success{
+      display: none;
+    }
+  }
+}
+
+.isComplete{
+  formio{
+    button[type="submit"]{
+     display: none;
+    }
+  }
 }

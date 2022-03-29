@@ -9,15 +9,15 @@
     </div>
   </div>
   <div class="mb-3" *ngFor="let item of items">
-    <div class="white-box py-2">
+    <div class="white-box py-2" [routerLink]="['/page/checklist/'+item.form_Id]" [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true}">
       <div class="box-content">
         <p class="number">
-          #2342
+          #{{item.record_Id}}
         </p>
         <h5 class="font-14">
-          Maintenance visit form
+          {{item.form_Title}}
         </h5>
-        <p class="date">27 March 2021</p>
+        <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
       </div>
       <div class="box-side">
         <div class="d-flex align-items-center">

@@ -2,9 +2,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from './../../services/alert/alert.service';
 import { HttpService } from './../../services/http/http.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
 import { Location } from '@angular/common';
+import { RecordStatus } from 'src/app/core/enums/status.enum';
 
 @Component({
   selector: 'app-checklist',
@@ -12,6 +13,10 @@ import { Location } from '@angular/common';
   styleUrls: ['./checklist.component.scss']
 })
 export class ChecklistComponent implements OnInit {
+  @ViewChild('openModal') openModal!: ElementRef;
+  @ViewChild('closeModal') closeModal!: ElementRef;
+
+
   form: any;
   options!: FormioEditorOptions;
   data: any;
@@ -21,6 +26,9 @@ export class ChecklistComponent implements OnInit {
   params: any;
   latitude!: number;
   longitude!: number;
+  userId!: number;
+  modelBody!: any;
+  isComplete = false;
   constructor(private route: ActivatedRoute,
     private http: HttpService,
     private router: Router,
@@ -32,6 +40,7 @@ export class ChecklistComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.form = {
       display: "form",
       components: []
@@ -76,7 +85,7 @@ export class ChecklistComponent implements OnInit {
           }
         },
         output: {
-          submit: (event) => { this.submission(event); },
+          submit: (event) => { },
         },
         input: {
           //submission: {
@@ -96,6 +105,8 @@ export class ChecklistComponent implements OnInit {
     };
     this.id = this.route.snapshot.params.id;
     this.params = this.route.snapshot.queryParams;
+
+    this.isComplete = this.params.Complete == 'true' ? true : false;
     this.buildForm();
     if (this.id && this.params.editMode == 'false') {
       this.getById();
@@ -105,25 +116,25 @@ export class ChecklistComponent implements OnInit {
     }
   }
 
-
   buildForm() {
-    console.log('this.params.editMode', this.params.editMode);
     this.recordForm = this.fb.group({
-      Form_Id: [+this.id],
-      Action: [this.params.editMode == 'true' ? 'Update' : 'Add'],
-      Form_Data: [''],
-      Record_Id: [this.params.Record_Id ? +this.params.Record_Id : 0],
-      FormDataRef: ['', Validators.required],
-      location: ['']
+      form_Id: [+this.id],
+      record_Id: [this.params.Record_Id ? +this.params.Record_Id : 0],
+      formDataRef: ['', Validators.required],
+      form_Record: [''],
+      record_Status: [0],
+      user_Id: [this.userId],
+      isNewRecord: [this.params.editMode == 'true' ? false : true],
+      location: [''],
+      isSubmitted: [],
+      offlineRef: ['']
     });
   }
-  submission(event: any) {
-    console.log('event', event);
-  }
+
 
   back(): void {
     this.location.back();
-  }
+  };
   getById() {
     this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe((value: any) => {
       if (value?.gpsRequired) {
@@ -138,9 +149,9 @@ export class ChecklistComponent implements OnInit {
           });
       }
       this.data = value;
-      this.recordForm.get('Record_Id')?.setValue(0);
-      this.recordForm.get('FormDataRef')?.setValue(value.formDataRef);
-      this.recordForm.get('FormDataRef')?.disable();
+      this.recordForm.get('record_Id')?.setValue(0);
+      this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
+      this.recordForm.get('formDataRef')?.disable();
       this.options = {
         builder: {
           hideTab: true,
@@ -211,9 +222,9 @@ export class ChecklistComponent implements OnInit {
       }
       this.data = value;
 
-      this.recordForm.get('Record_Id')?.setValue(+this.params.Record_Id);
-      this.recordForm.get('FormDataRef')?.setValue(value.formDataRef);
-      this.recordForm.get('FormDataRef')?.disable();
+      this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
+      this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
+      this.recordForm.get('formDataRef')?.disable();
       let recordJson = value.record_Json; // data
       let dataObject = this.deSerialize(JSON.parse(recordJson));
       this.form.components = JSON.parse(value.form_Layout);
@@ -257,7 +268,6 @@ export class ChecklistComponent implements OnInit {
 
           output: {
             submit: this.onFormSubmitted.bind(this, event),
-
           },
           input: {
             // readOnly: this.printed,
@@ -297,9 +307,29 @@ export class ChecklistComponent implements OnInit {
     let serializedData = this.serializeObj(recordData);
     let formDataStr = JSON.stringify(serializedData);
 
-    let model = { ...this.recordForm.value };
-    model.Form_Data = formDataStr;
-    this.http.post('ChecklistRecords/SaveChecklistRecord', model).subscribe((res: any) => {
+    this.modelBody = { ...this.recordForm.value };
+    this.modelBody.form_Record = serializedData;
+
+    this.openModal.nativeElement.click();
+
+
+  }
+
+  save() {
+    this.modelBody.record_Status = RecordStatus.Pendding;
+    this.modelBody.isSubmitted = false;
+    this.send()
+  }
+  submit() {
+    this.modelBody.record_Status = RecordStatus.Complete;
+    this.modelBody.isSubmitted = true;
+    this.modelBody.isNewRecord = false;
+    this.send()
+  }
+
+  send() {
+    console.log('modelBody',this.modelBody);
+    this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
       console.log('res', res);
       if (res.isPassed) {
         this.alert.success(res?.message);
