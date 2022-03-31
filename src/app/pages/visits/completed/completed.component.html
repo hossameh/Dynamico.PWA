@@ -40,7 +40,7 @@
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
         <h5 class="modal-title" id="filterLabel">Pending forms Filter</h5>
-        <button type="button" class="btn-close" #closeModal data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
       </div>
       <div class="modal-body">
 
@@ -50,11 +50,11 @@
 
         <div class="d-flex justify-content-between align-items-center  mb-3 mt-3">
           <div class="form-floating me-2 w-100">
-            <input type="date" class="form-control " id="From" placeholder="">
+            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From" placeholder="">
             <label for="From">From</label>
           </div>
           <div class="form-floating ms-2 w-100">
-            <input type="date" class="form-control " id="to" placeholder="">
+            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate" [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
             <label for="to">To</label>
           </div>
         </div>
