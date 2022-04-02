@@ -5,7 +5,12 @@
     </h4>
   </div>
   <div class="page-bar">
-
+    <div class="d-flex justify-content-end">
+      <div class="" (click)="toggle()">
+        <img src="assets/img/icons/list.svg" alt="list" *ngIf="!grade">
+        <img src="assets/img/icons/grid.svg" alt="grid" *ngIf="grade">
+      </div>
+    </div>
   </div>
 
   <app-card-view></app-card-view>

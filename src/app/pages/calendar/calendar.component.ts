@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-
+  grade = false;
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+
+  toggle(){
+    this.grade = !this.grade
   }
 
 }
