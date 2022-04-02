@@ -1,3 +1,4 @@
+import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,10 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationComponent implements OnInit {
 
-  items = [1,1,1,1]
-  constructor() { }
+  items:any = []
+  constructor(
+    private http:HttpService
+  ) { }
 
   ngOnInit(): void {
+    this.getAll()
+  }
+
+  getAll(){
+    this.http.get('Plans/GetUserChecklistsAssigned').subscribe((res) => {
+      console.log('res',res);
+      this.items = res;
+    })
   }
 
 }
