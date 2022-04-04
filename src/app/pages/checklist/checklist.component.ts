@@ -1,3 +1,4 @@
+import { OfflineService } from './../../services/offline/offline.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from './../../services/alert/alert.service';
 import { HttpService } from './../../services/http/http.service';
@@ -6,6 +7,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
 import { Location } from '@angular/common';
 import { RecordStatus } from 'src/app/core/enums/status.enum';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-checklist',
@@ -33,6 +35,8 @@ export class ChecklistComponent implements OnInit {
     private http: HttpService,
     private router: Router,
     private fb: FormBuilder,
+    private offline: OfflineService,
+    private storage: Storage,
     private location: Location,
     private alert: AlertService
   ) {
@@ -108,12 +112,25 @@ export class ChecklistComponent implements OnInit {
 
     this.isComplete = this.params.Complete == 'true' ? true : false;
     this.buildForm();
-    if (this.id && this.params.editMode == 'false') {
-      this.getById();
-    }
-    if (this.id && this.params.editMode == 'true') {
-      this.editChecklistRecord();
-    }
+    this.offline.currentStatus.subscribe(isOnline => {
+      if (isOnline) {
+        if (this.id && this.params.editMode == 'false') {
+          this.getById();
+        }
+        if (this.id && this.params.editMode == 'true') {
+          this.editChecklistRecord();
+        }
+      } else {
+        if (this.id && this.params.editMode == 'false') {
+          this.loadFromCacheById();
+        }
+        if (this.id && this.params.editMode == 'true') {
+          this.loadFromCacheByIdEdit();
+        }
+
+      }
+    });
+
   }
 
   buildForm() {
@@ -136,7 +153,7 @@ export class ChecklistComponent implements OnInit {
     this.location.back();
   };
   getById() {
-    this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe((value: any) => {
+    this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe(async (value: any) => {
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
@@ -148,7 +165,27 @@ export class ChecklistComponent implements OnInit {
             this.alert.error('Please accept to share your location first !');
           });
       }
+      let cacheChecklists = await this.storage.get('Checklists') || [];
+
+
+      if (cacheChecklists) {
+        // check if Checklists  id is in cahce
+        let index = cacheChecklists.findIndex((el: any) => {
+          return el.formId == +this.id;
+        });
+        // check if Checklists  id is in cahce update data in this index
+        if (index >= 0) {
+          cacheChecklists[index] = value;
+        } else {
+          //if not found id add a new record
+          cacheChecklists.push(value);
+        }
+      } else {
+        cacheChecklists.push(value);
+      }
+      await this.storage.set('Checklists', cacheChecklists);
       this.data = value;
+
       this.recordForm.get('record_Id')?.setValue(0);
       this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
@@ -318,18 +355,16 @@ export class ChecklistComponent implements OnInit {
   save() {
     this.modelBody.record_Status = RecordStatus.Pendding;
     this.modelBody.isSubmitted = false;
-    this.send()
+    this.send();
   }
   submit() {
     this.modelBody.record_Status = RecordStatus.Complete;
     this.modelBody.isSubmitted = true;
-    this.send()
+    this.send();
   }
 
   send() {
-    console.log('modelBody',this.modelBody);
     this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
-      console.log('res', res);
       if (res.isPassed) {
         this.alert.success(res?.message);
         this.location.back();
@@ -337,5 +372,78 @@ export class ChecklistComponent implements OnInit {
         this.alert.error(res?.message);
       }
     });
+  }
+
+  async loadFromCacheById() {
+    let cacheChecklists = await this.storage.get('Checklists') || [];
+    let value: any = {};
+    if (cacheChecklists.length > 0) {
+      console.log('cacheChecklists',cacheChecklists);
+      value = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
+console.log('value',value);
+      if (value) {
+        this.recordForm.get('record_Id')?.setValue(0);
+        this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
+        this.recordForm.get('formDataRef')?.disable();
+        this.options = {
+          builder: {
+            hideTab: true,
+            hideDisplaySelect: true,
+
+          },
+          json: {
+            hideTab: true,
+            changePanelLocations: ['top', 'bottom'],
+            input: {
+
+            },
+
+          },
+          renderer: {
+            defaultTab: true,
+            submissionPanel: {
+
+              disabled: true,
+              // Whether to initially show full or partial submission. Default to false.
+              fullSubmission: false,
+              // The json editor of the submitted resource.
+              resourceJsonEditor: {
+
+                input: {
+
+                },
+                output: {
+
+                }
+              },
+              schemaJsonEditor: {
+                enabled: false,
+                input: {},
+                output: {}
+              }
+            },
+
+            output: {
+              submit: this.onFormSubmitted.bind(this, event),
+            },
+            input: {
+              submission: {
+
+              },
+              hooks: {
+
+              }
+            }
+          }
+        };
+        this.form.components = JSON.parse(value.formControls);
+      }
+
+
+    }
+  }
+
+  loadFromCacheByIdEdit() {
+
   }
 }
