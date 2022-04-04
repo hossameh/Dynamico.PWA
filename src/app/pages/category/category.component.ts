@@ -71,7 +71,7 @@ export class CategoryComponent implements OnInit {
   async loadFromCache() {
     let cacheCatgoryChecklists = await this.storage.get('CategoryChecklists') || [];
     this.items = [];
-    if (cacheCatgoryChecklists.length == 0) {
+    if (cacheCatgoryChecklists.length > 0) {
       this.items = cacheCatgoryChecklists.filter((el: any) => el.categoryId == this.category_Id)[0].list;
     }
 
