@@ -13,5 +13,6 @@
     </div>
   </div>
 
-  <app-card-view></app-card-view>
+  <app-card-view *ngIf="grade"></app-card-view>
+  <app-date-view *ngIf="!grade"></app-date-view>
 </section>

@@ -3,6 +3,8 @@ import { HelperService } from './services/helper.service';
 import { Component } from '@angular/core';
 import { routingAnimation } from './router.animations';
 import { NavigationEnd, Router } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +14,19 @@ import { NavigationEnd, Router } from '@angular/router';
 
 })
 export class AppComponent {
-  currentLang!:any
+  currentLang!: any;
   show = false;
-  constructor(private helper:HelperService,private router: Router,private loadingService:LoadingService) {}
+  update = false;
+
+  constructor(private helper: HelperService,
+    private swUpdates: SwUpdate,
+    private storage: Storage, private router: Router, private loadingService: LoadingService) { }
 
   ngOnInit(): void {
+    this.update = false;
+    this.createDb();
+    this.reloadCache();
+
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;
@@ -27,8 +37,8 @@ export class AppComponent {
     this.currentLang = localStorage.getItem('lang');
     if (!this.currentLang) {
       localStorage.setItem('lang', 'en');
-      this.currentLang = 'en'
-    }else{
+      this.currentLang = 'en';
+    } else {
       localStorage.setItem('lang', this.currentLang);
     }
     this.langChanged(this.currentLang);
@@ -40,8 +50,24 @@ export class AppComponent {
       window.scrollTo(0, 0);
     });
   }
+  async createDb() {
+    await this.storage.create();
+  }
 
-  langChanged(lang:any) {
+  reloadCache() {
+    if (this.swUpdates.isEnabled) {
+      this.swUpdates.available.subscribe(() => {
+        this.update = true;
+      });
+    }
+  }
+
+  updateAccept(){
+    this.update = false;
+    window.location.reload();
+  }
+
+  langChanged(lang: any) {
     // const elEn = document.querySelector('#bootstrap-en');
     // const elAr = document.querySelector('#bootstrap-ar');
     if (lang === 'ar') {
@@ -66,7 +92,7 @@ export class AppComponent {
       });
     }
   }
-  generateLinkElement(props:any) {
+  generateLinkElement(props: any) {
     const el = document.createElement('link');
     const htmlEl = document.getElementsByTagName('html')[0];
     el.rel = 'stylesheet';

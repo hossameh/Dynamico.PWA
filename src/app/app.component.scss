@@ -1,0 +1,26 @@
+.notification {
+  position: fixed;
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  margin: auto;
+  left: 15px;
+  right: 15px;
+  box-shadow: 2px 3px 10px 0px rgb(0 0 0 / 13%);
+  transition: all 0.3s ease-in-out;
+  bottom: 20px;
+  &.hide {
+    opacity: 0.5;
+    transform: translateY(150%);
+  }
+  &.show {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  .notification-buttons {
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+}

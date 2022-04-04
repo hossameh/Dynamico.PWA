@@ -1,3 +1,4 @@
+import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,15 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-  grade = false;
-  constructor() { }
+  grade = true;
+  constructor(private http:HttpService) { }
 
   ngOnInit(): void {
+    console.log('getPlans',this.getPlans());
   }
 
 
   toggle(){
     this.grade = !this.grade
+  }
+
+  getPlans(){
+    this.http.get('Plans/GetPlans').subscribe(value => {
+      console.log('value',value);
+    })
   }
 
 }

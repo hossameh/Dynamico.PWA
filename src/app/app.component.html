@@ -8,3 +8,19 @@
     <div></div>
   </div>
 </div>
+<div class="notification" [ngClass]="update ? 'show' : 'hide'">
+  <i class="fa fa-check bg-green-dark"></i>
+  <h1 class="font-20 color-white">New version available!</h1>
+  <!-- <strong>19:24</strong> -->
+  <p class="pb-0">Would you like to update?</p>
+  <div class="notification-buttons">
+    <div class="d-flex justify-content-between w-100 mb-0">
+      <div class="">
+        <a (click)="updateAccept()" class="btn btn-success">Update Now</a>
+      </div>
+      <div class="">
+        <a (click)="update = false" class="btn btn-light">Maybe Later</a>
+      </div>
+    </div>
+  </div>
+</div>

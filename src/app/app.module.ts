@@ -23,11 +23,12 @@ import { NotificationComponent } from './pages/notification/notification.compone
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { PagesComponent } from './pages/pages.component';
 import { CardViewComponent } from './pages/calendar/card-view/card-view.component';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { FormioEditorModule } from '@davebaol/angular-formio-editor';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 @NgModule({
   declarations: [
@@ -56,9 +57,10 @@ import { FormioEditorModule } from '@davebaol/angular-formio-editor';
     MatSlideToggleModule,
     HttpClientModule,
     FormsModule,
+    IonicStorageModule.forRoot(),
     FormioEditorModule,
     ToastrModule.forRoot({
-      positionClass:'toast-bottom-center',
+      positionClass: 'toast-bottom-center',
     }),
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
