@@ -364,23 +364,56 @@ export class ChecklistComponent implements OnInit {
   }
 
   send() {
-    this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
-      if (res.isPassed) {
-        this.alert.success(res?.message);
-        this.location.back();
+    this.offline.currentStatus.subscribe(async (isOnline) => {
+      if (isOnline) {
+        this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
+          if (res.isPassed) {
+            this.alert.success(res?.message);
+            this.location.back();
+          } else {
+            this.alert.error(res?.message);
+          }
+        });
       } else {
-        this.alert.error(res?.message);
+        this.modelBody.creation_Date = new Date();
+
+        let cacheRecords = await this.storage.get('Records') || [];
+        if (this.params.offline) {
+          let index = cacheRecords.findIndex((el: any) => {
+            return el.offlineRef == this.params.offline;
+          });
+          this.modelBody.offlineRef = this.params.offline;
+          console.log('index', index);
+          if (index >= 0) {
+            cacheRecords[index] = this.modelBody;
+          } else {
+            //if not found
+            this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
+            cacheRecords.push(this.modelBody);
+          }
+
+        } else {
+          if (cacheRecords.length > 0) {
+            this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
+            cacheRecords.push(this.modelBody);
+          } else {
+            this.modelBody.offlineRef = 'offline#1';
+            cacheRecords.push(this.modelBody);
+          }
+        }
+
+        await this.storage.set('Records', cacheRecords);
+
       }
     });
+
   }
 
   async loadFromCacheById() {
     let cacheChecklists = await this.storage.get('Checklists') || [];
     let value: any = {};
     if (cacheChecklists.length > 0) {
-      console.log('cacheChecklists',cacheChecklists);
       value = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
-console.log('value',value);
       if (value) {
         this.recordForm.get('record_Id')?.setValue(0);
         this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
@@ -438,8 +471,6 @@ console.log('value',value);
         };
         this.form.components = JSON.parse(value.formControls);
       }
-
-
     }
   }
 

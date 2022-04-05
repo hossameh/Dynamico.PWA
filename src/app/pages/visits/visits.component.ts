@@ -1,3 +1,4 @@
+import { OfflineService } from './../../services/offline/offline.service';
 import { HelperService } from './../../services/helper.service';
 import { AlertService } from './../../services/alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +10,7 @@ import {
   animate,
   transition,
 } from "@angular/animations";import { Component, OnInit } from '@angular/core';
-
+import { Storage } from '@ionic/storage'
 @Component({
   selector: 'app-visits',
   templateUrl: './visits.component.html',
@@ -63,11 +64,14 @@ export class VisitsComponent implements OnInit {
 
   params:any
   formId!:number
-  id!:number
+  id!:number;
+  isOnline =  true
   constructor(
     private route:ActivatedRoute,
     private router:Router,
     private alert:AlertService,
+    private offline: OfflineService,
+    private storage: Storage,
     private helper:HelperService,
     private http: HttpService) { }
 
@@ -76,7 +80,16 @@ export class VisitsComponent implements OnInit {
     this.id =  this.route.snapshot.params.id;
     this.id ? this.body.FormId = +this.id:'';
     this.params =  this.route.snapshot.queryParams;
-    this.getAllPending()
+    this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline
+      if (isOnline) {
+        this.getAllPending()
+      }else{
+        this.loadFromCache();
+      }
+    });
+
+
   }
 
 
@@ -93,12 +106,27 @@ export class VisitsComponent implements OnInit {
     })
   }
 
+  async loadFromCache(){
+    this.completeItems = []
+    this.pendingItems = []
+      let cacheRecords = await this.storage.get('Records') || [];
+      if(cacheRecords.length > 0){
+        cacheRecords.map((el:any) => {
+          el.form_Title = this.params?.listName
+        });
 
+        this.pendingItems = cacheRecords.filter((el:any) => el.isSubmitted == false);
+        this.completeItems = cacheRecords.filter((el:any) => el.isSubmitted == true);
+      }
+  }
   change(step:number){
-    step == 1 ? this.step = 1 : this.step = 2;
+   this.step = step;
 
+   if(this.isOnline){
     step == 1 && this.pendingItems.length == 0 ? this.getAllPending() : '';
     step == 2 && this.completeItems.length == 0 ? this.getAllComplete() : '';
+   }
+
 
   }
 
