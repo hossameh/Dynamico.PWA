@@ -134,7 +134,6 @@ export class ChecklistComponent implements OnInit {
   }
 
   loadFromApi() {
-    console.log('this.isOnline', this.isOnline);
     if (this.isOnline) {
       if (this.id && this.params.editMode == 'false') {
         this.getById();
@@ -336,11 +335,9 @@ export class ChecklistComponent implements OnInit {
 
   deSerialize(recordDataArray: any) {
     let data: any = {};
-    console.log('recordDataArray', recordDataArray);
     recordDataArray.forEach((item: any) => {
       data[item?.name] = item?.value;
     });
-    console.log('data', data);
     return data;
   }
 
@@ -397,7 +394,6 @@ export class ChecklistComponent implements OnInit {
             return el.offlineRef == this.params.offline;
           });
           this.modelBody.offlineRef = this.params.offline;
-          console.log('index', index);
           if (index >= 0) {
             cacheRecords[index] = this.modelBody;
           } else {
@@ -420,7 +416,7 @@ export class ChecklistComponent implements OnInit {
         this.location.back();
       }
     });
-
+    this.statusSubscription2.unsubscribe();
   }
 
   async loadFromCacheById() {
@@ -525,7 +521,6 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('formDataRef')?.setValue(this.params.offline);
         this.recordForm.get('formDataRef')?.disable();
         let recordJson = valueRecord.form_Record; // data
-        console.log('recordJson', recordJson);
         let dataObject = this.deSerialize(recordJson);
         this.form.components = JSON.parse(valueChecklist.formControls);
         this.options = {
@@ -590,6 +585,6 @@ export class ChecklistComponent implements OnInit {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.statusSubscription.unsubscribe();
-    this.statusSubscription2.unsubscribe();
+
   }
 }

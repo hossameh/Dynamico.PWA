@@ -42,7 +42,6 @@ export class CategoryComponent implements OnInit {
   }
 
   loadFromApi(){
-    console.log('this.isOnline',this.isOnline);
     this.isOnline ? this.getCategoryChecklists() : ''
   }
 

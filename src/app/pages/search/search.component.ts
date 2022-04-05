@@ -65,7 +65,6 @@ export class SearchComponent implements OnInit {
       Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : ''
     };
     this.http.get('Records/ReadFormRecords', body).subscribe((value: any) => {
-      console.log('value', value);
       this.items = value;
     });
   }

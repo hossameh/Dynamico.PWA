@@ -19,7 +19,6 @@ export class NotificationComponent implements OnInit {
 
   getAll(){
     this.http.get('Plans/GetUserChecklistsAssigned').subscribe((res) => {
-      console.log('res',res);
       this.items = res;
     })
   }

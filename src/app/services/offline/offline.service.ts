@@ -1,3 +1,5 @@
+import { HttpService } from './../http/http.service';
+import { map } from 'rxjs/operators';
 import { HelperService } from './../helper.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -20,7 +22,7 @@ export class OfflineService {
     private toastr: ToastrService,
     private help: HelperService,
     private storage: Storage,
-    private http: HttpClient) {
+    private http: HttpService) {
 
     let status = navigator.onLine;
     this.isConnected = status;
@@ -52,9 +54,19 @@ export class OfflineService {
   }
 
   async SendToApi() {
-    let submitCache = await this.storage.get('SubmitBody');
-    let savedCache = await this.storage.get('SavedBody');
+    let cacheRecords = await this.storage.get('Records') || [];
+    if(cacheRecords.length > 0){
+      cacheRecords.map((el:any , index:number) => {
+        console.log('index',index);
+        this.http.post('Records/SaveFormRecord', el).subscribe((res: any) => {
 
+        });
+        if(index == (cacheRecords.length-1) ){
+          this.storage.remove('Records');
+        }
+      });
+
+    }
   }
 
 }
