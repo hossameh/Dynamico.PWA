@@ -9,8 +9,9 @@ import {
   style,
   animate,
   transition,
-} from "@angular/animations";import { Component, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage'
+} from "@angular/animations"; import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-visits',
   templateUrl: './visits.component.html',
@@ -53,91 +54,101 @@ import { Storage } from '@ionic/storage'
 })
 export class VisitsComponent implements OnInit {
   step = 1;
-  pendingItems:any = []
-  completeItems:any = []
+  pendingItems: any = [];
+  completeItems: any = [];
   body = {
-    FromCreationDate:'',
-    ToCreationDate:'',
-    FormId:0,
-    Record_Status:0
-  }
+    FromCreationDate: '',
+    ToCreationDate: '',
+    FormId: 0,
+    Record_Status: 0
+  };
 
-  params:any
-  formId!:number
-  id!:number;
-  isOnline =  true
+  params: any;
+  formId!: number;
+  id!: number;
+  isOnline = true;
+  statusSubscription!: Subscription;
   constructor(
-    private route:ActivatedRoute,
-    private router:Router,
-    private alert:AlertService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private alert: AlertService,
     private offline: OfflineService,
     private storage: Storage,
-    private helper:HelperService,
+    private helper: HelperService,
     private http: HttpService) { }
 
   ngOnInit(): void {
 
-    this.id =  this.route.snapshot.params.id;
-    this.id ? this.body.FormId = +this.id:'';
-    this.params =  this.route.snapshot.queryParams;
-    this.offline.currentStatus.subscribe(isOnline => {
-      this.isOnline = isOnline
-      if (isOnline) {
-        this.getAllPending()
-      }else{
+    this.id = this.route.snapshot.params.id;
+    this.id ? this.body.FormId = +this.id : '';
+    this.params = this.route.snapshot.queryParams;
+    this.statusSubscription =  this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+      if (!isOnline) {
         this.loadFromCache();
+      }else{
+        this.loadFromApi()
       }
     });
 
-
   }
 
 
-  getAllPending(){
+  loadFromApi() {
+    if (this.isOnline) {
+      this.getAllPending();
+    }
+  }
+  getAllPending() {
     this.body.Record_Status = 1;
-    this.http.get('Records/ReadFormRecords',this.body).subscribe((value:any) =>{
-      this.pendingItems = [...value]
-    })
+    this.http.get('Records/ReadFormRecords', this.body).subscribe((value: any) => {
+      this.pendingItems = [...value];
+    });
   }
-  getAllComplete(){
+  getAllComplete() {
     this.body.Record_Status = 2;
-    this.http.get('Records/ReadFormRecords',this.body).subscribe((value:any) =>{
-      this.completeItems = [...value]
-    })
+    this.http.get('Records/ReadFormRecords', this.body).subscribe((value: any) => {
+      this.completeItems = [...value];
+    });
   }
 
-  async loadFromCache(){
-    this.completeItems = []
-    this.pendingItems = []
-      let cacheRecords = await this.storage.get('Records') || [];
-      if(cacheRecords.length > 0){
-        cacheRecords.map((el:any) => {
-          el.form_Title = this.params?.listName
-        });
+  async loadFromCache() {
+    this.completeItems = [];
+    this.pendingItems = [];
+    let cacheRecords = await this.storage.get('Records') || [];
+    if (cacheRecords.length > 0) {
+      cacheRecords.map((el: any) => {
+        el.form_Title = this.params?.listName;
+      });
 
-        this.pendingItems = cacheRecords.filter((el:any) => el.isSubmitted == false);
-        this.completeItems = cacheRecords.filter((el:any) => el.isSubmitted == true);
-      }
+      this.pendingItems = cacheRecords.filter((el: any) => el.isSubmitted == false && el.form_Id == this.id);
+      this.completeItems = cacheRecords.filter((el: any) => el.isSubmitted == true && el.form_Id == this.id);
+    }
   }
-  change(step:number){
-   this.step = step;
+  change(step: number) {
+    this.step = step;
 
-   if(this.isOnline){
-    step == 1 && this.pendingItems.length == 0 ? this.getAllPending() : '';
-    step == 2 && this.completeItems.length == 0 ? this.getAllComplete() : '';
-   }
+    if (this.isOnline) {
+      step == 1 && this.pendingItems.length == 0 ? this.getAllPending() : '';
+      step == 2 && this.completeItems.length == 0 ? this.getAllComplete() : '';
+    }
 
 
   }
 
-  filterPending(event:any){
+  filterPending(event: any) {
     this.body.FromCreationDate = event.FromCreationDate;
     this.body.ToCreationDate = event.ToCreationDate;
-    this.getAllPending()
+    this.getAllPending();
   }
-  filterComplete(event:any){
+  filterComplete(event: any) {
     this.body.FromCreationDate = event.FromCreationDate;
     this.body.ToCreationDate = event.ToCreationDate;
-    this.getAllComplete()
+    this.getAllComplete();
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.statusSubscription.unsubscribe();
   }
 }

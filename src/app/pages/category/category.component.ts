@@ -3,6 +3,7 @@ import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-category',
@@ -13,6 +14,9 @@ export class CategoryComponent implements OnInit {
   items: any = [];
   category_Id!: number;
   name!: string;
+  isOnline = true;
+  statusSubscription!: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private offline: OfflineService,
@@ -25,16 +29,21 @@ export class CategoryComponent implements OnInit {
     this.name = this.route.snapshot.queryParams.name;
 
     if (this.category_Id) {
-      this.offline.currentStatus.subscribe(isOnline => {
-        if (isOnline) {
-          this.getCategoryChecklists();
-        } else {
+      this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+        this.isOnline = isOnline
+        if (!isOnline) {
           this.loadFromCache();
+        }else{
+          this.loadFromApi()
         }
       });
     }
 
+  }
 
+  loadFromApi(){
+    console.log('this.isOnline',this.isOnline);
+    this.isOnline ? this.getCategoryChecklists() : ''
   }
 
   getCategoryChecklists() {
@@ -75,6 +84,12 @@ export class CategoryComponent implements OnInit {
       this.items = cacheCatgoryChecklists.filter((el: any) => el.categoryId == this.category_Id)[0].list;
     }
 
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.statusSubscription.unsubscribe();
   }
 
 }

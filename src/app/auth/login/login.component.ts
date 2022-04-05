@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.BuildRequestForm();
+    localStorage.clear();
   }
 
   BuildRequestForm() {

@@ -8,6 +8,7 @@ import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
 import { Location } from '@angular/common';
 import { RecordStatus } from 'src/app/core/enums/status.enum';
 import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-checklist',
@@ -31,6 +32,10 @@ export class ChecklistComponent implements OnInit {
   userId!: number;
   modelBody!: any;
   isComplete = false;
+  isOnline = true;
+  statusSubscription!: Subscription;
+  statusSubscription2!: Subscription;
+
   constructor(private route: ActivatedRoute,
     private http: HttpService,
     private router: Router,
@@ -112,25 +117,32 @@ export class ChecklistComponent implements OnInit {
 
     this.isComplete = this.params.Complete == 'true' ? true : false;
     this.buildForm();
-    this.offline.currentStatus.subscribe(isOnline => {
-      if (isOnline) {
-        if (this.id && this.params.editMode == 'false') {
-          this.getById();
-        }
-        if (this.id && this.params.editMode == 'true') {
-          this.editChecklistRecord();
-        }
-      } else {
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+      if (!isOnline) {
         if (this.id && this.params.editMode == 'false') {
           this.loadFromCacheById();
         }
         if (this.id && this.params.editMode == 'true') {
           this.loadFromCacheByIdEdit();
         }
-
+      }else{
+        this.loadFromApi();
       }
     });
 
+  }
+
+  loadFromApi() {
+    console.log('this.isOnline', this.isOnline);
+    if (this.isOnline) {
+      if (this.id && this.params.editMode == 'false') {
+        this.getById();
+      }
+      if (this.id && this.params.editMode == 'true') {
+        this.editChecklistRecord();
+      }
+    }
   }
 
   buildForm() {
@@ -187,7 +199,7 @@ export class ChecklistComponent implements OnInit {
       this.data = value;
 
       this.recordForm.get('record_Id')?.setValue(0);
-      this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
+      this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
       this.options = {
         builder: {
@@ -260,7 +272,7 @@ export class ChecklistComponent implements OnInit {
       this.data = value;
 
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
-      this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
+      this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
       let recordJson = value.record_Json; // data
       let dataObject = this.deSerialize(JSON.parse(recordJson));
@@ -324,9 +336,11 @@ export class ChecklistComponent implements OnInit {
 
   deSerialize(recordDataArray: any) {
     let data: any = {};
+    console.log('recordDataArray', recordDataArray);
     recordDataArray.forEach((item: any) => {
       data[item?.name] = item?.value;
     });
+    console.log('data', data);
     return data;
   }
 
@@ -364,7 +378,7 @@ export class ChecklistComponent implements OnInit {
   }
 
   send() {
-    this.offline.currentStatus.subscribe(async (isOnline) => {
+    this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
       if (isOnline) {
         this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
@@ -403,7 +417,7 @@ export class ChecklistComponent implements OnInit {
         }
 
         await this.storage.set('Records', cacheRecords);
-
+        this.location.back();
       }
     });
 
@@ -414,9 +428,21 @@ export class ChecklistComponent implements OnInit {
     let value: any = {};
     if (cacheChecklists.length > 0) {
       value = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
+      if (value?.gpsRequired) {
+        navigator.geolocation.getCurrentPosition((location) => {
+          this.latitude = location.coords.latitude;
+          this.longitude = location.coords.longitude;
+          this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
+        },
+          (err) => {
+            this.location.back();
+            this.alert.error('Please accept to share your location first !');
+          });
+      }
       if (value) {
+
         this.recordForm.get('record_Id')?.setValue(0);
-        this.recordForm.get('formDataRef')?.setValue(value.formDataRef);
+        this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
         this.recordForm.get('formDataRef')?.disable();
         this.options = {
           builder: {
@@ -474,7 +500,96 @@ export class ChecklistComponent implements OnInit {
     }
   }
 
-  loadFromCacheByIdEdit() {
+  async loadFromCacheByIdEdit() {
 
+    let cacheChecklists = await this.storage.get('Checklists') || [];
+    let cacheRecords = await this.storage.get('Records') || [];
+    let valueChecklist: any = {};
+    let valueRecord: any = {};
+    if (cacheChecklists.length > 0 && cacheRecords.length > 0) {
+      valueChecklist = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
+      valueRecord = cacheRecords.filter((el: any) => el.offlineRef == this.params.offline)[0];
+      if (valueChecklist?.gpsRequired) {
+        navigator.geolocation.getCurrentPosition((location) => {
+          this.latitude = location.coords.latitude;
+          this.longitude = location.coords.longitude;
+          this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
+        },
+          (err) => {
+            this.location.back();
+            this.alert.error('Please accept to share your location first !');
+          });
+      }
+      if (valueRecord) {
+        this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
+        this.recordForm.get('formDataRef')?.setValue(this.params.offline);
+        this.recordForm.get('formDataRef')?.disable();
+        let recordJson = valueRecord.form_Record; // data
+        console.log('recordJson', recordJson);
+        let dataObject = this.deSerialize(recordJson);
+        this.form.components = JSON.parse(valueChecklist.formControls);
+        this.options = {
+          builder: {
+            hideTab: true,
+            hideDisplaySelect: true,
+
+          },
+          json: {
+            hideTab: true,
+            changePanelLocations: ['top', 'bottom'],
+            input: {
+
+            },
+
+          },
+          renderer: {
+            defaultTab: true,
+            submissionPanel: {
+
+              disabled: true,
+              // Whether to initially show full or partial submission. Default to false.
+              fullSubmission: false,
+              // The json editor of the submitted resource.
+              resourceJsonEditor: {
+
+                input: {
+
+                },
+                output: {
+
+                }
+              },
+              schemaJsonEditor: {
+                enabled: false,
+                input: {},
+                output: {}
+              }
+            },
+
+            output: {
+              submit: this.onFormSubmitted.bind(this, event),
+            },
+            input: {
+              // readOnly: this.printed,
+              submission: {
+                data: dataObject
+              },
+              hooks: {
+
+              }
+
+
+            }
+          }
+        };
+      }
+
+    }
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.statusSubscription.unsubscribe();
+    this.statusSubscription2.unsubscribe();
   }
 }

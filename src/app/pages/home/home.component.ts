@@ -2,6 +2,7 @@ import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,8 @@ import { Storage } from '@ionic/storage';
 })
 export class HomeComponent implements OnInit {
   items: category[] = [];
+  isOnline = true;
+  statusSubscription!: Subscription;
   constructor(
     private http: HttpService,
     private storage: Storage,
@@ -18,15 +21,19 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.items = [];
-    this.offline.currentStatus.subscribe(isOnline => {
-      if (isOnline) {
-        this.getCategories();
-      } else {
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+      if (!isOnline) {
         this.loadFromCache();
+      } else {
+        this.loadFromApi();
       }
     });
   }
 
+  loadFromApi() {
+    this.isOnline ? this.getCategories() : '';
+  }
   getCategories() {
     this.http.get('Categories/GetUserCategories').subscribe(async (res: any) => {
       this.items = res;
@@ -38,7 +45,11 @@ export class HomeComponent implements OnInit {
     this.items = [];
     this.items = await this.storage.get('Categories');
   }
-
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.statusSubscription.unsubscribe();
+  }
 }
 
 
