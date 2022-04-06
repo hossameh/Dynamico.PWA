@@ -46,7 +46,7 @@ export class CategoryComponent implements OnInit {
   }
 
   getCategoryChecklists() {
-    this.http.get('Categories/GetCategoryChecklists', { categoryId: this.category_Id }).subscribe(async (res) => {
+    this.http.get('Categories/GetCategoryChecklists', { categoryId: this.category_Id, userId:  JSON.parse(localStorage.getItem('userData') || '{}').userId}).subscribe(async (res) => {
       this.items = res;
       let CategoryChecklist = {
         categoryId: +this.category_Id,
