@@ -5,25 +5,25 @@
     </p>
     <mat-slide-toggle></mat-slide-toggle>
   </div>
-  <div class="accordion" id="accordionExample">
+  <div class="accordion" id="accordionExample" *ngIf="items?.length != 0">
     <div class="accordion-item" *ngFor="let item of items ; let i = index">
       <h2 class="accordion-header" [id]="'heading' + i">
         <p class="header" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
-          {{17 + i}} May 2021 <span *ngIf="i == 0" class="badge">2</span>
+          {{item?.date | date:'d MMM YYY'}} <span *ngIf="item?.list?.length != 0" class="badge">{{item?.list?.length}}</span>
         </p>
       </h2>
       <div [id]="'collapse' + i" class="accordion-collapse collapse " [class.show]="i == 0" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          <div class="mb-3" *ngFor="let item of items">
+          <div class="mb-3" *ngFor="let element of item.list">
             <div class="white-box py-2">
               <div class="box-content">
                 <p class="number">
-                  #2342
+                  #{{element.formId}}
                 </p>
                 <h5 class="font-14">
-                  Maintenance visit form
+                  {{element.title}}
                 </h5>
-                <p class="date">27 March 2021</p>
+                <p class="date"> {{element.endDate | date:'d MMM YYY'}}</p>
               </div>
               <div class="box-side">
                 <div class="d-flex align-items-center">

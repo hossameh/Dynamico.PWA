@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarComponent implements OnInit {
   grade = true;
+  items = []
   constructor(private http:HttpService) { }
 
   ngOnInit(): void {
@@ -20,7 +21,13 @@ export class CalendarComponent implements OnInit {
   }
 
   getPlans(){
-    this.http.get('Plans/GetPlans').subscribe(value => {
+    let body = {
+      pageIndex: 1,
+      pageSize:2,
+      // UserId:JSON.parse(localStorage.getItem('userData') || '{}').userId
+    }
+    this.http.get('Plan/GetPlans',body).subscribe((value:any) => {
+      this.items = value.list
       console.log('value',value);
     })
   }
