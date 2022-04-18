@@ -25,12 +25,12 @@ export class LoginComponent implements OnInit {
 
   BuildRequestForm() {
     this.authForm = this.FB.group({
-      username: [null, [Validators.required, Validators.email]],
+      username: [null, [Validators.required]],
       password: [null, [Validators.required, Validators.minLength(8),
       Validators.pattern(
         /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$-\/:-?{-~!"^_`\[\]@%$*])(?=.{8,})/
       )]],
-      companyCode: []
+      // companyCode: []
     });
   }
 

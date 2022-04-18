@@ -33,3 +33,37 @@ export interface list {
   lastUpdateDate:          null;
   isDeleted:               boolean;
 }
+
+
+
+export interface Planner {
+  color?: string;
+  title?: string;
+  id?: number;
+  startDate?: Date;
+  endDate?: Date;
+  userId?: number;
+  formId?: number;
+  companyId?: number;
+  mode?: string;
+  days?: string;
+  usersId?: number[];
+  isCreateFormData: boolean;
+  Is_Need_Delete_FormData?: boolean;
+  user?: any;
+}
+
+export interface RecurringEvent {
+  id: number;
+  title: string;
+  color: any;
+  rrule?: {
+    freq: any;
+    bymonth?: number;
+    bymonthday?: number;
+    byweekday?: any;
+    dtstart?: any;
+    until?: any;
+    interval?: any;
+  };
+}

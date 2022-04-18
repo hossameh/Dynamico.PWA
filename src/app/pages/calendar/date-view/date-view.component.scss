@@ -1,0 +1,22 @@
+.p-relative{
+  position: relative;
+  .text{
+    position: absolute;
+    top: -56px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.btn{
+  img{
+    filter: invert(1);
+  }
+  &.ft-chevron-left{
+    img{
+      transform: rotateY(180deg);
+    }
+  }
+}

@@ -13,9 +13,9 @@
         <div *ngIf="f.username.touched && (f.username.errors?.required)" class="text-danger text-start mt-2 font-12">
           This Is Required
         </div>
-        <div *ngIf="f.username.touched && (f.username.errors?.email)" class="text-danger text-start mt-2 font-12">
+        <!-- <div *ngIf="f.username.touched && (f.username.errors?.email)" class="text-danger text-start mt-2 font-12">
           Email Not Valid
-        </div>
+        </div> -->
       </div>
       <div class="form-floating has-icon">
         <input [type]="showPasswordText ? 'text' : 'password'" class="form-control " id="floatingPassword" placeholder=" " formControlName="password">

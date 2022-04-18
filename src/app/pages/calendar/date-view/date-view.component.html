@@ -1,1 +1,39 @@
-Date View
+<div class="p-relative">
+  <div class="text-center mb-2 mb-sm-0 text">
+    <h6 class="text-uppercase mb-0">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h6>
+  </div>
+
+</div>
+
+<div class="mt-3">
+  <mwl-calendar-month-view [viewDate]="viewDate" [events]="PlansEvent" [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+                           (eventClicked)="onEditClick( $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-month-view>
+
+</div>
+
+<div class="text-center text-sm-left mb-2 mb-sm-0">
+  <div class="btn-group d-none d-lg-block my-2">
+    <a class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+      {{'Previous'}}
+    </a>
+    <a class="btn btn-danger" mwlCalendarToday [(viewDate)]="viewDate">
+      {{'Today'}}
+    </a>
+    <a class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+      {{'Next'}}
+    </a>
+  </div>
+
+  <div class="btn-group d-block d-lg-none my-2">
+    <a class="btn btn-primary ft-chevron-left" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+      <img src="assets/img/icons/right-chevron-icon.svg" alt="Previous">
+    </a>
+    <a class="btn btn-danger ft-calendar" mwlCalendarToday [(viewDate)]="viewDate">
+      <img src="assets/img/icons/calendar-icon.svg" alt="today">
+    </a>
+    <a class="btn btn-primary ft-chevron-right" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+      <img src="assets/img/icons/right-chevron-icon.svg" alt="Next">
+    </a>
+  </div>
+</div>

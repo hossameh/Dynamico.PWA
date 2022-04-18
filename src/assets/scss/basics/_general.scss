@@ -374,3 +374,16 @@ formio{
     }
   }
 }
+
+.cal-month-view .cal-cell-top,
+.cal-month-view .cal-day-cell{
+  min-height: 50px;
+}
+.cal-month-view .cal-day-number{
+  font-size: 14px;
+}
+.cal-month-view .cal-day-cell.cal-today .cal-day-number{
+  font-size: 14px;
+
+}
+

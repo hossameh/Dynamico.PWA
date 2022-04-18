@@ -6,7 +6,7 @@
   </div>
   <div class="page-bar">
     <div class="d-flex justify-content-end">
-      <div class="" (click)="toggle()">
+      <div class="icons" (click)="toggle()">
         <img src="assets/img/icons/list.svg" alt="list" *ngIf="!grade">
         <img src="assets/img/icons/grid.svg" alt="grid" *ngIf="grade">
       </div>
@@ -14,5 +14,5 @@
   </div>
 
   <app-card-view [items]="items" *ngIf="grade"></app-card-view>
-  <app-date-view *ngIf="!grade"></app-date-view>
+  <app-date-view [items]="itemsDateView" *ngIf="!grade"></app-date-view>
 </section>

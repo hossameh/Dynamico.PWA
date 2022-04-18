@@ -8,23 +8,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarComponent implements OnInit {
   grade = true;
-  items = []
+  items = [];
+  itemsDateView = [];
+
   constructor(private http:HttpService) { }
 
   ngOnInit(): void {
-    console.log('getPlans',this.getPlans());
+    this.toggle();
   }
 
 
   toggle(){
     this.grade = !this.grade
+    if(this.grade){
+      this.getPlans()
+    }else{
+      this.getPlansForDateView()
+    }
   }
 
   getPlans(){
     let body = {
       pageIndex: 1,
-      pageSize:2,
-      // UserId:JSON.parse(localStorage.getItem('userData') || '{}').userId
+      pageSize:10,
+      UserId:JSON.parse(localStorage.getItem('userData') || '{}').userId
     }
     this.http.get('Plan/GetPlans',body).subscribe((value:any) => {
       this.items = value.list
@@ -32,4 +39,14 @@ export class CalendarComponent implements OnInit {
     })
   }
 
+  getPlansForDateView(){
+    let body = {
+     
+      UserId:JSON.parse(localStorage.getItem('userData') || '{}').userId
+    }
+    this.http.get('Plans/GetPlans',body).subscribe((value:any) => {
+      console.log('value',value);
+      this.itemsDateView = value.list
+    })
+  }
 }
