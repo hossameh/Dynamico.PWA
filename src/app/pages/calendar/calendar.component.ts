@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -10,11 +12,18 @@ export class CalendarComponent implements OnInit {
   grade = true;
   items = [];
   itemsDateView = [];
+  Subscription!: Subscription;
 
-  constructor(private http:HttpService) { }
+  constructor(private http:HttpService,
+    private offline: OfflineService,
+) { }
 
   ngOnInit(): void {
-    this.toggle();
+    this.Subscription = this.offline.currentStatus.subscribe(isOnline => {
+      if (isOnline) {
+        this.toggle();
+      }
+    });
   }
 
 
@@ -41,7 +50,7 @@ export class CalendarComponent implements OnInit {
 
   getPlansForDateView(){
     let body = {
-     
+
       UserId:JSON.parse(localStorage.getItem('userData') || '{}').userId
     }
     this.http.get('Plans/GetPlans',body).subscribe((value:any) => {
