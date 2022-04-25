@@ -17,6 +17,7 @@ export class AppComponent {
   currentLang!: any;
   show = false;
   update = false;
+  hideNotifcation= false
 
   constructor(private helper: HelperService,
     private swUpdates: SwUpdate,
@@ -46,6 +47,8 @@ export class AppComponent {
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
+      }else{
+        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search') ;
       }
       window.scrollTo(0, 0);
     });

@@ -53,13 +53,13 @@
       </div>
       <div class="modal-body">
         <div class="form-floating ">
-          <input type="number" class="form-control" id="floatingInput" placeholder="Name" [(ngModel)]="formId" name="formId">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Name" [(ngModel)]="formRef" name="formRef">
           <label for="floatingInput"> Record reference</label>
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" [routerLink]="['/page/checklist/'+formId]" [queryParams]="{editMode: false}"
-                  routerLinkActive="router-link-active" [disabled]="!formId">Start</button>
+          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" [routerLink]="['/page/checklist/'+id]" [queryParams]="{editMode: false}"
+                  routerLinkActive="router-link-active" [queryParams]="{editMode: false ,formRef:formRef}" [disabled]="!formRef">Start</button>
         </div>
       </div>
     </div>

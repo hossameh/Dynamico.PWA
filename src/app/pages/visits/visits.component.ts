@@ -64,7 +64,7 @@ export class VisitsComponent implements OnInit {
   };
 
   params: any;
-  formId!: number;
+  formRef = ''
   id!: number;
   isOnline = true;
   statusSubscription!: Subscription;

@@ -1,6 +1,6 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { dates, Planner, RecurringEvent } from './../../../core/interface/api.interface';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
   startOfDay,
   endOfDay,
@@ -41,7 +41,8 @@ const colors: any = {
 })
 export class DateViewComponent implements OnInit {
   @Input() items: Planner[] = [];
-
+  @Output() showCompletedDateView = new EventEmitter();
+  isChecked = false
   viewDate: Date = new Date();
   newEvent!: CalendarEvent;
   // view: string = 'month';
@@ -78,6 +79,11 @@ export class DateViewComponent implements OnInit {
   ngOnInit(): void {
 
   }
+  toggle(){
+    setTimeout(() => {
+     this.showCompletedDateView.emit(this.isChecked);
+    },50)
+ }
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.

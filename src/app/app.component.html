@@ -1,7 +1,10 @@
 <main [@routing]="outletRef.isActivated ? outletRef.activatedRoute : ''">
   <router-outlet #outletRef="outlet"></router-outlet>
 </main>
-
+<a [routerLink]="['/page/notification']" *ngIf="!hideNotifcation" routerLinkActive="active" class="notification-icon">
+  <!-- <span class="dots"></span> -->
+  <img src="assets/img/icons/notification-icon.svg" alt="notification">
+</a>
 <div class="preload" *ngIf="show">
   <div class="lds-ripple">
     <div></div>

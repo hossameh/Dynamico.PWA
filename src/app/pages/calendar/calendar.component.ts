@@ -14,9 +14,9 @@ export class CalendarComponent implements OnInit {
   itemsDateView = [];
   Subscription!: Subscription;
 
-  constructor(private http:HttpService,
+  constructor(private http: HttpService,
     private offline: OfflineService,
-) { }
+  ) { }
 
   ngOnInit(): void {
     this.Subscription = this.offline.currentStatus.subscribe(isOnline => {
@@ -27,35 +27,40 @@ export class CalendarComponent implements OnInit {
   }
 
 
-  toggle(){
-    this.grade = !this.grade
-    if(this.grade){
-      this.getPlans()
-    }else{
-      this.getPlansForDateView()
+  toggle() {
+    this.grade = !this.grade;
+    if (this.grade) {
+      this.getPlans();
+    } else {
+      this.getPlansForDateView();
     }
   }
 
-  getPlans(){
+  getPlans(isComplete:any = null) {
     let body = {
       pageIndex: 1,
-      pageSize:10,
-      UserId:JSON.parse(localStorage.getItem('userData') || '{}').userId
-    }
-    this.http.get('Plan/GetPlans',body).subscribe((value:any) => {
-      this.items = value.list
-      console.log('value',value);
-    })
+      pageSize: 10,
+      UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+      ShowCompletedForms:isComplete
+    };
+    this.http.get('Plan/GetPlans', body).subscribe((value: any) => {
+      this.items = value.list;
+    });
   }
 
-  getPlansForDateView(){
+  showCompleted(event: boolean) {
+    this.getPlans(event)
+  }
+  showCompletedDateView(event: boolean) {
+    this.getPlansForDateView(event)
+  }
+  getPlansForDateView(isComplete:any = false) {
     let body = {
-
-      UserId:JSON.parse(localStorage.getItem('userData') || '{}').userId
-    }
-    this.http.get('Plans/GetPlans',body).subscribe((value:any) => {
-      console.log('value',value);
-      this.itemsDateView = value.list
-    })
+      ShowCompletedForms:isComplete,
+      UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId
+    };
+    this.http.get('Plans/GetPlans', body).subscribe((value: any) => {
+      this.itemsDateView = value.list;
+    });
   }
 }

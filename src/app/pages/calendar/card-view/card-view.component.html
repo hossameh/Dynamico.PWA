@@ -3,7 +3,7 @@
     <p>
       Show completed forms
     </p>
-    <mat-slide-toggle></mat-slide-toggle>
+    <mat-slide-toggle (click)="toggle()" [(ngModel)]="isChecked"></mat-slide-toggle>
   </div>
   <div class="accordion" id="accordionExample" *ngIf="items?.length != 0">
     <div class="accordion-item" *ngFor="let item of items ; let i = index">

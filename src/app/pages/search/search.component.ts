@@ -73,7 +73,8 @@ export class SearchComponent implements OnInit {
     this.http.post('Records/DeleteFormRecord',null,true,{Record_Id: this.selectedItem.record_Id}).subscribe((res:any) => {
 
       if(res.isPassed){
-        this.closeModal.nativeElement.click()
+        this.closeModal.nativeElement.click();
+        this.search()
       }else{
         this.alert.error(res.message)
       }

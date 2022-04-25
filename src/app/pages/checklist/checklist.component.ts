@@ -366,6 +366,7 @@ export class ChecklistComponent implements OnInit {
   save() {
     this.modelBody.record_Status = RecordStatus.Pendding;
     this.modelBody.isSubmitted = false;
+
     this.send();
   }
   submit() {
@@ -375,11 +376,12 @@ export class ChecklistComponent implements OnInit {
   }
 
   send() {
+    this.modelBody.formDataRef =  this.params.formRef ? this.params.formRef : null;
     this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
       if (isOnline) {
         this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
-            this.alert.success(res?.message);
+            this.alert.success('Successfully');
             this.location.back();
           } else {
             this.alert.error(res?.message);

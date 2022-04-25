@@ -16,7 +16,8 @@ export class CategoryComponent implements OnInit {
   name!: string;
   isOnline = true;
   statusSubscription!: Subscription;
-
+  selectedItem:any = {}
+  formRef = ''
   constructor(
     private route: ActivatedRoute,
     private offline: OfflineService,
