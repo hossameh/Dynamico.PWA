@@ -31,6 +31,9 @@ import { FormioEditorModule } from '@davebaol/angular-formio-editor';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { WorkflowComponent } from './pages/workflow/workflow.component';
+import { PendingWorkflowComponent } from './pages/workflow/pending-workflow/pending-workflow.component';
+import { HistoryWorkflowComponent } from './pages/workflow/history-workflow/history-workflow.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +53,10 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     CalendarComponent,
     PagesComponent,
     CardViewComponent,
-    DateViewComponent
+    DateViewComponent,
+    WorkflowComponent,
+    PendingWorkflowComponent,
+    HistoryWorkflowComponent
   ],
   imports: [
     BrowserModule,

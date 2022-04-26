@@ -127,13 +127,10 @@ export class VisitsComponent implements OnInit {
   }
   change(step: number) {
     this.step = step;
-
     if (this.isOnline) {
       step == 1 && this.pendingItems.length == 0 ? this.getAllPending() : '';
       step == 2 && this.completeItems.length == 0 ? this.getAllComplete() : '';
     }
-
-
   }
 
   filterPending(event: any) {

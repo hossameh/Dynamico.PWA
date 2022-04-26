@@ -12,9 +12,10 @@
       </a>
     </li>
     <li>
-      <a [routerLink]="['/page/notification']" routerLinkActive="active">
+      <a [routerLink]="['/page/workflow']" routerLinkActive="active">
         <!-- <span class="dots"></span> -->
-        <img src="assets/img/icons/notification-icon.svg" alt="notification">
+        <img src="assets/img/icons/workflow.svg" alt="workflow">
+        <span class="number" *ngIf="count">{{count}}</span>
       </a>
     </li>
     <li>

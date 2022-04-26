@@ -1,3 +1,4 @@
+import { HttpService } from './services/http/http.service';
 import { LoadingService } from './services/loading/loading.service';
 import { HelperService } from './services/helper.service';
 import { Component } from '@angular/core';
@@ -21,6 +22,7 @@ export class AppComponent {
 
   constructor(private helper: HelperService,
     private swUpdates: SwUpdate,
+    private http: HttpService,
     private storage: Storage, private router: Router, private loadingService: LoadingService) { }
 
   ngOnInit(): void {
@@ -28,6 +30,7 @@ export class AppComponent {
     this.createDb();
     this.reloadCache();
 
+    this.getWorkflowCount();
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;
@@ -48,7 +51,7 @@ export class AppComponent {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }else{
-        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search') ;
+        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search') || this.router.url.includes('login')  ;
       }
       window.scrollTo(0, 0);
     });
@@ -64,7 +67,11 @@ export class AppComponent {
       });
     }
   }
-
+  getWorkflowCount(){
+    this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
+      this.helper.getingCount.next(res);
+    })
+  }
   updateAccept(){
     this.update = false;
     window.location.reload();

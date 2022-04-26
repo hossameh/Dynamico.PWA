@@ -106,7 +106,7 @@ export class ChecklistComponent implements OnInit {
           //    submit: true
           //  }
           //},
-          //readOnly: true,
+          // readOnly: true,
 
 
         }
@@ -318,7 +318,7 @@ export class ChecklistComponent implements OnInit {
             submit: this.onFormSubmitted.bind(this, event),
           },
           input: {
-            // readOnly: this.printed,
+            readOnly: !!this.params.Complete ? true : false,
             submission: {
               data: dataObject
             },
@@ -567,7 +567,7 @@ export class ChecklistComponent implements OnInit {
               submit: this.onFormSubmitted.bind(this, event),
             },
             input: {
-              // readOnly: this.printed,
+              readOnly: !!this.params.Complete ? true : false,
               submission: {
                 data: dataObject
               },

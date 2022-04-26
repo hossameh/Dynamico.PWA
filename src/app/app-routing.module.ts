@@ -1,3 +1,4 @@
+import { WorkflowComponent } from './pages/workflow/workflow.component';
 import { ChecklistComponent } from './pages/checklist/checklist.component';
 import { AuthGard } from './core/gaurds/auth.guard';
 import { CalendarComponent } from './pages/calendar/calendar.component';
@@ -56,6 +57,10 @@ const routes: Routes = [
       {
         path:'profile',
         component:ProfileComponent
+      },
+      {
+        path:'workflow',
+        component:WorkflowComponent
       },
       {
         path:'checklist/:id',
