@@ -63,7 +63,8 @@ export class WorkflowComponent implements OnInit {
     this.$subscription =  this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       if (isOnline) {
-        this.getData()
+        this.getWorkflowCount();
+        this.getData();
       }
     });
 

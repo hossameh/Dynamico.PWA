@@ -1,5 +1,5 @@
 <div class="content px-3 py-4">
-  <div class="mb-3" *ngFor="let item of items">
+  <div class="mb-3" *ngFor="let item of items" [routerLink]="['/page/workflow/details']" [queryParams]="{Form_Id:item.form.formId,Record_Id: item.formDataId}">
     <div class="white-box py-2">
       <div class="box-content">
         <p class="number">

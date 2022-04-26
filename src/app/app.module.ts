@@ -34,6 +34,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { WorkflowComponent } from './pages/workflow/workflow.component';
 import { PendingWorkflowComponent } from './pages/workflow/pending-workflow/pending-workflow.component';
 import { HistoryWorkflowComponent } from './pages/workflow/history-workflow/history-workflow.component';
+import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/details-workflow.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { HistoryWorkflowComponent } from './pages/workflow/history-workflow/hist
     DateViewComponent,
     WorkflowComponent,
     PendingWorkflowComponent,
-    HistoryWorkflowComponent
+    HistoryWorkflowComponent,
+    DetailsWorkflowComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,57 @@
+.content{
+  background: #FFF;
+    border-radius: 10px;
+    margin: 10px;
+}
+.bg-white{
+  border-radius: 10px;
+  box-shadow: 0 3px 10px 0px rgb(0 0 0 / 5%);
+  .white-box {
+    box-shadow: unset;
+  }
+  .comment{
+    font-size: 13px;
+    padding: 0 15px 5px;
+  }
+}
+.actions{
+  margin: 0 -0.5rem !important;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  button{
+    background: transparent;
+    border: unset;
+    width: 50%;
+    color: #FFF;
+    padding: 5px 0;
+    img{
+      width: 25px;
+      margin-inline-end: 5px;
+    }
+    &.accept{
+    background: #0BBCA1;
+    }
+    &.reject{
+      background: #bc260b;
+      }
+  }
+}
+
+.badge{
+  img{
+    filter: brightness(10);
+  }
+}
+
+.form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-select ~ label{
+  width: 100%;
+    background: #fff;
+
+}
+
+.form-floating>.form-control:focus~label, .form-floating>.form-control:not(:placeholder-shown)~label, .form-floating>.form-select~label{
+  opacity: 1;
+  transform: scale(1) translateY(-0.5rem) translateX(0.15rem);
+  font-size: 14px;
+  height: 35px;
+}

@@ -1,3 +1,4 @@
+import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/details-workflow.component';
 import { WorkflowComponent } from './pages/workflow/workflow.component';
 import { ChecklistComponent } from './pages/checklist/checklist.component';
 import { AuthGard } from './core/gaurds/auth.guard';
@@ -61,6 +62,10 @@ const routes: Routes = [
       {
         path:'workflow',
         component:WorkflowComponent
+      },
+      {
+        path:'workflow/details',
+        component:DetailsWorkflowComponent
       },
       {
         path:'checklist/:id',
