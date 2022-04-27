@@ -60,8 +60,7 @@ export class SearchComponent implements OnInit {
 
   search() {
     let body = {
-      FormId: isNaN(this.searchObj.searchKey) ? '' : this.searchObj.searchKey,
-      FormTitle: isNaN(this.searchObj.searchKey) ? this.searchObj.searchKey : '',
+      TitleOrREF: this.searchObj.searchKey ,
       Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : ''
     };
     this.http.get('Records/ReadFormRecords', body).subscribe((value: any) => {
