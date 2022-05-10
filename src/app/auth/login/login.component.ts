@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { API } from 'src/app/core/interface/api.interface';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -41,8 +42,9 @@ export class LoginComponent implements OnInit {
     return this.authForm.controls;
   }
   login() {
-
-    this.http.post('User/authenticate', this.authForm.value, true).subscribe((res: any) => {
+    let body = this.authForm.value;
+    body.appName = environment.appName;
+    this.http.post('User/authenticate', body, true).subscribe((res: any) => {
       if (res.isPassed) {
         localStorage.setItem('userData', JSON.stringify(res.data));
         localStorage.setItem('token', JSON.stringify(res.data.resetToken));

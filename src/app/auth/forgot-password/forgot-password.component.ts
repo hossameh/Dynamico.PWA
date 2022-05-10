@@ -9,6 +9,8 @@ export class ForgotPasswordComponent implements OnInit {
 
   constructor() { }
 
+  linkSent:boolean = false;
+
   ngOnInit(): void {
   }
 

@@ -51,7 +51,8 @@ export class AppComponent {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }else{
-        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search') || this.router.url.includes('login')  ;
+        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search') 
+        || this.router.url.includes('login') || this.router.url.includes('forgot')  ;
       }
       window.scrollTo(0, 0);
     });
