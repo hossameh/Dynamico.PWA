@@ -17,72 +17,74 @@ import { LoginComponent } from './auth/login/login.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { ResetPasswordGuard } from './core/gaurds/reset-password.guard';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
-    path:'login',
-    component:LoginComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path:'forgot',
-    component:ForgotPasswordComponent
+    path: 'forgot',
+    component: ForgotPasswordComponent
   },
   {
-    path:'resetpassword',
-    component:ResetPasswordComponent
+    path: 'resetpassword',
+    canActivate: [ResetPasswordGuard],
+    component: ResetPasswordComponent
   },
   {
-    path:'page',
+    path: 'page',
     component: PagesComponent,
-    canActivateChild:[AuthGard],
-    children:[
+    canActivateChild: [AuthGard],
+    children: [
       {
-        path:'home',
-        component:HomeComponent
+        path: 'home',
+        component: HomeComponent
       },
       {
-        path:'home/category/:id',
-        component:CategoryComponent
+        path: 'home/category/:id',
+        component: CategoryComponent
       },
       {
-        path:'visits/:id',
-        component:VisitsComponent
+        path: 'visits/:id',
+        component: VisitsComponent
       },
       {
-        path:'pending',
-        component:PendingComponent
+        path: 'pending',
+        component: PendingComponent
       },
       {
-        path:'completed',
-        component:CompletedComponent
+        path: 'completed',
+        component: CompletedComponent
       },
       {
-        path:'search',
-        component:SearchComponent
+        path: 'search',
+        component: SearchComponent
       },
       {
-        path:'profile',
-        component:ProfileComponent
+        path: 'profile',
+        component: ProfileComponent
       },
       {
-        path:'workflow',
-        component:WorkflowComponent
+        path: 'workflow',
+        component: WorkflowComponent
       },
       {
-        path:'workflow/details',
-        component:DetailsWorkflowComponent
+        path: 'workflow/details',
+        component: DetailsWorkflowComponent
       },
       {
-        path:'checklist/:id',
-        component:ChecklistComponent
+        path: 'checklist/:id',
+        component: ChecklistComponent
       },
       {
-        path:'notification',
-        component:NotificationComponent
+        path: 'notification',
+        component: NotificationComponent
       },
       {
-        path:'calendar',
-        component:CalendarComponent
+        path: 'calendar',
+        component: CalendarComponent
       },
     ]
   }

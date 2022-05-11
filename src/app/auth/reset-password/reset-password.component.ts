@@ -28,12 +28,12 @@ export class ResetPasswordComponent implements OnInit {
     this.buildForm();
     this.route.queryParams.subscribe((params) => {
       this.APIKey = params["APIKey"];
-      if (this.APIKey) {
-        this.validateApiKey();
-      } else {
-        this.alert.error("Invalid Data");
-        this.routeToLogin();
-      }
+      // if (this.APIKey) {
+      //   this.validateApiKey();
+      // } else {
+      //   this.alert.error("Invalid Data");
+      //   this.routeToLogin();
+      // }
     });
 
   }
@@ -56,20 +56,20 @@ export class ResetPasswordComponent implements OnInit {
     this.userForm.updateValueAndValidity();
   }
 
-  validateApiKey() {
-    try {
-      this.http.get2('User/ValidateForgetPassword', { APIKey: this.APIKey }).subscribe((res : any) => {                
-        if (res && res.isPassed) {
-          this.alert.success(res?.message);
-        } else {
-          this.alert.error(res?.message ? res?.message : "Invalid Token");
-          this.routeToForgetPassword();
-        }
-      });
-    } catch (error: any) {
-      this.alert.error(error);
-    }
-  }
+  // validateApiKey() {
+  //   try {
+  //     this.http.get2('User/ValidateForgetPassword', { APIKey: this.APIKey }).subscribe((res : any) => {                
+  //       if (res && res.isPassed) {
+  //         this.alert.success(res?.message);
+  //       } else {
+  //         this.alert.error(res?.message ? res?.message : "Invalid Token");
+  //         this.routeToForgetPassword();
+  //       }
+  //     });
+  //   } catch (error: any) {
+  //     this.alert.error(error);
+  //   }
+  // }
   resetPassword() {
     try {
       let body = {
