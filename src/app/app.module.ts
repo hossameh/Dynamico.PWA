@@ -35,6 +35,7 @@ import { WorkflowComponent } from './pages/workflow/workflow.component';
 import { PendingWorkflowComponent } from './pages/workflow/pending-workflow/pending-workflow.component';
 import { HistoryWorkflowComponent } from './pages/workflow/history-workflow/history-workflow.component';
 import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/details-workflow.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/deta
     WorkflowComponent,
     PendingWorkflowComponent,
     HistoryWorkflowComponent,
-    DetailsWorkflowComponent
+    DetailsWorkflowComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

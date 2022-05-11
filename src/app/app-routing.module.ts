@@ -16,6 +16,7 @@ import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.
 import { LoginComponent } from './auth/login/login.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path:'forgot',
     component:ForgotPasswordComponent
+  },
+  {
+    path:'resetpassword',
+    component:ResetPasswordComponent
   },
   {
     path:'page',

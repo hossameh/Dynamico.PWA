@@ -22,7 +22,7 @@ export class HelperService {
       isRead: false
     }
     this.http.post('Notification/GetNotificationCount', body).subscribe((res: any) => {
-      this.getingNotificationCount.next(+res.data + 1);
+      this.getingNotificationCount.next(+res.data);
     })
   }
 
