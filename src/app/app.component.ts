@@ -18,7 +18,8 @@ export class AppComponent {
   currentLang!: any;
   show = false;
   update = false;
-  hideNotifcation= false
+  hideNotifcation = false;
+  notifcationCount = 5;
 
   constructor(private helper: HelperService,
     private swUpdates: SwUpdate,
@@ -31,12 +32,16 @@ export class AppComponent {
     this.reloadCache();
 
     this.getWorkflowCount();
+    this.getNotificationCount();
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;
       });
     });
 
+    this.helper.getingNotificationCount.subscribe((count) => {
+      this.notifcationCount = count
+    })
     window.scrollTo(0, 0);
     this.currentLang = localStorage.getItem('lang');
     if (!this.currentLang) {
@@ -50,9 +55,9 @@ export class AppComponent {
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
-      }else{
-        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search') 
-        || this.router.url.includes('login') || this.router.url.includes('forgot')  ;
+      } else {
+        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search')
+          || this.router.url.includes('login') || this.router.url.includes('forgot');
       }
       window.scrollTo(0, 0);
     });
@@ -68,12 +73,21 @@ export class AppComponent {
       });
     }
   }
-  getWorkflowCount(){
+  getWorkflowCount() {
     this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
       this.helper.getingCount.next(res);
     })
   }
-  updateAccept(){
+  getNotificationCount() {
+    let body={
+      UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+      isRead : false
+    }
+    this.http.post('Notification/GetNotificationCount',body).subscribe((res :any) => {
+      this.helper.getingNotificationCount.next(res.data);
+    })
+  }
+  updateAccept() {
     this.update = false;
     window.location.reload();
   }
