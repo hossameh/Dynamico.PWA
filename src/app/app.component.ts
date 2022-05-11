@@ -32,7 +32,7 @@ export class AppComponent {
     this.reloadCache();
 
     this.getWorkflowCount();
-    this.getNotificationCount();
+    this.helper.getNotificationCount();
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;
@@ -76,15 +76,6 @@ export class AppComponent {
   getWorkflowCount() {
     this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
       this.helper.getingCount.next(res);
-    })
-  }
-  getNotificationCount() {
-    let body={
-      UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
-      isRead : false
-    }
-    this.http.post('Notification/GetNotificationCount',body).subscribe((res :any) => {
-      this.helper.getingNotificationCount.next(res.data);
     })
   }
   updateAccept() {
