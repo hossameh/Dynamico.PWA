@@ -4,20 +4,24 @@
       <h4>
         Notifications
       </h4>
-      <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" aria-expanded="false">
 
-      <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
+      <!-- <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
         <li><a class="dropdown-item">Make all as read</a></li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 
   <div class=" px-3 py-4">
     <div class="content">
-      <div class="box unread" *ngFor="let item of items ; let i = index">
-        <p [routerLink]="['/page/checklist/'+ item.id]" [queryParams]="{editMode:false}" routerLinkActive="router-link-active">
-          {{item.name}}
-        </p>
+      <div *ngFor="let item of items ; let i = index">
+        <div class="box" [class.unread]="item.isRead">
+          <p [routerLink]="['/page/notification-details/'+ item.id]" [queryParams]="{title:item.title,body:item.body}"
+            routerLinkActive="router-link-active">
+            {{item.name}}
+          </p>
+        </div>
       </div>
     </div>
   </div>

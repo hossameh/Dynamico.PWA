@@ -18,6 +18,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { ResetPasswordGuard } from './core/gaurds/reset-password.guard';
+import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -81,6 +82,10 @@ const routes: Routes = [
       {
         path: 'notification',
         component: NotificationComponent
+      },
+      {
+        path: 'notification-details/:id',
+        component: NotificationDetailsComponent
       },
       {
         path: 'calendar',

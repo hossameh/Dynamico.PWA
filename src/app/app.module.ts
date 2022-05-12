@@ -36,6 +36,7 @@ import { PendingWorkflowComponent } from './pages/workflow/pending-workflow/pend
 import { HistoryWorkflowComponent } from './pages/workflow/history-workflow/history-workflow.component';
 import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/details-workflow.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { ResetPasswordComponent } from './auth/reset-password/reset-password.com
     PendingWorkflowComponent,
     HistoryWorkflowComponent,
     DetailsWorkflowComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    NotificationDetailsComponent
   ],
   imports: [
     BrowserModule,
