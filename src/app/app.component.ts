@@ -31,6 +31,8 @@ export class AppComponent {
     this.createDb();
     this.reloadCache();
 
+    this.listenToFCM();
+
     this.getWorkflowCount();
     this.helper.getNotificationCount();
     this.loadingService.isLoading.subscribe(isLoading => {
@@ -118,5 +120,14 @@ export class AppComponent {
     htmlEl.setAttribute('dir', props.dir);
     htmlEl.setAttribute('lang', props.lang);
     // this.loaderService.isLoading.next(false);
+  }
+
+  listenToFCM() {
+    // const messaging = getMessaging();
+    // onMessage(messaging, (payload: any) => {
+    //   // occures if the user is online on this browser tab
+    //   console.log('Message received. ', payload);
+
+    // });
   }
 }

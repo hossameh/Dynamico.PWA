@@ -9,6 +9,17 @@ export const environment = {
   //hostAPI:"http://5.189.153.30/api.dynamico/api/"
 
   appName: 'PWA',
+
+  firebase: {
+    apiKey: "AIzaSyBy3U-CpZ8_Wad19d3dU7dQskBxiBzWd3I",
+    authDomain: "qafarmadmin.firebaseapp.com",
+    projectId: "qafarmadmin",
+    storageBucket: "qafarmadmin.appspot.com",
+    messagingSenderId: "32296479187",
+    appId: "1:32296479187:web:7d18ce442a7a47c74b6726",
+    measurementId: "G-PBNG4MSG6E",
+    vapidKey: "BEd-j1ujDH0tT3uNSs1bFtic81AEi3cnyh9QBLf8GE5clCbZGxCKgoQG3gHA8357KEFRXHtHQ-NHdjPllyH-lAA",
+  },
 };
 
 /*
