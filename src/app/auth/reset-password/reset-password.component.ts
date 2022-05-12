@@ -40,7 +40,10 @@ export class ResetPasswordComponent implements OnInit {
 
   buildForm(): void {
     this.userForm = this.fb.group({
-      password: [null, [Validators.required]],
+      password: [null, [Validators.required, Validators.minLength(8),
+        Validators.pattern(
+          /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$-\/:-?{-~!"^_`\[\]@%$*])(?=.{8,})/
+        )]],
       confirmPassword: [null],
     });
   }
@@ -50,6 +53,9 @@ export class ResetPasswordComponent implements OnInit {
       password: null,
       confirmPassword: null
     };
+  }
+  get f() {
+    return this.userForm.controls;
   }
   resetData() {
     this.userForm.reset(this.formInit());
