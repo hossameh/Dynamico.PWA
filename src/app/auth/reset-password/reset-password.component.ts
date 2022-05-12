@@ -16,6 +16,8 @@ export class ResetPasswordComponent implements OnInit {
   canChange: any;
   userForm!: FormGroup;
   same: boolean = false;
+  showPasswordText = false;
+
   constructor(
     private fb: FormBuilder,
     private alert: AlertService,
@@ -61,7 +63,9 @@ export class ResetPasswordComponent implements OnInit {
     this.userForm.reset(this.formInit());
     this.userForm.updateValueAndValidity();
   }
-
+  showPassword() {
+    this.showPasswordText = !this.showPasswordText;
+  }
   // validateApiKey() {
   //   try {
   //     this.http.get2('User/ValidateForgetPassword', { APIKey: this.APIKey }).subscribe((res : any) => {                
