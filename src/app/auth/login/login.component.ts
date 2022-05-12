@@ -51,7 +51,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userData', JSON.stringify(res.data));
         localStorage.setItem('token', JSON.stringify(res.data.resetToken));
 
-        this.CheckFCMTokenExpiration(res.data);
+        // this.CheckFCMTokenExpiration(res.data);
+        this.routeToHome();
 
       } else {
         this.alert.error(res.message);
@@ -63,6 +64,7 @@ export class LoginComponent implements OnInit {
   }
 
   CheckFCMTokenExpiration(returnObject: any) {
+
     let fcmTokenExpiration = returnObject?.fcmTokenExpiryDate;
     if (fcmTokenExpiration) {
       localStorage.setItem('fcmTokenExpireDate', fcmTokenExpiration);

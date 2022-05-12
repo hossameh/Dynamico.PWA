@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 })
 export class DetailsWorkflowComponent implements OnInit {
   @ViewChild('closeModal') closeModal!: ElementRef;
+  step = 1;
 
   params: any;
   form: any;
@@ -101,7 +102,9 @@ export class DetailsWorkflowComponent implements OnInit {
     }
   }
 
-
+  change(step: number) {
+    this.step = step;
+  }
 
   getRecord() {
     let body = {
