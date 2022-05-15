@@ -2,9 +2,9 @@
   <div class="d-flex justify-content-between align-items-center">
     <div>
       <div class="d-flex">
-        <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" (click)="back()">
+        <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
         <h4>
-          Workflow
+          {{'Workflow' | translate}}
         </h4>
       </div>
     </div>
@@ -15,14 +15,14 @@
   <div class="item " [class.active]="step == 1" (click)="change(1)">
     <div class="d-flex align-items-center justify-content-center ">
       <p>
-        Details
+        {{'Details' | translate}}
       </p>
     </div>
   </div>
   <div class="item " [class.active]="step == 2" (click)="change(2)">
     <div class="d-flex align-items-center justify-content-center">
       <p>
-        Workflow
+        {{'Workflow' | translate}}
       </p>
     </div>
   </div>
@@ -63,11 +63,11 @@
         <div class="d-flex justify-content-between align-items-stretch actions" *ngIf="showActionButton(item)">
           <button class="accept" data-bs-toggle="modal" data-bs-target="#newModal" (click)="saveAction(true,item)">
             <img src="assets/img/icons/accept.png" alt="accept">
-            Accept
+            {{'Accept' | translate}}
           </button>
           <button class="reject" data-bs-toggle="modal" data-bs-target="#newModal" (click)="saveAction(false,item)">
             <img src="assets/img/icons/reject.png" alt="accept">
-            Reject
+            {{'Reject' | translate}}
           </button>
         </div>
       </div>
@@ -81,16 +81,17 @@
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
-        <h5 class="modal-title" id="deleteLabel">Start new </h5>
+        <h5 class="modal-title" id="deleteLabel">{{'Comment' | translate}} </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
       </div>
       <div class="modal-body">
         <div class="form-floating ">
-          <textarea type="text" style="height: 100px;" class="form-control" id="floatingInput" placeholder="Name" [(ngModel)]="comment" name="comment"></textarea>
-          <label for="floatingInput"> Comment</label>
+          <textarea type="text" style="height: 100px;" class="form-control" id="floatingInput" placeholder="{{'Comment' | translate}}" [(ngModel)]="comment"
+                    name="comment"></textarea>
+          <label for="floatingInput"> {{'Comment' | translate}}</label>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" (click)="submit()" [disabled]="!comment">Submit</button>
+          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" (click)="submit()" [disabled]="!comment">{{'Submit' | translate}}</button>
         </div>
       </div>
     </div>

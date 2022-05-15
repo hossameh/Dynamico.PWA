@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { AlertService } from './../../services/alert/alert.service';
 import { HttpService } from './../../services/http/http.service';
 import { Router } from '@angular/router';
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private FB: FormBuilder,
     private alert: AlertService,
+    private translate:TranslateService,
     private httpClient: HttpClient,
     private http: HttpService) { }
 
@@ -26,9 +28,50 @@ export class LoginComponent implements OnInit {
     this.BuildRequestForm();
     const lang = localStorage.getItem('lang') || '{}';
     localStorage.clear();
-   localStorage.setItem('lang',lang)
+   localStorage.setItem('lang',lang);
+   this.langChanged(lang);
 
   }
+
+  langChanged(lang: any) {
+    // const elEn = document.querySelector('#bootstrap-en');
+    // const elAr = document.querySelector('#bootstrap-ar');
+    this.translate.use(lang)
+    localStorage.setItem('lang',lang)
+    if (lang === 'ar') {
+      // add bootstrap ar
+      // elEn && elEn.remove();
+
+      this.generateLinkElement({
+        id: 'bootstrap-en',
+        href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
+        dir: 'rtl',
+        lang: 'ar',
+      });
+
+    } else {
+      // en
+      // elAr && elAr.remove();
+      this.generateLinkElement({
+        id: 'bootstrap-en',
+        href: 'assets/vendor/bootstrap/bootstrap.min.css',
+        dir: 'ltr',
+        lang: 'en',
+      });
+    }
+  }
+  generateLinkElement(props: any) {
+    const el = document.createElement('link');
+    const htmlEl = document.getElementsByTagName('html')[0];
+    el.rel = 'stylesheet';
+    el.href = props.href;
+    el.id = props.id;
+    document.head.prepend(el);
+    htmlEl.setAttribute('dir', props.dir);
+    htmlEl.setAttribute('lang', props.lang);
+    // this.loaderService.isLoading.next(false);
+  }
+
 
   BuildRequestForm() {
     this.authForm = this.FB.group({

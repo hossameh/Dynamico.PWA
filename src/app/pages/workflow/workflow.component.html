@@ -4,7 +4,7 @@
       <div>
         <div class="d-flex">
           <h4>
-            Workflow
+            {{'Workflow' | translate}}
           </h4>
         </div>
       </div>
@@ -15,14 +15,14 @@
     <div class="item " [class.active]="step == 1" (click)="change(1)">
       <div class="d-flex align-items-center justify-content-center ">
         <p>
-          Pending
+          {{'Pending' | translate}}
         </p>
       </div>
     </div>
     <div class="item " [class.active]="step == 2" (click)="change(2)">
       <div class="d-flex align-items-center justify-content-center">
         <p>
-          History
+          {{'History' | translate}}
         </p>
       </div>
     </div>
