@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { HttpService } from './services/http/http.service';
 import { LoadingService } from './services/loading/loading.service';
 import { HelperService } from './services/helper.service';
@@ -26,6 +27,7 @@ export class AppComponent {
   constructor(private helper: HelperService,
     private swUpdates: SwUpdate,
     private http: HttpService,
+    private translate:TranslateService,
     private storage: Storage, private router: Router, private loadingService: LoadingService) { }
 
   ngOnInit(): void {
@@ -54,6 +56,7 @@ export class AppComponent {
     } else {
       localStorage.setItem('lang', this.currentLang);
     }
+    this.translate.use(this.currentLang)
     this.langChanged(this.currentLang);
     this.helper.currentLang.next(this.currentLang);
     this.router.events.subscribe((evt) => {

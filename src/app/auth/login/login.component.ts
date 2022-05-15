@@ -24,7 +24,10 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.BuildRequestForm();
+    const lang = localStorage.getItem('lang') || '{}';
     localStorage.clear();
+   localStorage.setItem('lang',lang)
+
   }
 
   BuildRequestForm() {
@@ -105,12 +108,12 @@ export class LoginComponent implements OnInit {
       };
       const res: any = await this.updateUserFCMToken(body, authToken);
       console.log(res);
-      
+
       if (res.isPassed) {
         let fcmTokenExpiration = res.data;
         localStorage.setItem('fcmTokenExpireDate', fcmTokenExpiration);
         console.log("fcmTokenExpireDate",fcmTokenExpiration);
-        
+
       }
       else {
         this.alert.error('Failed To Update FCM Token')

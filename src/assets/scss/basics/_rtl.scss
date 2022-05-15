@@ -1,0 +1,19 @@
+html[dir="rtl"] {
+  .notification-icon {
+    right: unset;
+    left: 20px;
+  }
+  .rotateRtl {
+    transform: rotateY(180deg);
+  }
+  .form-help {
+    text-align: right;
+  }
+  app-login ,
+  .forgot{
+    .has-icon .icon {
+      right: unset !important;
+      left: 10px;
+    }
+  }
+}

@@ -1,14 +1,14 @@
 <section class="main">
   <div class="section-heading">
     <h4>
-      Settings
+      {{'Settings' | translate }}
     </h4>
   </div>
   <div class=" px-3 py-4">
     <div class="content">
       <div class="mb-2">
         <p class="label">
-          Username
+          {{'Username' | translate}}
         </p>
         <p class="data">
           {{userData?.username}}
@@ -16,7 +16,7 @@
       </div>
       <div class="mb-2">
         <p class="label">
-          Email address
+          {{'Email_address' | translate}}
         </p>
         <p class="data">
           {{userData?.userEmail}}
@@ -24,49 +24,49 @@
       </div>
       <div class="d-flex justify-content-between align-items-center control mt-4">
         <h6>
-          Language
+          {{'Language' | translate}}
         </h6>
         <div class="d-flex align-items-center ">
           <p class="btn  dropdown-toggle" role="button" id="Language" data-bs-toggle="dropdown" aria-expanded="false">
-            English
+            {{'English' | translate}}
           </p>
 
           <ul class="dropdown-menu px-3" aria-labelledby="Language">
-            <li><a class="dropdown-item py-0 px-2">English</a></li>
+            <li><a class="dropdown-item py-0 px-2" (click)="langChanged('en')">English</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item py-0 px-2">Arabic</a></li>
+            <li><a class="dropdown-item py-0 px-2" (click)="langChanged('ar')">العربية</a></li>
           </ul>
-          <img src="assets/img/icons/right-chevron-icon.svg" alt="open">
+          <img class="rotateRtl" src="assets/img/icons/right-chevron-icon.svg" alt="open">
         </div>
       </div>
 
       <div class="d-flex justify-content-between align-items-center control mt-4">
         <h6>
-          Theme
+          {{'Theme' | translate}}
         </h6>
         <div class="d-flex align-items-center ">
 
           <p class="btn  dropdown-toggle" role="button" id="theme" data-bs-toggle="dropdown" aria-expanded="false">
-            Light
+            {{'Light' | translate}}
           </p>
 
           <ul class="dropdown-menu px-3" aria-labelledby="theme">
-            <li><a class="dropdown-item py-0 px-2">Light</a></li>
+            <li><a class="dropdown-item py-0 px-2"> {{'Light' | translate}}</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item py-0 px-2">Dark</a></li>
+            <li><a class="dropdown-item py-0 px-2"> {{'Dark' | translate}}</a></li>
           </ul>
-          <img src="assets/img/icons/right-chevron-icon.svg" alt="open">
+          <img class="rotateRtl" src="assets/img/icons/right-chevron-icon.svg" alt="open">
         </div>
       </div>
       <div class="mt-4">
-        <h6 class="text-danger font-14" [routerLink]="['/login']" (click)="logout()" routerLinkActive="router-link-active">LOGOUT</h6>
+        <h6 class="text-danger font-14" [routerLink]="['/login']" (click)="logout()" routerLinkActive="router-link-active">{{"LOGOUT" | translate}}</h6>
       </div>
       <div class="text-center my-3 version">
-        Version {{version}}
+        {{'Version' | translate}} {{version}}
       </div>
     </div>
   </div>

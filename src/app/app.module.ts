@@ -25,7 +25,7 @@ import { PagesComponent } from './pages/pages.component';
 import { CardViewComponent } from './pages/calendar/card-view/card-view.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { FormioEditorModule } from '@davebaol/angular-formio-editor';
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -38,6 +38,8 @@ import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/deta
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
 import { initializeApp } from 'firebase/app';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 initializeApp(environment.firebase);
 
 
@@ -79,6 +81,13 @@ initializeApp(environment.firebase);
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-center',
     }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
@@ -93,8 +102,12 @@ initializeApp(environment.firebase);
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    TranslateService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}
