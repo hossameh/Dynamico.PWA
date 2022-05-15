@@ -32,4 +32,13 @@ export class NotificationComponent implements OnInit {
     })
 
   }
+
+  makeNotificationRead(key: string) {
+    let body = {
+      loginId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+      messageKeys: [key],
+      isRead: true
+    }
+    var res = this.http.post('Notification/MakeNotificationReadByLogin', body).toPromise();
+  }
 }
