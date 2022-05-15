@@ -35,8 +35,8 @@ export class AppComponent {
 
     this.listenToFCM();
 
-    this.getWorkflowCount();
-    this.helper.getNotificationCount();
+    // this.getWorkflowCount();
+    // this.helper.getNotificationCount();
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;

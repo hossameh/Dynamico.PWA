@@ -25,5 +25,10 @@ export class HelperService {
       this.getingNotificationCount.next(+res.data);
     })
   }
+  getWorkflowCount() {
+    this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
+      this.getingCount.next(res);
+    })
+  }
 
 }

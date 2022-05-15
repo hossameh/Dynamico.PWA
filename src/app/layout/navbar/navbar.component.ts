@@ -1,5 +1,6 @@
 import { HelperService } from './../../services/helper.service';
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from 'src/app/services/http/http.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,13 +10,15 @@ import { Component, OnInit } from '@angular/core';
 export class NavbarComponent implements OnInit {
   count = 0;
   constructor(
-    private helper:HelperService
+    private helper: HelperService
   ) { }
 
   ngOnInit(): void {
     this.helper.getingCount.subscribe((count) => {
       this.count = count
     })
+    this.helper.getNotificationCount();
+    this.helper.getWorkflowCount();
   }
 
 }
