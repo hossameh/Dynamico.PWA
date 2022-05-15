@@ -11,14 +11,13 @@ export const environment = {
   appName: 'PWA',
 
   firebase: {
-    apiKey: "AIzaSyBy3U-CpZ8_Wad19d3dU7dQskBxiBzWd3I",
-    authDomain: "qafarmadmin.firebaseapp.com",
-    projectId: "qafarmadmin",
-    storageBucket: "qafarmadmin.appspot.com",
-    messagingSenderId: "32296479187",
-    appId: "1:32296479187:web:7d18ce442a7a47c74b6726",
-    measurementId: "G-PBNG4MSG6E",
-    vapidKey: "BEd-j1ujDH0tT3uNSs1bFtic81AEi3cnyh9QBLf8GE5clCbZGxCKgoQG3gHA8357KEFRXHtHQ-NHdjPllyH-lAA",
+    apiKey: "AIzaSyAz-VXCUhh8cytvpEM5OZhD0JnxMsoyGrk",
+    authDomain: "qadynamico.firebaseapp.com",
+    projectId: "qadynamico",
+    storageBucket: "qadynamico.appspot.com",
+    messagingSenderId: "678182888011",
+    appId: "1:678182888011:web:f9acf48c202a0f8aea63ce",
+    vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
 };
 

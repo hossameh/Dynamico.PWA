@@ -37,6 +37,9 @@ import { HistoryWorkflowComponent } from './pages/workflow/history-workflow/hist
 import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/details-workflow.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
+import { initializeApp } from 'firebase/app';
+initializeApp(environment.firebase);
+
 
 @NgModule({
   declarations: [

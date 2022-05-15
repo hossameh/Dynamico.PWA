@@ -6,6 +6,8 @@ import { routingAnimation } from './router.animations';
 import { NavigationEnd, Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { SwUpdate } from '@angular/service-worker';
+import { getMessaging, onMessage } from 'firebase/messaging';
+
 
 @Component({
   selector: 'app-root',
@@ -123,11 +125,11 @@ export class AppComponent {
   }
 
   listenToFCM() {
-    // const messaging = getMessaging();
-    // onMessage(messaging, (payload: any) => {
-    //   // occures if the user is online on this browser tab
-    //   console.log('Message received. ', payload);
+    const messaging = getMessaging();
+    onMessage(messaging, (payload: any) => {
+      // occures if the user is online on this browser tab
+      console.log('Message received. ', payload);
 
-    // });
+    });
   }
 }
