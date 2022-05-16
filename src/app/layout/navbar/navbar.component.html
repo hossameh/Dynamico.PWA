@@ -1,25 +1,25 @@
 <nav>
   <ul>
     <li>
-      <a [routerLink]="['/page/home']" routerLinkActive="active">
+      <a [routerLink]="['/page/home']" (click)="updateCounts()" routerLinkActive="active">
         <img src="assets/img/icons/home-icon.svg" alt="home">
       </a>
     </li>
     <li>
-      <a [routerLink]="['/page/calendar']" routerLinkActive="active">
+      <a [routerLink]="['/page/calendar']" (click)="updateCounts()" routerLinkActive="active">
         <!-- <span class="dots"></span> -->
         <img src="assets/img/icons/calendar-icon.svg" alt="calendar">
       </a>
     </li>
     <li>
-      <a [routerLink]="['/page/workflow']" routerLinkActive="active">
+      <a [routerLink]="['/page/workflow']" (click)="updateCounts()" routerLinkActive="active">
         <!-- <span class="dots"></span> -->
         <img src="assets/img/icons/workflow.svg" alt="workflow">
         <span class="number" *ngIf="count">{{count}}</span>
       </a>
     </li>
     <li>
-      <a [routerLink]="['/page/profile']" routerLinkActive="active">
+      <a [routerLink]="['/page/profile']" (click)="updateCounts()" routerLinkActive="active">
         <img src="assets/img/icons/user-icon.svg" alt="user">
       </a>
     </li>

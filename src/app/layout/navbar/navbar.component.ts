@@ -17,6 +17,9 @@ export class NavbarComponent implements OnInit {
     this.helper.getingCount.subscribe((count) => {
       this.count = count
     })
+    this.updateCounts();
+  }
+  updateCounts() {
     this.helper.getNotificationCount();
     this.helper.getWorkflowCount();
   }

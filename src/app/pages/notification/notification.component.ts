@@ -1,6 +1,11 @@
 import { HttpService } from './../../services/http/http.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AlertService } from 'src/app/services/alert/alert.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { IPageInfo } from 'src/app/core/interface/page-info.interface';
+import { OfflineService } from 'src/app/services/offline/offline.service';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-notification',
@@ -9,26 +14,64 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 })
 export class NotificationComponent implements OnInit {
 
+  @HostListener("window:scroll", [])
+  onScroll(): void {
+    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1) && this.isOnline) {
+      // Load Your Data Here
+      this.pager.page += 1;
+      this.getAll();
+    }
+    console.log("Scroll");
+    console.log("page", this.pager.page);
+
+  }
+  statusSubscription!: Subscription;
+  pager!: IPageInfo;
+  loaded = true;
+  isOnline = true;
+
   items: any = []
   constructor(
     private http: HttpService,
-    private alert: AlertService
+    private alert: AlertService,
+    private helper: HelperService,
+    private offline: OfflineService,
   ) { }
 
   ngOnInit(): void {
+    this.pager = {
+      page: 1,
+      pages: 0,
+      pageSize: 3,
+      total: 0,
+    };
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
     this.getAll()
   }
-
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.statusSubscription.unsubscribe();
+  }
   getAll() {
+    this.loaded = false;
     let params = {
-      pageIndex: 1,
-      pageSize: 10
+      pageIndex: this.pager.page,
+      pageSize: this.pager.pageSize
     }
     let body = {
       UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
     }
     this.http.post('Notification/GetNotifications', body, true, params).subscribe((res: any) => {
-      this.items = res?.data?.list;
+      res?.data?.list.map((el: any) => {
+        this.items.push(el);
+      });
+      // this.items = res?.data?.list;
+      this.pager.total = res?.data?.total;
+      this.pager.pages = res?.data?.pages;
+      this.loaded = true;
     })
 
   }
@@ -39,6 +82,20 @@ export class NotificationComponent implements OnInit {
       messageKeys: [key],
       isRead: true
     }
-    var res = this.http.post('Notification/MakeNotificationReadByLogin', body).toPromise();
+    try {
+      this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
+        console.log("res", res);
+
+        if (res)
+          this.helper.getNotificationCount();
+      });
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  bottomReached(): boolean {
+    return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
   }
 }
