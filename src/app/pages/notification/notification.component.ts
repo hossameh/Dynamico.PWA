@@ -21,9 +21,6 @@ export class NotificationComponent implements OnInit {
       this.pager.page += 1;
       this.getAll();
     }
-    console.log("Scroll");
-    console.log("page", this.pager.page);
-
   }
   statusSubscription!: Subscription;
   pager!: IPageInfo;
@@ -42,7 +39,7 @@ export class NotificationComponent implements OnInit {
     this.pager = {
       page: 1,
       pages: 0,
-      pageSize: 3,
+      pageSize: 10,
       total: 0,
     };
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
@@ -84,8 +81,6 @@ export class NotificationComponent implements OnInit {
     }
     try {
       this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
-        console.log("res", res);
-
         if (res)
           this.helper.getNotificationCount();
       });
@@ -97,5 +92,8 @@ export class NotificationComponent implements OnInit {
 
   bottomReached(): boolean {
     return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+  }
+  scrollToTop() {
+    window.scroll(0, 0);
   }
 }

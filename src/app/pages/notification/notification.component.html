@@ -17,12 +17,22 @@
     <div class="content">
       <div *ngFor="let item of items ; let i = index">
         <div class="box" [class.unread]="item.isRead == false">
-          <p [routerLink]="['/page/notification-details/'+ item.id]" (click)="makeNotificationRead(item.key)" [queryParams]="{title:item.title,body:item.body}"
-             routerLinkActive="router-link-active">
+          <p [routerLink]="['/page/notification-details/'+ item.id]" (click)="makeNotificationRead(item.key)"
+            [queryParams]="{title:item.title,body:item.body}" routerLinkActive="router-link-active">
             {{item.title}}
           </p>
         </div>
       </div>
     </div>
   </div>
+  <a (click)="scrollToTop()" class="
+    back-to-top-icon
+    rounded-xs
+    back-to-top-icon-circle
+    bg-highlight
+    shadow-m
+  " style="transform: scale(1); position: fixed !important"> Up
+  <!-- <img src="assets/img/icons/home-icon.svg" alt="home"> -->
+  <!-- <i class="fa fa-angle-up"></i> -->
+</a>
 </section>

@@ -1,4 +1,5 @@
 @import "style.scss";
+
 .box {
   padding: 16px 30px 16px 16px;
   background-color: #fff;
@@ -9,6 +10,7 @@
   font-size: 14px;
   color: #000;
   opacity: 0.6;
+
   p {
     font-weight: 500;
     font-family: "avenir-medium";
@@ -18,6 +20,7 @@
   &.unread {
     box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
     opacity: 1;
+
     &::after {
       content: "";
       position: absolute;
@@ -28,10 +31,49 @@
       border-radius: 50%;
       right: 8px;
     }
+
     p {
       b {
         font-family: "avenir-black";
       }
     }
   }
+}
+
+
+.back-to-top-icon {
+  position: fixed;
+  z-index: 9999;
+  bottom: 70px;
+  right: 15px;
+  display: inline-block;
+  width: 35px;
+  line-height: 35px;
+  border-radius: 35px;
+  color: #FFF;
+  text-align: center;
+  font-size: 12px;
+  transform: scale(0, 0);
+  transition: all 300ms ease;
+}
+
+.rounded-xs {
+  border-radius: 5px !important;
+}
+
+.back-to-top-icon-circle {
+  border-radius: 40px;
+}
+
+.bg-highlight {
+  background-color: #004685 !important;
+  color: #FFF !important;
+}
+
+.shadow-m {
+  box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.08) !important;
+}
+
+.fa-angle-up:before {
+  content: "\f106";
 }
