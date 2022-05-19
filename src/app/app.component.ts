@@ -8,6 +8,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { SwUpdate } from '@angular/service-worker';
 import { getMessaging, onMessage } from 'firebase/messaging';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -23,12 +24,16 @@ export class AppComponent {
   update = false;
   hideNotifcation = false;
   notifcationCount = 5;
+  message: any = null;
 
   constructor(private helper: HelperService,
     private swUpdates: SwUpdate,
     private http: HttpService,
-    private translate:TranslateService,
-    private storage: Storage, private router: Router, private loadingService: LoadingService) { }
+    private translate: TranslateService,
+    private toastr: ToastrService,
+    private storage: Storage,
+    private router: Router,
+    private loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.update = false;
@@ -132,7 +137,24 @@ export class AppComponent {
     onMessage(messaging, (payload: any) => {
       // occures if the user is online on this browser tab
       console.log('Message received. ', payload);
-
+      this.message = payload;
+      this.showToaster();
     });
+  }
+
+  showToaster() {
+    this.toastr.info(this.message?.notification?.body, this.message?.notification?.title, {
+      // timeOut: 15000,
+      // extendedTimeOut: 10000,
+      newestOnTop: false,
+      closeButton: true,
+      disableTimeOut: true,
+      positionClass: "toast-top-right"
+    })
+      .onTap
+      .subscribe(() => this.toasterClickedHandler());
+  }
+  toasterClickedHandler() {
+    this.router.navigateByUrl("/page/notification-details/1?title=" + this.message?.notification?.body + "&body=" + this.message?.notification?.title)
   }
 }
