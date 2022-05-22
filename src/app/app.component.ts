@@ -155,6 +155,23 @@ export class AppComponent {
       .subscribe(() => this.toasterClickedHandler());
   }
   toasterClickedHandler() {
+    this.makeNotificationRead();
     this.router.navigateByUrl("/page/notification-details/1?title=" + this.message?.notification?.body + "&body=" + this.message?.notification?.title)
+  }
+  makeNotificationRead() {
+    let body = {
+      loginId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+      messageKeys: [this.message?.data?.key],
+      isRead: true
+    }
+    try {
+      this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
+        if (res)
+          this.helper.getNotificationCount();
+      });
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
 }
