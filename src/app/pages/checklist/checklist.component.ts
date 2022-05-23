@@ -126,7 +126,7 @@ export class ChecklistComponent implements OnInit {
         if (this.id && this.params.editMode == 'true') {
           this.loadFromCacheByIdEdit();
         }
-      }else{
+      } else {
         this.loadFromApi();
       }
     });
@@ -364,19 +364,19 @@ export class ChecklistComponent implements OnInit {
   }
 
   save() {
-    this.modelBody.record_Status = RecordStatus.Pendding;
+    this.modelBody.record_Status = RecordStatus.Created;
     this.modelBody.isSubmitted = false;
 
     this.send();
   }
   submit() {
-    this.modelBody.record_Status = RecordStatus.Complete;
+    this.modelBody.record_Status = RecordStatus.Submitted;
     this.modelBody.isSubmitted = true;
     this.send();
   }
 
   send() {
-    this.modelBody.formDataRef =  this.params.formRef ? this.params.formRef : null;
+    this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;
     this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
       if (isOnline) {
         this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {

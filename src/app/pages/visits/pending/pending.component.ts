@@ -4,6 +4,7 @@ import { AlertService } from './../../../services/alert/alert.service';
 import { HttpService } from './../../../services/http/http.service';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 
 @Component({
   selector: 'app-pending',
@@ -27,6 +28,8 @@ export class PendingComponent implements OnInit {
 
   isOnline = true;
   statusSubscription!: Subscription;
+  recordStatus = RecordStatus;
+  recordStatusNames = RecordStatusNames;
 
   constructor(
     private http: HttpService,

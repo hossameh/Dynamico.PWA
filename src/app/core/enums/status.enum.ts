@@ -1,10 +1,27 @@
+// export enum RecordStatus {
+//   Pendding = 1,
+//   Complete = 2,
+// }
+
 export enum RecordStatus {
-  Pendding = 1,
-  Complete = 2,
+  Created = 1,
+  Submitted = 2,
+  Assigned = 3,
+  PendingApproval = 4,
+  Approved = 5,
+  Rejected = 6
+}
+export enum RecordStatusNames {
+  Created = "Created",
+  Submitted = "Submitted",
+  Assigned = "Assigned",
+  PendingApproval = "PendingApproval",
+  Approved = "Approved",
+  Rejected = "Rejected"
 }
 
 export enum WorkflowStatus {
-  Pending ='Pending',
-  Approved ='Approved',
-  Rejected ='Rejected'
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected'
 }

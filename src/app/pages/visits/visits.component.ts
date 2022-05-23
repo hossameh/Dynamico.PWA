@@ -12,6 +12,7 @@ import {
 } from "@angular/animations"; import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
+import { RecordStatus } from 'src/app/core/enums/status.enum';
 @Component({
   selector: 'app-visits',
   templateUrl: './visits.component.html',
@@ -68,6 +69,8 @@ export class VisitsComponent implements OnInit {
   id!: number;
   isOnline = true;
   statusSubscription!: Subscription;
+  recordStatus = RecordStatus;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -77,8 +80,7 @@ export class VisitsComponent implements OnInit {
     private helper: HelperService,
     private http: HttpService) { }
 
-  ngOnInit(): void {
-
+  ngOnInit(): void {    
     this.id = this.route.snapshot.params.id;
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;

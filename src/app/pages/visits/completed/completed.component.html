@@ -9,8 +9,8 @@
     </div>
   </div>
   <div class="mb-3" *ngFor="let item of items">
-    <div class="white-box py-2" [routerLink]="['/page/checklist/'+item.form_Id]"
-         [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+    <div *ngIf="item.workflowId" class="white-box py-2" [routerLink]="['/page/workflow/details']"
+      [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id}">
       <div class="box-content">
         <p class="number">
           #{{item.formDataRef}}
@@ -22,7 +22,31 @@
       </div>
       <div class="box-side">
         <div class="d-flex align-items-center">
-          <p class="badge me-2">{{'Completed' | translate}}</p>
+          <p class="badge me-2"
+            [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+            [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
+            recordStatus[item.record_Status_Id] | translate}}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!item.workflowId" class="white-box py-2" [routerLink]="['/page/checklist/'+item.form_Id]"
+      [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+      <div class="box-content">
+        <p class="number">
+          #{{item.formDataRef}}
+        </p>
+        <h5 class="font-14">
+          {{item.form_Title}}
+        </h5>
+        <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
+      </div>
+      <div class="box-side">
+        <div class="d-flex align-items-center">
+          <!-- <p class="badge me-2">{{'Completed' | translate}}</p> -->
+          <p class="badge me-2"
+            [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+            [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
+            recordStatus[item.record_Status_Id] | translate}}</p>
         </div>
       </div>
     </div>
@@ -51,11 +75,13 @@
 
         <div class="d-flex justify-content-between align-items-center  mb-3 mt-3">
           <div class="form-floating me-2 w-100">
-            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From" placeholder="">
+            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From"
+              placeholder="">
             <label for="From">{{'From' | translate}}</label>
           </div>
           <div class="form-floating ms-2 w-100">
-            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate" [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
+            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate"
+              [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
             <label for="to">{{'To' | translate}}</label>
           </div>
         </div>
