@@ -9,9 +9,9 @@
     </div>
   </div>
   <div class="mb-3" *ngFor="let item of items">
-    <div class="white-box py-2" *ngIf="item.workflowId" [routerLink]="['/page/workflow/details']"
-      [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id}">
-      <div class="box-content">
+    <div class="white-box py-2" *ngIf="item.workflowId">
+      <div class="box-content" [routerLink]="['/page/workflow/details']"
+        [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id}">
         <p class="number">
           #{{item.formDataRef}}
         </p>
@@ -46,9 +46,9 @@
         </div>
       </div>
     </div>
-    <div class="white-box py-2" *ngIf="!item.workflowId" [routerLink]="['/page/checklist/'+item.form_Id]"
-      [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
-      <div class="box-content">
+    <div class="white-box py-2" *ngIf="!item.workflowId">
+      <div class="box-content" [routerLink]="['/page/checklist/'+item.form_Id]"
+        [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
         <p class="number">
           #{{item.formDataRef}}
         </p>
