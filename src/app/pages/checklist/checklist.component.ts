@@ -370,7 +370,7 @@ export class ChecklistComponent implements OnInit {
     this.send();
   }
   submit() {
-    this.modelBody.record_Status = RecordStatus.Submitted;
+    this.modelBody.record_Status = RecordStatus.Completed;
     this.modelBody.isSubmitted = true;
     this.send();
   }

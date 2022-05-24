@@ -5,7 +5,7 @@
 
 export enum RecordStatus {
   Created = 1,
-  Submitted = 2,
+  Completed = 2,
   Assigned = 3,
   PendingApproval = 4,
   Approved = 5,
@@ -13,7 +13,7 @@ export enum RecordStatus {
 }
 export enum RecordStatusNames {
   Created = "Created",
-  Submitted = "Submitted",
+  Completed = "Completed",
   Assigned = "Assigned",
   PendingApproval = "PendingApproval",
   Approved = "Approved",

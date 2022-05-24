@@ -24,10 +24,12 @@
         <div class="d-flex align-items-center">
           <!-- <p class="badge me-2">{{'Pending' | translate}}</p> -->
           <p class="badge me-2" [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
-            [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Submitted"
+            [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
             [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval">{{
             recordStatus[item.record_Status_Id] | translate}}</p>
-          <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+          <img src="assets/img/icons/menu.svg"
+          *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+           alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
             data-bs-toggle="dropdown" aria-expanded="false">
           <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]"
@@ -61,10 +63,12 @@
         <div class="d-flex align-items-center">
           <!-- <p class="badge me-2">{{'Pending' | translate}}</p> -->
           <p class="badge me-2" [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
-            [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Submitted"
+            [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
             [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval">{{
             recordStatus[item.record_Status_Id] | translate}}</p>
-          <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+          <img src="assets/img/icons/menu.svg" alt="menu"
+          *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+           class="dropdown-toggle" type="button" id="dropdownMenuButton1"
             data-bs-toggle="dropdown" aria-expanded="false">
           <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]"

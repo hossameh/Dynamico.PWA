@@ -24,6 +24,7 @@
         <div class="d-flex align-items-center">
           <p class="badge me-2"
             [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+            [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Completed"
             [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
             recordStatus[item.record_Status_Id] | translate}}</p>
         </div>
@@ -45,6 +46,7 @@
           <!-- <p class="badge me-2">{{'Completed' | translate}}</p> -->
           <p class="badge me-2"
             [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+            [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Completed"
             [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
             recordStatus[item.record_Status_Id] | translate}}</p>
         </div>

@@ -26,6 +26,7 @@ export class NotificationComponent implements OnInit {
   pager!: IPageInfo;
   loaded = true;
   isOnline = true;
+  isLoading = false;
 
   items: any = []
   constructor(
@@ -54,6 +55,7 @@ export class NotificationComponent implements OnInit {
   }
   getAll() {
     this.loaded = false;
+    this.isLoading = true;
     let params = {
       pageIndex: this.pager.page,
       pageSize: this.pager.pageSize
@@ -69,6 +71,7 @@ export class NotificationComponent implements OnInit {
       this.pager.total = res?.data?.total;
       this.pager.pages = res?.data?.pages;
       this.loaded = true;
+      this.isLoading = false;
     })
 
   }
