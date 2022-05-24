@@ -26,13 +26,14 @@ export class TokenInterceptor implements HttpInterceptor {
       setHeaders: {
         'Authorization': `Bearer ${this.token ? this.token : ''}`,
         'Access-Control-Allow-Origin': '*',
-        'Language':localStorage.getItem('lang')  || '{}',
+        'Language': localStorage.getItem('lang') || '{}',
         'Cache-Control': 'max-age=31536000'
       }
     });
 
     if (request.url.includes(environment.hostAPI)) {
-      this.loadingService.setLoading(true, request.url);
+      if (!request.url.includes('Notification/GetNotifications'))
+        this.loadingService.setLoading(true, request.url);
       return next.handle(request).pipe(
         catchError((error: HttpErrorResponse) => {
           if (error && error.status === 401) {
