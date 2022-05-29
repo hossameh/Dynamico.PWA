@@ -40,6 +40,7 @@ import { NotificationDetailsComponent } from './pages/notification/notification-
 import { initializeApp } from 'firebase/app';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 initializeApp(environment.firebase);
 
 
@@ -76,6 +77,7 @@ initializeApp(environment.firebase);
     MatSlideToggleModule,
     HttpClientModule,
     FormsModule,
+    NgbModule,
     IonicStorageModule.forRoot(),
     FormioEditorModule,
     ToastrModule.forRoot({

@@ -1,9 +1,10 @@
 import { Storage } from '@ionic/storage';
 import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AlertService } from 'src/app/services/alert/alert.service';
 
 @Component({
   selector: 'app-category',
@@ -11,30 +12,36 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit {
+  @ViewChild('openModal') openModal!: ElementRef;
   items: any = [];
   category_Id!: number;
   name!: string;
+  formId!: string;
   isOnline = true;
   statusSubscription!: Subscription;
-  selectedItem:any = {}
+  selectedItem: any = {}
   formRef = ''
+
   constructor(
     private route: ActivatedRoute,
     private offline: OfflineService,
     private storage: Storage,
-    private http: HttpService
+    private http: HttpService,
+    private router: Router,
+    private alert: AlertService,
   ) { }
 
   ngOnInit(): void {
     this.category_Id = this.route.snapshot.params.id;
     this.name = this.route.snapshot.queryParams.name;
+    this.formId = this.route.snapshot.queryParams.formId;
 
     if (this.category_Id) {
       this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
         this.isOnline = isOnline
         if (!isOnline) {
           this.loadFromCache();
-        }else{
+        } else {
           this.loadFromApi()
         }
       });
@@ -42,17 +49,34 @@ export class CategoryComponent implements OnInit {
 
   }
 
-  loadFromApi(){
+  loadFromApi() {
     this.isOnline ? this.getCategoryChecklists() : ''
   }
-
   getCategoryChecklists() {
-    this.http.get('Categories/GetCategoryChecklists', { categoryId: this.category_Id, userId:  JSON.parse(localStorage.getItem('userData') || '{}').userId}).subscribe(async (res) => {
+    this.http.get('Categories/GetCategoryChecklists', { categoryId: this.category_Id, userId: JSON.parse(localStorage.getItem('userData') || '{}').userId }).subscribe(async (res) => {
       this.items = res;
       let CategoryChecklist = {
         categoryId: +this.category_Id,
         list: res
       };
+
+      if (this.formId) {
+        if (this.items.length == 0) {
+          this.alert.error("Invalid Input Data");
+          this.router.navigateByUrl('/page/home');
+        }
+        else {
+          let index = this.items.findIndex((ww: any) => ww.formId == +this.formId);
+          if (index >= 0) {
+            this.selectedItem = this.items[index];
+            this.openModal.nativeElement.click();
+          }
+          else {
+            this.alert.error("Invalid Input Data");
+            this.router.navigateByUrl('/page/home');
+          }
+        }
+      }
 
       let cacheCatgoryChecklists = await this.storage.get('CategoryChecklists') || [];
 
@@ -75,7 +99,6 @@ export class CategoryComponent implements OnInit {
 
     });
   }
-
 
   async loadFromCache() {
     let cacheCatgoryChecklists = await this.storage.get('CategoryChecklists') || [];

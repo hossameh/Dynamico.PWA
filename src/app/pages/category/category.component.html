@@ -1,22 +1,28 @@
 <section class="main">
   <div class="section-heading">
     <div class="d-flex">
-      <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" [routerLink]="['/page/home']" routerLinkActive="router-link-active">
+      <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" [routerLink]="['/page/home']"
+        routerLinkActive="router-link-active">
       <h4>
         {{name ? name :'Category name'}}
       </h4>
     </div>
   </div>
 
+  <a data-bs-toggle="modal" data-bs-target="#newModal" hidden #openModal></a>
+
+
   <div class="content px-3 py-4">
     <div class="mb-3" *ngFor="let item of items">
       <div class="white-box">
-        <div class="box-content" [routerLink]="['/page/visits/'+item.formId]" [queryParams]="{categoryName: name , listName:item.formTitle , categoryId:item.categoryId}">
+        <div class="box-content" [routerLink]="['/page/visits/'+item.formId]"
+          [queryParams]="{categoryName: name , listName:item.formTitle , categoryId:item.categoryId}">
           <h5 class="font-14">
             {{item.formTitle}}
           </h5>
         </div>
-        <div class="box-side" data-bs-toggle="modal" data-bs-target="#newModal" (click)="selectedItem = item">
+        <div class="box-side" data-bs-toggle="modal" data-bs-target="#newModal"
+          (click)="selectedItem = item">
           <div class="d-flex align-items-center">
             <p class="badge me-2" *ngIf="item.totalRecords">{{item.totalRecords}}</p>
             <img src="assets/img/icons/add-button.svg" alt="open">
@@ -29,6 +35,7 @@
   </div>
 
 </section>
+
 <div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
@@ -43,10 +50,10 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" [routerLink]="['/page/checklist/'+selectedItem.formId]"
-                  routerLinkActive="router-link-active"
-                  [queryParams]="{editMode: false ,formRef:formRef, Record_Id:selectedItem.record_Id , categoryName: name, listName:selectedItem.formTitle , categoryId:selectedItem.categoryId}"
-                  [disabled]="!formRef">{{'Start' | translate}}</button>
+          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal"
+            [routerLink]="['/page/checklist/'+selectedItem.formId]" routerLinkActive="router-link-active"
+            [queryParams]="{editMode: false ,formRef:formRef, Record_Id:selectedItem.record_Id , categoryName: name, listName:selectedItem.formTitle , categoryId:selectedItem.categoryId}"
+            [disabled]="!formRef">{{'Start' | translate}}</button>
         </div>
       </div>
     </div>
