@@ -41,6 +41,7 @@ import { initializeApp } from 'firebase/app';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
 initializeApp(environment.firebase);
 
 
@@ -68,7 +69,8 @@ initializeApp(environment.firebase);
     HistoryWorkflowComponent,
     DetailsWorkflowComponent,
     ResetPasswordComponent,
-    NotificationDetailsComponent
+    NotificationDetailsComponent,
+    QrScanComponent
   ],
   imports: [
     BrowserModule,

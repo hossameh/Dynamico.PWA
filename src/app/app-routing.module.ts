@@ -19,6 +19,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { ResetPasswordGuard } from './core/gaurds/reset-password.guard';
 import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
+import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -90,6 +91,10 @@ const routes: Routes = [
       {
         path: 'calendar',
         component: CalendarComponent
+      },
+      {
+        path: 'qr-scan/:id',
+        component: QrScanComponent
       },
     ]
   }
