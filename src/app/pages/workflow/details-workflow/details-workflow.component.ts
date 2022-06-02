@@ -1,7 +1,7 @@
 import { AlertService } from './../../../services/alert/alert.service';
 import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
 import { HttpService } from './../../../services/http/http.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 
@@ -18,15 +18,16 @@ export class DetailsWorkflowComponent implements OnInit {
   form: any;
   options!: FormioEditorOptions;
   data: any;
-  userData!:any
-  workflowProcess:IWorkflowProcessList[] = [];
-  body:any
-  comment=''
+  userData!: any
+  workflowProcess: IWorkflowProcessList[] = [];
+  body: any
+  comment = ''
   constructor(
     private route: ActivatedRoute,
     private http: HttpService,
-    private alert:AlertService,
-    private location: Location
+    private alert: AlertService,
+    private location: Location,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -111,8 +112,17 @@ export class DetailsWorkflowComponent implements OnInit {
       Form_Id: this.params.Form_Id,
       Record_Id: this.params.Record_Id
     };
-    this.http.get('ChecklistRecords/EditChecklistRecord', body).subscribe((value: any) => {
+    let apiUrl = 'ChecklistRecords/EditChecklistRecord';
+    let isQrCode = this.params.isQR;
+    if (isQrCode)
+      apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
+    this.http.get(apiUrl, body).subscribe((value: any) => {
       console.log('res', value);
+
+      if (!value) {
+        this.alert.error("Invalid Input Data");
+        this.router.navigateByUrl("/page/home")
+      }
 
       this.data = value;
 
@@ -206,19 +216,19 @@ export class DetailsWorkflowComponent implements OnInit {
     return false;
   }
 
-  saveAction(isApproved:boolean,item:IWorkflowProcessList){
+  saveAction(isApproved: boolean, item: IWorkflowProcessList) {
     this.body = {
-      isApproved:isApproved,
-      agentId:this.userData.userId,
+      isApproved: isApproved,
+      agentId: this.userData.userId,
       comment: this.comment,
-      id:item.id,
-      returnBackToWorkflowProcessId:null
+      id: item.id,
+      returnBackToWorkflowProcessId: null
     }
   }
 
-  submit(){
+  submit() {
     this.body.comment = this.comment;
-    this.http.post('Workflow/UpdateWorkflowProcess',this.body).subscribe(res => {
+    this.http.post('Workflow/UpdateWorkflowProcess', this.body).subscribe(res => {
       this.alert.success('Successfully');
       this.closeModal.nativeElement.click();
       this.comment = '';
@@ -227,8 +237,7 @@ export class DetailsWorkflowComponent implements OnInit {
   }
 
 }
-interface IWorkflowProcessList
-{
+interface IWorkflowProcessList {
   id: number;
   workflowStagesId: number;
   workflowStagesName: string;

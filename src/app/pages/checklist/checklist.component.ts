@@ -256,7 +256,15 @@ export class ChecklistComponent implements OnInit {
   }
 
   editChecklistRecord() {
-    this.http.get('ChecklistRecords/EditChecklistRecord', { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
+    let apiUrl = 'ChecklistRecords/EditChecklistRecord';
+    let isQrCode = this.params.isQR;
+    if (isQrCode)
+      apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
+    this.http.get(apiUrl, { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
+      if (!value) {
+        this.alert.error("Invalid Input Data");
+        this.router.navigateByUrl("/page/home")
+      }
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
