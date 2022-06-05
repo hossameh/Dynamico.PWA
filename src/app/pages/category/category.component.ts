@@ -69,7 +69,9 @@ export class CategoryComponent implements OnInit {
           let index = this.items.findIndex((ww: any) => ww.formId == +this.formId);
           if (index >= 0) {
             this.selectedItem = this.items[index];
-            this.openModal.nativeElement.click();
+            setTimeout(() => {
+              this.openModal.nativeElement.click();
+            }, 500);
           }
           else {
             this.alert.error("Invalid Input Data");

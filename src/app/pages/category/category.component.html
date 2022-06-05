@@ -9,9 +9,6 @@
     </div>
   </div>
 
-  <a data-bs-toggle="modal" data-bs-target="#newModal" hidden #openModal></a>
-
-
   <div class="content px-3 py-4">
     <div class="mb-3" *ngFor="let item of items">
       <div class="white-box">
@@ -35,6 +32,8 @@
   </div>
 
 </section>
+
+<a data-bs-toggle="modal" data-bs-target="#newModal" #openModal></a>
 
 <div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-centered">
