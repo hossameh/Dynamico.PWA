@@ -1,7 +1,7 @@
 import { Storage } from '@ionic/storage';
 import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/services/alert/alert.service';
@@ -11,7 +11,7 @@ import { AlertService } from 'src/app/services/alert/alert.service';
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, AfterViewInit {
   @ViewChild('openModal') openModal!: ElementRef;
   items: any = [];
   category_Id!: number;
@@ -30,12 +30,7 @@ export class CategoryComponent implements OnInit {
     private router: Router,
     private alert: AlertService,
   ) { }
-
-  ngOnInit(): void {
-    this.category_Id = this.route.snapshot.params.id;
-    this.name = this.route.snapshot.queryParams.name;
-    this.formId = this.route.snapshot.queryParams.formId;
-
+  ngAfterViewInit(): void {
     if (this.category_Id) {
       this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
         this.isOnline = isOnline
@@ -46,7 +41,12 @@ export class CategoryComponent implements OnInit {
         }
       });
     }
+  }
 
+  ngOnInit(): void {
+    this.category_Id = this.route.snapshot.params.id;
+    this.name = this.route.snapshot.queryParams.name;
+    this.formId = this.route.snapshot.queryParams.formId;
   }
 
   loadFromApi() {
@@ -60,7 +60,7 @@ export class CategoryComponent implements OnInit {
         list: res
       };
 
-      if (this.formId) {
+      if (this.formId && res) {
         if (this.items.length == 0) {
           this.alert.error("Invalid Input Data");
           this.router.navigateByUrl('/page/home');

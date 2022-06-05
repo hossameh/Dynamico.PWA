@@ -1,7 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
 import { AlertService } from './../../services/alert/alert.service';
 import { HttpService } from './../../services/http/http.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { API } from 'src/app/core/interface/api.interface';
@@ -17,19 +17,25 @@ import { getMessaging, getToken } from 'firebase/messaging';
 export class LoginComponent implements OnInit {
   showPasswordText = false;
   authForm!: FormGroup;
+  returnUrl!: string;
 
   constructor(private router: Router, private FB: FormBuilder,
     private alert: AlertService,
-    private translate:TranslateService,
+    private translate: TranslateService,
     private httpClient: HttpClient,
+    private route: ActivatedRoute,
     private http: HttpService) { }
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    // this.returnUrl = this.returnUrl.replace('%',' ');
+    console.log(this.returnUrl);
+    
     this.BuildRequestForm();
     const lang = localStorage.getItem('lang') || '{}';
     localStorage.clear();
-   localStorage.setItem('lang',lang);
-   this.langChanged(lang);
+    localStorage.setItem('lang', lang);
+    this.langChanged(lang);
 
   }
 
@@ -37,7 +43,7 @@ export class LoginComponent implements OnInit {
     // const elEn = document.querySelector('#bootstrap-en');
     // const elAr = document.querySelector('#bootstrap-ar');
     this.translate.use(lang)
-    localStorage.setItem('lang',lang)
+    localStorage.setItem('lang', lang)
     if (lang === 'ar') {
       // add bootstrap ar
       // elEn && elEn.remove();
@@ -139,7 +145,11 @@ export class LoginComponent implements OnInit {
   }
 
   routeToHome() {
-    this.router.navigate(['/page/home']);
+    if (this.returnUrl != '/') {
+      this.router.navigateByUrl(this.returnUrl);
+    }
+    else
+      this.router.navigate(['/page/home']);
   }
   async updateFCMToken(fcmToken: any, returnObject: any) {
     try {
@@ -155,7 +165,7 @@ export class LoginComponent implements OnInit {
       if (res.isPassed) {
         let fcmTokenExpiration = res.data;
         localStorage.setItem('fcmTokenExpireDate', fcmTokenExpiration);
-        console.log("fcmTokenExpireDate",fcmTokenExpiration);
+        console.log("fcmTokenExpireDate", fcmTokenExpiration);
 
       }
       else {

@@ -34,6 +34,8 @@ export class QrScanComponent implements OnInit {
 
   routeToPages() {
 
+    console.log(this.categoryName);
+    
     if (this.id && this.categoryName && this.formId)
       this.router.navigateByUrl("/page/home/category/" + +this.id + "?name=" + this.categoryName + "&formId=" + +this.formId)
     else if (this.id && this.Record_Id && this.hasWorkFlow && this.hasWorkFlow == 'true')
