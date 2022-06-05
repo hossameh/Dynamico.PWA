@@ -28,8 +28,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    // this.returnUrl = this.returnUrl.replace('%',' ');
-    console.log(this.returnUrl);
     
     this.BuildRequestForm();
     const lang = localStorage.getItem('lang') || '{}';
