@@ -2,7 +2,7 @@ import { OfflineService } from './../../../services/offline/offline.service';
 import { Storage } from '@ionic/storage';
 import { AlertService } from './../../../services/alert/alert.service';
 import { HttpService } from './../../../services/http/http.service';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 
@@ -36,6 +36,7 @@ export class PendingComponent implements OnInit {
     private alert: AlertService,
     private storage: Storage,
     private offline: OfflineService,
+    private elementRef: ElementRef
   ) { }
 
   ngOnInit(): void {
@@ -43,7 +44,9 @@ export class PendingComponent implements OnInit {
       this.isOnline = isOnline;
     });
   }
-
+  editBtnClic(event : any) {
+    event.stopPropagation();
+  }
   delete() {
 
     if (this.isOnline) {

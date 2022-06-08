@@ -22,7 +22,8 @@
 .bg-completed-approved {
   border-radius: 10px;
   box-shadow: 0 3px 10px 0px rgb(0 0 0 / 5%);
-  background-color: #07c5a9 !important;
+  border: 2px solid;
+  border-color: darkgreen;
 
   .white-box {
     box-shadow: unset;
@@ -33,10 +34,12 @@
     padding: 0 15px 5px;
   }
 }
+
 .bg-completed-rejected {
   border-radius: 10px;
   box-shadow: 0 3px 10px 0px rgb(0 0 0 / 5%);
-  background-color: #dc0d0d !important;
+  border: 2px solid;
+  border-color: darkred;
 
   .white-box {
     box-shadow: unset;
@@ -47,10 +50,12 @@
     padding: 0 15px 5px;
   }
 }
+
 .bg-completed-is-current {
   border-radius: 10px;
   box-shadow: 0 3px 10px 0px rgb(0 0 0 / 5%);
-  background-color: #f7f76a !important;
+  border: 2px solid;
+  border-color: darkorange;
 
   .white-box {
     box-shadow: unset;

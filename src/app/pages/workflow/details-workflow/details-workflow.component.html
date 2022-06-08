@@ -38,12 +38,10 @@
 <div *ngIf="step == 2">
   <div class=" mt-3  px-2">
     <div class="mb-3" *ngFor="let item of workflowProcess">
-      <div class="px-2"
-      [class.bg-completed-approved]="item.isCompleted && item.approveDate"
-      [class.bg-completed-rejected]="item.isCompleted && item.rejectDate"
-      [class.bg-completed-is-current]="!item.isCompleted && item.isCurrent"
-      [class.bg-completed-bg-white]="!item.isCompleted && !item.isCurrent"
-      >
+      <div class="px-2" [class.bg-completed-approved]="item.isCompleted && item.approveDate"
+        [class.bg-completed-rejected]="item.isCompleted && item.rejectDate"
+        [class.bg-completed-is-current]="!item.isCompleted && item.isCurrent"
+        [class.bg-completed-bg-white]="!item.isCompleted && !item.isCurrent">
         <div class="white-box py-2">
           <div class="box-content">
             <p class="number">
@@ -52,14 +50,21 @@
             <h5 class="font-14">
               {{item.userName}}
             </h5>
-            <p class="date">{{item.dueDate | date:'short'}}</p>
-            <p *ngIf="item.isCompleted && item.approveDate" class="date">Approved at : {{item.approveDate | date:'short'}}</p>
-            <p *ngIf="item.isCompleted && item.rejectDate" class="date">Rejected at : {{item.rejectDate | date:'short'}}</p>
-          </div>
+            <p class="date">Due Date : {{item.dueDate | date:'short'}}</p>
+            <p *ngIf="item.isCompleted && item.approveDate" class="date">Actual Date : {{item.approveDate |
+              date:'short'}}</p>
+            <p *ngIf="item.isCompleted && item.rejectDate" class="date">Actual Date : {{item.rejectDate | date:'short'}}
+            </p>
+          </div> 
           <div class="box-side">
             <div class="d-flex align-items-center">
-              <p class="badge me-2">
-                <img src="assets/img/icons/workflow.svg" alt="workflow">
+              <p class="me-2">
+                <img width="22px" height="22px" src="assets/img/icons/correct.png" *ngIf="item.isCompleted && item.approveDate" alt="approved">
+                <img width="22px" height="22px" src="assets/img/icons/cross.png" *ngIf="item.isCompleted && item.rejectDate" alt="rejected">
+                <img width="22px" height="22px" src="assets/img/icons/exclamation-mark.png" *ngIf="!item.isCompleted && item.isCurrent"
+                  alt="current">
+                <img width="22px" height="22px" src="assets/img/icons/stopwatch.png" *ngIf="!item.isCompleted && !item.isCurrent"
+                  alt="inSequence">
               </p>
             </div>
           </div>
