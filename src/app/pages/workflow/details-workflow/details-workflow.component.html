@@ -50,21 +50,47 @@
             <h5 class="font-14">
               {{item.userName}}
             </h5>
-            <p class="date">Due Date : {{item.dueDate | date:'short'}}</p>
-            <p *ngIf="item.isCompleted && item.approveDate" class="date">Actual Date : {{item.approveDate |
-              date:'short'}}</p>
-            <p *ngIf="item.isCompleted && item.rejectDate" class="date">Actual Date : {{item.rejectDate | date:'short'}}
+            <p class="date">
+              {{'Due Date : ' | translate}}
+              {{item.dueDate | date:'short'}}</p>
+            <p *ngIf="item.isCompleted && item.approveDate" class="date">
+              {{'Actual Date : '| translate}}
+              {{item.approveDate |date:'short'}}
             </p>
-          </div> 
+            <p *ngIf="item.isCompleted && item.rejectDate" class="date">
+              {{'Actual Date : '| translate}}
+              {{item.rejectDate |date:'short'}}
+            </p>
+            <p 
+            [class.color-red]="checkLarger(item.approveDate,item.dueDate)"
+            [class.color-green]="!checkLarger(item.approveDate,item.dueDate)"
+            *ngIf="item.isCompleted && item.approveDate" class="date">
+              {{'Gap : ' | translate}}
+              {{ timeDiff(item.dueDate,item.approveDate)?.days + (' Day '|translate)}} |
+              {{ timeDiff(item.dueDate,item.approveDate)?.hours + (' Hour '|translate)}} |
+              {{ timeDiff(item.dueDate,item.approveDate)?.minutes + (' Minute'|translate)}}
+            </p>
+            <p 
+            [class.color-red]="checkLarger(item.rejectDate,item.dueDate)"
+            [class.color-green]="!checkLarger(item.rejectDate,item.dueDate)"
+            *ngIf="item.isCompleted && item.rejectDate" class="date">
+              {{'Gap : ' | translate}}
+              {{ timeDiff(item.dueDate,item.rejectDate)?.days + (' Day '|translate)}} |
+              {{ timeDiff(item.dueDate,item.rejectDate)?.hours + (' Hour '|translate)}} |
+              {{ timeDiff(item.dueDate,item.rejectDate)?.minutes + (' Minute'|translate)}}
+            </p>
+          </div>
           <div class="box-side">
             <div class="d-flex align-items-center">
               <p class="me-2">
-                <img width="22px" height="22px" src="assets/img/icons/correct.png" *ngIf="item.isCompleted && item.approveDate" alt="approved">
-                <img width="22px" height="22px" src="assets/img/icons/cross.png" *ngIf="item.isCompleted && item.rejectDate" alt="rejected">
-                <img width="22px" height="22px" src="assets/img/icons/exclamation-mark.png" *ngIf="!item.isCompleted && item.isCurrent"
-                  alt="current">
-                <img width="22px" height="22px" src="assets/img/icons/stopwatch.png" *ngIf="!item.isCompleted && !item.isCurrent"
-                  alt="inSequence">
+                <img width="22px" height="22px" src="assets/img/icons/correct.png"
+                  *ngIf="item.isCompleted && item.approveDate" alt="approved">
+                <img width="22px" height="22px" src="assets/img/icons/cross.png"
+                  *ngIf="item.isCompleted && item.rejectDate" alt="rejected">
+                <img width="22px" height="22px" src="assets/img/icons/exclamation-mark.png"
+                  *ngIf="!item.isCompleted && item.isCurrent" alt="current">
+                <img width="22px" height="22px" src="assets/img/icons/stopwatch.png"
+                  *ngIf="!item.isCompleted && !item.isCurrent" alt="inSequence">
               </p>
             </div>
           </div>

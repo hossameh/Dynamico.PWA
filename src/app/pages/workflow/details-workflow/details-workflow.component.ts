@@ -235,6 +235,77 @@ export class DetailsWorkflowComponent implements OnInit {
       this.getWorkflowProcess();
     })
   }
+  checkLarger(start: any, end: any) {
+    if (start && end) {
+      let date1: Date;
+      let date2: Date;
+      if (start.length > 5 || end.length > 5) {
+        date1 = new Date(start);
+        date2 = new Date(end);
+      }
+      else {
+        date1 = new Date("02/14/2022");
+        date2 = new Date("02/14/2022");
+        date1.setHours(0, 0, 0, 0);
+        date2.setHours(0, 0, 0, 0);
+        let arr1 = start.toString().split(':');
+        let arr2 = end.toString().split(':');
+        date1.setHours(arr1[0], arr1[1]);
+        date2.setHours(arr2[0], arr2[1]);
+      }
+      if (date1 > date2)
+        return true;
+    }
+    return false;
+  }
+  timeDiff(start: any, end: any) {
+    if (start && end) {
+      let date1: Date;
+      let date2: Date;
+      if (start.length > 5 || end.length > 5) {
+        date1 = new Date(start);
+        date2 = new Date(end);
+      }
+      else {
+        date1 = new Date("02/14/2022");
+        date2 = new Date("02/14/2022");
+        date1.setHours(0, 0, 0, 0);
+        date2.setHours(0, 0, 0, 0);
+        let arr1 = start.toString().split(':');
+        let arr2 = end.toString().split(':');
+        date1.setHours(arr1[0], arr1[1]);
+        date2.setHours(arr2[0], arr2[1]);
+      }
+      return this.calcDiff(date1, date2)
+    }
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+    }
+  }
+  calcDiff(d1: any, d2: any) {
+    var delta = Math.abs(d1.getTime() - d2.getTime()) / 1000;
+    if (delta < 0)
+      delta = - delta;
+    // calculate (and subtract) whole days
+    var days = Math.floor(delta / 86400);
+    delta -= days * 86400;
+
+    // calculate (and subtract) whole hours
+    var hours = Math.floor(delta / 3600) % 24;
+    delta -= hours * 3600;
+
+    // calculate (and subtract) whole minutes
+    var minutes = Math.floor(delta / 60) % 60;
+    delta -= minutes * 60;
+
+    return {
+      days: days,
+      hours: hours,
+      minutes: minutes,
+    }
+  }
 
 }
 interface IWorkflowProcessList {
@@ -255,3 +326,5 @@ interface IWorkflowProcessList {
   assignationGroupId?: number;
   assignationGroupName: string;
 }
+
+
