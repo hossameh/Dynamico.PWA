@@ -236,6 +236,9 @@ export class DetailsWorkflowComponent implements OnInit {
     })
   }
   checkLarger(start: any, end: any) {
+    if (start == null) {
+      start = new Date().toLocaleString();
+    }
     if (start && end) {
       let date1: Date;
       let date2: Date;
@@ -259,6 +262,9 @@ export class DetailsWorkflowComponent implements OnInit {
     return false;
   }
   timeDiff(start: any, end: any) {
+    if (end == null) {
+      end = new Date().toLocaleString();
+    } 
     if (start && end) {
       let date1: Date;
       let date2: Date;
@@ -285,6 +291,9 @@ export class DetailsWorkflowComponent implements OnInit {
     }
   }
   calcDiff(d1: any, d2: any) {
+    // console.log(d1);
+    // console.log(d2);
+    
     var delta = Math.abs(d1.getTime() - d2.getTime()) / 1000;
     if (delta < 0)
       delta = - delta;

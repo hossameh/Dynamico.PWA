@@ -61,23 +61,34 @@
               {{'Actual Date : '| translate}}
               {{item.rejectDate |date:'short'}}
             </p>
-            <p 
-            [class.color-red]="checkLarger(item.approveDate,item.dueDate)"
-            [class.color-green]="!checkLarger(item.approveDate,item.dueDate)"
-            *ngIf="item.isCompleted && item.approveDate" class="date">
-              {{'Gap : ' | translate}}
-              {{ timeDiff(item.dueDate,item.approveDate)?.days + (' Day '|translate)}} |
-              {{ timeDiff(item.dueDate,item.approveDate)?.hours + (' Hour '|translate)}} |
-              {{ timeDiff(item.dueDate,item.approveDate)?.minutes + (' Minute'|translate)}}
+            <p *ngIf="!item.isCompleted && !item.rejectDate && !item.approveDate" class="date">
+              {{'Actual Date : '| translate}} NA
             </p>
-            <p 
-            [class.color-red]="checkLarger(item.rejectDate,item.dueDate)"
-            [class.color-green]="!checkLarger(item.rejectDate,item.dueDate)"
-            *ngIf="item.isCompleted && item.rejectDate" class="date">
-              {{'Gap : ' | translate}}
-              {{ timeDiff(item.dueDate,item.rejectDate)?.days + (' Day '|translate)}} |
-              {{ timeDiff(item.dueDate,item.rejectDate)?.hours + (' Hour '|translate)}} |
-              {{ timeDiff(item.dueDate,item.rejectDate)?.minutes + (' Minute'|translate)}}
+            <p [class.color-red]="checkLarger(item.approveDate,item.dueDate)"
+              [class.color-green]="!checkLarger(item.approveDate,item.dueDate)"
+              *ngIf="item.isCompleted && item.approveDate" class="date">
+              {{ checkLarger(item.approveDate,item.dueDate) ?
+              ('Exceeded Time : ' | translate) : ('Remaining Time :' | translate)}}
+              {{ timeDiff(item.dueDate,item.approveDate)?.days + (' Days '|translate) }} |
+              {{ timeDiff(item.dueDate,item.approveDate)?.hours + (' Hours '|translate) }} |
+              {{ timeDiff(item.dueDate,item.approveDate)?.minutes + (' Minutes'|translate) }}
+            </p>
+            <p [class.color-red]="checkLarger(item.rejectDate,item.dueDate)"
+              [class.color-green]="!checkLarger(item.rejectDate,item.dueDate)"
+              *ngIf="item.isCompleted && item.rejectDate" class="date">
+              {{ checkLarger(item.rejectDate,item.dueDate) ?
+              ('Exceeded Time : ' | translate) : ('Remaining Time :' | translate)}}
+              {{ timeDiff(item.dueDate,item.rejectDate)?.days + (' Days '|translate) }} |
+              {{ timeDiff(item.dueDate,item.rejectDate)?.hours + (' Hours '|translate) }} |
+              {{ timeDiff(item.dueDate,item.rejectDate)?.minutes + (' Minutes'|translate) }}
+            </p>
+            <p [class.color-red]="checkLarger(null,item.dueDate)" [class.color-green]="!checkLarger(null,item.dueDate)"
+              *ngIf="!item.isCompleted && !item.rejectDate && !item.approveDate" class="date">
+              {{ checkLarger(null,item.dueDate) ?
+              ('Exceeded Time : ' | translate) : ('Remaining Time :' | translate)}}
+              {{ timeDiff(item.dueDate,null)?.days + (' Days ' | translate) }} |
+              {{ timeDiff(item.dueDate,null)?.hours + (' Hours ' | translate) }} |
+              {{ timeDiff(item.dueDate,null)?.minutes + (' Minutes' | translate) }}
             </p>
           </div>
           <div class="box-side">
