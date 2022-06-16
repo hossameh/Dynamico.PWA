@@ -1,10 +1,11 @@
 import { Storage } from '@ionic/storage';
 import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/services/alert/alert.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-category',
@@ -13,6 +14,7 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 })
 export class CategoryComponent implements OnInit, AfterViewInit {
   @ViewChild('openModal') openModal!: ElementRef;
+  @ViewChild('newRecord') newRecord!: TemplateRef<any>;
   items: any = [];
   category_Id!: number;
   name!: string;
@@ -29,6 +31,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
     private http: HttpService,
     private router: Router,
     private alert: AlertService,
+    private modalService: NgbModal
   ) { }
   ngAfterViewInit(): void {
     if (this.category_Id) {
@@ -69,9 +72,10 @@ export class CategoryComponent implements OnInit, AfterViewInit {
           let index = this.items.findIndex((ww: any) => ww.formId == +this.formId);
           if (index >= 0) {
             this.selectedItem = this.items[index];
-            setTimeout(() => {
-              this.openModal.nativeElement.click();
-            }, 500);
+            // setTimeout(() => {
+            //   this.openModal.nativeElement.click();
+            // }, 500);
+            this.openNewModal(this.newRecord, "md");
           }
           else {
             this.alert.error("Invalid Input Data");
@@ -115,6 +119,17 @@ export class CategoryComponent implements OnInit, AfterViewInit {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.statusSubscription.unsubscribe();
+  }
+  openNewModal(modalName: any, size = 'lg') {
+    this.modalService.open(
+      modalName,
+      {
+        windowClass: 'modal-holder',
+        backdropClass: 'light-blue-backdrop',
+        centered: true, keyboard: false,
+        backdrop: 'static',
+        size: size
+      });
   }
 
 }
