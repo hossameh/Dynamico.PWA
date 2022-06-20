@@ -40,6 +40,16 @@ h6{
   font-family: "avenir-black";
   margin: 0;
 }
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: 6px;
+  padding-bottom: 2px;
+}
 
 p{
   margin: 0;
