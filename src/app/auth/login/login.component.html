@@ -7,11 +7,10 @@
       <div class="mb-3">
         <div class="form-floating ">
           <input type="email" class="form-control" id="floatingInput" placeholder=" " formControlName="username">
-          <label for="floatingInput">Email address</label>
-
+          <label for="floatingInput">{{'Username' | translate}}</label>
         </div>
         <div *ngIf="f.username.touched && (f.username.errors?.required)" class="text-danger text-start mt-2 font-12">
-          This Is Required
+          {{'Required' | translate}}
         </div>
         <!-- <div *ngIf="f.username.touched && (f.username.errors?.email)" class="text-danger text-start mt-2 font-12">
           Email Not Valid
@@ -19,22 +18,22 @@
       </div>
       <div class="form-floating has-icon">
         <input [type]="showPasswordText ? 'text' : 'password'" class="form-control " id="floatingPassword" placeholder=" " formControlName="password">
-        <label for="floatingPassword">Password</label>
+        <label for="floatingPassword">{{'Password' | translate}}</label>
 
         <div class="icon" (click)="showPassword()">
           <img src="assets/img/icons/view-icon.svg" alt="view">
         </div>
       </div>
       <div *ngIf="f.password.touched && (f.password.errors?.required)" class="text-danger text-start mt-2 font-12">
-        This Is Required
+        {{'Required' | translate}}
       </div>
       <div *ngIf="f.password.touched && (f.password.errors?.pattern)" class="text-danger text-start mt-2 font-12">
-        Password must contains Uppercase, lowercase letters, one number and a symbol
+        {{'pass_p' | translate}}
       </div>
       <div class="mb-4 d-flex justify-content-end">
-        <a class="text-white mt-2" [routerLink]="['/forgot']" routerLinkActive="router-link-active"> Forgot password?</a>
+        <a class="text-white mt-2" [routerLink]="['/forgot']" routerLinkActive="router-link-active"> {{'Forgot_password' | translate}}</a>
       </div>
-      <button (click)="login()" [disabled]="authForm.invalid" class="btn btn-secondary w-100 py-3">Login</button>
+      <button (click)="login()" [disabled]="authForm.invalid" class="btn btn-secondary w-100 py-3">{{'Login' | translate}}</button>
 
     </form>
   </div>

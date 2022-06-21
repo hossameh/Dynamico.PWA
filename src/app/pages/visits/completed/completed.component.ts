@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 
 @Component({
   selector: 'app-completed',
@@ -11,7 +12,9 @@ export class CompletedComponent implements OnInit {
   @Input() items:any = [];
   @Output() date:any = new EventEmitter()
 
-  id!:number
+  id!:number;
+  recordStatus = RecordStatus;
+  recordStatusNames = RecordStatusNames;
 
   rangeDate = {
     FromCreationDate:'',

@@ -1,0 +1,31 @@
+html[dir="rtl"] {
+  .notification-icon {
+    right: unset;
+    left: 20px;
+  }
+  .rotateRtl {
+    transform: rotateY(180deg) !important;
+  }
+  .btn.ft-chevron-left img{
+    transform: unset !important
+    ;
+  }
+  .form-help {
+    text-align: right;
+  }
+  app-login ,
+  .forgot{
+    .has-icon .icon {
+      right: unset !important;
+      left: 10px;
+    }
+  }
+  app-search .form-group img{
+    left: unset !important;
+    right: 10px;
+  }
+  .c-tabs .item:first-child{
+    border-right: unset;
+    border-left: 2px solid rgba(0, 0, 0, 0.1);
+  }
+}

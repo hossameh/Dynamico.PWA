@@ -1,0 +1,158 @@
+<div class="section-heading">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <div class="d-flex">
+        <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
+        <h4>
+          {{'Workflow' | translate}}
+        </h4>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="c-tabs">
+  <div class="item " [class.active]="step == 1" (click)="change(1)">
+    <div class="d-flex align-items-center justify-content-center ">
+      <p>
+        {{'Details' | translate}}
+      </p>
+    </div>
+  </div>
+  <div class="item " [class.active]="step == 2" (click)="change(2)">
+    <div class="d-flex align-items-center justify-content-center">
+      <p>
+        {{'Workflow' | translate}}
+      </p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="step == 1">
+  <div class="content mt-3">
+    <div class="p-2" *ngIf="form.components.length > 0">
+      <formio-editor [form]="form" [options]="options"></formio-editor>
+    </div>
+  </div>
+</div>
+<div *ngIf="step == 2">
+  <div class=" mt-3  px-2">
+    <div class="mb-3" *ngFor="let item of workflowProcess">
+      <div class="px-2" [class.bg-completed-approved]="item.isCompleted && item.approveDate"
+        [class.bg-completed-rejected]="item.isCompleted && item.rejectDate"
+        [class.bg-completed-is-current]="!item.isCompleted && item.isCurrent"
+        [class.bg-completed-bg-white]="!item.isCompleted && !item.isCurrent">
+        <div class="white-box py-2">
+          <div class="box-content">
+            <p class="number">
+              {{item.workflowStagesName}}
+            </p>
+            <h5 class="font-14">
+              {{item.userName}}
+            </h5>
+            <p class="date">
+              {{'Due Date : ' | translate}}
+              {{item.dueDate | date:'short'}}</p>
+            <p *ngIf="item.isCompleted && item.approveDate" class="date">
+              {{'Actual Date : '| translate}}
+              {{item.approveDate |date:'short'}}
+            </p>
+            <p *ngIf="item.isCompleted && item.rejectDate" class="date">
+              {{'Actual Date : '| translate}}
+              {{item.rejectDate |date:'short'}}
+            </p>
+            <p *ngIf="!item.isCompleted && !item.rejectDate && !item.approveDate" class="date">
+              {{'Actual Date : '| translate}} NA
+            </p>
+            <p [class.color-red]="checkLarger(item.approveDate,item.dueDate)"
+              [class.color-green]="!checkLarger(item.approveDate,item.dueDate)"
+              *ngIf="item.isCompleted && item.approveDate" class="date">
+              {{ checkLarger(item.approveDate,item.dueDate) ?
+              ('Exceeded Time : ' | translate) : ('Remaining Time :' | translate)}}
+              {{ timeDiff(item.dueDate,item.approveDate)?.days }}
+              {{ timeDiff(item.dueDate,item.approveDate).days > 1 ? (' Days ' | translate) : (' Day ' | translate) }} |
+              {{ timeDiff(item.dueDate,item.approveDate)?.hours }}
+              {{ timeDiff(item.dueDate,item.approveDate).hours > 1 ? (' Hours ' | translate) : (' Hour ' | translate) }} |
+              {{ timeDiff(item.dueDate,item.approveDate)?.minutes}}
+              {{ timeDiff(item.dueDate,item.approveDate).minutes > 1 ? (' Minutes' | translate) : (' Minute' | translate)}}
+            </p>
+            <p [class.color-red]="checkLarger(item.rejectDate,item.dueDate)"
+              [class.color-green]="!checkLarger(item.rejectDate,item.dueDate)"
+              *ngIf="item.isCompleted && item.rejectDate" class="date">
+              {{ checkLarger(item.rejectDate,item.dueDate) ?
+              ('Exceeded Time : ' | translate) : ('Remaining Time :' | translate)}}
+              {{ timeDiff(item.dueDate,item.rejectDate)?.days }}
+              {{ timeDiff(item.dueDate,item.rejectDate).days > 1 ? (' Days ' | translate) : (' Day ' | translate) }} |
+              {{ timeDiff(item.dueDate,item.rejectDate)?.hours }}
+              {{ timeDiff(item.dueDate,item.rejectDate).hours > 1 ? (' Hours ' | translate) : (' Hour ' | translate) }} |
+              {{ timeDiff(item.dueDate,item.rejectDate)?.minutes }}
+              {{ timeDiff(item.dueDate,item.rejectDate).minutes > 1 ? (' Minutes' | translate) : (' Minute' | translate)}}
+            </p>
+            <p [class.color-red]="checkLarger(null,item.dueDate)" [class.color-green]="!checkLarger(null,item.dueDate)"
+              *ngIf="!item.isCompleted && !item.rejectDate && !item.approveDate" class="date">
+              {{ checkLarger(null,item.dueDate) ?
+              ('Exceeded Time : ' | translate) : ('Remaining Time :' | translate)}}
+              {{ timeDiff(item.dueDate,null)?.days }}
+              {{ timeDiff(item.dueDate,null).days > 1 ? (' Days ' | translate) : (' Day ' | translate) }} |
+              {{ timeDiff(item.dueDate,null)?.hours }}
+              {{ timeDiff(item.dueDate,null).hours > 1 ? (' Hours ' | translate) : (' Hour ' | translate) }} |
+              {{ timeDiff(item.dueDate,null)?.minutes }}
+              {{ timeDiff(item.dueDate,null).minutes > 1 ? (' Minutes' | translate) : (' Minute' | translate)}}
+            </p>
+          </div>
+          <div class="box-side">
+            <div class="d-flex align-items-center">
+              <p class="me-2">
+                <img width="22px" height="22px" src="assets/img/icons/correct.png"
+                  *ngIf="item.isCompleted && item.approveDate" alt="approved">
+                <img width="22px" height="22px" src="assets/img/icons/cross.png"
+                  *ngIf="item.isCompleted && item.rejectDate" alt="rejected">
+                <img width="22px" height="22px" src="assets/img/icons/exclamation-mark.png"
+                  *ngIf="!item.isCompleted && item.isCurrent" alt="current">
+                <img width="22px" height="22px" src="assets/img/icons/stopwatch.png"
+                  *ngIf="!item.isCompleted && !item.isCurrent" alt="inSequence">
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="comment">
+          {{item.comment}}
+        </p>
+        <div class="d-flex justify-content-between align-items-stretch actions" *ngIf="showActionButton(item)">
+          <button class="accept" data-bs-toggle="modal" data-bs-target="#newModal" (click)="saveAction(true,item)">
+            <img src="assets/img/icons/accept.png" alt="accept">
+            {{'Accept' | translate}}
+          </button>
+          <button class="reject" data-bs-toggle="modal" data-bs-target="#newModal" (click)="saveAction(false,item)">
+            <img src="assets/img/icons/reject.png" alt="accept">
+            {{'Reject' | translate}}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-center p-2 ">
+        <h5 class="modal-title" id="deleteLabel">{{'Comment' | translate}} </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating ">
+          <textarea type="text" style="height: 100px;" class="form-control" id="floatingInput"
+            placeholder="{{'Comment' | translate}}" [(ngModel)]="comment" name="comment"></textarea>
+          <label for="floatingInput"> {{'Comment' | translate}}</label>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" (click)="submit()"
+            [disabled]="!comment && body?.isApproved == false">{{'Submit' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

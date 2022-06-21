@@ -31,8 +31,16 @@ nav{
           border-radius: 50%;
           left: 8px;
         }
+        .number{
+          padding: 0 5px;
+          border-radius: 25px;
+          background: $second;
+          color: #FFF;
+          margin-inline-start: 10px;
+          font-size: 12px;
+        }
         img{
-          filter: contrast(0.2);
+          filter: contrast(0);
           transition: all 0.3s ease-in-out;
         }
         &.active{

@@ -1,3 +1,5 @@
+import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/details-workflow.component';
+import { WorkflowComponent } from './pages/workflow/workflow.component';
 import { ChecklistComponent } from './pages/checklist/checklist.component';
 import { AuthGard } from './core/gaurds/auth.guard';
 import { CalendarComponent } from './pages/calendar/calendar.component';
@@ -14,60 +16,85 @@ import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.
 import { LoginComponent } from './auth/login/login.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { ResetPasswordGuard } from './core/gaurds/reset-password.guard';
+import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
+import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
-    path:'login',
-    component:LoginComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path:'forgot',
-    component:ForgotPasswordComponent
+    path: 'forgot',
+    component: ForgotPasswordComponent
   },
   {
-    path:'page',
+    path: 'resetpassword',
+    canActivate: [ResetPasswordGuard],
+    component: ResetPasswordComponent
+  },
+  {
+    path: 'page',
     component: PagesComponent,
-    canActivateChild:[AuthGard],
-    children:[
+    canActivateChild: [AuthGard],
+    children: [
       {
-        path:'home',
-        component:HomeComponent
+        path: 'home',
+        component: HomeComponent
       },
       {
-        path:'home/category/:id',
-        component:CategoryComponent
+        path: 'home/category/:id',
+        component: CategoryComponent
       },
       {
-        path:'visits/:id',
-        component:VisitsComponent
+        path: 'visits/:id',
+        component: VisitsComponent
       },
       {
-        path:'pending',
-        component:PendingComponent
+        path: 'pending',
+        component: PendingComponent
       },
       {
-        path:'completed',
-        component:CompletedComponent
+        path: 'completed',
+        component: CompletedComponent
       },
       {
-        path:'search',
-        component:SearchComponent
+        path: 'search',
+        component: SearchComponent
       },
       {
-        path:'profile',
-        component:ProfileComponent
+        path: 'profile',
+        component: ProfileComponent
       },
       {
-        path:'checklist/:id',
-        component:ChecklistComponent
+        path: 'workflow',
+        component: WorkflowComponent
       },
       {
-        path:'notification',
-        component:NotificationComponent
+        path: 'workflow/details',
+        component: DetailsWorkflowComponent
       },
       {
-        path:'calendar',
-        component:CalendarComponent
+        path: 'checklist/:id',
+        component: ChecklistComponent
+      },
+      {
+        path: 'notification',
+        component: NotificationComponent
+      },
+      {
+        path: 'notification-details/:id',
+        component: NotificationDetailsComponent
+      },
+      {
+        path: 'calendar',
+        component: CalendarComponent
+      },
+      {
+        path: 'qr-scan/:id',
+        component: QrScanComponent
       },
     ]
   }

@@ -3,6 +3,8 @@
 // @import '~font-awesome/css/font-awesome.min.css';
 // @import "~jsoneditor/dist/jsoneditor.min.css";
 // @import "~@davebaol/angular-formio-editor/styles.css";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
@@ -37,6 +39,16 @@ h5,
 h6{
   font-family: "avenir-black";
   margin: 0;
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: 6px;
+  padding-bottom: 2px;
 }
 
 p{

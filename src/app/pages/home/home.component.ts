@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
     this.items = [];
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
-      if (!isOnline) {
+      if (!this.isOnline) {
         this.loadFromCache();
       } else {
         this.loadFromApi();

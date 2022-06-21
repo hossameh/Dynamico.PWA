@@ -3,9 +3,9 @@
     <div class="d-flex justify-content-between align-items-center">
       <div>
         <div class="d-flex">
-          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" (click)="back()">
+          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
           <h4>
-            Search
+            {{'Search' | translate}}
           </h4>
         </div>
       </div>
@@ -18,34 +18,34 @@
 
   <div class="page-bar">
     <div class="form-group">
-      <input class="form-control form-control-md no-shadow" type="search" placeholder="Search by form name and id name" aria-label="search" #SearchInput>
+      <input class="form-control form-control-md no-shadow" type="search" placeholder="{{'search_p' | translate}} " aria-label="search" #SearchInput>
       <img src="assets/img/icons/search-icon.svg" alt="search">
     </div>
 
     <div class="content d-flex mt-3 align-items-center">
-      <p>Search For</p>
+      <p>{{'Search_For' | translate}}</p>
       <div class="form-check me-3">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [(ngModel)]="searchObj.pending" (change)="search()">
         <label class="form-check-label" for="flexCheckDefault">
-          Pending
+          {{'Pending' | translate}}
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" [(ngModel)]="searchObj.complete" (change)="search()">
         <label class="form-check-label" for="flexCheckChecked">
-          Completed
+          {{'Completed' | translate}}
         </label>
       </div>
     </div>
   </div>
   <div class="py-3 section-content">
-    <h4 *ngIf="items.length > 0">Search results</h4>
+    <h4 *ngIf="items.length > 0">{{'Search_results' | translate}}</h4>
 
     <div class="my-3" *ngFor="let item of items">
       <div class="white-box py-2">
         <div class="box-content">
           <p class="number">
-            #{{item.record_Id}}
+            #{{item.formDataRef}}
           </p>
           <h5 class="font-14">
             {{item.form_Title}}
@@ -54,20 +54,20 @@
         </div>
         <div class="box-side">
           <div class="d-flex align-items-center">
-            <p class="badge me-2" [class.complete]="item.record_Status_Id == 2">{{item.record_Status_Id == 1 ?'Pending' : 'Completed'}}</p>
+            <p class="badge me-2" [class.complete]="item.record_Status_Id == 2">{{item.record_Status_Id == 1 ? ('Pending' | translate): ('Completed' | translate)}}</p>
             <ng-container *ngIf="item.record_Status_Id == 1">
               <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]" [queryParams]="{editMode: true, Record_Id:item.record_Id}"
                      routerLinkActive="router-link-active">
                     <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
-                    Edit</a></li>
+                    {{'Edit' | translate}}</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
                 <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete" (click)="selectedItem  = item">
                     <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
-                    Delete</a></li>
+                    {{'Delete' | translate}}</a></li>
               </ul>
             </ng-container>
 
@@ -89,19 +89,19 @@
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
-        <h5 class="modal-title" id="deleteLabel">Delete</h5>
+        <h5 class="modal-title" id="deleteLabel">{{'Delete' | translate}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
       </div>
       <div class="modal-body">
 
         <h6 class="font-14 text-center px-5">
-          Are you sure you want to delete
-          {{selectedItem?.form_Title}} ?
+          {{'delete_p'}}
+          #{{selectedItem?.record_Id}} ?
         </h6>
 
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-outline-primary w-50 mt-4 me-2" data-bs-dismiss="modal" aria-label="Close">No</button>
-          <button type="button" class="btn btn-primary w-50 mt-4 ms-2" (click)="delete()">Yes</button>
+          <button type="button" class="btn btn-outline-primary w-50 mt-4 me-2" data-bs-dismiss="modal" aria-label="Close">{{'No' | translate}}</button>
+          <button type="button" class="btn btn-primary w-50 mt-4 ms-2" (click)="delete()">{{'Yes' | translate}}</button>
         </div>
       </div>
     </div>

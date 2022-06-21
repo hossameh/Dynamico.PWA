@@ -106,7 +106,7 @@ export class ChecklistComponent implements OnInit {
           //    submit: true
           //  }
           //},
-          //readOnly: true,
+          // readOnly: true,
 
 
         }
@@ -126,7 +126,7 @@ export class ChecklistComponent implements OnInit {
         if (this.id && this.params.editMode == 'true') {
           this.loadFromCacheByIdEdit();
         }
-      }else{
+      } else {
         this.loadFromApi();
       }
     });
@@ -256,7 +256,15 @@ export class ChecklistComponent implements OnInit {
   }
 
   editChecklistRecord() {
-    this.http.get('ChecklistRecords/EditChecklistRecord', { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
+    let apiUrl = 'ChecklistRecords/EditChecklistRecord';
+    let isQrCode = this.params.isQR;
+    if (isQrCode)
+      apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
+    this.http.get(apiUrl, { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
+      if (!value) {
+        this.alert.error("Invalid Input Data");
+        this.router.navigateByUrl("/page/home")
+      }
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
@@ -318,7 +326,7 @@ export class ChecklistComponent implements OnInit {
             submit: this.onFormSubmitted.bind(this, event),
           },
           input: {
-            // readOnly: this.printed,
+            readOnly: !!this.params.Complete ? true : false,
             submission: {
               data: dataObject
             },
@@ -364,22 +372,24 @@ export class ChecklistComponent implements OnInit {
   }
 
   save() {
-    this.modelBody.record_Status = RecordStatus.Pendding;
+    this.modelBody.record_Status = RecordStatus.Created;
     this.modelBody.isSubmitted = false;
+
     this.send();
   }
   submit() {
-    this.modelBody.record_Status = RecordStatus.Complete;
+    this.modelBody.record_Status = RecordStatus.Completed;
     this.modelBody.isSubmitted = true;
     this.send();
   }
 
   send() {
+    this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;
     this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
       if (isOnline) {
         this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
-            this.alert.success(res?.message);
+            this.alert.success('Successfully');
             this.location.back();
           } else {
             this.alert.error(res?.message);
@@ -565,7 +575,7 @@ export class ChecklistComponent implements OnInit {
               submit: this.onFormSubmitted.bind(this, event),
             },
             input: {
-              // readOnly: this.printed,
+              readOnly: !!this.params.Complete ? true : false,
               submission: {
                 data: dataObject
               },

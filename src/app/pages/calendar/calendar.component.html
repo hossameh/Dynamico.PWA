@@ -1,7 +1,7 @@
 <section class="main">
   <div class="section-heading">
     <h4>
-      Plans
+      {{'Plans'| translate}}
     </h4>
   </div>
   <div class="page-bar">
@@ -13,6 +13,6 @@
     </div>
   </div>
 
-  <app-card-view [items]="items" *ngIf="grade"></app-card-view>
-  <app-date-view [items]="itemsDateView" *ngIf="!grade"></app-date-view>
+  <app-card-view [items]="items" (showCompleted)="showCompleted($event)" *ngIf="grade"></app-card-view>
+  <app-date-view [items]="itemsDateView" (showCompletedDateView)="showCompletedDateView($event)" *ngIf="!grade"></app-date-view>
 </section>

@@ -1,3 +1,5 @@
+import { TranslateService } from '@ngx-translate/core';
+import { HttpService } from './services/http/http.service';
 import { LoadingService } from './services/loading/loading.service';
 import { HelperService } from './services/helper.service';
 import { Component } from '@angular/core';
@@ -5,6 +7,9 @@ import { routingAnimation } from './router.animations';
 import { NavigationEnd, Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { SwUpdate } from '@angular/service-worker';
+import { getMessaging, onMessage } from 'firebase/messaging';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-root',
@@ -17,22 +22,37 @@ export class AppComponent {
   currentLang!: any;
   show = false;
   update = false;
+  hideNotifcation = false;
+  notifcationCount = 5;
+  message: any = null;
 
   constructor(private helper: HelperService,
     private swUpdates: SwUpdate,
-    private storage: Storage, private router: Router, private loadingService: LoadingService) { }
+    private http: HttpService,
+    private translate: TranslateService,
+    private toastr: ToastrService,
+    private storage: Storage,
+    private router: Router,
+    private loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.update = false;
     this.createDb();
     this.reloadCache();
 
+    this.listenToFCM();
+
+    // this.getWorkflowCount();
+    // this.helper.getNotificationCount();
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;
       });
     });
 
+    this.helper.getingNotificationCount.subscribe((count) => {
+      this.notifcationCount = count
+    })
     window.scrollTo(0, 0);
     this.currentLang = localStorage.getItem('lang');
     if (!this.currentLang) {
@@ -41,11 +61,15 @@ export class AppComponent {
     } else {
       localStorage.setItem('lang', this.currentLang);
     }
+    this.translate.use(this.currentLang)
     this.langChanged(this.currentLang);
     this.helper.currentLang.next(this.currentLang);
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
+      } else {
+        this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search')
+          || this.router.url.includes('login') || this.router.url.includes('forgot') || this.router.url.includes('resetpassword');
       }
       window.scrollTo(0, 0);
     });
@@ -61,8 +85,12 @@ export class AppComponent {
       });
     }
   }
-
-  updateAccept(){
+  getWorkflowCount() {
+    this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
+      this.helper.getingCount.next(res);
+    })
+  }
+  updateAccept() {
     this.update = false;
     window.location.reload();
   }
@@ -102,5 +130,48 @@ export class AppComponent {
     htmlEl.setAttribute('dir', props.dir);
     htmlEl.setAttribute('lang', props.lang);
     // this.loaderService.isLoading.next(false);
+  }
+
+  listenToFCM() {
+    const messaging = getMessaging();
+    onMessage(messaging, (payload: any) => {
+      // occures if the user is online on this browser tab
+      console.log('Message received. ', payload);
+      this.message = payload;
+      this.showToaster();
+    });
+  }
+
+  showToaster() {
+    this.toastr.info(this.message?.notification?.body, this.message?.notification?.title, {
+      // timeOut: 15000,
+      // extendedTimeOut: 10000,
+      newestOnTop: false,
+      closeButton: true,
+      disableTimeOut: true,
+      positionClass: "toast-top-right"
+    })
+      .onTap
+      .subscribe(() => this.toasterClickedHandler());
+  }
+  toasterClickedHandler() {
+    this.makeNotificationRead();
+    this.router.navigateByUrl("/page/notification-details/1?title=" + this.message?.notification?.body + "&body=" + this.message?.notification?.title)
+  }
+  makeNotificationRead() {
+    let body = {
+      loginId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+      messageKeys: [this.message?.data?.key],
+      isRead: true
+    }
+    try {
+      this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
+        if (res)
+          this.helper.getNotificationCount();
+      });
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
 }

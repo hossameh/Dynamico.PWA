@@ -25,12 +25,25 @@ import { PagesComponent } from './pages/pages.component';
 import { CardViewComponent } from './pages/calendar/card-view/card-view.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { FormioEditorModule } from '@davebaol/angular-formio-editor';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { WorkflowComponent } from './pages/workflow/workflow.component';
+import { PendingWorkflowComponent } from './pages/workflow/pending-workflow/pending-workflow.component';
+import { HistoryWorkflowComponent } from './pages/workflow/history-workflow/history-workflow.component';
+import { DetailsWorkflowComponent } from './pages/workflow/details-workflow/details-workflow.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
+import { initializeApp } from 'firebase/app';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
+initializeApp(environment.firebase);
+
 
 @NgModule({
   declarations: [
@@ -50,7 +63,14 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     CalendarComponent,
     PagesComponent,
     CardViewComponent,
-    DateViewComponent
+    DateViewComponent,
+    WorkflowComponent,
+    PendingWorkflowComponent,
+    HistoryWorkflowComponent,
+    DetailsWorkflowComponent,
+    ResetPasswordComponent,
+    NotificationDetailsComponent,
+    QrScanComponent
   ],
   imports: [
     BrowserModule,
@@ -59,10 +79,18 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     MatSlideToggleModule,
     HttpClientModule,
     FormsModule,
+    NgbModule,
     IonicStorageModule.forRoot(),
     FormioEditorModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-center',
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
     }),
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
@@ -78,8 +106,12 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    TranslateService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}

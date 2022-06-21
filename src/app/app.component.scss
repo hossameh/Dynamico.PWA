@@ -24,3 +24,28 @@
     justify-content: space-between;
   }
 }
+
+.notification-icon{
+  position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    img{
+      filter: contrast(0);
+      transition: all 0.3s ease-in-out;
+    }
+    &.active{
+      img{
+        filter: unset;
+      }
+    }
+}
+
+.notification-count {
+  padding: 0 5px;
+  border-radius: 25px;
+  background: #ff6536;
+  color: #FFF;
+  margin-inline-start: 3px;
+  font-size: 12px;
+}

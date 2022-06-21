@@ -1,4 +1,4 @@
 <svg id="edit-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
   <rect id="Rectangle_56" data-name="Rectangle 56" width="24" height="24" fill="none"/>
-  <path id="pencil-f" d="M14.823,5.6l-3.2-3.2L12.9,1.112a1.978,1.978,0,0,1,2.562,0l.641.641a1.978,1.978,0,0,1,0,2.563ZM13.542,6.878l-8.97,8.97-4.164.96.96-4.164,8.97-8.97,3.2,3.2Z" transform="translate(3.592 3.359)"/>
+  <path id="pencil-f" fill="#48bf53" d="M14.823,5.6l-3.2-3.2L12.9,1.112a1.978,1.978,0,0,1,2.562,0l.641.641a1.978,1.978,0,0,1,0,2.563ZM13.542,6.878l-8.97,8.97-4.164.96.96-4.164,8.97-8.97,3.2,3.2Z" transform="translate(3.592 3.359)"/>
 </svg>

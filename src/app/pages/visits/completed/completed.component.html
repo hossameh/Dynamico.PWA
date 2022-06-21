@@ -1,19 +1,19 @@
 <div class="content px-3 py-4">
   <div class="d-flex align-items-center justify-content-between mb-3 filter">
     <p>
-      Completed forms
+      {{'Completed_forms' | translate}}
     </p>
     <div data-bs-toggle="modal" data-bs-target="#filter">
-      <span>List filter</span>
+      <span>{{'List_filter' | translate}}</span>
       <img src="assets/img/icons/filter.svg" alt="filter" class="ms-2">
     </div>
   </div>
   <div class="mb-3" *ngFor="let item of items">
-    <div class="white-box py-2" [routerLink]="['/page/checklist/'+item.form_Id]"
-         [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+    <div *ngIf="item.workflowId" style="cursor: pointer;" class="white-box py-2" [routerLink]="['/page/workflow/details']"
+      [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id}">
       <div class="box-content">
         <p class="number">
-          #{{item.record_Id}}
+          #{{item.formDataRef}}
         </p>
         <h5 class="font-14">
           {{item.form_Title}}
@@ -22,7 +22,33 @@
       </div>
       <div class="box-side">
         <div class="d-flex align-items-center">
-          <p class="badge me-2">Completed</p>
+          <p class="badge me-2"
+            [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+            [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Completed"
+            [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
+            recordStatus[item.record_Status_Id] | translate}}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!item.workflowId" style="cursor: pointer;" class="white-box py-2" [routerLink]="['/page/checklist/'+item.form_Id]"
+      [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+      <div class="box-content">
+        <p class="number">
+          #{{item.formDataRef}}
+        </p>
+        <h5 class="font-14">
+          {{item.form_Title}}
+        </h5>
+        <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
+      </div>
+      <div class="box-side">
+        <div class="d-flex align-items-center">
+          <!-- <p class="badge me-2">{{'Completed' | translate}}</p> -->
+          <p class="badge me-2"
+            [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+            [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Completed"
+            [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
+            recordStatus[item.record_Status_Id] | translate}}</p>
         </div>
       </div>
     </div>
@@ -30,7 +56,7 @@
   </div>
 
   <div class="text-center mt-5 pt-5" *ngIf="items.length == 0">
-    <p>There's No Data Found</p>
+    <p>{{'There_is_no_data' | translate}}</p>
   </div>
 </div>
 
@@ -40,27 +66,29 @@
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
-        <h5 class="modal-title" id="filterLabel">Pending forms Filter</h5>
+        <h5 class="modal-title" id="filterLabel">{{'Complete_forms_Filter' | translate}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
       </div>
       <div class="modal-body">
 
         <h6>
-          Filter by date range
+          {{"Filter_by_date_range" | translate}}
         </h6>
 
         <div class="d-flex justify-content-between align-items-center  mb-3 mt-3">
           <div class="form-floating me-2 w-100">
-            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From" placeholder="">
-            <label for="From">From</label>
+            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From"
+              placeholder="">
+            <label for="From">{{'From' | translate}}</label>
           </div>
           <div class="form-floating ms-2 w-100">
-            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate" [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
-            <label for="to">To</label>
+            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate"
+              [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
+            <label for="to">{{'To' | translate}}</label>
           </div>
         </div>
 
-        <button type="button" class="btn btn-primary w-100 mt-4" (click)="apply()">Apply</button>
+        <button type="button" class="btn btn-primary w-100 mt-4" (click)="apply()">{{'Apply' | translate}}</button>
       </div>
     </div>
   </div>

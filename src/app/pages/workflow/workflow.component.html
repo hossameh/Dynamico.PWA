@@ -1,0 +1,37 @@
+<section class="main pb-5">
+  <div class="section-heading">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <div class="d-flex">
+          <h4>
+            {{'Workflow' | translate}}
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-tabs">
+    <div class="item " [class.active]="step == 1" (click)="change(1)">
+      <div class="d-flex align-items-center justify-content-center ">
+        <p>
+          {{'Pending' | translate}}
+        </p>
+      </div>
+    </div>
+    <div class="item " [class.active]="step == 2" (click)="change(2)">
+      <div class="d-flex align-items-center justify-content-center">
+        <p>
+          {{'History' | translate}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="step == 1" [@slideInOut1]>
+    <app-pending-workflow [items]="pendingItems"></app-pending-workflow>
+  </div>
+  <div *ngIf="step == 2" [@slideInOut2]>
+    <app-history-workflow [items]="historyItems"></app-history-workflow>
+  </div>
+
+</section>

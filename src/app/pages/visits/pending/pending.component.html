@@ -1,18 +1,20 @@
 <div class="content px-3 py-4">
   <div class="d-flex align-items-center justify-content-between mb-3 filter">
     <p>
-      Pending forms
+      {{'Pending_forms' | translate}}
     </p>
     <div data-bs-toggle="modal" data-bs-target="#filter">
-      <span>List filter</span>
+      <span>{{'List_filter' | translate}}</span>
       <img src="assets/img/icons/filter.svg" alt="filter" class="ms-2">
     </div>
   </div>
   <div class="mb-3" *ngFor="let item of items">
-    <div class="white-box py-2">
+    <div class="white-box py-2" style="cursor: pointer;"
+      *ngIf="item.workflowId && recordStatus[item.record_Status_Id] !== recordStatusNames.Created && recordStatus[item.record_Status_Id] !== recordStatusNames.Assigned"
+      [routerLink]="['/page/workflow/details']" [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id}">
       <div class="box-content">
         <p class="number">
-          #{{item.record_Id}}
+          #{{item.formDataRef}}
         </p>
         <h5 class="font-14">
           {{item.form_Title}}
@@ -21,20 +23,110 @@
       </div>
       <div class="box-side">
         <div class="d-flex align-items-center">
-          <p class="badge me-2">Pending</p>
-          <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <!-- <p class="badge me-2">{{'Pending' | translate}}</p> -->
+          <p class="badge me-2" [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
+            [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+            [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval">{{
+            recordStatus[item.record_Status_Id] | translate}}</p>
+          <!-- <img src="assets/img/icons/menu.svg" (click)="editBtnClic($event)"
+            *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+            alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+            aria-expanded="false">
           <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]"
-                 [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}"
-                 routerLinkActive="router-link-active">
+                [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}"
+                routerLinkActive="router-link-active">
                 <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
-                Edit</a></li>
+                {{'Edit' | translate}}</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete" (click)="selectedItem  = item">
+            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete"
+                (click)="selectedItem  = item">
                 <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
-                Delete</a></li>
+                {{'Delete' | translate}}</a></li>
+          </ul> -->
+        </div>
+      </div>
+    </div>
+    <div class="white-box py-2" style="cursor: pointer;"
+      *ngIf="!item.workflowId && recordStatus[item.record_Status_Id] !== recordStatusNames.Created && recordStatus[item.record_Status_Id] !== recordStatusNames.Assigned"
+      [routerLink]="['/page/checklist/'+item.form_Id]"
+      [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+      <div class="box-content">
+        <p class="number">
+          #{{item.formDataRef}}
+        </p>
+        <h5 class="font-14">
+          {{item.form_Title}}
+        </h5>
+        <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
+      </div>
+      <div class="box-side">
+        <div class="d-flex align-items-center">
+          <!-- <p class="badge me-2">{{'Pending' | translate}}</p> -->
+          <p class="badge me-2" [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
+            [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+            [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval">{{
+            recordStatus[item.record_Status_Id] | translate}}</p>
+          <!-- <img src="assets/img/icons/menu.svg" alt="menu" (click)="editBtnClic($event)"
+            *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+            class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+            aria-expanded="false">
+          <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]"
+                [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}"
+                routerLinkActive="router-link-active">
+                <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
+                {{'Edit' | translate}}</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete"
+                (click)="selectedItem  = item">
+                <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
+                {{'Delete' | translate}}</a></li>
+          </ul> -->
+        </div>
+      </div>
+    </div>
+    <div class="white-box py-2" style="cursor: pointer;"
+      *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+      [routerLink]="['/page/checklist/'+item.form_Id]"
+      [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+      <div class="box-content">
+        <p class="number">
+          #{{item.formDataRef}}
+        </p>
+        <h5 class="font-14">
+          {{item.form_Title}}
+        </h5>
+        <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
+      </div>
+      <div class="box-side">
+        <div class="d-flex align-items-center">
+          <!-- <p class="badge me-2">{{'Pending' | translate}}</p> -->
+          <p class="badge me-2" [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
+            [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+            [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval">{{
+            recordStatus[item.record_Status_Id] | translate}}</p>
+          <img src="assets/img/icons/menu.svg" alt="menu" (click)="editBtnClic($event)"
+            *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+            class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+            aria-expanded="false">
+          <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]"
+                [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}"
+                routerLinkActive="router-link-active">
+                <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
+                {{'Edit' | translate}}</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete"
+                (click)="selectedItem  = item">
+                <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
+                {{'Delete' | translate}}</a></li>
           </ul>
         </div>
       </div>
@@ -42,7 +134,7 @@
   </div>
 
   <div class="text-center mt-5 pt-5" *ngIf="items.length == 0">
-    <p>There's No Data Found</p>
+    <p>{{'There_is_no_data' | translate}}</p>
   </div>
 </div>
 
@@ -52,27 +144,29 @@
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
-        <h5 class="modal-title" id="filterLabel">Pending forms Filter</h5>
+        <h5 class="modal-title" id="filterLabel">{{'Pending_forms_Filter' | translate}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal2></button>
       </div>
       <div class="modal-body">
 
         <h6>
-          Filter by date range
+          {{'Filter_by_date_range' | translate}}
         </h6>
 
         <div class="d-flex justify-content-between align-items-center  mb-3 mt-3">
           <div class="form-floating me-2 w-100">
-            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From" placeholder="">
-            <label for="From">From</label>
+            <input type="date" [(ngModel)]="rangeDate.FromCreationDate" name="From" class="form-control " id="From"
+              placeholder="">
+            <label for="From">{{'From' | translate}}</label>
           </div>
           <div class="form-floating ms-2 w-100">
-            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate" [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
-            <label for="to">To</label>
+            <input type="date" class="form-control " [min]="rangeDate.FromCreationDate"
+              [(ngModel)]="rangeDate.ToCreationDate" name="to" id="to" placeholder="">
+            <label for="to">{{'To' | translate}}</label>
           </div>
         </div>
 
-        <button type="button" class="btn btn-primary w-100 mt-4" (click)="apply()">Apply</button>
+        <button type="button" class="btn btn-primary w-100 mt-4" (click)="apply()">{{'Apply' | translate}}</button>
       </div>
     </div>
   </div>
@@ -82,19 +176,20 @@
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
-        <h5 class="modal-title" id="deleteLabel">Delete</h5>
+        <h5 class="modal-title" id="deleteLabel">{{'Delete' |translate}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
       </div>
       <div class="modal-body">
 
         <h6 class="font-14 text-center px-5">
-          Are you sure you want to delete
-          {{selectedItem?.form_Title}} ?
+          {{'delete_p' | translate}}
+          #{{selectedItem?.record_Id}} ?
         </h6>
 
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-outline-primary w-50 mt-4 me-2" data-bs-dismiss="modal" aria-label="Close">No</button>
-          <button type="button" class="btn btn-primary w-50 mt-4 ms-2" (click)="delete()">Yes</button>
+          <button type="button" class="btn btn-outline-primary w-50 mt-4 me-2" data-bs-dismiss="modal"
+            aria-label="Close">{{'No' | translate}}</button>
+          <button type="button" class="btn btn-primary w-50 mt-4 ms-2" (click)="delete()">{{'Yes' | translate}}</button>
         </div>
       </div>
     </div>

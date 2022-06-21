@@ -1,0 +1,26 @@
+<div class="content px-3 py-4">
+  <div class="mb-3" *ngFor="let item of items" [routerLink]="['/page/workflow/details']" [queryParams]="{Form_Id:item.form.formId,Record_Id: item.formDataId}">
+    <div class="white-box py-2">
+      <div class="box-content">
+        <p class="number">
+          {{item.user.fullName}}
+        </p>
+        <h5 class="font-14">
+          {{item.form.formTitle}}
+        </h5>
+        <p class="date">{{item.submitDate | date:'short'}}</p>
+      </div>
+      <!-- <div class="box-side">
+        <div class="d-flex align-items-center">
+          <p class="badge me-2" [class.approved]="item.workflowStatus == WorkflowStatus.Approved" [class.rejected]="item.workflowStatus == WorkflowStatus.Rejected">
+            {{item.workflowStatus}}
+          </p>
+        </div>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="text-center mt-5 pt-5" *ngIf="items.length == 0">
+    <p>{{'There_is_no_data' | translate}}</p>
+  </div>
+</div>

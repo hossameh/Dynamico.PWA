@@ -22,6 +22,11 @@ export class HttpService {
       return event.data;
     }));
   }
+  get2<T>(APIName: string, params?:any): Observable<T> {
+    return this.http.get<API>(`${this.serverUrl}${APIName}`,{params}).pipe(map((event:any) => {
+      return event;
+    }));
+  }
 
   post<T>(APIName: string, body?: any, showAlert = true,params?:any): Observable<T> {
     return this.http.post<API>(`${this.serverUrl}${APIName}`, body ? body : null,{params}).pipe(map((event: any) => {
