@@ -37,16 +37,19 @@ export class NotificationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.resetPager();
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
+    this.getAll()
+  }
+  resetPager(){
     this.pager = {
       page: 1,
       pages: 0,
       pageSize: 10,
       total: 0,
     };
-    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
-      this.isOnline = isOnline;
-    });
-    this.getAll()
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -87,6 +90,20 @@ export class NotificationComponent implements OnInit {
         if (res)
           this.helper.getNotificationCount();
       });
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+  markAllAsRead() {
+    let loginId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    try {
+      this.http.get(`Notification/MarkeAllNotificationAsRead?loginId=${loginId}`).toPromise()
+        .then(() => {
+          this.items = [];
+          this.resetPager();
+          this.getAll();
+        });
     }
     catch (err) {
       console.log(err)

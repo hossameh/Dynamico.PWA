@@ -4,12 +4,12 @@
       <h4>
         {{'Notifications' | translate}}
       </h4>
-      <!-- <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-        data-bs-toggle="dropdown" aria-expanded="false"> -->
+      <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" aria-expanded="false">
 
-      <!-- <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item">Make all as read</a></li>
-      </ul> -->
+      <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" (click)="markAllAsRead()">Make all as read</a></li>
+      </ul>
     </div>
   </div>
 
@@ -17,10 +17,18 @@
     <div class="content">
       <div *ngFor="let item of items ; let i = index">
         <div class="box" [class.unread]="item.isRead == false">
-          <p [routerLink]="['/page/notification-details/'+ item.id]" (click)="makeNotificationRead(item.key)"
+          <div class="box-content" [routerLink]="['/page/notification-details/'+ item.id]"
+            (click)="makeNotificationRead(item.key)" [queryParams]="{title:item.title,body:item.body}"
+            routerLinkActive="router-link-active">
+            <h5 class="font-14">
+              {{item.title}}
+            </h5>
+            <p class="date">{{item.creationDate |date:'short'}}</p>
+          </div>
+          <!-- <p [routerLink]="['/page/notification-details/'+ item.id]" (click)="makeNotificationRead(item.key)"
             [queryParams]="{title:item.title,body:item.body}" routerLinkActive="router-link-active">
             {{item.title}}
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
