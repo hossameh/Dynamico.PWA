@@ -1,4 +1,4 @@
-<div class="section-heading">
+<div class="section-heading hide-in-print">
   <div class="d-flex justify-content-between align-items-center">
     <div>
       <div class="d-flex">
@@ -12,14 +12,14 @@
   </div>
 </div>
 <div class="c-tabs">
-  <div class="item " [class.active]="step == 1" (click)="change(1)">
+  <div class="item hide-in-print" [class.active]="step == 1" (click)="change(1)">
     <div class="d-flex align-items-center justify-content-center ">
       <p>
         {{'Details' | translate}}
       </p>
     </div>
   </div>
-  <div class="item " [class.active]="step == 2" (click)="change(2)">
+  <div class="item hide-in-print" [class.active]="step == 2" (click)="change(2)">
     <div class="d-flex align-items-center justify-content-center">
       <p>
         {{'Workflow' | translate}}
@@ -28,9 +28,9 @@
   </div>
 </div>
 
-<div *ngIf="step == 1">
+<div *ngIf="step == 1" id="print-section">
   <div class="content mt-3">
-    <div class="p-2" *ngIf="form.components.length > 0">
+    <div class="p-2" *ngIf="form.components.length > 0" >
       <formio-editor [form]="form" [options]="options"></formio-editor>
     </div>
   </div>

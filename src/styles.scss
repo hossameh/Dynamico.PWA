@@ -15,11 +15,13 @@
   src: url("assets/vendor/avenir_ff/avenir_heavy.ttf");
   font-weight: normal;
 }
+
 @font-face {
   font-family: "avenir-black";
   src: url("assets/vendor/avenir_ff/avenir_black.ttf");
   font-weight: bold;
 }
+
 @font-face {
   font-family: "avenir-medium";
   src: url("assets/vendor/avenir_ff/avenir_medium.ttf");
@@ -31,15 +33,17 @@ body {
   color: $text;
   background-color: #F2FBFD;
 }
+
 h1,
 h2,
 h3,
 h4,
 h5,
-h6{
+h6 {
   font-family: "avenir-black";
   margin: 0;
 }
+
 .fa {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
@@ -51,8 +55,32 @@ h6{
   padding-bottom: 2px;
 }
 
-p{
+p {
   margin: 0;
 }
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
+
+@media print {
+
+  .app-sidebar,
+  .hide-in-print {
+    width: 0;
+    display: none;
+  }
+  .div input[type=submit]{
+    width: 0;
+    display: none;
+  }
+
+  .main-panel .main-content {
+    margin: 0 !important;
+  }
+
+  .print-only {
+    display: block;
+  }
+}

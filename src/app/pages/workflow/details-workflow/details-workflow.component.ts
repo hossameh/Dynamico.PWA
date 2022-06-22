@@ -2,8 +2,9 @@ import { AlertService } from './../../../services/alert/alert.service';
 import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
 import { HttpService } from './../../../services/http/http.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Location } from '@angular/common';
+import { LoadingService } from 'src/app/services/loading/loading.service';
 
 @Component({
   selector: 'app-details-workflow',
@@ -13,8 +14,9 @@ import { Location } from '@angular/common';
 export class DetailsWorkflowComponent implements OnInit {
   @ViewChild('closeModal') closeModal!: ElementRef;
   step = 1;
-
+  isLoading = false;
   params: any;
+  printPdf: any;
   form: any;
   options!: FormioEditorOptions;
   data: any;
@@ -27,11 +29,16 @@ export class DetailsWorkflowComponent implements OnInit {
     private http: HttpService,
     private alert: AlertService,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) { }
-
   ngOnInit(): void {
 
+    this.loadingService.isLoading.subscribe(isLoading => {
+      setTimeout(() => {
+        this.isLoading = isLoading;
+      });
+    });
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
     this.form = {
       display: "form",
@@ -97,6 +104,7 @@ export class DetailsWorkflowComponent implements OnInit {
     };
 
     this.params = this.route.snapshot.queryParams;
+    this.printPdf = this.params.printPdf;
     if (this.params) {
       this.getRecord();
       this.getWorkflowProcess();
@@ -117,7 +125,6 @@ export class DetailsWorkflowComponent implements OnInit {
     if (isQrCode)
       apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
     this.http.get(apiUrl, body).subscribe((value: any) => {
-      console.log('res', value);
 
       if (!value) {
         this.alert.error("Invalid Input Data");
@@ -184,6 +191,11 @@ export class DetailsWorkflowComponent implements OnInit {
         }
       };
 
+      if (value && this.printPdf == "true") {
+        setTimeout(() => {
+          this.printWindow()
+        }, 2000)
+      }
     });
   }
 
@@ -264,7 +276,7 @@ export class DetailsWorkflowComponent implements OnInit {
   timeDiff(start: any, end: any) {
     if (end == null) {
       end = new Date().toLocaleString();
-    } 
+    }
     if (start && end) {
       let date1: Date;
       let date2: Date;
@@ -293,7 +305,7 @@ export class DetailsWorkflowComponent implements OnInit {
   calcDiff(d1: any, d2: any) {
     // console.log(d1);
     // console.log(d2);
-    
+
     var delta = Math.abs(d1.getTime() - d2.getTime()) / 1000;
     if (delta < 0)
       delta = - delta;
@@ -316,6 +328,71 @@ export class DetailsWorkflowComponent implements OnInit {
     }
   }
 
+  printWindow() {
+    window.print();
+  }
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('print-section')?.innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto')
+    popupWin?.document.open()
+    popupWin?.document.write(`
+    <html>
+      <head>
+        <title>Print tab</title>
+        <style>
+
+        .row {
+          display: flex;
+          flex-wrap: wrap;
+
+      }
+        .col-6{
+          flex: 0 0 50%;
+  max-width: 50%;
+        }
+        .col-1 {
+          flex: 0 0 8.3333333333%;
+          max-width: 8.3333333333%;
+      }
+      .col-2 {
+        flex: 0 0 16.6666666667%;
+        max-width: 16.6666666667%;
+    }
+    .col-3 {
+      flex: 0 0 25%;
+      max-width: 25%;
+  }
+  .col-4 {
+    flex: 0 0 33.3333333333%;
+    max-width: 33.3333333333%;
+}
+.col-5 {
+  flex: 0 0 41.6666666667%;
+  max-width: 41.6666666667%;
+}
+button{
+display:none
+}
+.card{
+border: 1px solid #000;
+border-radius:10px;
+padding: 20px;
+margin:10px 0;
+}
+.mat-content p {
+font-weight:bold;
+padding:10px;
+border:1px dashed #000
+}
+        </style>
+      </head>
+  <body onload="window.print();window.close()">${printContents}</body>
+    </html>`
+    )
+    popupWin?.document.close()
+  }
+
 }
 interface IWorkflowProcessList {
   id: number;
@@ -335,5 +412,6 @@ interface IWorkflowProcessList {
   assignationGroupId?: number;
   assignationGroupName: string;
 }
+
 
 

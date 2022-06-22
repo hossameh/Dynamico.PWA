@@ -25,7 +25,9 @@ export class CompletedComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  clickPrint(event : any) {
+    event.stopPropagation();
+  }
 
   apply(){
     this.date.emit(this.rangeDate);
