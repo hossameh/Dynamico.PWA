@@ -274,25 +274,33 @@ export class DetailsWorkflowComponent implements OnInit {
     return false;
   }
   timeDiff(start: any, end: any) {
-    if (end == null) {
-      end = new Date().toLocaleString();
-    }
-    if (start && end) {
+    // if (end == null) {
+    //   end = new Date().toLocaleString();
+    // }
+    if (start) {
       let date1: Date;
       let date2: Date;
       if (start.length > 5 || end.length > 5) {
         date1 = new Date(start);
-        date2 = new Date(end);
+        if (end == null)
+          date2 = new Date();
+        else
+          date2 = new Date(end);
       }
       else {
         date1 = new Date("02/14/2022");
-        date2 = new Date("02/14/2022");
         date1.setHours(0, 0, 0, 0);
-        date2.setHours(0, 0, 0, 0);
         let arr1 = start.toString().split(':');
-        let arr2 = end.toString().split(':');
         date1.setHours(arr1[0], arr1[1]);
-        date2.setHours(arr2[0], arr2[1]);
+        if (end == null) {
+          date2 = new Date();
+        }
+        else {
+          date2 = new Date("02/14/2022");
+          date2.setHours(0, 0, 0, 0);
+          let arr2 = end.toString().split(':');
+          date2.setHours(arr2[0], arr2[1]);
+        }
       }
       return this.calcDiff(date1, date2)
     }
