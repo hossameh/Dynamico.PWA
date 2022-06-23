@@ -5,6 +5,7 @@ export const environment = {
   //hostAPI:"http://5.189.153.30/api.dynamico/api/"
 
   appName: 'PWA',
+  APP_URL: 'https://qa-farm.tensorforms.com/DynamicoApp/',
 
   firebase: {
     apiKey: "AIzaSyAz-VXCUhh8cytvpEM5OZhD0JnxMsoyGrk",

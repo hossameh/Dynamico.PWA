@@ -8,19 +8,18 @@
         data-bs-toggle="dropdown" aria-expanded="false">
 
       <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item py-0 px-2" (click)="markAllAsRead()">
+        <li>
+          <a class="dropdown-item py-0 px-2" (click)="markAllAsRead()">
+            <img width="22px" height="22px" src="assets/img/icons/correct.png" class="m-0 me-2" alt="all">
             {{'Make all as read' | translate}}</a></li>
         <li>
           <hr class="dropdown-divider">
         </li>
         <li>
-          <mat-slide-toggle class="dropdown-item py-0 px-2" [(ngModel)]="showAllItems" (change)="resetAll()">
+          <mat-slide-toggle class="dropdown-item  py-0 px-2" [(ngModel)]="showAllItems" (change)="resetAll()">
             {{'Show All' | translate}}
           </mat-slide-toggle>
         </li>
-      </ul>
-      <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" (click)="markAllAsRead()">Make all as read</a></li>
       </ul>
     </div>
   </div>

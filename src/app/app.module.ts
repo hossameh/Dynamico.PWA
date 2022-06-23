@@ -42,6 +42,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 initializeApp(environment.firebase);
 
 
@@ -80,6 +81,7 @@ initializeApp(environment.firebase);
     HttpClientModule,
     FormsModule,
     NgbModule,
+    NgxQRCodeModule,
     IonicStorageModule.forRoot(),
     FormioEditorModule,
     ToastrModule.forRoot({

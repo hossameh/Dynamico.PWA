@@ -29,7 +29,7 @@
             recordStatus[item.record_Status_Id] | translate}}</p>
           <img src="assets/img/icons/printer-svgrepo-com.svg" width="15px" height="15px" alt="menu"
             [routerLink]="['/page/workflow/details']"
-            [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id,printPdf : true}"
+            [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id,printPdf : true,hasWorkflow : true}"
             (click)="clickPrint($event)" class="dropdown-toggle" type="button">
         </div>
       </div>
@@ -56,7 +56,7 @@
             recordStatus[item.record_Status_Id] | translate}}</p>
           <img src="assets/img/icons/printer-svgrepo-com.svg" width="15px" height="15px" alt="menu"
             [routerLink]="['/page/workflow/details']"
-            [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id,printPdf : true}"
+            [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id,printPdf : true,hasWorkflow : false}"
             (click)="clickPrint($event)" class="dropdown-toggle" type="button">
         </div>
       </div>

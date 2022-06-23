@@ -71,5 +71,10 @@
   "Due Date : ":"تاريخ الاستحقاق : ",
   "Actual Date : ":"الوقت الفغلى :",
   "Exceeded Time : ":"الوقت الزائد : ",
-  "Remaining Time :":"الوقت المتبقي : "
+  "Remaining Time :":"الوقت المتبقي : ",
+  "Make all as read":"تحديد الكل كمقروء",
+  "Show All":"إظهار الكل",
+  "Form Data Ref":"المرجع",
+  "Printed By":"طبعت بواسطة",
+  "Print Date":"تاريخ الطباعه"
 }

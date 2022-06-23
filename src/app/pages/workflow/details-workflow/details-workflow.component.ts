@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { LoadingService } from 'src/app/services/loading/loading.service';
+import { environment } from 'src/environments/environment';
+import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
 
 @Component({
   selector: 'app-details-workflow',
@@ -17,13 +19,20 @@ export class DetailsWorkflowComponent implements OnInit {
   isLoading = false;
   params: any;
   printPdf: any;
+  hasWorkFlow: any;
   form: any;
   options!: FormioEditorOptions;
   data: any;
   userData!: any
   workflowProcess: IWorkflowProcessList[] = [];
   body: any
-  comment = ''
+  comment = '';
+  currentDate: any;
+  elementType = NgxQrcodeElementTypes.URL;
+  qrLink!: string;
+  appUrl!: string;
+
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpService,
@@ -33,7 +42,8 @@ export class DetailsWorkflowComponent implements OnInit {
     private loadingService: LoadingService
   ) { }
   ngOnInit(): void {
-
+    this.currentDate = new Date();
+    this.appUrl = environment.APP_URL;
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.isLoading = isLoading;
@@ -105,6 +115,7 @@ export class DetailsWorkflowComponent implements OnInit {
 
     this.params = this.route.snapshot.queryParams;
     this.printPdf = this.params.printPdf;
+    this.hasWorkFlow = this.params.hasWorkflow;
     if (this.params) {
       this.getRecord();
       this.getWorkflowProcess();
@@ -190,7 +201,15 @@ export class DetailsWorkflowComponent implements OnInit {
           }
         }
       };
+      if (this.hasWorkFlow == "true")
+        this.qrLink = this.appUrl + 'page/qr-scan/' + this.data?.form_Id + '?recordId=' + this.data?.record_Id +
+          '&hasWorkFlow=true';
+      if (this.hasWorkFlow == "false")
+        this.qrLink = this.appUrl + 'page/qr-scan/' + this.data?.form_Id + '?recordId=' + this.data?.record_Id +
+          '&hasWorkFlow=false';
 
+      console.log(this.qrLink);
+          
       if (value && this.printPdf == "true") {
         setTimeout(() => {
           this.printWindow()
