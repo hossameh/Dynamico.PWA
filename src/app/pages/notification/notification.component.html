@@ -4,9 +4,21 @@
       <h4>
         {{'Notifications' | translate}}
       </h4>
-      <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+      <img src="assets/img/icons/menu.svg" alt="menu" (click)="clickMenue($event)" class="dropdown-toggle mb-2 pb-2" type="button" id="dropdownMenuButton1"
         data-bs-toggle="dropdown" aria-expanded="false">
 
+      <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item py-0 px-2" (click)="markAllAsRead()">
+            {{'Make all as read' | translate}}</a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li>
+          <mat-slide-toggle class="dropdown-item py-0 px-2" [(ngModel)]="showAllItems" (change)="resetAll()">
+            {{'Show All' | translate}}
+          </mat-slide-toggle>
+        </li>
+      </ul>
       <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
         <li><a class="dropdown-item" (click)="markAllAsRead()">Make all as read</a></li>
       </ul>
@@ -23,7 +35,7 @@
             <h5 class="font-14">
               {{item.title}}
             </h5>
-            <p class="date">{{item.creationDate |date:'short'}}</p>
+            <p class="date pt-2">{{item.creationDate |date:'short'}}</p>
           </div>
           <!-- <p [routerLink]="['/page/notification-details/'+ item.id]" (click)="makeNotificationRead(item.key)"
             [queryParams]="{title:item.title,body:item.body}" routerLinkActive="router-link-active">

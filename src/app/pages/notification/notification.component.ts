@@ -28,7 +28,8 @@ export class NotificationComponent implements OnInit {
   isOnline = true;
   isLoading = false;
 
-  items: any = []
+  items: any = [];
+  showAllItems: boolean = false;
   constructor(
     private http: HttpService,
     private alert: AlertService,
@@ -43,7 +44,7 @@ export class NotificationComponent implements OnInit {
     });
     this.getAll()
   }
-  resetPager(){
+  resetPager() {
     this.pager = {
       page: 1,
       pages: 0,
@@ -65,6 +66,7 @@ export class NotificationComponent implements OnInit {
     }
     let body = {
       UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+      IsRead: this.showAllItems == false ? false : null
     }
     this.http.post('Notification/GetNotifications', body, true, params).subscribe((res: any) => {
       res?.data?.list.map((el: any) => {
@@ -77,6 +79,9 @@ export class NotificationComponent implements OnInit {
       this.isLoading = false;
     })
 
+  }
+  clickMenue(event : any) {
+    event.stopPropagation();
   }
 
   makeNotificationRead(key: string) {
@@ -100,14 +105,17 @@ export class NotificationComponent implements OnInit {
     try {
       this.http.get(`Notification/MarkeAllNotificationAsRead?loginId=${loginId}`).toPromise()
         .then(() => {
-          this.items = [];
-          this.resetPager();
-          this.getAll();
+          this.resetAll();
         });
     }
     catch (err) {
       console.log(err)
     }
+  }
+  resetAll() {
+    this.items = [];
+    this.resetPager();
+    this.getAll();
   }
 
   bottomReached(): boolean {

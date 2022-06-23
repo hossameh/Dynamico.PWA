@@ -6,6 +6,7 @@
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
+
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 @import "assets/scss/style.scss";
@@ -42,6 +43,10 @@ h5,
 h6 {
   font-family: "avenir-black";
   margin: 0;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #079e16;
 }
 
 .fa {
