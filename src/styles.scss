@@ -67,11 +67,9 @@ body {
 @media print {
 
   .app-sidebar,
-  .hide-in-print {
-    width: 0;
-    display: none;
-  }
-  .div input[type=submit]{
+  .hide-in-print,
+  button[type="submit"],
+  button[type="button"] {
     width: 0;
     display: none;
   }
