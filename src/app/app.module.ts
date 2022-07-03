@@ -43,6 +43,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { AssetsComponent } from './pages/assets/assets.component';
+import { AssetsInfoComponent } from './pages/assets/assets-info/assets-info.component';
+import { AssetsChecklistComponent } from './pages/assets/assets-checklist/assets-checklist.component';
+import { AssetsDocumentsComponent } from './pages/assets/assets-documents/assets-documents.component';
 initializeApp(environment.firebase);
 
 
@@ -71,7 +75,11 @@ initializeApp(environment.firebase);
     DetailsWorkflowComponent,
     ResetPasswordComponent,
     NotificationDetailsComponent,
-    QrScanComponent
+    QrScanComponent,
+    AssetsComponent,
+    AssetsInfoComponent,
+    AssetsChecklistComponent,
+    AssetsDocumentsComponent
   ],
   imports: [
     BrowserModule,

@@ -20,6 +20,7 @@ import { ResetPasswordComponent } from './auth/reset-password/reset-password.com
 import { ResetPasswordGuard } from './core/gaurds/reset-password.guard';
 import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
 import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
+import { AssetsComponent } from './pages/assets/assets.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -95,6 +96,10 @@ const routes: Routes = [
       {
         path: 'qr-scan/:id',
         component: QrScanComponent
+      },
+      {
+        path: 'assets',
+        component: AssetsComponent
       },
     ]
   }
