@@ -13,7 +13,7 @@ export class ResetPasswordGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let token = route.queryParams.APIKey;
         if (token) {
-            return this.http.get2('User/ValidateForgetPassword', { APIKey: token }).
+            return this.http.get2('Auth/ValidateForgetPassword', { APIKey: token }).
                 pipe(
                     map(
                         (res: any) => {

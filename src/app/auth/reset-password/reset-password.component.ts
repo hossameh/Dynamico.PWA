@@ -68,7 +68,7 @@ export class ResetPasswordComponent implements OnInit {
   }
   // validateApiKey() {
   //   try {
-  //     this.http.get2('User/ValidateForgetPassword', { APIKey: this.APIKey }).subscribe((res : any) => {                
+  //     this.http.get2('Auth/ValidateForgetPassword', { APIKey: this.APIKey }).subscribe((res : any) => {                
   //       if (res && res.isPassed) {
   //         this.alert.success(res?.message);
   //       } else {
@@ -86,7 +86,7 @@ export class ResetPasswordComponent implements OnInit {
         apiKey: this.APIKey,
         newPassword: this.userForm.value.password
       }
-      this.http.post('User/ResetForgetPassword', body).subscribe((res: any) => {
+      this.http.post('Auth/ResetForgetPassword', body).subscribe((res: any) => {
         if (res.isPassed) {
           this.alert.success(res?.message);
           this.routeToLogin();

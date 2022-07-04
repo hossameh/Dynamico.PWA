@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
     this.isOnline ? this.getCategories() : '';
   }
   getCategories() {
-    this.http.get('Categories/GetUserCategories').subscribe(async (res: any) => {
+    this.http.get('Category/GetUserCategories').subscribe(async (res: any) => {
       this.items = res;
       await this.storage.set('Categories', res);
     });

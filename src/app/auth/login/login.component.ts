@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
   login() {
     let body = this.authForm.value;
     body.appName = environment.appName;
-    this.http.post('User/authenticate', body, true).subscribe((res: any) => {
+    this.http.post('Auth/Login', body, true).subscribe((res: any) => {
       if (res.isPassed) {
         localStorage.setItem('userData', JSON.stringify(res.data));
         localStorage.setItem('token', JSON.stringify(res.data.resetToken));

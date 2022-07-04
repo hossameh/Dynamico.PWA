@@ -32,7 +32,7 @@ export class ForgotPasswordComponent implements OnInit {
         Email: this.userForm.value.email,
         appName: environment.appName
       }
-      this.http.post('User/ForgetPassword', null, true, param).subscribe((res: any) => {
+      this.http.post('Auth/ForgetPassword', null, true, param).subscribe((res: any) => {
         if (res.isPassed) {
           this.linkSent = true;
           localStorage.setItem('email', this.userForm.value.email)

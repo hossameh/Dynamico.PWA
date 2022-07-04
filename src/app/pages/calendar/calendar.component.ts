@@ -43,7 +43,7 @@ export class CalendarComponent implements OnInit {
       UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
       ShowCompletedForms:isComplete
     };
-    this.http.get('Plan/GetPlans', body).subscribe((value: any) => {
+    this.http.get('Plans/MobileGetPlans', body).subscribe((value: any) => {
       this.items = value.list;
     });
   }
