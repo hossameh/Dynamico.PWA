@@ -14,7 +14,6 @@ export class QrScanComponent implements OnInit {
   formId: any;
   Record_Id: any;
   hasWorkFlow: any;
-  assetId: any;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -28,7 +27,6 @@ export class QrScanComponent implements OnInit {
     this.formId = params?.formId;
     this.Record_Id = params?.recordId;
     this.hasWorkFlow = params?.hasWorkFlow;
-    this.assetId = params?.assetId;
 
     this.routeToPages();
   }
@@ -40,8 +38,8 @@ export class QrScanComponent implements OnInit {
       this.router.navigateByUrl("/page/workflow/details?Form_Id=" + this.id + "&isQR=true&Record_Id=" + +this.Record_Id)
     else if (this.id && this.Record_Id && this.hasWorkFlow && this.hasWorkFlow == 'false')
       this.router.navigateByUrl("/page/checklist/" + +this.id + "?editMode=true&Complete=true&isQR=true&Record_Id=" + +this.Record_Id)
-    else if (this.assetId)
-      this.router.navigateByUrl("/page/assets?assetId=" + +this.assetId)
+    else if (this.id)
+      this.router.navigateByUrl("/page/assets?assetId=" + +this.id)
     else {
       this.alert.error("Invalid Input Data")
       this.router.navigateByUrl("/page/home")
