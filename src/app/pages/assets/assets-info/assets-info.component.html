@@ -8,7 +8,8 @@
                     <label id="l-ev6mja-email" for="ev6mja-email" class="col-form-label" ref="label">
                         {{ item?.code }}
                     </label>
-                    <div ref="element" *ngIf="item?.type !== propertyTypeEnum.QR">
+                    <div ref="element"
+                        *ngIf="item?.type !== propertyTypeEnum.QR && item?.type !== propertyTypeEnum.Image && item?.type !== propertyTypeEnum.Location">
                         <input aria-required="false" aria-labelledby="l-eltdhm5-textField" id="eltdhm5-textField"
                             [value]="item?.value" spellcheck="true" disabled="disabled" lang="en" class="form-control"
                             type="text" name="data[textField]" ref="input" aria-invalid="false">
@@ -19,6 +20,15 @@
                             <ngx-qrcode [elementType]="elementType" [value]="item?.value" cssClass="aclass">
                             </ngx-qrcode>
                         </div>
+                    </div>
+                    <div *ngIf="item?.type === propertyTypeEnum.Image"
+                        class="text-center d-flex justify-content-end  col-sm-6 col-lg-6">
+                        <img class="rounded" height="120" [src]="item?.value" />
+                    </div>
+                    <div *ngIf="item?.type === propertyTypeEnum.Location"
+                        class="text-center d-flex justify-content-end  col-sm-6 col-lg-6">
+                        <img src="assets/img/icons/map.jpg" (click)="mapClick(item?.value)" height="100px" alt="menu" class="dropdown-toggle"
+                            type="button">
                     </div>
                 </div>
             </div>

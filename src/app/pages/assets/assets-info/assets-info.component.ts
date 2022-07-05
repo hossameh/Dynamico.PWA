@@ -20,5 +20,10 @@ export class AssetsInfoComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
   }
+  mapClick(value: any) {
+    setTimeout(`window.location = 'geo:${value}';`, 1000);
+
+    // window.location.href = "geo:" + value;
+  }
 
 }

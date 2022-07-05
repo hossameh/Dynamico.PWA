@@ -1,0 +1,9 @@
+img.rounded {
+    &.selected {
+      border: 3px solid white;
+      box-shadow: 0 0 1px 1px paleturquoise;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
