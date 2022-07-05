@@ -1,1 +1,20 @@
-<p>assets-checklist works!</p>
+<div class="mb-2 mt-1" *ngFor="let item of items">
+    <div class="white-box py-2">
+        <div class="box-content">
+            <h5 class="font-14">
+                {{item.formName}}
+            </h5>
+            <p class="date">{{item.assignationDate | date:'d MMMM y'}}</p>
+        </div>
+        <!-- <div class="box-side">
+            <div class="d-flex align-items-center">
+                <p class="badge me-2">
+                    {{recordStatus[item.record_Status_Id] | translate}}</p>
+                <img src="assets/img/icons/printer-svgrepo-com.svg" width="15px" height="15px" alt="menu"
+                    [routerLink]="['/page/workflow/details']"
+                    [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id,printPdf : true,hasWorkflow : false}"
+                    (click)="clickPrint($event)" class="dropdown-toggle" type="button">
+            </div>
+        </div> -->
+    </div>
+</div>

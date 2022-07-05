@@ -108,7 +108,7 @@ export class AssetsComponent implements OnInit {
   }
   getAssetDocuments() {
     this.http.get(`AssetDocument/GetAssetDocuments?AssetId=${+this.assetId}`).subscribe((res: any) => {
-      this.assetDocuments = res.data?.assetDocumentCategories
+      this.assetDocuments = res.assetDocumentCategories;  
     })
   }
 
