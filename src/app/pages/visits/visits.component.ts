@@ -103,13 +103,13 @@ export class VisitsComponent implements OnInit {
   }
   getAllPending() {
     this.body.Record_Status = 1;
-    this.http.get('Records/ReadFormRecords', this.body).subscribe((value: any) => {
+    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((value: any) => {
       this.pendingItems = [...value];
     });
   }
   getAllComplete() {
     this.body.Record_Status = 2;
-    this.http.get('Records/ReadFormRecords', this.body).subscribe((value: any) => {
+    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((value: any) => {
       this.completeItems = [...value];
     });
   }

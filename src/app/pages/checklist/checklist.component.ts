@@ -387,7 +387,7 @@ export class ChecklistComponent implements OnInit {
     this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;
     this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
       if (isOnline) {
-        this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
+        this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
             this.alert.success('Successfully');
             this.location.back();

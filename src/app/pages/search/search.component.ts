@@ -63,13 +63,13 @@ export class SearchComponent implements OnInit {
       TitleOrREF: this.searchObj.searchKey ,
       Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : ''
     };
-    this.http.get('Records/ReadFormRecords', body).subscribe((value: any) => {
+    this.http.get('ChecklistRecords/ReadFormRecords', body).subscribe((value: any) => {
       this.items = value;
     });
   }
 
   delete(){
-    this.http.post('Records/DeleteFormRecord',null,true,{Record_Id: this.selectedItem.record_Id}).subscribe((res:any) => {
+    this.http.post('ChecklistRecords/DeleteFormRecord',null,true,{Record_Id: this.selectedItem.record_Id}).subscribe((res:any) => {
 
       if(res.isPassed){
         this.closeModal.nativeElement.click();

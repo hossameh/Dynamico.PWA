@@ -58,7 +58,7 @@ export class OfflineService {
     if(cacheRecords.length > 0){
       cacheRecords.map((el:any , index:number) => {
         console.log('index',index);
-        this.http.post('Records/SaveFormRecord', el).subscribe((res: any) => {
+        this.http.post('ChecklistRecords/SaveFormRecord', el).subscribe((res: any) => {
 
         });
         if(index == (cacheRecords.length-1) ){

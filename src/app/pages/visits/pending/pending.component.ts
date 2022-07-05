@@ -50,7 +50,7 @@ export class PendingComponent implements OnInit {
   delete() {
 
     if (this.isOnline) {
-      this.http.post('Records/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
+      this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
 
         if (res.isPassed) {
           this.closeModal.nativeElement.click();
