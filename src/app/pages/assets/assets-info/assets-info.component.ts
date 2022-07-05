@@ -21,9 +21,8 @@ export class AssetsInfoComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
   mapClick(value: any) {
-    setTimeout(`window.location = 'geo:${value}';`, 1000);
-
-    // window.location.href = "geo:" + value;
+    window.open("http://maps.google.com/maps/search/" + value, "_blank")
+    //  window.location.href = "http://maps.google.com/maps/search/" + value;
   }
 
 }
