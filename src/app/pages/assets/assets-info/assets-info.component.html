@@ -15,18 +15,18 @@
                             type="text" name="data[textField]" ref="input" aria-invalid="false">
                     </div>
                     <div *ngIf="item?.type === propertyTypeEnum.QR"
-                        class="text-center d-flex justify-content-end  col-sm-6 col-lg-6">
+                        class="text-left col-sm-6 col-lg-6">
                         <div class="qrCode-wrapper">
                             <ngx-qrcode [elementType]="elementType" [value]="item?.value" cssClass="aclass">
                             </ngx-qrcode>
                         </div>
                     </div>
                     <div *ngIf="item?.type === propertyTypeEnum.Image"
-                        class="text-center d-flex justify-content-end  col-sm-6 col-lg-6">
+                        class="text-left  col-sm-6 col-lg-6">
                         <img class="rounded" height="120" [src]="item?.value" />
                     </div>
                     <div *ngIf="item?.type === propertyTypeEnum.Location"
-                        class="text-center d-flex justify-content-end  col-sm-6 col-lg-6">
+                        class="text-left  col-sm-6 col-lg-6">
                         <img src="assets/img/icons/map.jpg" (click)="mapClick(item?.value)" height="100px" alt="menu"
                             class="dropdown-toggle" type="button">
                     </div>
