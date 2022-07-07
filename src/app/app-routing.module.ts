@@ -100,11 +100,11 @@ const routes: Routes = [
       },
       {
         path: 'assets',
-        component: AssetsComponent
+        component: AssetsListComponent
       },
       {
-        path: 'myAssets',
-        component: AssetsListComponent
+        path: 'assets/details',
+        component: AssetsComponent
       },
     ]
   }

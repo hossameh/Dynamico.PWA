@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-assets-checklist',
@@ -11,11 +12,15 @@ export class AssetsChecklistComponent implements OnInit {
   selectedItem: any = {}
   formRef = '';
   name!: '';
+  assetId!: any;
+  params: any;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
-    console.log(this.items);
+    this.params = this.route.snapshot.queryParams;
+    this.assetId = +this.params.assetId;
   }
 
 }

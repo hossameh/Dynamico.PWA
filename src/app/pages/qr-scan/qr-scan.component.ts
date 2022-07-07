@@ -39,7 +39,7 @@ export class QrScanComponent implements OnInit {
     else if (this.id && this.Record_Id && this.hasWorkFlow && this.hasWorkFlow == 'false')
       this.router.navigateByUrl("/page/checklist/" + +this.id + "?editMode=true&Complete=true&isQR=true&Record_Id=" + +this.Record_Id)
     else if (this.id)
-      this.router.navigateByUrl("/page/assets?assetId=" + +this.id)
+      this.router.navigateByUrl("/page/assets/details?assetId=" + +this.id)
     else {
       this.alert.error("Invalid Input Data")
       this.router.navigateByUrl("/page/home")

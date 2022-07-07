@@ -70,7 +70,7 @@ export class VisitsComponent implements OnInit {
   isOnline = true;
   statusSubscription!: Subscription;
   recordStatus = RecordStatus;
-
+  assetId!: any;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -80,15 +80,18 @@ export class VisitsComponent implements OnInit {
     private helper: HelperService,
     private http: HttpService) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
-    this.statusSubscription =  this.offline.currentStatus.subscribe(isOnline => {
+    this.assetId = +this.params.assetId;
+    console.log(this.assetId);
+    
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       if (!isOnline) {
         this.loadFromCache();
-      }else{
+      } else {
         this.loadFromApi()
       }
     });

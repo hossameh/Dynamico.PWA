@@ -3,15 +3,18 @@
     <div class="d-flex justify-content-between align-items-center">
       <div>
         <div class="d-flex">
-          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" [routerLink]="['/page/home/category/'+params?.categoryId]"
-               [queryParams]="{name:params?.categoryName}" routerLinkActive="router-link-active">
+          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl"
+            [routerLink]="[assetId ? '/page/assets/details' : '/page/home/category/'+params?.categoryId]"
+            [queryParams]="assetId ? {assetId:assetId} : {name:params?.categoryName}"
+            routerLinkActive="router-link-active">
           <h4>
             {{params?.listName}}
           </h4>
         </div>
       </div>
       <div>
-        <img src="assets/img/icons/search-icon.svg" alt="search" [routerLink]="['/page/search']" routerLinkActive="router-link-active">
+        <img src="assets/img/icons/search-icon.svg" alt="search" [routerLink]="['/page/search']"
+          routerLinkActive="router-link-active">
       </div>
     </div>
   </div>
@@ -53,13 +56,16 @@
       </div>
       <div class="modal-body">
         <div class="form-floating ">
-          <input type="text" class="form-control" id="floatingInput" placeholder="Name" [(ngModel)]="formRef" name="formRef">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Name" [(ngModel)]="formRef"
+            name="formRef">
           <label for="floatingInput"> {{'Record_reference' | translate}}</label>
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" [routerLink]="['/page/checklist/'+id]" [queryParams]="{editMode: false}"
-                  routerLinkActive="router-link-active" [queryParams]="{editMode: false ,formRef:formRef}" [disabled]="!formRef">{{'Start' | translate}}</button>
+          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal"
+            [routerLink]="['/page/checklist/'+id]" [queryParams]="{editMode: false}"
+            routerLinkActive="router-link-active" [queryParams]="{editMode: false ,formRef:formRef}"
+            [disabled]="!formRef">{{'Start' | translate}}</button>
         </div>
       </div>
     </div>
