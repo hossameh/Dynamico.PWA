@@ -8,6 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AssetsChecklistComponent implements OnInit {
 
   @Input() items: any = [];
+  selectedItem: any = {}
+  formRef = '';
+  name!: '';
 
   constructor() { }
 

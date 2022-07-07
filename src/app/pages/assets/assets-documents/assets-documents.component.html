@@ -1,27 +1,29 @@
-<div class="mb-2 mt-1" *ngFor="let cat of items">
-    <label class="col-form-label" ref="label">
-        {{ cat?.documentCategoryName }}
-    </label>
-    <div *ngFor="let item of cat.documentList">
-        <div class="white-box py-2">
-            <div class="box-content">
-                <p class="font-14">
-                    {{item?.documentName}}
-                </p>
-                <h5 class="font-14">
-                    {{item?.mimeType}}
-                </h5>
-                <p class="date">{{item?.creation_Date | date:'d MMMM y'}}</p>
-            </div>
-            <div class="box-side">
-                <div class="d-flex align-items-center">
-                    <a placement="bottom" [href]="item?.documentPath" [download]="item.documentName" target="_blank"
-                        ngbTooltip="Download" class="text-secondary mb-0 mt-0 mx-1">
-                        <img src="assets/img/icons/printer-svgrepo-com.svg" width="15px" height="15px" alt="menu"
-                            class="dropdown-toggle" type="button">
-                    </a>
+<ngb-accordion #acc="ngbAccordion">
+    <ngb-panel *ngFor="let cat of items" [title]="cat?.documentCategoryName">
+        <ng-template ngbPanelContent>
+            <div *ngFor="let item of cat.documentList">
+                <div class="white-box py-2">
+                    <div class="box-content">
+                        <p class="font-14">
+                            {{item?.documentName ? item?.documentName : 'NA'}}
+                        </p>
+                        <h5 class="font-14">
+                            <!-- {{item?.mimeType}} -->
+                            {{ item?.documentPath ? item?.documentPath.split('.')[1] : 'NA' }}
+                        </h5>
+                        <p class="date">{{item?.creation_Date | date:'d MMMM y'}}</p>
+                    </div>
+                    <div class="box-side">
+                        <div class="d-flex align-items-center">
+                            <a placement="bottom" [href]="item?.documentPath" [download]="item.documentName"
+                                target="_blank" ngbTooltip="Download" class="text-secondary mb-0 mt-0 mx-1">
+                                <img src="assets/img/icons/download.svg" width="15px" height="15px"
+                                    alt="menu" class="dropdown-toggle" type="button">
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>

@@ -102,7 +102,7 @@ export class AssetsComponent implements OnInit {
     })
   }
   getAssetChecklist() {
-    this.http.post(`AssetChecklist/GetAssetChecklists?AssetId=${+this.assetId}`, null).subscribe((res: any) => {
+    this.http.post(`AssetChecklist/GetAssetChecklistsWithCategory?assetId=${+this.assetId}`, null).subscribe((res: any) => {      
       this.assetCheckList = res.data;
     })
   }
