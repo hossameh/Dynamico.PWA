@@ -21,6 +21,7 @@ import { ResetPasswordGuard } from './core/gaurds/reset-password.guard';
 import { NotificationDetailsComponent } from './pages/notification/notification-details/notification-details.component';
 import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
 import { AssetsComponent } from './pages/assets/assets.component';
+import { AssetsListComponent } from './pages/assets/assets-list/assets-list.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -100,6 +101,10 @@ const routes: Routes = [
       {
         path: 'assets',
         component: AssetsComponent
+      },
+      {
+        path: 'myAssets',
+        component: AssetsListComponent
       },
     ]
   }
