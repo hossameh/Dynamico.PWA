@@ -7,16 +7,12 @@ import { PropertyTypeEnum } from './propertiesType';
   templateUrl: './assets-info.component.html',
   styleUrls: ['./assets-info.component.scss']
 })
-export class AssetsInfoComponent implements OnInit, OnChanges {
+export class AssetsInfoComponent implements OnInit {
 
   @Input() items: any = [];
   elementType = NgxQrcodeElementTypes.URL;
   propertyTypeEnum = PropertyTypeEnum;
   constructor() { }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.items)
-      console.log(this.items);
-  }
 
   ngOnInit(): void {
   }

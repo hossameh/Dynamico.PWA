@@ -85,7 +85,6 @@ export class VisitsComponent implements OnInit {
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
     this.assetId = +this.params.assetId;
-    console.log(this.assetId);
     
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;

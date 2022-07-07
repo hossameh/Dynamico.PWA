@@ -29,9 +29,7 @@ export class AssetsListComponent implements OnInit {
     });
   }
   getAssets() {
-    this.http.get(`Assets/GetUserAssets`, null).subscribe((res: any) => {
-      console.log(res);
-      
+    this.http.get(`Assets/GetUserAssets`, null).subscribe((res: any) => {      
       this.assets = res;
     })
   }

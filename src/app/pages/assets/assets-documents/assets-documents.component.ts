@@ -12,8 +12,6 @@ export class AssetsDocumentsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.items);
-
   }
 
 }
