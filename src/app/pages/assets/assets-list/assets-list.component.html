@@ -10,10 +10,18 @@
             </div>
         </div>
     </div>
+    <div class="page-bar">
+        <div class="form-group">
+            <input class="form-control form-control-md no-shadow" type="search" (keyup)="getAssets()"
+                placeholder="{{'Search By Name or Code' | translate}} " [(ngModel)]="searchKeyWord" aria-label="search">
+            <img src="assets/img/icons/search-icon.svg" alt="search">
+        </div>
+    </div>
     <div class="content px-3 py-2">
         <div class="mb-3" *ngFor="let item of assets">
             <div class="white-box">
-                <div class="box-content" [routerLink]="['/page/assets/details']" [queryParams]="{assetId: item?.assetId}">
+                <div class="box-content" [routerLink]="['/page/assets/details']"
+                    [queryParams]="{assetId: item?.assetId}">
                     <p class="number">
                         {{item.code}}
                     </p>

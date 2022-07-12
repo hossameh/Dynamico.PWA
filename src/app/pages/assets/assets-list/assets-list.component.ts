@@ -15,6 +15,7 @@ export class AssetsListComponent implements OnInit {
   isOnline = true;
   assets: any = [];
   $subscription!: Subscription;
+  searchKeyWord!: '';
   constructor(private http: HttpService,
     private helper: HelperService,
     private offline: OfflineService,
@@ -29,7 +30,7 @@ export class AssetsListComponent implements OnInit {
     });
   }
   getAssets() {
-    this.http.get(`Assets/GetUserAssets`, null).subscribe((res: any) => {      
+    this.http.get(`Assets/GetUserAssets?search=${this.searchKeyWord ? this.searchKeyWord : ''}`, null).subscribe((res: any) => {
       this.assets = res;
     })
   }
