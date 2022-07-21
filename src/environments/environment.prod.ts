@@ -1,11 +1,13 @@
 export const environment = {
   production: true,
-  version:'1.2.4',
-  hostAPI:"https://qa-farm.tensorforms.com/api.dynamico/api/",
-  //hostAPI:"http://5.189.153.30/api.dynamico/api/"
+  version: '1.2.5',
+  //hostAPI:"https://qa-farm.tensorforms.com/api.dynamico/api/",
+  //hostAPI:"http://5.189.153.30/api.dynamico/api/",
+  hostAPI: "https://dynamico.cloud/api/",
 
   appName: 'PWA',
-  APP_URL: 'https://qa-farm.tensorforms.com/DynamicoApp/',
+  //APP_URL: 'https://qa-farm.tensorforms.com/DynamicoApp/',
+  APP_URL: 'https://dynamico.cloud/app/',
 
   firebase: {
     apiKey: "AIzaSyD3opHG18VdZ1OYGJZICGRMAK5B6OVDQIs",
@@ -15,7 +17,7 @@ export const environment = {
     messagingSenderId: "178261450313",
     appId: "1:178261450313:web:ddbd34310fe88d688f6998",
     measurementId: "G-H0NER3WF13",
-    vapidKey : "BKTm9vxTjCIbTS1mfN-EPmFaOpA8GrpbjcX6fa0a0v_QRy0bkIaTkSowq5IVD5a1gS3sy7M2hvnrxKc1xlTY4JM"
+    vapidKey: "BKTm9vxTjCIbTS1mfN-EPmFaOpA8GrpbjcX6fa0a0v_QRy0bkIaTkSowq5IVD5a1gS3sy7M2hvnrxKc1xlTY4JM"
   }
 
   // firebase: {
