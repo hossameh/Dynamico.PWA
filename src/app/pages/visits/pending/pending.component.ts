@@ -44,7 +44,7 @@ export class PendingComponent implements OnInit {
       this.isOnline = isOnline;
     });
   }
-  editBtnClic(event : any) {
+  editBtnClic(event: any) {
     event.stopPropagation();
   }
   delete() {
@@ -53,6 +53,7 @@ export class PendingComponent implements OnInit {
       this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
 
         if (res.isPassed) {
+          this.date.emit(this.rangeDate);
           this.closeModal.nativeElement.click();
         } else {
           this.alert.error(res.message);
