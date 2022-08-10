@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AccessTypes } from 'src/app/core/enums/access.enum';
 
 @Component({
   selector: 'app-category',
@@ -22,7 +23,8 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   isOnline = true;
   statusSubscription!: Subscription;
   selectedItem: any = {}
-  formRef = ''
+  formRef = '';
+  accessTypes = AccessTypes;
 
   constructor(
     private route: ActivatedRoute,

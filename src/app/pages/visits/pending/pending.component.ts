@@ -5,6 +5,7 @@ import { HttpService } from './../../../services/http/http.service';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
+import { AccessTypes } from 'src/app/core/enums/access.enum';
 
 @Component({
   selector: 'app-pending',
@@ -16,8 +17,10 @@ export class PendingComponent implements OnInit {
   @ViewChild('closeModal2') closeModal2!: ElementRef;
 
   @Input() items: any = [];
+  @Input() access: any;
   @Output() date: any = new EventEmitter();
 
+  accessTypes = AccessTypes;
   id!: number;
   selectedItem: any;
 

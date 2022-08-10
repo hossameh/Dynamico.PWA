@@ -37,12 +37,13 @@
     </div>
   </div>
   <div *ngIf="step == 1" [@slideInOut1]>
-    <app-pending [items]="pendingItems" (date)="filterPending($event)"></app-pending>
+    <app-pending [items]="pendingItems" [access]="access" (date)="filterPending($event)"></app-pending>
   </div>
   <div *ngIf="step == 2" [@slideInOut2]>
-    <app-completed [items]="completeItems" (date)="filterComplete($event)"></app-completed>
+    <app-completed [items]="completeItems" [access]="access" (date)="filterComplete($event)"></app-completed>
   </div>
-  <div class="fixed-btn" data-bs-toggle="modal" data-bs-target="#newModal">
+  <div *ngIf="access && access.includes(accessTypes.Create)" class="fixed-btn" data-bs-toggle="modal"
+    data-bs-target="#newModal">
     <img src="assets/img/icons/add.svg" alt="add">
   </div>
 </section>

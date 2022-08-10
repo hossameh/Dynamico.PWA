@@ -110,13 +110,15 @@
             [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
             [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval">{{
             recordStatus[item.record_Status_Id] | translate}}</p>
-          <img src="assets/img/icons/menu.svg" alt="menu" (click)="editBtnClic($event)"
-            *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
-            class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+          <img src="assets/img/icons/menu.svg" alt="menu" (click)="editBtnClic($event)" *ngIf="
+            ( recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned ) 
+            &&
+            ( access && ( access.includes(accessTypes.Update) || access.includes(accessTypes.Delete) ) )
+            " class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
             aria-expanded="false">
           <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
-            <li><a (click)="editBtnClic($event)" class="dropdown-item py-0 px-2"
-                [routerLink]="['/page/checklist/'+item.form_Id]"
+            <li><a *ngIf="access && access.includes(accessTypes.Update)" (click)="editBtnClic($event)"
+                class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]"
                 [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}"
                 routerLinkActive="router-link-active">
                 <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
@@ -124,8 +126,8 @@
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete"
-                (click)="editBtnClic($event);selectedItem = item">
+            <li><a *ngIf="access && access.includes(accessTypes.Delete)" class="dropdown-item py-0 px-2"
+                data-bs-toggle="modal" data-bs-target="#delete" (click)="editBtnClic($event);selectedItem = item">
                 <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
                 {{'Delete' | translate}}</a></li>
           </ul>

@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AccessTypes } from 'src/app/core/enums/access.enum';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 
 @Component({
@@ -9,27 +10,30 @@ import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum'
 export class CompletedComponent implements OnInit {
   @ViewChild('closeModal') closeModal!: ElementRef
 
-  @Input() items:any = [];
-  @Output() date:any = new EventEmitter()
+  @Input() items: any = [];
+  @Input() access: any;
+  @Output() date: any = new EventEmitter()
 
-  id!:number;
+  id!: number;
   recordStatus = RecordStatus;
   recordStatusNames = RecordStatusNames;
 
+  accessTypes = AccessTypes;
+
   rangeDate = {
-    FromCreationDate:'',
-    ToCreationDate:''
+    FromCreationDate: '',
+    ToCreationDate: ''
   }
 
   constructor() { }
 
   ngOnInit(): void {
   }
-  clickPrint(event : any) {
+  clickPrint(event: any) {
     event.stopPropagation();
   }
 
-  apply(){
+  apply() {
     this.date.emit(this.rangeDate);
     this.closeModal.nativeElement.click()
 

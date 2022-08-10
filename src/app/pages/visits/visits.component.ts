@@ -13,6 +13,7 @@ import {
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { RecordStatus } from 'src/app/core/enums/status.enum';
+import { AccessTypes } from 'src/app/core/enums/access.enum';
 @Component({
   selector: 'app-visits',
   templateUrl: './visits.component.html',
@@ -71,6 +72,9 @@ export class VisitsComponent implements OnInit {
   statusSubscription!: Subscription;
   recordStatus = RecordStatus;
   assetId!: any;
+  access!: any;
+  accessTypes = AccessTypes;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -85,6 +89,7 @@ export class VisitsComponent implements OnInit {
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
     this.assetId = +this.params.assetId;
+    this.access = +this.params.access;
     
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
