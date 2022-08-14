@@ -11,7 +11,8 @@
   <div class="mb-3" *ngFor="let item of items">
     <div class="white-box py-2" style="cursor: pointer;"
       *ngIf="item.workflowId && recordStatus[item.record_Status_Id] !== recordStatusNames.Created && recordStatus[item.record_Status_Id] !== recordStatusNames.Assigned"
-      [routerLink]="['/page/workflow/details']" [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id}">
+      (click)="routeWithWorkFlow(item)">
+      <!-- [routerLink]="['/page/workflow/details']" [queryParams]="{Form_Id:item.form_Id,Record_Id: item.record_Id}" -->
       <div class="box-content">
         <p class="number">
           #{{item.formDataRef}}
@@ -51,8 +52,9 @@
     </div>
     <div class="white-box py-2" style="cursor: pointer;"
       *ngIf="!item.workflowId && recordStatus[item.record_Status_Id] !== recordStatusNames.Created && recordStatus[item.record_Status_Id] !== recordStatusNames.Assigned"
-      [routerLink]="['/page/checklist/'+item.form_Id]"
-      [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+      (click)="routeWithNoWorkFlow(item)">
+      <!-- [routerLink]="['/page/checklist/'+item.form_Id]" -->
+      <!-- [queryParams]="{editMode: true, Record_Id:item.record_Id, Complete:true, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}" -->
       <div class="box-content">
         <p class="number">
           #{{item.formDataRef}}
@@ -92,8 +94,9 @@
     </div>
     <div class="white-box py-2" style="cursor: pointer;"
       *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
-      [routerLink]="['/page/checklist/'+item.form_Id]"
-      [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}">
+      (click)="routeIfCreatedOrAssigned(item)">
+      <!-- [routerLink]="['/page/checklist/'+item.form_Id]"
+      [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}" -->
       <div class="box-content">
         <p class="number">
           #{{item.formDataRef}}

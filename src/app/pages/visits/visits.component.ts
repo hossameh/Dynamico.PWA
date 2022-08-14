@@ -89,7 +89,7 @@ export class VisitsComponent implements OnInit {
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
     this.assetId = +this.params.assetId;
-    this.access = +this.params.access;
+    this.access = this.params.access;
     
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
