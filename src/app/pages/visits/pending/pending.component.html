@@ -126,7 +126,7 @@
                 routerLinkActive="router-link-active">
                 <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
                 {{'Edit' | translate}}</a></li>
-            <li>
+            <li *ngIf="access && access.includes(accessTypes.Delete)">
               <hr class="dropdown-divider">
             </li>
             <li><a *ngIf="access && access.includes(accessTypes.Delete)" class="dropdown-item py-0 px-2"
