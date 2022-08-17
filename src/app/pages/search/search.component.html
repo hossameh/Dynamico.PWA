@@ -9,29 +9,33 @@
           </h4>
         </div>
       </div>
-      <div>
-        <img src="assets/img/icons/search-icon.svg" alt="back" [routerLink]="['/page/search']" routerLinkActive="router-link-active">
-      </div>
+      <!-- <div>
+        <img src="assets/img/icons/search-icon.svg" alt="back" [routerLink]="['/page/search']"
+          routerLinkActive="router-link-active">
+      </div> -->
     </div>
   </div>
 
 
   <div class="page-bar">
     <div class="form-group">
-      <input class="form-control form-control-md no-shadow" type="search" placeholder="{{'search_p' | translate}} " aria-label="search" #SearchInput>
+      <input class="form-control form-control-md no-shadow" type="search" placeholder="{{'search_p' | translate}} "
+        aria-label="search" #SearchInput>
       <img src="assets/img/icons/search-icon.svg" alt="search">
     </div>
 
     <div class="content d-flex mt-3 align-items-center">
       <p>{{'Search_For' | translate}}</p>
       <div class="form-check me-3">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [(ngModel)]="searchObj.pending" (change)="search()">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [(ngModel)]="searchObj.pending"
+          (change)="search()">
         <label class="form-check-label" for="flexCheckDefault">
           {{'Pending' | translate}}
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" [(ngModel)]="searchObj.complete" (change)="search()">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" [(ngModel)]="searchObj.complete"
+          (change)="search()">
         <label class="form-check-label" for="flexCheckChecked">
           {{'Completed' | translate}}
         </label>
@@ -42,7 +46,9 @@
     <h4 *ngIf="items.length > 0">{{'Search_results' | translate}}</h4>
 
     <div class="my-3" *ngFor="let item of items">
-      <div class="white-box py-2">
+      <div class="white-box py-2" style="cursor: pointer;"
+        *ngIf="item.workflowId && recordStatus[item.record_Status_Id] !== recordStatusNames.Created && recordStatus[item.record_Status_Id] !== recordStatusNames.Assigned"
+        (click)="routeWithWorkFlow(item)">
         <div class="box-content">
           <p class="number">
             #{{item.formDataRef}}
@@ -54,24 +60,85 @@
         </div>
         <div class="box-side">
           <div class="d-flex align-items-center">
-            <p class="badge me-2" [class.complete]="item.record_Status_Id == 2">{{item.record_Status_Id == 1 ? ('Pending' | translate): ('Completed' | translate)}}</p>
-            <ng-container *ngIf="item.record_Status_Id == 1">
-              <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]" [queryParams]="{editMode: true, Record_Id:item.record_Id}"
-                     routerLinkActive="router-link-active">
-                    <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
-                    {{'Edit' | translate}}</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete" (click)="selectedItem  = item">
-                    <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
-                    {{'Delete' | translate}}</a></li>
-              </ul>
-            </ng-container>
-
-
+            <p class="badge me-2"
+              [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
+              [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+              [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval"
+              [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+              [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Completed"
+              [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
+              recordStatus[item.record_Status_Id] | translate}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="white-box py-2" style="cursor: pointer;"
+        *ngIf="!item.workflowId && recordStatus[item.record_Status_Id] !== recordStatusNames.Created && recordStatus[item.record_Status_Id] !== recordStatusNames.Assigned"
+        (click)="routeWithNoWorkFlow(item)">
+        <div class="box-content">
+          <p class="number">
+            #{{item.formDataRef}}
+          </p>
+          <h5 class="font-14">
+            {{item.form_Title}}
+          </h5>
+          <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
+        </div>
+        <div class="box-side">
+          <div class="d-flex align-items-center">
+            <p class="badge me-2"
+              [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
+              [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+              [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval"
+              [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+              [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Completed"
+              [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
+              recordStatus[item.record_Status_Id] | translate}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="white-box py-2" style="cursor: pointer;"
+        *ngIf="recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+        (click)="routeIfCreatedOrAssigned(item)">
+        <div class="box-content">
+          <p class="number">
+            #{{item.formDataRef}}
+          </p>
+          <h5 class="font-14">
+            {{item.form_Title}}
+          </h5>
+          <p class="date">{{item.creation_Date | date:'d MMMM y'}}</p>
+        </div>
+        <div class="box-side">
+          <div class="d-flex align-items-center">
+            <p class="badge me-2"
+              [class.badge-created]="recordStatus[item.record_Status_Id] == recordStatusNames.Created"
+              [class.badge-assigned]="recordStatus[item.record_Status_Id] == recordStatusNames.Assigned"
+              [class.badge-pending]="recordStatus[item.record_Status_Id] == recordStatusNames.PendingApproval"
+              [class.badge-approved]="recordStatus[item.record_Status_Id] == recordStatusNames.Approved"
+              [class.badge-submitted]="recordStatus[item.record_Status_Id] == recordStatusNames.Completed"
+              [class.badge-rejected]="recordStatus[item.record_Status_Id] == recordStatusNames.Rejected">{{
+              recordStatus[item.record_Status_Id] | translate}}</p>
+            <img src="assets/img/icons/menu.svg" alt="menu" (click)="editBtnClic($event)" *ngIf="
+            ( recordStatus[item.record_Status_Id] == recordStatusNames.Created || recordStatus[item.record_Status_Id] == recordStatusNames.Assigned ) 
+            &&
+            ( access && ( access.includes(accessTypes.Update) || access.includes(accessTypes.Delete) ) )
+            " class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+              aria-expanded="false">
+            <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
+              <li><a *ngIf="access && access.includes(accessTypes.Update)" (click)="editBtnClic($event)"
+                  class="dropdown-item py-0 px-2" [routerLink]="['/page/checklist/'+item.form_Id]"
+                  [queryParams]="{editMode: true, Record_Id:item.record_Id, offline:item.offlineRef ? item.offlineRef : '', listName:item.form_Title}"
+                  routerLinkActive="router-link-active">
+                  <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
+                  {{'Edit' | translate}}</a></li>
+              <li *ngIf="access && access.includes(accessTypes.Delete)">
+                <hr class="dropdown-divider">
+              </li>
+              <li><a *ngIf="access && access.includes(accessTypes.Delete)" class="dropdown-item py-0 px-2"
+                  data-bs-toggle="modal" data-bs-target="#delete" (click)="editBtnClic($event);selectedItem = item">
+                  <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
+                  {{'Delete' | translate}}</a></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -100,7 +167,8 @@
         </h6>
 
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-outline-primary w-50 mt-4 me-2" data-bs-dismiss="modal" aria-label="Close">{{'No' | translate}}</button>
+          <button type="button" class="btn btn-outline-primary w-50 mt-4 me-2" data-bs-dismiss="modal"
+            aria-label="Close">{{'No' | translate}}</button>
           <button type="button" class="btn btn-primary w-50 mt-4 ms-2" (click)="delete()">{{'Yes' | translate}}</button>
         </div>
       </div>

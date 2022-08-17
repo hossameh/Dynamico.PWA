@@ -9,6 +9,9 @@ import {
 } from "rxjs/operators";
 import { fromEvent } from 'rxjs';
 import { Location } from '@angular/common';
+import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
+import { AccessTypes } from 'src/app/core/enums/access.enum';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -26,14 +29,27 @@ export class SearchComponent implements OnInit {
     searchKey: ""
   };
 
-  selectedItem:any
+  selectedItem: any;
+
+  recordStatus = RecordStatus;
+  recordStatusNames = RecordStatusNames;
+
+  accessTypes = AccessTypes;
+  access!: any;
+  params: any;
 
   constructor(private http: HttpService,
     private location: Location,
-    private alert:AlertService
-    ) { }
+    private alert: AlertService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
+    this.params = this.route.snapshot.queryParams;
+    this.access = this.params.access;
+
+
     fromEvent(this.SearchInput.nativeElement, 'keyup').pipe(
 
       // get value
@@ -60,7 +76,7 @@ export class SearchComponent implements OnInit {
 
   search() {
     let body = {
-      TitleOrREF: this.searchObj.searchKey ,
+      TitleOrREF: this.searchObj.searchKey,
       Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : ''
     };
     this.http.get('ChecklistRecords/ReadFormRecords', body).subscribe((value: any) => {
@@ -68,13 +84,12 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  delete(){
-    this.http.post('ChecklistRecords/DeleteFormRecord',null,true,{Record_Id: this.selectedItem.record_Id}).subscribe((res:any) => {
-
-      if(res.isPassed){
+  delete() {
+    this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
+      if (res.isPassed) {
         this.closeModal.nativeElement.click();
         this.search()
-      }else{
+      } else {
         this.alert.error(res.message)
       }
 
@@ -84,4 +99,42 @@ export class SearchComponent implements OnInit {
   back(): void {
     this.location.back();
   };
+  editBtnClic(event: any) {
+    event.stopPropagation();
+  }
+  routeWithWorkFlow(item: any) {
+    if (this.access && (this.access.includes(this.accessTypes.Read) || this.access.includes(this.accessTypes.Update)))
+      this.router.navigateByUrl("/page/workflow/details?Form_Id=" + item?.form_Id + "&Record_Id=" + +item?.record_Id)
+    else {
+      this.alert.error("You have No Access")
+      return;
+    }
+  }
+  routeWithNoWorkFlow(item: any) {
+    if (this.access && (this.access.includes(this.accessTypes.Read) || this.access.includes(this.accessTypes.Update)))
+      this.router.navigateByUrl("/page/checklist/" + +item?.form_Id + "?editMode=true&Complete=true" +
+        "&offline=" + (item.offlineRef ? item.offlineRef : '') +
+        "&listName=" + item.form_Title +
+        "&Record_Id=" + +item.record_Id);
+    else {
+      this.alert.error("You have No Access")
+      return;
+    }
+  }
+  routeIfCreatedOrAssigned(item: any) {
+    let complete = false;
+    if (this.access && this.access.toString().includes(this.accessTypes.Read)) {
+      if (!this.access.includes(this.accessTypes.Update))
+        complete = true;
+      this.router.navigateByUrl("/page/checklist/" + +item?.form_Id + "?editMode=true" +
+        (complete == true ? "&Complete=true" : "") +
+        "&offline=" + (item.offlineRef ? item.offlineRef : '') +
+        "&listName=" + item.form_Title +
+        "&Record_Id=" + +item.record_Id);
+    }
+    else {
+      this.alert.error("You have No Access")
+      return;
+    }
+  }
 }
