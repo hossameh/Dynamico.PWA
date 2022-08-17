@@ -89,13 +89,19 @@ export class VisitsComponent implements OnInit {
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
     this.assetId = +this.params.assetId;
-    this.access = this.params.access;
-    
+    // this.access = this.params.access;
+
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       if (!isOnline) {
         this.loadFromCache();
       } else {
+        if (this.id) {
+          this.http.get('Checklist/GetChecklistUserAccess', { formId: +this.id, userId: JSON.parse(localStorage.getItem('userData') || '{}').userId })
+            .subscribe((res: any) => {
+              this.access = res.access;
+            })
+        }
         this.loadFromApi()
       }
     });

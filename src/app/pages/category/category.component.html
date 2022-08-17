@@ -13,7 +13,7 @@
     <div class="mb-3" *ngFor="let item of items">
       <div class="white-box">
         <div class="box-content" [routerLink]="['/page/visits/'+item.formId]" [queryParams]="{categoryName: name , listName:item.formTitle 
-            , categoryId:item.categoryId , access : item.access}">
+            , categoryId:item.categoryId}">
           <h5 class="font-14">
             {{item.formTitle}}
           </h5>
