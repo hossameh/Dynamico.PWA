@@ -1,35 +1,41 @@
 <div class="card" *ngIf="printPdf">
-  <div class="card-body">
-    <div class="row my-2 py-2">
-      <h4 class="font-weight-bold text-primary"> {{data?.formTitle}}</h4>
-    </div>
-    <div class="row">
-      <div class="col-12 col-sm-6 col-lg-6 form-group">
-        <div>
-          <label for="fomRef">{{ "Form Data Ref"|translate }}</label>
-          <input type="text" class="form-control" [value]="data?.formDataRef" id="fomRef" disabled />
-        </div>
-        <div class="d-flex justify-content-between p-2">
-          <div>
-            <span class="text-bold-600 primary text-uppercase d-block">{{'Printed By'|translate}}</span>
-            <p class="display-block overflow-hidden">
-              {{userData?.fullName}}
-            </p>
-          </div>
-          <div>
-            <span class="text-bold-600 primary text-uppercase d-block">{{'Print Date'|translate}}</span>
-            <p class="display-block overflow-hidden">
-              {{currentDate | date}}
-            </p>
-          </div>
+  <div class="section-heading">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <div class="d-flex">
+          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl hide-in-print"
+            (click)="back()">
+          <h4 class="font-weight-bold text-primary"> {{data?.formTitle}}</h4>
         </div>
       </div>
-      <div class="text-center d-flex justify-content-end  col-sm-6 col-lg-6" *ngIf="data">
-        <div class="qrCode-wrapper">
-          <ngx-qrcode id="qrcode{{ data?.record_Id }}" [elementType]="elementType" [value]="qrLink"
-            cssClass="aclass">
-          </ngx-qrcode>
+    </div>
+  </div>
+
+  <div class="top-card-body row">
+    <div class="col-12 col-sm-6 col-lg-6 form-group">
+      <div>
+        <label class="primary text-uppercase" style="font-size: 14px;" for="fomRef">{{ "Form Data Ref"|translate }}</label>
+        <input type="text" class="form-control" [value]="data?.formDataRef" id="fomRef" disabled />
+      </div>
+      <div class="d-flex justify-content-between mt-1 p-2">
+        <div>
+          <span class="primary text-uppercase d-block" style="font-size: 14px;">{{'Printed By'|translate}}</span>
+          <p class="display-block overflow-hidden">
+            {{userData?.fullName}}
+          </p>
         </div>
+        <div>
+          <span class="primary text-uppercase d-block" style="font-size: 14px;">{{'Print Date'|translate}}</span>
+          <p class="display-block overflow-hidden">
+            {{currentDate | date}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center d-flex justify-content-end  col-sm-6 col-lg-6" *ngIf="data">
+      <div class="qrCode-wrapper">
+        <ngx-qrcode id="qrcode{{ data?.record_Id }}" [elementType]="elementType" [value]="qrLink" cssClass="aclass">
+        </ngx-qrcode>
       </div>
     </div>
   </div>
