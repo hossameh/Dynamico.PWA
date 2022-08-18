@@ -106,8 +106,6 @@ export class SearchComponent implements OnInit {
       pageSize: this.pager.pageSize
     };
     this.http.get('ChecklistRecords/ReadUserFormRecords', body).subscribe((res: any) => {
-      console.log(res);
-
       res?.list.map((el: any) => {
         this.items.push(el);
       });

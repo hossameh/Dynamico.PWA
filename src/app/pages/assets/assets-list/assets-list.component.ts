@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 import { HelperService } from 'src/app/services/helper.service';
 import { HttpService } from 'src/app/services/http/http.service';
 import { OfflineService } from 'src/app/services/offline/offline.service';
@@ -12,16 +13,31 @@ import { OfflineService } from 'src/app/services/offline/offline.service';
 })
 export class AssetsListComponent implements OnInit {
 
+  @HostListener("window:scroll", [])
+  onScroll(): void {
+    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+      // Load Your Data Here
+      this.pager.page += 1;
+      this.getAssets();
+    }
+  }
+
   isOnline = true;
   assets: any = [];
   $subscription!: Subscription;
   searchKeyWord!: '';
+
+  pager!: IPageInfo;
+  loaded = true;
+  isLoading = false;
+
   constructor(private http: HttpService,
     private helper: HelperService,
     private offline: OfflineService,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.resetPager();
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       if (isOnline) {
@@ -29,10 +45,42 @@ export class AssetsListComponent implements OnInit {
       }
     });
   }
+  resetPager() {
+    this.pager = {
+      page: 1,
+      pages: 0,
+      pageSize: 10,
+      total: 0,
+    };
+  }
   getAssets() {
-    this.http.get(`Assets/GetUserAssets?search=${this.searchKeyWord ? this.searchKeyWord : ''}`, null).subscribe((res: any) => {
-      this.assets = res;
+    this.loaded = false;
+    this.isLoading = true;
+    let params = {
+      search: this.searchKeyWord ? this.searchKeyWord : '',
+      pageIndex: this.pager.page,
+      pageSize: this.pager.pageSize
+    };
+    this.http.get(`Assets/GetUserAssets`, params).subscribe((res: any) => {
+      res?.list.map((el: any) => {
+        this.assets.push(el);
+      });
+      this.pager.total = res?.total;
+      this.pager.pages = res?.pages;
+      this.loaded = true;
+      this.isLoading = false;
     })
+  }
+  resetSearch() {
+    this.assets = [];
+    this.resetPager();
+    this.getAssets();
+  }
+  bottomReached(): boolean {
+    return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+  }
+  scrollToTop() {
+    window.scroll(0, 0);
   }
 
 }

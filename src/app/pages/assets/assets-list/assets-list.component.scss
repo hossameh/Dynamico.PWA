@@ -1,3 +1,5 @@
+@import "style.scss";
+
 .box-side {
     position: relative;
     z-index: 99;
@@ -28,4 +30,142 @@
         left: 10px;
         opacity: 0.6;
     }
+}
+
+.box {
+    padding: 16px 30px 16px 16px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    border: 1px solid #efefef;
+    border-radius: 12px;
+    position: relative;
+    font-size: 14px;
+    color: #000;
+    opacity: 0.6;
+
+    p {
+        font-weight: 500;
+        font-family: "avenir-medium";
+
+    }
+
+    &.unread {
+        box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
+        opacity: 1;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            background-color: $second;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            right: 8px;
+        }
+
+        p {
+            b {
+                font-family: "avenir-black";
+            }
+        }
+    }
+}
+
+
+.back-to-top-icon {
+    position: fixed;
+    z-index: 9999;
+    bottom: 70px;
+    right: 15px;
+    display: inline-block;
+    width: 35px;
+    line-height: 35px;
+    border-radius: 35px;
+    color: #FFF;
+    text-align: center;
+    font-size: 12px;
+    transform: scale(0, 0);
+    transition: all 300ms ease;
+}
+
+.rounded-xs {
+    border-radius: 5px !important;
+}
+
+.back-to-top-icon-circle {
+    border-radius: 40px;
+}
+
+.bg-highlight {
+    background-color: #bee9e7 !important;
+    // background-color: #004685 !important;
+    color: #FFF !important;
+}
+
+.shadow-m {
+    box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.08) !important;
+}
+
+.fa-angle-up:before {
+    content: "\f106";
+}
+
+.loader {
+    position: fixed;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+}
+
+/* Creating the dots */
+span {
+    height: 6px;
+    width: 6px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: rgb(160, 180, 180);
+    animation: loading 1s linear infinite;
+}
+
+/* Creating the loading animation*/
+@keyframes loading {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(15px);
+    }
+
+    50% {
+        transform: translateX(-15px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+
+}
+
+span:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+span:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+span:nth-child(5) {
+    animation-delay: 0.5s;
 }
