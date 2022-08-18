@@ -35,7 +35,6 @@ export class SearchComponent implements OnInit {
   recordStatusNames = RecordStatusNames;
 
   accessTypes = AccessTypes;
-  access!: any;
   params: any;
 
   constructor(private http: HttpService,
@@ -47,7 +46,6 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.params = this.route.snapshot.queryParams;
-    this.access = this.params.access;
 
 
     fromEvent(this.SearchInput.nativeElement, 'keyup').pipe(
@@ -79,7 +77,7 @@ export class SearchComponent implements OnInit {
       TitleOrREF: this.searchObj.searchKey,
       Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : ''
     };
-    this.http.get('ChecklistRecords/ReadFormRecords', body).subscribe((value: any) => {
+    this.http.get('ChecklistRecords/ReadUserFormRecords', body).subscribe((value: any) => {
       this.items = value;
     });
   }
@@ -103,7 +101,7 @@ export class SearchComponent implements OnInit {
     event.stopPropagation();
   }
   routeWithWorkFlow(item: any) {
-    if (this.access && (this.access.includes(this.accessTypes.Read) || this.access.includes(this.accessTypes.Update)))
+    if (item?.access && (item?.access.includes(this.accessTypes.Read) || item?.access.includes(this.accessTypes.Update)))
       this.router.navigateByUrl("/page/workflow/details?Form_Id=" + item?.form_Id + "&Record_Id=" + +item?.record_Id)
     else {
       this.alert.error("You have No Access")
@@ -111,7 +109,7 @@ export class SearchComponent implements OnInit {
     }
   }
   routeWithNoWorkFlow(item: any) {
-    if (this.access && (this.access.includes(this.accessTypes.Read) || this.access.includes(this.accessTypes.Update)))
+    if (item?.access && (item?.access.includes(this.accessTypes.Read) || item?.access.includes(this.accessTypes.Update)))
       this.router.navigateByUrl("/page/checklist/" + +item?.form_Id + "?editMode=true&Complete=true" +
         "&offline=" + (item.offlineRef ? item.offlineRef : '') +
         "&listName=" + item.form_Title +
@@ -123,8 +121,8 @@ export class SearchComponent implements OnInit {
   }
   routeIfCreatedOrAssigned(item: any) {
     let complete = false;
-    if (this.access && this.access.toString().includes(this.accessTypes.Read)) {
-      if (!this.access.includes(this.accessTypes.Update))
+    if (item?.access && item?.access.toString().includes(this.accessTypes.Read)) {
+      if (!item?.access.includes(this.accessTypes.Update))
         complete = true;
       this.router.navigateByUrl("/page/checklist/" + +item?.form_Id + "?editMode=true" +
         (complete == true ? "&Complete=true" : "") +
