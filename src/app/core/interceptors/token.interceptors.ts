@@ -32,7 +32,10 @@ export class TokenInterceptor implements HttpInterceptor {
     });
 
     if (request.url.includes(environment.hostAPI)) {
-      if (!request.url.includes('Notification/GetNotifications'))
+      if (
+        !request.url.includes('Notification/GetNotifications') &&
+        !request.url.includes('ChecklistRecords/ReadUserFormRecords')
+      )
         this.loadingService.setLoading(true, request.url);
       return next.handle(request).pipe(
         catchError((error: HttpErrorResponse) => {

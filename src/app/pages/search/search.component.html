@@ -28,14 +28,14 @@
       <p>{{'Search_For' | translate}}</p>
       <div class="form-check me-3">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [(ngModel)]="searchObj.pending"
-          (change)="search()">
+          (change)="resetSearch()">
         <label class="form-check-label" for="flexCheckDefault">
           {{'Pending' | translate}}
         </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" [(ngModel)]="searchObj.complete"
-          (change)="search()">
+          (change)="resetSearch()">
         <label class="form-check-label" for="flexCheckChecked">
           {{'Completed' | translate}}
         </label>
@@ -148,6 +148,29 @@
     <div *ngIf="items.length == 0">
       <img src="assets/img/icons/searchImg.svg" alt="search image" class="c-width p-5">
     </div>
+  </div>
+
+  <a (click)="scrollToTop()" class="
+  back-to-top-icon
+  rounded-xs
+  back-to-top-icon-circle
+  bg-highlight
+  shadow-m
+" style="transform: scale(1); position: fixed !important">
+    <img src="assets/img/icons/icons8-up-24.png" alt="add">
+    <!-- <img src="assets/img/icons/up-arrow.svg" alt="add"> -->
+    <!-- <svg class="bi bi-arrow-up"></svg> -->
+    <!-- Up -->
+    <!-- <img src="assets/img/icons/home-icon.svg" alt="home"> -->
+    <!-- <i class="fa fa-angle-up"></i> -->
+  </a>
+  <div *ngIf="isLoading" class="loader">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
 
 </section>

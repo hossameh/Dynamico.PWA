@@ -1,6 +1,6 @@
 import { AlertService } from './../../services/alert/alert.service';
 import { HttpService } from './../../services/http/http.service';
-import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
+import { Component, ViewChild, ElementRef, OnInit, HostListener } from "@angular/core";
 import {
   debounceTime,
   map,
@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 import { AccessTypes } from 'src/app/core/enums/access.enum';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 
 @Component({
   selector: 'app-search',
@@ -19,6 +20,17 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+
+  @HostListener("window:scroll", [])
+  onScroll(): void {
+    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+      // Load Your Data Here
+      this.pager.page += 1;
+      this.search();
+    }
+  }
+
+
   @ViewChild('SearchInput', { static: true }) SearchInput!: ElementRef;
   @ViewChild('closeModal') closeModal!: ElementRef
 
@@ -37,6 +49,10 @@ export class SearchComponent implements OnInit {
   accessTypes = AccessTypes;
   params: any;
 
+  pager!: IPageInfo;
+  loaded = true;
+  isLoading = false;
+
   constructor(private http: HttpService,
     private location: Location,
     private alert: AlertService,
@@ -45,6 +61,7 @@ export class SearchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.resetPager();
     this.params = this.route.snapshot.queryParams;
 
 
@@ -66,27 +83,51 @@ export class SearchComponent implements OnInit {
       // subscription for response
     ).subscribe((text: string) => {
       this.searchObj.searchKey = text;
-      this.search();
+      this.resetSearch();
 
     });
   }
 
-
+  resetPager() {
+    this.pager = {
+      page: 1,
+      pages: 0,
+      pageSize: 10,
+      total: 0,
+    };
+  }
   search() {
+    this.loaded = false;
+    this.isLoading = true;
     let body = {
       TitleOrREF: this.searchObj.searchKey,
-      Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : ''
+      Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : '',
+      pageIndex: this.pager.page,
+      pageSize: this.pager.pageSize
     };
-    this.http.get('ChecklistRecords/ReadUserFormRecords', body).subscribe((value: any) => {
-      this.items = value;
+    this.http.get('ChecklistRecords/ReadUserFormRecords', body).subscribe((res: any) => {
+      console.log(res);
+
+      res?.list.map((el: any) => {
+        this.items.push(el);
+      });
+      this.pager.total = res?.total;
+      this.pager.pages = res?.pages;
+      this.loaded = true;
+      this.isLoading = false;
     });
+  }
+  resetSearch() {
+    this.items = [];
+    this.resetPager();
+    this.search();
   }
 
   delete() {
     this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
       if (res.isPassed) {
         this.closeModal.nativeElement.click();
-        this.search()
+        this.resetSearch()
       } else {
         this.alert.error(res.message)
       }
@@ -134,5 +175,11 @@ export class SearchComponent implements OnInit {
       this.alert.error("You have No Access")
       return;
     }
+  }
+  bottomReached(): boolean {
+    return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+  }
+  scrollToTop() {
+    window.scroll(0, 0);
   }
 }
