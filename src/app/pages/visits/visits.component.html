@@ -25,7 +25,7 @@
         <p>
           {{'Pending' | translate}}
         </p>
-        <span class="badge ms-2" *ngIf="pendingItems.length">{{pendingItems.length}}</span>
+        <b class="badge ms-2" *ngIf="pendingItems.length">{{pendingItems.length}}</b>
       </div>
     </div>
     <div class="item " [class.active]="step == 2" (click)="change(2)">
@@ -45,6 +45,29 @@
   <div *ngIf="access && access.includes(accessTypes.Create)" class="fixed-btn" data-bs-toggle="modal"
     data-bs-target="#newModal">
     <img src="assets/img/icons/add.svg" alt="add">
+  </div>
+
+  <a (click)="scrollToTop()" class="
+  back-to-top-icon
+  rounded-xs
+  back-to-top-icon-circle
+  bg-highlight
+  shadow-m
+" style="transform: scale(1); position: fixed !important">
+    <img src="assets/img/icons/icons8-up-24.png" alt="add">
+    <!-- <img src="assets/img/icons/up-arrow.svg" alt="add"> -->
+    <!-- <svg class="bi bi-arrow-up"></svg> -->
+    <!-- Up -->
+    <!-- <img src="assets/img/icons/home-icon.svg" alt="home"> -->
+    <!-- <i class="fa fa-angle-up"></i> -->
+  </a>
+  <div *ngIf="isLoading" class="loader">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
 </section>
 

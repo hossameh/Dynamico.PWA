@@ -9,11 +9,12 @@ import {
   style,
   animate,
   transition,
-} from "@angular/animations"; import { Component, OnInit } from '@angular/core';
+} from "@angular/animations"; import { Component, HostListener, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { RecordStatus } from 'src/app/core/enums/status.enum';
 import { AccessTypes } from 'src/app/core/enums/access.enum';
+import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 @Component({
   selector: 'app-visits',
   templateUrl: './visits.component.html',
@@ -55,6 +56,20 @@ import { AccessTypes } from 'src/app/core/enums/access.enum';
   ],
 })
 export class VisitsComponent implements OnInit {
+
+  @HostListener("window:scroll", [])
+  onScroll(): void {
+    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+      // Load Your Data Here
+      this.pager.page += 1;
+      if (this.step == 1)
+        this.getAllPending()
+      if (this.step == 2)
+        this.getAllComplete()
+    }
+  }
+
+
   step = 1;
   pendingItems: any = [];
   completeItems: any = [];
@@ -62,7 +77,9 @@ export class VisitsComponent implements OnInit {
     FromCreationDate: '',
     ToCreationDate: '',
     FormId: 0,
-    Record_Status: 0
+    Record_Status: 0,
+    pageIndex: 1,
+    pageSize: 10
   };
 
   params: any;
@@ -75,6 +92,10 @@ export class VisitsComponent implements OnInit {
   access!: any;
   accessTypes = AccessTypes;
 
+  pager!: IPageInfo;
+  loaded = true;
+  isLoading = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -85,6 +106,7 @@ export class VisitsComponent implements OnInit {
     private http: HttpService) { }
 
   ngOnInit(): void {
+    this.resetData();
     this.id = this.route.snapshot.params.id;
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
@@ -108,7 +130,14 @@ export class VisitsComponent implements OnInit {
 
   }
 
-
+  resetPager() {
+    this.pager = {
+      page: 1,
+      pages: 0,
+      pageSize: 10,
+      total: 0,
+    };
+  }
   loadFromApi() {
     if (this.isOnline) {
       this.getAllPending();
@@ -116,15 +145,37 @@ export class VisitsComponent implements OnInit {
   }
   getAllPending() {
     this.body.Record_Status = 1;
-    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((value: any) => {
-      this.pendingItems = [...value];
+    this.loaded = false;
+    this.isLoading = true;
+    this.body.pageIndex = this.pager.page;
+    this.body.pageSize = this.pager.pageSize as number;
+    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((res: any) => {
+      res?.list.map((el: any) => {
+        this.pendingItems.push(el);
+      });
+      this.pager.total = res?.total;
+      this.pager.pages = res?.pages;
+      this.loaded = true;
+      this.isLoading = false;
     });
+    // this.pendingItems = [...value];
   }
   getAllComplete() {
     this.body.Record_Status = 2;
-    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((value: any) => {
-      this.completeItems = [...value];
+    this.loaded = false;
+    this.isLoading = true;
+    this.body.pageIndex = this.pager.page;
+    this.body.pageSize = this.pager.pageSize as number;
+    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((res: any) => {
+      res?.list.map((el: any) => {
+        this.completeItems.push(el);
+      });
+      this.pager.total = res?.total;
+      this.pager.pages = res?.pages;
+      this.loaded = true;
+      this.isLoading = false;
     });
+    // this.completeItems = [...value];
   }
 
   async loadFromCache() {
@@ -141,6 +192,7 @@ export class VisitsComponent implements OnInit {
     }
   }
   change(step: number) {
+    this.resetData();
     this.step = step;
     if (this.isOnline) {
       step == 1 && this.pendingItems.length == 0 ? this.getAllPending() : '';
@@ -162,5 +214,16 @@ export class VisitsComponent implements OnInit {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.statusSubscription.unsubscribe();
+  }
+  bottomReached(): boolean {
+    return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+  }
+  scrollToTop() {
+    window.scroll(0, 0);
+  }
+  resetData() {
+    this.pendingItems = [];
+    this.completeItems = [];
+    this.resetPager();
   }
 }
