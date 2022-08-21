@@ -175,7 +175,8 @@ export class SearchComponent implements OnInit {
     }
   }
   bottomReached(): boolean {
-    return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+    return ((document.documentElement.offsetHeight + document.documentElement.scrollTop + 100) >= document.documentElement.scrollHeight);
+    // return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
   }
   scrollToTop() {
     window.scroll(0, 0);

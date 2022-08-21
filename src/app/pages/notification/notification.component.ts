@@ -80,7 +80,7 @@ export class NotificationComponent implements OnInit {
     })
 
   }
-  clickMenue(event : any) {
+  clickMenue(event: any) {
     event.stopPropagation();
   }
 
@@ -119,7 +119,8 @@ export class NotificationComponent implements OnInit {
   }
 
   bottomReached(): boolean {
-    return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+    return ((document.documentElement.offsetHeight + document.documentElement.scrollTop + 100) >= document.documentElement.scrollHeight);
+    // return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
   }
   scrollToTop() {
     window.scroll(0, 0);
