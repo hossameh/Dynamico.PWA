@@ -97,6 +97,8 @@ export class SearchComponent implements OnInit {
     };
   }
   search() {
+    if (!this.searchObj.complete && !this.searchObj.pending)
+      return;
     this.loaded = false;
     this.isLoading = true;
     let body = {
