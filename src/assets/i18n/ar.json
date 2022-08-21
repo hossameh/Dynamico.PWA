@@ -41,6 +41,11 @@
   "Notifications": "الإشعارات",
   "Search_For": "بحث عن",
   "Completed": "مكتملة",
+  "Approved": "مقبولة",
+  "Rejected": "مرفوضة",
+  "PendingApproval": "قيد الإنتظار",
+  "Assigned": "تم التعيين",
+  "Created": "تم الإنشاء",
   "Search_results": "نتائج البحث",
   "delete_p": "هل انت متأكد من حذف",
   "No": "لا",
@@ -81,6 +86,6 @@
   "Info": "معلومات",
   "Documents": "مستندات",
   "Checklists": "قوائم تدقيق",
-  "Search By Name or Code":"ابحث بالاسم أو الكود",
-  "Name":"الاسم"
+  "Search By Name or Code": "ابحث بالاسم أو الكود",
+  "Name": "الاسم"
 }
