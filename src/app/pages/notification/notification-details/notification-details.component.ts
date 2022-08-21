@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-notification-details',
@@ -12,10 +12,12 @@ export class NotificationDetailsComponent implements OnInit {
   id!: number;
   title: any;
   body: any;
+  showAll: any;
 
   constructor(
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -23,10 +25,13 @@ export class NotificationDetailsComponent implements OnInit {
     let params = this.route.snapshot.queryParams;
     this.title = params?.title;
     this.body = params?.body;
+    this.showAll = params?.showAll;
   }
 
   back(): void {
-    this.location.back();
+    this.showAll ?
+      this.router.navigateByUrl("/page/notification?showAll=" + this.showAll) :
+      this.location.back();
   };
 
 }

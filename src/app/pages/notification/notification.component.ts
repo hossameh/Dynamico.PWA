@@ -5,6 +5,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 import { OfflineService } from 'src/app/services/offline/offline.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -29,12 +30,13 @@ export class NotificationComponent implements OnInit {
   isLoading = false;
 
   items: any = [];
-  showAllItems: boolean = false;
+  showAllItems!: boolean;
   constructor(
     private http: HttpService,
     private alert: AlertService,
     private helper: HelperService,
     private offline: OfflineService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +44,9 @@ export class NotificationComponent implements OnInit {
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
     });
+    let params = this.route.snapshot.queryParams;
+    let show = params?.showAll;
+    (show && (show == "true" || show == true)) ? this.showAllItems = true : this.showAllItems = false;
     this.getAll()
   }
   resetPager() {
