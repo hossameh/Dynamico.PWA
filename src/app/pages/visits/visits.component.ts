@@ -201,11 +201,13 @@ export class VisitsComponent implements OnInit {
   }
 
   filterPending(event: any) {
+    this.resetData();
     this.body.FromCreationDate = event.FromCreationDate;
     this.body.ToCreationDate = event.ToCreationDate;
     this.getAllPending();
   }
   filterComplete(event: any) {
+    this.resetData();
     this.body.FromCreationDate = event.FromCreationDate;
     this.body.ToCreationDate = event.ToCreationDate;
     this.getAllComplete();
@@ -225,6 +227,8 @@ export class VisitsComponent implements OnInit {
   resetData() {
     this.pendingItems = [];
     this.completeItems = [];
+    this.body.FromCreationDate = '';
+    this.body.ToCreationDate = '';
     this.resetPager();
   }
 }
