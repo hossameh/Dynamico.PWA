@@ -207,8 +207,6 @@ export class DetailsWorkflowComponent implements OnInit {
       if (this.hasWorkFlow == "false")
         this.qrLink = this.appUrl + 'page/qr-scan/' + this.data?.form_Id + '?recordId=' + this.data?.record_Id +
           '&hasWorkFlow=false';
-
-      console.log(this.qrLink);
           
       if (value && this.printPdf == "true") {
         setTimeout(() => {
