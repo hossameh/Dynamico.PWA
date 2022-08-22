@@ -5,7 +5,7 @@
                 <div class="d-flex">
                     <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" (click)="back()">
                     <h4>
-                        {{ title ? title : 'Notification' }}
+                        {{ pageProps?.selectedObj?.title ? pageProps?.selectedObj?.title : 'Notification' }}
                     </h4>
                 </div>
             </div>
@@ -14,8 +14,54 @@
     </div>
 
     <div class="content" role="main">
-        <div class="col-10 m-4">
-            {{ body ? body : 'Message' }}
+        <div class="col-10 m-4" *ngIf="!pageProps?.selectedObj?.screen || !pageProps?.objDetails">
+            {{ pageProps?.selectedObj?.body ? pageProps?.selectedObj?.body : 'Message' }}
+        </div>
+        <div class="row" *ngIf="pageProps?.selectedObj?.screen && pageProps?.objDetails">
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.AssignCHkUser">
+                Kindly be be informed that You have been Assigned To checklist
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.UnAssignCHKUser">
+                Kindly be be informed that You have been UnAssigned To checklist
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.AssignRecordUser">
+                Kindly be be informed that You have been Assigned To Record No. {{ pageProps?.objDetails?.formDataRef }}
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.UnAssignRecordUser">
+                Kindly be be informed that You have been UnAssigned To Record No. {{ pageProps?.objDetails?.formDataRef
+                }} of Checklist
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.CreatePlan">
+                Kindly be be informed that A Plan has been Created on checklist
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.SubmitWorkflow">
+                Kindly be be informed that Workflow has been Submitted for Record No. {{
+                pageProps?.objDetails?.formDataRef }} of Checklist
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.ApproveWorkflow">
+                Kindly be be informed that Workflow has been Approved for Record No. {{
+                pageProps?.objDetails?.formDataRef }} of Checklist
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
+            <div class="col-10 m-4" *ngIf="pageProps?.selectedObj?.screen == screenEnum.RejectWorkflow">
+                Kindly be be informed that Workflow has been Rejected for Record No. {{
+                pageProps?.objDetails?.formDataRef }} of Checklist
+                {{ pageProps?.objDetails?.formTitle }} of Category {{ pageProps?.objDetails?.categoryName }} .
+                <p class="date pt-2">at  {{pageProps?.selectedObj?.creationDate |date:'short'}}</p>
+            </div>
         </div>
     </div>
 </section>

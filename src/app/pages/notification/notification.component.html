@@ -4,14 +4,15 @@
       <h4>
         {{'Notifications' | translate}}
       </h4>
-      <img src="assets/img/icons/menu.svg" alt="menu" (click)="clickMenue($event)" class="dropdown-toggle mb-2 pb-2" type="button" id="dropdownMenuButton1"
-        data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="assets/img/icons/menu.svg" alt="menu" (click)="clickMenue($event)" class="dropdown-toggle mb-2 pb-2"
+        type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 
       <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
         <li>
           <a class="dropdown-item py-0 px-2" (click)="markAllAsRead()">
             <img width="22px" height="22px" src="assets/img/icons/correct.png" class="m-0 me-2" alt="all">
-            {{'Make all as read' | translate}}</a></li>
+            {{'Make all as read' | translate}}</a>
+        </li>
         <li>
           <hr class="dropdown-divider">
         </li>
@@ -27,10 +28,11 @@
   <div class=" px-3 py-4">
     <div class="content">
       <div *ngFor="let item of items ; let i = index">
-        <div class="box" [class.unread]="item.isRead == false">
-          <div class="box-content" [routerLink]="['/page/notification-details/'+ item.id]"
-            (click)="makeNotificationRead(item.key)" [queryParams]="{title:item.title,body:item.body}"
-            routerLinkActive="router-link-active">
+        <div class="box" style="cursor: pointer;" [class.unread]="item.isRead == false">
+          <div class="box-content" [routerLink]="['/page/notification-details/']"
+            (click)="clickNotification(item);makeNotificationRead(item.key)" routerLinkActive="router-link-active"
+            [queryParams]="{showAll:showAllItems}">
+            <!-- [queryParams]="{title:item.title,body:item.body}" -->
             <h5 class="font-14">
               {{item.title}}
             </h5>

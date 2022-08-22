@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationPage, NotificationPageProps } from '../notification.page';
+import { HttpService } from 'src/app/services/http/http.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
+import { ScreenEnum } from 'src/app/core/enums/screen.enum';
 
 @Component({
   selector: 'app-notification-details',
@@ -13,19 +17,27 @@ export class NotificationDetailsComponent implements OnInit {
   title: any;
   body: any;
   showAll: any;
+  pageProps!: NotificationPageProps;
+  screenEnum = ScreenEnum;
 
   constructor(
     private location: Location,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notificationPage: NotificationPage,
+    private http: HttpService,
+    private alert: AlertService
   ) { }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params.id;
+    this.pageProps = this.notificationPage.pageProps;
+    // this.id = this.route.snapshot.params.id;
     let params = this.route.snapshot.queryParams;
-    this.title = params?.title;
-    this.body = params?.body;
+    // this.title = params?.title;
+    // this.body = params?.body;
     this.showAll = params?.showAll;
+    if (this.pageProps.selectedObj)
+      this.GetNoticationDetails();
   }
 
   back(): void {
@@ -33,5 +45,26 @@ export class NotificationDetailsComponent implements OnInit {
       this.router.navigateByUrl("/page/notification?showAll=" + this.showAll) :
       this.location.back();
   };
+  GetNoticationDetails() {
+    this.pageProps.objDetails = null;
+    let loginId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    let params = {
+      UserId: +loginId,
+      ObjectId: +this.pageProps?.selectedObj?.objectId,
+      Screen: this.pageProps?.selectedObj?.screen
+    }
+    try {
+      this.http.get2(`Notification/GetNotificationDetailsByScreen`, params).subscribe((val) => {
+        if (val)
+          this.pageProps.objDetails = val;
+        // else
+        //   this.alert.error("Failed To Load Details");
+      });
+    }
+    catch (err) {
+      this.alert.error("Failed To Load Details");
+      console.log(err)
+    }
+  }
 
 }

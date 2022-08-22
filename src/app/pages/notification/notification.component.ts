@@ -6,6 +6,7 @@ import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 import { OfflineService } from 'src/app/services/offline/offline.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationPage, NotificationPageProps } from './notification.page';
 
 
 @Component({
@@ -31,15 +32,18 @@ export class NotificationComponent implements OnInit {
 
   items: any = [];
   showAllItems!: boolean;
+  pageProps!: NotificationPageProps;
   constructor(
     private http: HttpService,
     private alert: AlertService,
     private helper: HelperService,
     private offline: OfflineService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notificationPage: NotificationPage
   ) { }
 
   ngOnInit(): void {
+    this.pageProps = this.notificationPage.pageProps;
     this.resetPager();
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
@@ -48,6 +52,9 @@ export class NotificationComponent implements OnInit {
     let show = params?.showAll;
     (show && (show == "true" || show == true)) ? this.showAllItems = true : this.showAllItems = false;
     this.getAll()
+  }
+  clickNotification(item: any) {
+    this.notificationPage.pageProps.selectedObj = item;
   }
   resetPager() {
     this.pager = {

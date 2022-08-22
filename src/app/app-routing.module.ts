@@ -87,7 +87,7 @@ const routes: Routes = [
         component: NotificationComponent
       },
       {
-        path: 'notification-details/:id',
+        path: 'notification-details',
         component: NotificationDetailsComponent
       },
       {
