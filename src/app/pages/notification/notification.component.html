@@ -30,7 +30,7 @@
       <div *ngFor="let item of items ; let i = index">
         <div class="box" style="cursor: pointer;" [class.unread]="item.isRead == false">
           <div class="box-content" [routerLink]="['/page/notification-details/']"
-            (click)="clickNotification(item);makeNotificationRead(item.key)" routerLinkActive="router-link-active"
+            (click)="clickNotification(item);makeNotificationRead(item)" routerLinkActive="router-link-active"
             [queryParams]="{showAll:showAllItems}">
             <!-- [queryParams]="{title:item.title,body:item.body}" -->
             <h5 class="font-14">
@@ -38,7 +38,7 @@
             </h5>
             <p class="date pt-2">{{item.creationDate |date:'short'}}</p>
           </div>
-          <!-- <p [routerLink]="['/page/notification-details/'+ item.id]" (click)="makeNotificationRead(item.key)"
+          <!-- <p [routerLink]="['/page/notification-details/'+ item.id]" (click)="makeNotificationRead(item)"
             [queryParams]="{title:item.title,body:item.body}" routerLinkActive="router-link-active">
             {{item.title}}
           </p> -->

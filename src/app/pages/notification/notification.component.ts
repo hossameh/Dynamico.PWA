@@ -96,20 +96,22 @@ export class NotificationComponent implements OnInit {
     event.stopPropagation();
   }
 
-  makeNotificationRead(key: string) {
-    let body = {
-      loginId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
-      messageKeys: [key],
-      isRead: true
-    }
-    try {
-      this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
-        if (res)
-          this.helper.getNotificationCount();
-      });
-    }
-    catch (err) {
-      console.log(err)
+  makeNotificationRead(item: any) {
+    if (item?.isRead == false) {
+      let body = {
+        loginId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+        messageKeys: [item?.key],
+        isRead: true
+      }
+      try {
+        this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
+          if (res)
+            this.helper.getNotificationCount();
+        });
+      }
+      catch (err) {
+        console.log(err)
+      }
     }
   }
   markAllAsRead() {
