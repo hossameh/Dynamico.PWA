@@ -31,7 +31,7 @@ export class NotificationComponent implements OnInit {
   isLoading = false;
 
   items: any = [];
-  showAllItems!: boolean;
+  // showAllItems!: boolean;
   pageProps!: NotificationPageProps;
   constructor(
     private http: HttpService,
@@ -48,9 +48,9 @@ export class NotificationComponent implements OnInit {
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
     });
-    let params = this.route.snapshot.queryParams;
-    let show = params?.showAll;
-    (show && (show == "true" || show == true)) ? this.showAllItems = true : this.showAllItems = false;
+    // let params = this.route.snapshot.queryParams;
+    // let show = params?.showAll;
+    // (show && (show == "true" || show == true)) ? this.showAllItems = true : this.showAllItems = false;
     this.getAll()
   }
   clickNotification(item: any) {
@@ -78,7 +78,8 @@ export class NotificationComponent implements OnInit {
     }
     let body = {
       UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
-      IsRead: this.showAllItems == false ? false : null
+      IsRead: this.pageProps.showAll == false ? false : null
+      // IsRead: this.showAllItems == false ? false : null
     }
     this.http.post('Notification/GetNotifications', body, true, params).subscribe((res: any) => {
       res?.data?.list.map((el: any) => {

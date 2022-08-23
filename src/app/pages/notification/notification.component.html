@@ -17,7 +17,7 @@
           <hr class="dropdown-divider">
         </li>
         <li>
-          <mat-slide-toggle class="dropdown-item  py-0 px-2" [(ngModel)]="showAllItems" (change)="resetAll()">
+          <mat-slide-toggle class="dropdown-item  py-0 px-2" [(ngModel)]="pageProps.showAll" (change)="resetAll()">
             {{'Show All' | translate}}
           </mat-slide-toggle>
         </li>
@@ -31,7 +31,8 @@
         <div class="box" style="cursor: pointer;" [class.unread]="item.isRead == false">
           <div class="box-content" [routerLink]="['/page/notification-details/']"
             (click)="clickNotification(item);makeNotificationRead(item)" routerLinkActive="router-link-active"
-            [queryParams]="{showAll:showAllItems}">
+            >
+            <!-- [queryParams]="{showAll:showAllItems}" -->
             <!-- [queryParams]="{title:item.title,body:item.body}" -->
             <h5 class="font-14">
               {{item.title}}

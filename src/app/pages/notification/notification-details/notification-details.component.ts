@@ -37,17 +37,17 @@ export class NotificationDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.pageProps = this.notificationPage.pageProps;
     // this.id = this.route.snapshot.params.id;
-    let params = this.route.snapshot.queryParams;
+    // let params = this.route.snapshot.queryParams;
     // this.title = params?.title;
     // this.body = params?.body;
-    this.showAll = params?.showAll;
+    // this.showAll = params?.showAll;
     if (this.pageProps.selectedObj)
       this.GetNoticationDetails();
   }
 
   back(): void {
-    this.showAll ?
-      this.router.navigateByUrl("/page/notification?showAll=" + this.showAll) :
+    // this.showAll ?
+    //   this.router.navigateByUrl("/page/notification?showAll=" + this.showAll) :
       this.location.back();
   };
   GetNoticationDetails() {
