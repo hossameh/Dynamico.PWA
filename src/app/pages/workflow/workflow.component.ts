@@ -4,6 +4,7 @@ import { HelperService } from './../../services/helper.service';
 import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-workflow',
@@ -53,24 +54,24 @@ export class WorkflowComponent implements OnInit {
   pendingItems: any = [];
   historyItems: any = [];
   constructor(
-    private http:HttpService,
+    private http: HttpService,
     private offline: OfflineService,
-
-    private helper:HelperService,
+    private storage: Storage,
+    private helper: HelperService,
   ) { }
 
   ngOnInit(): void {
-    this.$subscription =  this.offline.currentStatus.subscribe(isOnline => {
+    this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       if (isOnline) {
         this.getWorkflowCount();
-        this.getData();
       }
+      this.getData();
     });
 
   }
 
-  getWorkflowCount(){
+  getWorkflowCount() {
     this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
       this.helper.getingCount.next(res);
     })
@@ -78,20 +79,29 @@ export class WorkflowComponent implements OnInit {
 
   change(step: number) {
     this.step = step;
-    if (this.isOnline) {
-      step == 1 && this.pendingItems.length == 0 ? this.getData(false) : '';
-      step == 2 && this.historyItems.length == 0 ? this.getData(true) : '';
-    }
+    step == 1  ? this.getData(false) : '';
+    step == 2  ? this.getData(true) : '';
+    // if (this.isOnline) {
+    //   step == 1 && this.pendingItems.length == 0 ? this.getData(false) : '';
+    //   step == 2 && this.historyItems.length == 0 ? this.getData(true) : '';
+    // }
   }
-  getData(isHistory = false){
+  async getData(isHistory = false) {
     let params = {
-      PageIndex:1,
-      PageLimit:10,
+      PageIndex: 1,
+      PageLimit: 10,
       IsHistory: isHistory
     }
-    this.http.get('ChecklistRecords/GetPendingAndHistoryWorkflowFormData',params).subscribe((res:any) => {
-      isHistory ?  this.historyItems = res.list :  this.pendingItems = res.list;
-    })
+    if (this.isOnline)
+      this.http.get('ChecklistRecords/GetPendingAndHistoryWorkflowFormData', params).subscribe(async (res: any) => {
+        isHistory ? this.historyItems = res.list : this.pendingItems = res.list;
+        isHistory ? await this.storage.set("HistoryWorkflow", this.historyItems) :
+          await this.storage.set("PendingWorkflow", this.pendingItems);
+      })
+    else {
+      isHistory ? this.historyItems = await this.storage.get('HistoryWorkflow') || [] :
+        this.pendingItems = await this.storage.get('PendingWorkflow') || []
+    }
   }
 
   ngOnDestroy(): void {

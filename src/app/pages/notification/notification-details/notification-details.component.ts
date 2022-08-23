@@ -48,7 +48,7 @@ export class NotificationDetailsComponent implements OnInit {
   back(): void {
     // this.showAll ?
     //   this.router.navigateByUrl("/page/notification?showAll=" + this.showAll) :
-      this.location.back();
+    this.location.back();
   };
   GetNoticationDetails() {
     this.pageProps.objDetails = null;
@@ -95,7 +95,11 @@ export class NotificationDetailsComponent implements OnInit {
           }
         }
       }
+      else
+        this.alert.info("No Details");
     }
+    else
+      this.alert.info("No Details");
   }
   routeToChecklistRecords(item: any) {
     this.router.navigateByUrl("/page/visits/" + item?.formId + "?categoryName=" + item?.categoryName
@@ -103,7 +107,7 @@ export class NotificationDetailsComponent implements OnInit {
   }
   routeWithWorkFlow(item: any) {
     console.log(item);
-    
+
     if (item.access && (item.access.includes(this.accessTypes.Read) || item.access.includes(this.accessTypes.Update)))
       this.router.navigateByUrl("/page/workflow/details?Form_Id=" + item?.formId + "&Record_Id=" + +item?.formDataId)
     else {

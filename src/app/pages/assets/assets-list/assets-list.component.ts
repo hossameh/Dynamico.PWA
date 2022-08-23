@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 import { HelperService } from 'src/app/services/helper.service';
@@ -34,15 +35,16 @@ export class AssetsListComponent implements OnInit {
   constructor(private http: HttpService,
     private helper: HelperService,
     private offline: OfflineService,
+    private storage: Storage,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.resetPager();
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
-      if (isOnline) {
-        this.getAssets();
-      }
+      // if (isOnline) {
+      this.getAssets();
+      // }
     });
   }
   resetPager() {
@@ -53,7 +55,7 @@ export class AssetsListComponent implements OnInit {
       total: 0,
     };
   }
-  getAssets() {
+  async getAssets() {
     this.loaded = false;
     this.isLoading = true;
     let params = {
@@ -61,15 +63,19 @@ export class AssetsListComponent implements OnInit {
       pageIndex: this.pager.page,
       pageSize: this.pager.pageSize
     };
-    this.http.get(`Assets/GetUserAssets`, params).subscribe((res: any) => {
-      res?.list.map((el: any) => {
-        this.assets.push(el);
-      });
-      this.pager.total = res?.total;
-      this.pager.pages = res?.pages;
-      this.loaded = true;
-      this.isLoading = false;
-    })
+    if (this.isOnline)
+      this.http.get(`Assets/GetUserAssets`, params).subscribe(async (res: any) => {
+        res?.list.map((el: any) => {
+          this.assets.push(el);
+        });
+        this.pager.total = res?.total;
+        this.pager.pages = res?.pages;
+        this.loaded = true;
+        await this.storage.set("UserAssets", this.assets);
+      })
+    else
+      this.assets = await this.storage.get("UserAssets") || [];
+    this.isLoading = false;
   }
   resetSearch() {
     this.assets = [];
