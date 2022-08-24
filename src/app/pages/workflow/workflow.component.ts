@@ -2,9 +2,10 @@ import { Subscription } from 'rxjs';
 import { OfflineService } from './../../services/offline/offline.service';
 import { HelperService } from './../../services/helper.service';
 import { HttpService } from './../../services/http/http.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Storage } from '@ionic/storage-angular';
+import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 
 @Component({
   selector: 'app-workflow',
@@ -47,12 +48,28 @@ import { Storage } from '@ionic/storage-angular';
   ],
 })
 export class WorkflowComponent implements OnInit {
+
+  @HostListener("window:scroll", [])
+  onScroll(): void {
+    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+      // Load Your Data Here
+      this.pager.page += 1;
+      if (this.step == 1)
+        this.getData(false)
+      if (this.step == 2)
+        this.getData(true)
+    }
+  }
+
   step = 1;
   isOnline = true;
   $subscription!: Subscription;
 
   pendingItems: any = [];
   historyItems: any = [];
+  pager!: IPageInfo;
+  loaded = true;
+  isLoading = false;
   constructor(
     private http: HttpService,
     private offline: OfflineService,
@@ -61,6 +78,7 @@ export class WorkflowComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.resetData();
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       if (isOnline) {
@@ -70,6 +88,14 @@ export class WorkflowComponent implements OnInit {
     });
 
   }
+  resetPager() {
+    this.pager = {
+      page: 1,
+      pages: 0,
+      pageSize: 10,
+      total: 0,
+    };
+  }
 
   getWorkflowCount() {
     this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
@@ -78,23 +104,33 @@ export class WorkflowComponent implements OnInit {
   }
 
   change(step: number) {
+    this.resetData();
     this.step = step;
-    step == 1  ? this.getData(false) : '';
-    step == 2  ? this.getData(true) : '';
+    step == 1 ? this.getData(false) : '';
+    step == 2 ? this.getData(true) : '';
     // if (this.isOnline) {
     //   step == 1 && this.pendingItems.length == 0 ? this.getData(false) : '';
     //   step == 2 && this.historyItems.length == 0 ? this.getData(true) : '';
     // }
   }
   async getData(isHistory = false) {
+    this.loaded = false;
+    this.isLoading = true;
     let params = {
-      PageIndex: 1,
-      PageLimit: 10,
+      PageIndex: this.pager.page,
+      PageSize: this.pager.pageSize as number,
       IsHistory: isHistory
     }
     if (this.isOnline)
       this.http.get('ChecklistRecords/GetPendingAndHistoryWorkflowFormData', params).subscribe(async (res: any) => {
-        isHistory ? this.historyItems = res.list : this.pendingItems = res.list;
+        res?.list.map((el: any) => {
+          isHistory ? this.historyItems.push(el) : this.pendingItems.push(el);
+        });
+        // isHistory ? this.historyItems = res.list : this.pendingItems = res.list;
+        this.pager.total = res?.total;
+        this.pager.pages = res?.pages;
+        this.loaded = true;
+        this.isLoading = false;
         isHistory ? await this.storage.set("HistoryWorkflow", this.historyItems) :
           await this.storage.set("PendingWorkflow", this.pendingItems);
       })
@@ -108,5 +144,17 @@ export class WorkflowComponent implements OnInit {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.$subscription.unsubscribe();
+  }
+  bottomReached(): boolean {
+    return ((document.documentElement.offsetHeight + document.documentElement.scrollTop + 100) >= document.documentElement.scrollHeight);
+    // return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+  }
+  scrollToTop() {
+    window.scroll(0, 0);
+  }
+  resetData() {
+    this.pendingItems = [];
+    this.historyItems = [];
+    this.resetPager();
   }
 }

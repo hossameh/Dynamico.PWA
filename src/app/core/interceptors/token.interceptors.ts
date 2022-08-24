@@ -38,6 +38,7 @@ export class TokenInterceptor implements HttpInterceptor {
         !request.url.includes('Category/GetUserCategories') &&
         !request.url.includes('Category/GetCategoryChecklists') &&
         !request.url.includes('ChecklistRecords/ReadUserFormRecords') &&
+        !request.url.includes('ChecklistRecords/GetPendingAndHistoryWorkflowFormData') &&
         !request.url.includes('ChecklistRecords/ReadFormRecords') 
       )
         this.loadingService.setLoading(true, request.url);
