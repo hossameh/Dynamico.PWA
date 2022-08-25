@@ -114,14 +114,14 @@ export class WorkflowComponent implements OnInit {
     // }
   }
   async getData(isHistory = false) {
-    this.loaded = false;
-    this.isLoading = true;
     let params = {
       PageIndex: this.pager.page,
       PageSize: this.pager.pageSize as number,
       IsHistory: isHistory
     }
-    if (this.isOnline)
+    if (this.isOnline) {
+      this.loaded = false;
+      this.isLoading = true;
       this.http.get('ChecklistRecords/GetPendingAndHistoryWorkflowFormData', params).subscribe(async (res: any) => {
         res?.list.map((el: any) => {
           isHistory ? this.historyItems.push(el) : this.pendingItems.push(el);
@@ -134,6 +134,7 @@ export class WorkflowComponent implements OnInit {
         isHistory ? await this.storage.set("HistoryWorkflow", this.historyItems) :
           await this.storage.set("PendingWorkflow", this.pendingItems);
       })
+    }
     else {
       isHistory ? this.historyItems = await this.storage.get('HistoryWorkflow') || [] :
         this.pendingItems = await this.storage.get('PendingWorkflow') || []

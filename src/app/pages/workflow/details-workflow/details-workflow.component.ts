@@ -7,6 +7,9 @@ import { Location } from '@angular/common';
 import { LoadingService } from 'src/app/services/loading/loading.service';
 import { environment } from 'src/environments/environment';
 import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
+import { Storage } from '@ionic/storage-angular';
+import { OfflineService } from 'src/app/services/offline/offline.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-details-workflow',
@@ -31,7 +34,8 @@ export class DetailsWorkflowComponent implements OnInit {
   elementType = NgxQrcodeElementTypes.URL;
   qrLink!: string;
   appUrl!: string;
-
+  isOnline = true;
+  $subscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,11 +43,16 @@ export class DetailsWorkflowComponent implements OnInit {
     private alert: AlertService,
     private location: Location,
     private router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private storage: Storage,
+    private offline: OfflineService,
   ) { }
   ngOnInit(): void {
     this.currentDate = new Date();
     this.appUrl = environment.APP_URL;
+    this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.isLoading = isLoading;
@@ -125,112 +134,166 @@ export class DetailsWorkflowComponent implements OnInit {
   change(step: number) {
     this.step = step;
   }
-
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.$subscription.unsubscribe();
+  }
+  getWorkflowProcess() {
+    let body = {
+      FormDataId: this.params.Record_Id
+    };
+    if (this.isOnline)
+      this.http.get2('Workflow/GetWorkflowProcessByFormData', body).subscribe((res: any) => {
+        this.workflowProcess = res;
+        this.cashRecordWorkflowProcess();
+      });
+    else
+      this.getCashedRecordWorkflowProcess();
+  }
   getRecord() {
     let body = {
       Form_Id: this.params.Form_Id,
       Record_Id: this.params.Record_Id
     };
-    let apiUrl = 'ChecklistRecords/EditChecklistRecord';
-    let isQrCode = this.params.isQR;
-    if (isQrCode)
-      apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
-    this.http.get(apiUrl, body).subscribe((value: any) => {
+    if (this.isOnline) {
+      let apiUrl = 'ChecklistRecords/EditChecklistRecord';
+      let isQrCode = this.params.isQR;
+      if (isQrCode)
+        apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
+      this.http.get(apiUrl, body).subscribe((value: any) => {
 
-      if (!value) {
-        this.alert.error("Invalid Input Data");
-        this.router.navigateByUrl("/page/home")
-      }
-
-      this.data = value;
-
-      let recordJson = value.record_Json; // data
-      let dataObject = this.deSerialize(JSON.parse(recordJson));
-      this.form.components = JSON.parse(value.form_Layout);
-      this.options = {
-        builder: {
-          hideTab: true,
-          hideDisplaySelect: true,
-
+        if (!value) {
+          this.alert.error("Invalid Input Data");
+          this.router.navigateByUrl("/page/home")
+        }
+        this.data = value;
+        this.cashRecord();
+        this.continueWithData();
+      });
+    }
+    else {
+      this.getRecordFromCashe();
+    }
+  }
+  continueWithData() {
+    let recordJson = this.data?.record_Json; // data
+    let dataObject = this.deSerialize(JSON.parse(recordJson));
+    this.form.components = JSON.parse(this.data.form_Layout);
+    this.options = {
+      builder: {
+        hideTab: true,
+        hideDisplaySelect: true,
+      },
+      json: {
+        hideTab: true,
+        changePanelLocations: ['top', 'bottom'],
+        input: {
         },
-        json: {
-          hideTab: true,
-          changePanelLocations: ['top', 'bottom'],
-          input: {
-
-          },
-
-        },
-        renderer: {
-          defaultTab: true,
-          submissionPanel: {
-
-            disabled: true,
-            // Whether to initially show full or partial submission. Default to false.
-            fullSubmission: false,
-            // The json editor of the submitted resource.
-            resourceJsonEditor: {
-
-              input: {
-
-              },
-              output: {
-
-              }
+      },
+      renderer: {
+        defaultTab: true,
+        submissionPanel: {
+          disabled: true,
+          // Whether to initially show full or partial submission. Default to false.
+          fullSubmission: false,
+          // The json editor of the submitted resource.
+          resourceJsonEditor: {
+            input: {
             },
-            schemaJsonEditor: {
-              enabled: false,
-              input: {},
-              output: {}
+            output: {
             }
           },
-
-          output: {
-            // submit: this.onFormSubmitted.bind(this, event),
+          schemaJsonEditor: {
+            enabled: false,
+            input: {},
+            output: {}
+          }
+        },
+        output: {
+          // submit: this.onFormSubmitted.bind(this, event),
+        },
+        input: {
+          readOnly: true,
+          submission: {
+            data: dataObject
           },
-          input: {
-            readOnly: true,
-            submission: {
-              data: dataObject
-            },
-            hooks: {
-
-            }
-
-
+          hooks: {
           }
         }
-      };
-      if (this.hasWorkFlow == "true")
-        this.qrLink = this.appUrl + 'page/qr-scan/' + this.data?.form_Id + '?recordId=' + this.data?.record_Id +
-          '&hasWorkFlow=true';
-      if (this.hasWorkFlow == "false")
-        this.qrLink = this.appUrl + 'page/qr-scan/' + this.data?.form_Id + '?recordId=' + this.data?.record_Id +
-          '&hasWorkFlow=false';
-          
-      if (value && this.printPdf == "true") {
-        setTimeout(() => {
-          this.printWindow()
-        }, 2000)
       }
-    });
+    };
+    if (this.hasWorkFlow == "true")
+      this.qrLink = this.appUrl + 'page/qr-scan/' + this.data?.form_Id + '?recordId=' + this.data?.record_Id +
+        '&hasWorkFlow=true';
+    if (this.hasWorkFlow == "false")
+      this.qrLink = this.appUrl + 'page/qr-scan/' + this.data?.form_Id + '?recordId=' + this.data?.record_Id +
+        '&hasWorkFlow=false';
+
+    if (this.data && this.printPdf == "true") {
+      setTimeout(() => {
+        this.printWindow()
+      }, 2000)
+    }
   }
-
-
+  async cashRecord() {
+    let cashedCheckListRecords = await this.storage.get('CheckListRecords') || [];
+    if (cashedCheckListRecords) {
+      // check if Record is in cahce
+      let index = cashedCheckListRecords.findIndex((el: any) => {
+        return el.form_Id == this.params.Form_Id && el.record_Id == this.params.Record_Id;
+      });
+      // check if Record  is in cahce update data in this index
+      if (index >= 0) {
+        cashedCheckListRecords[index] = this.data;
+      } else {
+        //if not found id add a new record
+        cashedCheckListRecords.push(this.data);
+      }
+    } else {
+      cashedCheckListRecords.push(this.data);
+    }
+    await this.storage.set('CheckListRecords', cashedCheckListRecords);
+  }
+  async getRecordFromCashe() {
+    let cashedCheckListRecords = await this.storage.get('CheckListRecords') || [];
+    if (cashedCheckListRecords) {
+      // check if Record is in cahce
+      let index = cashedCheckListRecords.findIndex((el: any) => {
+        return el.form_Id == this.params.Form_Id && el.record_Id == this.params.Record_Id;
+      });
+      // check if Record  is in cahce update data in this index
+      if (index >= 0) {
+        this.data = cashedCheckListRecords[index];
+        this.continueWithData();
+      }
+    }
+  }
+  async cashRecordWorkflowProcess() {
+    let cashedRecordsWorkflowProcess = await this.storage.get('RecordsWorkflowProcess') || [];
+    if (cashedRecordsWorkflowProcess) {
+      // check if Category  id is in cahce
+      let oldList = cashedRecordsWorkflowProcess.filter((el: any) => el.formDataId == +this.params.Record_Id);
+      //remove old info
+      cashedRecordsWorkflowProcess = cashedRecordsWorkflowProcess.filter((el: any) => !oldList.includes(el));
+      //push new list
+      cashedRecordsWorkflowProcess.push(...this.workflowProcess);
+    } else {
+      cashedRecordsWorkflowProcess.push(...this.workflowProcess);
+    }
+    await this.storage.set('RecordsWorkflowProcess', cashedRecordsWorkflowProcess);
+  }
+  async getCashedRecordWorkflowProcess() {
+    let cashedList = await this.storage.get('RecordsWorkflowProcess') || [];
+    if (cashedList)
+      this.workflowProcess = cashedList.filter((el: any) => el.formDataId == +this.params.Record_Id);
+  }
   deSerialize(recordDataArray: any) {
     let data: any = {};
     recordDataArray.forEach((item: any) => {
       data[item?.name] = item?.value;
     });
     return data;
-  }
-  getWorkflowProcess() {
-    let body = {
-      FormDataId: this.params.Record_Id
-    };
-    this.http.get2('Workflow/GetWorkflowProcessByFormData', body).subscribe((res: any) => {
-      this.workflowProcess = res
-    });
   }
   back(): void {
     this.location.back();
