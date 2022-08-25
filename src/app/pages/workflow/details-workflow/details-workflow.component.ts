@@ -319,6 +319,10 @@ export class DetailsWorkflowComponent implements OnInit {
   }
 
   submit() {
+    if (!this.isOnline) {
+      this.alert.error("No Internet Connetction !");
+      return;
+    }
     this.body.comment = this.comment;
     this.http.post('Workflow/UpdateWorkflowProcess', this.body).subscribe(res => {
       this.alert.success('Successfully');

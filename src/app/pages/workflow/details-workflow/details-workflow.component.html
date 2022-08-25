@@ -167,7 +167,7 @@
           </div>
         </div>
         <p class="comment">
-          {{item.comment}}
+          {{item?.comment}}
         </p>
         <div class="d-flex justify-content-between align-items-stretch actions" *ngIf="showActionButton(item)">
           <button class="accept" data-bs-toggle="modal" data-bs-target="#newModal" (click)="saveAction(true,item)">
