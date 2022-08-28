@@ -59,7 +59,7 @@ export class VisitsComponent implements OnInit {
 
   @HostListener("window:scroll", [])
   onScroll(): void {
-    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+    if (this.bottomReached() && this.isOnline && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
       // Load Your Data Here
       this.pager.page += 1;
       if (this.step == 1)
@@ -95,6 +95,7 @@ export class VisitsComponent implements OnInit {
   pager!: IPageInfo;
   loaded = true;
   isLoading = false;
+  userId: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -107,6 +108,7 @@ export class VisitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.resetData();
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.id = this.route.snapshot.params.id;
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
@@ -115,19 +117,11 @@ export class VisitsComponent implements OnInit {
 
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
-      if (!isOnline) {
-        this.loadFromCache();
-      } else {
-        if (this.id) {
-          this.http.get('Checklist/GetChecklistUserAccess', { formId: +this.id, userId: JSON.parse(localStorage.getItem('userData') || '{}').userId })
-            .subscribe((res: any) => {
-              this.access = res.access;
-            })
-        }
-        this.loadFromApi()
-      }
     });
-
+    if (this.id)
+      this.GetChecklistUserAccess();
+    this.step == 1 ? this.getAllPending() : '';
+    this.step == 2 ? this.getAllComplete() : '';
   }
 
   resetPager() {
@@ -138,66 +132,106 @@ export class VisitsComponent implements OnInit {
       total: 0,
     };
   }
-  loadFromApi() {
-    if (this.isOnline) {
-      this.getAllPending();
-    }
+  // loadFromApi() {
+  //   // if (this.isOnline) {
+  //   this.getAllPending();
+  //   // }
+  // }
+  async GetChecklistUserAccess() {
+    let cashedUserAccess = await this.storage.get('ChecklistUserAccess') || [];    
+    let index = cashedUserAccess.findIndex((el: any) => {
+      return el.userId == this.userId && el.formId == +this.id
+    });    
+    if (this.isOnline)
+      this.http.get('Checklist/GetChecklistUserAccess', { formId: +this.id, userId: this.userId })
+        .subscribe(async (res: any) => {
+          this.access = res.access;
+          let cashObj = {
+            access: this.access,
+            formId: +this.id,
+            userId: this.userId
+          }
+          index >= 0 ? cashedUserAccess[index] = cashObj : cashedUserAccess.push(cashObj);
+
+          await this.storage.set("ChecklistUserAccess", cashedUserAccess);
+        })
+    else
+      index >= 0 ? this.access = cashedUserAccess[index]?.access : this.access = null;
   }
-  getAllPending() {
+  async getAllPending() {
     this.body.Record_Status = 1;
-    this.loaded = false;
-    this.isLoading = true;
-    this.body.pageIndex = this.pager.page;
-    this.body.pageSize = this.pager.pageSize as number;
-    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((res: any) => {
-      res?.list.map((el: any) => {
-        this.pendingItems.push(el);
+    if (this.isOnline) {
+      this.loaded = false;
+      this.isLoading = true;
+      this.body.pageIndex = this.pager.page;
+      this.body.pageSize = this.pager.pageSize as number;
+      this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe(async (res: any) => {
+        res?.list.map((el: any) => {
+          this.pendingItems.push(el);
+        });
+        this.pager.total = res?.total;
+        this.pager.pages = res?.pages;
+        this.loaded = true;
+        this.isLoading = false;
+        await this.storage.set('Records', this.pendingItems);
       });
-      this.pager.total = res?.total;
-      this.pager.pages = res?.pages;
-      this.loaded = true;
-      this.isLoading = false;
-    });
+    }
+    else {
+      await this.getPendingFromCache()
+    }
     // this.pendingItems = [...value];
   }
-  getAllComplete() {
-    this.body.Record_Status = 2;
-    this.loaded = false;
-    this.isLoading = true;
-    this.body.pageIndex = this.pager.page;
-    this.body.pageSize = this.pager.pageSize as number;
-    this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe((res: any) => {
-      res?.list.map((el: any) => {
-        this.completeItems.push(el);
+  async getAllComplete() {
+    if (this.isOnline) {
+      this.body.Record_Status = 2;
+      this.loaded = false;
+      this.isLoading = true;
+      this.body.pageIndex = this.pager.page;
+      this.body.pageSize = this.pager.pageSize as number;
+      this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe(async (res: any) => {
+        res?.list.map((el: any) => {
+          this.completeItems.push(el);
+        });
+        this.pager.total = res?.total;
+        this.pager.pages = res?.pages;
+        this.loaded = true;
+        this.isLoading = false;
+        await this.storage.set('CompletedRecords', this.completeItems);
       });
-      this.pager.total = res?.total;
-      this.pager.pages = res?.pages;
-      this.loaded = true;
-      this.isLoading = false;
-    });
+    }
+    else {
+      await this.getCompletedFromCache();
+    }
     // this.completeItems = [...value];
   }
 
-  async loadFromCache() {
-    this.completeItems = [];
+  async getPendingFromCache() {
     this.pendingItems = [];
     let cacheRecords = await this.storage.get('Records') || [];
     if (cacheRecords.length > 0) {
       cacheRecords.map((el: any) => {
         el.form_Title = this.params?.listName;
       });
-
-      this.pendingItems = cacheRecords.filter((el: any) => el.isSubmitted == false && el.form_Id == this.id);
-      this.completeItems = cacheRecords.filter((el: any) => el.isSubmitted == true && el.form_Id == this.id);
     }
+    this.pendingItems = cacheRecords.filter((el: any) => el.form_Id == this.id);
+  }
+  async getCompletedFromCache() {
+    this.completeItems = [];
+    let cacheCompletedRecords = await this.storage.get('CompletedRecords') || [];
+    if (cacheCompletedRecords.length > 0) {
+      cacheCompletedRecords.map((el: any) => {
+        el.form_Title = this.params?.listName;
+      });
+    }
+    this.completeItems = cacheCompletedRecords.filter((el: any) => el.form_Id == this.id);
   }
   change(step: number) {
     this.resetData();
     this.step = step;
-    if (this.isOnline) {
-      step == 1 && this.pendingItems.length == 0 ? this.getAllPending() : '';
-      step == 2 && this.completeItems.length == 0 ? this.getAllComplete() : '';
-    }
+    // if (this.isOnline) {
+    step == 1 ? this.getAllPending() : '';
+    step == 2 ? this.getAllComplete() : '';
+    // }
   }
 
   filterPending(event: any) {

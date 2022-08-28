@@ -53,17 +53,14 @@ export class PendingComponent implements OnInit {
     event.stopPropagation();
   }
   delete() {
-
     if (this.isOnline) {
       this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
-
         if (res.isPassed) {
           this.date.emit(this.rangeDate);
           this.closeModal.nativeElement.click();
         } else {
           this.alert.error(res.message);
         }
-
       });
     } else {
       this.deleteFromDB();
@@ -73,17 +70,41 @@ export class PendingComponent implements OnInit {
 
   async deleteFromDB() {
     let cacheRecords = await this.storage.get('Records') || [];
+    let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
+    let recordsWillBeDeleted = await this.storage.get('RecordsWillBeDeleted') || [];
+    recordsWillBeDeleted.push({ Record_Id: this.selectedItem.record_Id });
+    await this.storage.set("RecordsWillBeDeleted", recordsWillBeDeleted);
     if (cacheRecords.length > 0) {
-      let index = cacheRecords.findIndex((el: any) => {
-        return el.offlineRef == this.selectedItem?.offlineRef;
-      });
-      let indexItem = this.items.findIndex((el: any) => {
-        return el.offlineRef == this.selectedItem?.offlineRef;
-      });
-      index >= 0 ? cacheRecords.splice(index, 1) : '';
-      indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
+      if (this.selectedItem.record_Id) {
+        let index = cacheRecords.findIndex((el: any) => {
+          return el.record_Id == this.selectedItem.record_Id;
+        });
+        let indexItem = this.items.findIndex((el: any) => {
+          return el.record_Id == this.selectedItem.record_Id;
+        });
+        index >= 0 ? cacheRecords.splice(index, 1) : '';
+        indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
+      }
+      else {
+        let index = cacheRecords.findIndex((el: any) => {
+          return el.offlineRef == this.selectedItem?.offlineRef;
+        });
+        let indexItem = this.items.findIndex((el: any) => {
+          return el.offlineRef == this.selectedItem?.offlineRef;
+        });
+        index >= 0 ? cacheRecords.splice(index, 1) : '';
+        indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
+      }
     }
+    if (recordsWillBeUpserted.length > 0) {
+      let index = recordsWillBeUpserted.findIndex((el: any) => {
+        return el.offlineRef == this.selectedItem?.offlineRef;
+      });
+      index >= 0 ? recordsWillBeUpserted.splice(index, 1) : '';
+    }
+    await this.storage.set('RecordsWillBeUpserted', recordsWillBeUpserted);
     await this.storage.set('Records', cacheRecords);
+    //save in actions to take later when online
     this.closeModal.nativeElement.click();
   }
   apply() {

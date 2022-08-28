@@ -30,6 +30,7 @@ export class OfflineService {
       this.currentStatus.next(this.isConnected);
       this.status = "Online";
       this.SendToApi();
+      this.deletedRecords();
     }
     else {
       this.currentStatus.next(this.isConnected);
@@ -44,6 +45,7 @@ export class OfflineService {
       if (this.isConnected) {
         this.status = "Online";
         this.SendToApi();
+        this.deletedRecords();
       }
       else {
         this.toastr.error('', 'Offline Mode');
@@ -54,15 +56,26 @@ export class OfflineService {
   }
 
   async SendToApi() {
-    let cacheRecords = await this.storage.get('Records') || [];
-    if(cacheRecords.length > 0){
-      cacheRecords.map((el:any , index:number) => {
-        console.log('index',index);
+    let cacheRecords = await this.storage.get('RecordsWillBeUpserted') || [];
+    if (cacheRecords.length > 0) {
+      cacheRecords.map((el: any, index: number) => {
         this.http.post('ChecklistRecords/SaveFormRecord', el).subscribe((res: any) => {
-
         });
-        if(index == (cacheRecords.length-1) ){
-          this.storage.remove('Records');
+        if (index == (cacheRecords.length - 1)) {
+          this.storage.remove('RecordsWillBeUpserted');
+        }
+      });
+
+    }
+  }
+  async deletedRecords() {
+    let cacheRecords = await this.storage.get('RecordsWillBeDeleted') || [];
+    if (cacheRecords.length > 0) {
+      cacheRecords.map((el: any, index: number) => {
+        this.http.post('ChecklistRecords/DeleteFormRecord', null, true, el).subscribe((res: any) => {
+        });
+        if (index == (cacheRecords.length - 1)) {
+          this.storage.remove('RecordsWillBeUpserted');
         }
       });
 

@@ -21,6 +21,7 @@ export class TokenInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     this.token = JSON.parse(localStorage.getItem('token') || '{}');
+    // console.log("Token", this.token);
 
     request = request.clone({
       setHeaders: {
@@ -39,7 +40,7 @@ export class TokenInterceptor implements HttpInterceptor {
         !request.url.includes('Category/GetCategoryChecklists') &&
         !request.url.includes('ChecklistRecords/ReadUserFormRecords') &&
         !request.url.includes('ChecklistRecords/GetPendingAndHistoryWorkflowFormData') &&
-        !request.url.includes('ChecklistRecords/ReadFormRecords') 
+        !request.url.includes('ChecklistRecords/ReadFormRecords')
       )
         this.loadingService.setLoading(true, request.url);
       return next.handle(request).pipe(

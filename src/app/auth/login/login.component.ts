@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    
+
     this.BuildRequestForm();
     const lang = localStorage.getItem('lang') || '{}';
     localStorage.clear();
@@ -97,10 +97,10 @@ export class LoginComponent implements OnInit {
   login() {
     let body = this.authForm.value;
     body.appName = environment.appName;
-    this.http.post('Auth/Login', body, true).subscribe((res: any) => {
+    this.http.post('Auth/Login', body, true).subscribe(async (res: any) => {
       if (res.isPassed) {
-        localStorage.setItem('userData', JSON.stringify(res.data));
-        localStorage.setItem('token', JSON.stringify(res.data.resetToken));
+        await localStorage.setItem('userData', JSON.stringify(res.data));
+        await localStorage.setItem('token', JSON.stringify(res.data.resetToken));
 
         this.CheckFCMTokenExpiration(res.data);
         //this.routeToHome();

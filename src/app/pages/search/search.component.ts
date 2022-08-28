@@ -23,7 +23,7 @@ export class SearchComponent implements OnInit {
 
   @HostListener("window:scroll", [])
   onScroll(): void {
-    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+    if (this.bottomReached()  && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
       // Load Your Data Here
       this.pager.page += 1;
       this.search();

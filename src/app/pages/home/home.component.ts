@@ -34,7 +34,8 @@ export class HomeComponent implements OnInit {
   loadFromApi() {
     this.isOnline ? this.getCategories() : '';
   }
-  getCategories() {
+  getCategories() {    
+    this.items = [];
     this.http.get('Category/GetUserCategories').subscribe(async (res: any) => {
       this.items = res;
       await this.storage.set('Categories', res);
