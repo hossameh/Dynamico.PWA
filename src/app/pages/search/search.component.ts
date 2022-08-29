@@ -7,12 +7,14 @@ import {
   distinctUntilChanged,
   filter
 } from "rxjs/operators";
-import { fromEvent } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 import { AccessTypes } from 'src/app/core/enums/access.enum';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { IPageInfo } from 'src/app/core/interface/page-info.interface';
+import { OfflineService } from 'src/app/services/offline/offline.service';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-search',
@@ -23,7 +25,7 @@ export class SearchComponent implements OnInit {
 
   @HostListener("window:scroll", [])
   onScroll(): void {
-    if (this.bottomReached()  && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
       // Load Your Data Here
       this.pager.page += 1;
       this.search();
@@ -52,15 +54,22 @@ export class SearchComponent implements OnInit {
   pager!: IPageInfo;
   loaded = true;
   isLoading = false;
+  isOnline = true;
+  statusSubscription!: Subscription;
 
   constructor(private http: HttpService,
     private location: Location,
     private alert: AlertService,
     private router: Router,
     private route: ActivatedRoute,
+    private offline: OfflineService,
+    private storage: Storage,
   ) { }
 
   ngOnInit(): void {
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
     this.resetPager();
     this.params = this.route.snapshot.queryParams;
 
@@ -96,43 +105,104 @@ export class SearchComponent implements OnInit {
       total: 0,
     };
   }
-  search() {
+  async search() {
     if (!this.searchObj.complete && !this.searchObj.pending)
       return;
-    this.loaded = false;
-    this.isLoading = true;
-    let body = {
-      TitleOrREF: this.searchObj.searchKey,
-      Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : '',
-      pageIndex: this.pager.page,
-      pageSize: this.pager.pageSize
-    };
-    this.http.get('ChecklistRecords/ReadUserFormRecords', body).subscribe((res: any) => {
-      res?.list.map((el: any) => {
-        this.items.push(el);
+    let cahsedSearchPendingRecords = await this.storage.get("SearchPendingRecords") || [];
+    let cahsedSearchCompletedRecords = await this.storage.get("SearchCompletedRecords") || [];
+    if (this.isOnline) {
+      this.loaded = false;
+      this.isLoading = true;
+      let body = {
+        TitleOrREF: this.searchObj.searchKey,
+        Record_Status: (this.searchObj.complete && this.searchObj.pending) ? '' : this.searchObj.complete ? 2 : this.searchObj.pending ? 1 : '',
+        pageIndex: this.pager.page,
+        pageSize: this.pager.pageSize
+      };
+      this.http.get('ChecklistRecords/ReadUserFormRecords', body).subscribe(async (res: any) => {
+        res?.list.map((el: any) => {
+          this.items.push(el);
+        });
+        this.pager.total = res?.total;
+        this.pager.pages = res?.pages;
+        this.loaded = true;
+        this.isLoading = false;
+
+        cahsedSearchPendingRecords = (this.searchObj.pending && !this.searchObj.complete) ? this.items
+          : cahsedSearchPendingRecords;
+
+        cahsedSearchCompletedRecords = (this.searchObj.complete && !this.searchObj.pending) ? this.items : cahsedSearchCompletedRecords;
+        await this.storage.set("SearchPendingRecords", cahsedSearchPendingRecords);
+        await this.storage.set("SearchCompletedRecords", cahsedSearchCompletedRecords);
       });
-      this.pager.total = res?.total;
-      this.pager.pages = res?.pages;
-      this.loaded = true;
-      this.isLoading = false;
-    });
+    }
+    else {
+      this.items = [];
+      if (this.searchObj.pending)
+        this.items.push(...cahsedSearchPendingRecords);
+      if (this.searchObj.complete)
+        this.items.push(...cahsedSearchCompletedRecords);
+    }
   }
   resetSearch() {
     this.items = [];
     this.resetPager();
     this.search();
   }
-
   delete() {
-    this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
-      if (res.isPassed) {
-        this.closeModal.nativeElement.click();
-        this.resetSearch()
-      } else {
-        this.alert.error(res.message)
-      }
+    if (this.isOnline) {
+      this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
+        if (res.isPassed) {
+          this.closeModal.nativeElement.click();
+          this.resetSearch()
+        } else {
+          this.alert.error(res.message);
+        }
+      });
+    } else {
+      this.deleteFromDB();
+    }
 
-    })
+  }
+  async deleteFromDB() {
+    let cacheRecords = await this.storage.get('Records') || [];
+    let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
+    let recordsWillBeDeleted = await this.storage.get('RecordsWillBeDeleted') || [];
+    if (this.selectedItem.record_Id && this.selectedItem.record_Id > 0)
+      recordsWillBeDeleted.push({ Record_Id: this.selectedItem.record_Id });
+    await this.storage.set("RecordsWillBeDeleted", recordsWillBeDeleted);
+    if (cacheRecords.length > 0) {
+      if (this.selectedItem.record_Id) {
+        let index = cacheRecords.findIndex((el: any) => {
+          return el.record_Id == this.selectedItem.record_Id;
+        });
+        let indexItem = this.items.findIndex((el: any) => {
+          return el.record_Id == this.selectedItem.record_Id;
+        });
+        index >= 0 ? cacheRecords.splice(index, 1) : '';
+        indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
+      }
+      else {
+        let index = cacheRecords.findIndex((el: any) => {
+          return el.offlineRef == this.selectedItem?.offlineRef;
+        });
+        let indexItem = this.items.findIndex((el: any) => {
+          return el.offlineRef == this.selectedItem?.offlineRef;
+        });
+        index >= 0 ? cacheRecords.splice(index, 1) : '';
+        indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
+      }
+    }
+    if (recordsWillBeUpserted.length > 0) {
+      let index = recordsWillBeUpserted.findIndex((el: any) => {
+        return el.offlineRef == this.selectedItem?.offlineRef;
+      });
+      index >= 0 ? recordsWillBeUpserted.splice(index, 1) : '';
+    }
+    await this.storage.set('RecordsWillBeUpserted', recordsWillBeUpserted);
+    await this.storage.set('Records', cacheRecords);
+    //save in actions to take later when online
+    this.closeModal.nativeElement.click();
   }
 
   back(): void {
