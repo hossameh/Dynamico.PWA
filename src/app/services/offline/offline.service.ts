@@ -75,7 +75,7 @@ export class OfflineService {
         this.http.post('ChecklistRecords/DeleteFormRecord', null, true, el).subscribe((res: any) => {
         });
         if (index == (cacheRecords.length - 1)) {
-          this.storage.remove('RecordsWillBeUpserted');
+          this.storage.remove('RecordsWillBeDeleted');
         }
       });
 
