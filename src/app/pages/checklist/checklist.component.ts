@@ -262,7 +262,7 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
-  getRecordToEdit() {
+  getRecordToEdit() {    
     let apiUrl = 'ChecklistRecords/EditChecklistRecord';
     let isQrCode = this.params.isQR;
     if (isQrCode)
@@ -283,8 +283,7 @@ export class ChecklistComponent implements OnInit {
             this.alert.error('Please accept to share your location first !');
           });
       }
-      this.data = value;
-
+      this.data = value;      
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
@@ -406,6 +405,7 @@ export class ChecklistComponent implements OnInit {
         this.modelBody.creation_Date = new Date();
 
         let cacheRecords = await this.storage.get('Records') || [];
+        let cacheCompletedRecords = await this.storage.get('CompletedRecords') || [];
         let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
 
         if (this.params.offline) {
@@ -415,9 +415,8 @@ export class ChecklistComponent implements OnInit {
           this.modelBody.offlineRef = this.params.offline;
           this.modelBody.formDataRef = cacheRecords[index]?.formDataRef;
           if (index >= 0) {
-            // cacheRecords[index] = this.modelBody;
             cacheRecords.splice(index, 1);
-            cacheRecords.unshift({
+            let obj = {
               assigned_Date: null,
               createdBy: this.userEmail,
               creation_Date: this.modelBody.creation_Date,
@@ -428,15 +427,20 @@ export class ChecklistComponent implements OnInit {
               location: null,
               record: this.modelBody.form_Record,
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created : RecordStatus.PendingApproval,
+              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
               workflowId: this.selectedCashedChecklist?.workflowId,
               offlineRef: this.modelBody.offlineRef,
-            });
+            }
+            if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+              cacheCompletedRecords.unshift(obj);
+            else
+              cacheRecords.unshift(obj);
+
           } else {
             //if not found
             this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
-            // cacheRecords.unshift(this.modelBody);
-            cacheRecords.unshift({
+            let obj = {
               assigned_Date: null,
               createdBy: this.userEmail,
               creation_Date: this.modelBody.creation_Date,
@@ -447,10 +451,15 @@ export class ChecklistComponent implements OnInit {
               location: null,
               record: this.modelBody.form_Record,
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created : RecordStatus.PendingApproval,
+              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
               workflowId: this.selectedCashedChecklist?.workflowId,
               offlineRef: this.modelBody.offlineRef,
-            });
+            }
+            if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+              cacheCompletedRecords.unshift(obj);
+            else
+              cacheRecords.unshift(obj);
           }
           let savedIndex = recordsWillBeUpserted.findIndex((el: any) => {
             return el.offlineRef == this.params.offline;
@@ -463,11 +472,6 @@ export class ChecklistComponent implements OnInit {
           }
 
         } else {
-          if (cacheRecords.length > 0)
-            this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
-          else
-            this.modelBody.offlineRef = 'offline#1';
-
           if (this.params.editMode == 'true') {
             let index = cacheRecords.findIndex((el: any) => {
               return el.record_Id == this.params.Record_Id;
@@ -475,7 +479,7 @@ export class ChecklistComponent implements OnInit {
             this.modelBody.formDataRef = cacheRecords[index]?.formDataRef;
             if (index >= 0) {
               cacheRecords.splice(index, 1);
-              cacheRecords.unshift({
+              let obj = {
                 assigned_Date: null,
                 createdBy: this.userEmail,
                 creation_Date: this.modelBody.creation_Date,
@@ -486,15 +490,18 @@ export class ChecklistComponent implements OnInit {
                 location: null,
                 record: this.modelBody.form_Record,
                 record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-                record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created : RecordStatus.PendingApproval,
+                record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                  (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
                 workflowId: this.selectedCashedChecklist?.workflowId,
-                offlineRef: this.modelBody.offlineRef,
-              });
-              // cacheRecords.unshift(this.modelBody);
+                offlineRef: this.modelBody.offlineRef ?? '',
+              }
+              if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+                cacheCompletedRecords.unshift(obj);
+              else
+                cacheRecords.unshift(obj);
             }
-            else
-              // cacheRecords.unshift(this.modelBody);
-              cacheRecords.unshift({
+            else {
+              let obj = {
                 assigned_Date: null,
                 createdBy: this.userEmail,
                 creation_Date: this.modelBody.creation_Date,
@@ -505,13 +512,23 @@ export class ChecklistComponent implements OnInit {
                 location: null,
                 record: this.modelBody.form_Record,
                 record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-                record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created : RecordStatus.PendingApproval,
+                record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                  (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
                 workflowId: this.selectedCashedChecklist?.workflowId,
-                offlineRef: this.modelBody.offlineRef,
-              });
+                offlineRef: this.modelBody.offlineRef ?? '',
+              }
+              if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+                cacheCompletedRecords.unshift(obj);
+              else
+                cacheRecords.unshift(obj);
+            }
           }
-          else
-            cacheRecords.unshift({
+          else {
+            if (cacheRecords.length > 0)
+              this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
+            else
+              this.modelBody.offlineRef = 'offline#1';
+            let obj = {
               assigned_Date: null,
               createdBy: this.userEmail,
               creation_Date: this.modelBody.creation_Date,
@@ -522,17 +539,23 @@ export class ChecklistComponent implements OnInit {
               location: null,
               record: this.modelBody.form_Record,
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created : RecordStatus.PendingApproval,
+              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
               workflowId: this.selectedCashedChecklist?.workflowId,
-              offlineRef: this.modelBody.offlineRef,
-            });
-          // cacheRecords.unshift(this.modelBody);
+              offlineRef: this.modelBody.offlineRef ?? '',
+            }
+            if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+              cacheCompletedRecords.unshift(obj);
+            else
+              cacheRecords.unshift(obj);
+          }
 
           recordsWillBeUpserted.push(this.modelBody);
         }
 
         await this.storage.set('RecordsWillBeUpserted', recordsWillBeUpserted);
         await this.storage.set('Records', cacheRecords);
+        await this.storage.set('CompletedRecords', cacheCompletedRecords);
         this.location.back();
       }
     });
@@ -648,7 +671,7 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('formDataRef')?.disable();
         let recordJson = valueRecord.record; // data
         let dataObject = (this.params.Record_Id && +this.params.Record_Id > 0) ?
-          this.deSerialize(JSON.parse(recordJson)) 
+          this.deSerialize(JSON.parse(recordJson))
           : this.deSerialize(recordJson);
         this.form.components = JSON.parse(valueChecklist.formControls);
         this.options = {

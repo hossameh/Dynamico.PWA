@@ -21,14 +21,20 @@ export class HelperService {
       UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
       isRead: false
     }
-    this.http.post('Notification/GetNotificationCount', body).subscribe((res: any) => {
-      this.getingNotificationCount.next(+res.data);
-    })
+    try {
+      this.http.post('Notification/GetNotificationCount', body).subscribe((res: any) => {
+        this.getingNotificationCount.next(+res.data);
+      })
+    }
+    catch (ex) { }
   }
   getWorkflowCount() {
-    this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
-      this.getingCount.next(res);
-    })
+    try {
+      this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
+        this.getingCount.next(res);
+      })
+    }
+    catch (ex) { }
   }
 
 }
