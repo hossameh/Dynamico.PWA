@@ -29,7 +29,7 @@
     <div class="content">
       <div *ngFor="let item of items ; let i = index">
         <div class="box" style="cursor: pointer;" [class.unread]="item.isRead == false">
-          <div class="box-content" [routerLink]="['/page/notification-details/']"
+          <div class="box-content"
             (click)="clickNotification(item);makeNotificationRead(item)" routerLinkActive="router-link-active"
             >
             <!-- [queryParams]="{showAll:showAllItems}" -->

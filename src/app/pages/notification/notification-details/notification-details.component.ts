@@ -7,6 +7,10 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 import { ScreenEnum } from 'src/app/core/enums/screen.enum';
 import { AccessTypes } from 'src/app/core/enums/access.enum';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
+import { OfflineService } from 'src/app/services/offline/offline.service';
+import { Storage } from '@ionic/storage-angular';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-notification-details',
@@ -24,6 +28,8 @@ export class NotificationDetailsComponent implements OnInit {
   accessTypes = AccessTypes;
   recordStatus = RecordStatus;
   recordStatusNames = RecordStatusNames;
+  isOnline = true;
+  statusSubscription!: Subscription;
 
   constructor(
     private location: Location,
@@ -31,10 +37,15 @@ export class NotificationDetailsComponent implements OnInit {
     private router: Router,
     private notificationPage: NotificationPage,
     private http: HttpService,
-    private alert: AlertService
+    private alert: AlertService,
+    private offline: OfflineService,
+    private storage: Storage,
   ) { }
 
   ngOnInit(): void {
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
     this.pageProps = this.notificationPage.pageProps;
     // this.id = this.route.snapshot.params.id;
     // let params = this.route.snapshot.queryParams;
@@ -50,25 +61,47 @@ export class NotificationDetailsComponent implements OnInit {
     //   this.router.navigateByUrl("/page/notification?showAll=" + this.showAll) :
     this.location.back();
   };
-  GetNoticationDetails() {
+  async GetNoticationDetails() {
+    let cashedNotificationDetails = await this.storage.get("NotificationDetails") || [];
     this.pageProps.objDetails = null;
     let loginId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
-    let params = {
-      UserId: +loginId,
-      ObjectId: +this.pageProps?.selectedObj?.objectId,
-      Screen: this.pageProps?.selectedObj?.screen
+    if (this.isOnline) {
+      let params = {
+        UserId: +loginId,
+        ObjectId: +this.pageProps?.selectedObj?.objectId,
+        Screen: this.pageProps?.selectedObj?.screen
+      }
+      try {
+        this.http.get2(`Notification/GetNotificationDetailsByScreen`, params).subscribe(async (val) => {
+          if (val) {
+            this.pageProps.objDetails = val;
+            this.pageProps.objDetails.userId = +loginId;
+            this.pageProps.objDetails.objectId = +this.pageProps?.selectedObj?.objectId;
+            this.pageProps.objDetails.screen = this.pageProps?.selectedObj?.screen;
+          }
+          let index = cashedNotificationDetails.findIndex((el: any) => {
+            return el.userId == +loginId && el.objectId == +this.pageProps?.selectedObj?.objectId
+              && el.screen == this.pageProps?.selectedObj?.screen;
+          });
+          if (index >= 0)
+            cashedNotificationDetails[index] = this.pageProps.objDetails;
+          else
+            cashedNotificationDetails.push(this.pageProps.objDetails);
+
+          await this.storage.set("NotificationDetails", cashedNotificationDetails);
+        });
+      }
+      catch (err) {
+        this.alert.error("Failed To Load Details");
+        console.log(err)
+      }
     }
-    try {
-      this.http.get2(`Notification/GetNotificationDetailsByScreen`, params).subscribe((val) => {
-        if (val)
-          this.pageProps.objDetails = val;
-        // else
-        //   this.alert.error("Failed To Load Details");
-      });
-    }
-    catch (err) {
-      this.alert.error("Failed To Load Details");
-      console.log(err)
+    else {
+      let obj = cashedNotificationDetails.filter((el: any) => {
+        return el.userId == +loginId && el.objectId == +this.pageProps?.selectedObj?.objectId
+          && el.screen == this.pageProps?.selectedObj?.screen;
+      })[0];
+      this.pageProps.objDetails = obj;
     }
   }
   go() {
