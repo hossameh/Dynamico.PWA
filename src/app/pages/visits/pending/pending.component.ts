@@ -72,7 +72,8 @@ export class PendingComponent implements OnInit {
     let cacheRecords = await this.storage.get('Records') || [];
     let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
     let recordsWillBeDeleted = await this.storage.get('RecordsWillBeDeleted') || [];
-    recordsWillBeDeleted.push({ Record_Id: this.selectedItem.record_Id });
+    if (this.selectedItem.record_Id && this.selectedItem.record_Id > 0)
+      recordsWillBeDeleted.push({ Record_Id: this.selectedItem.record_Id });
     await this.storage.set("RecordsWillBeDeleted", recordsWillBeDeleted);
     if (cacheRecords.length > 0) {
       if (this.selectedItem.record_Id) {

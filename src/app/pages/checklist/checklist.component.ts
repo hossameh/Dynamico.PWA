@@ -262,7 +262,7 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
-  getRecordToEdit() {    
+  getRecordToEdit() {
     let apiUrl = 'ChecklistRecords/EditChecklistRecord';
     let isQrCode = this.params.isQR;
     if (isQrCode)
@@ -283,7 +283,7 @@ export class ChecklistComponent implements OnInit {
             this.alert.error('Please accept to share your location first !');
           });
       }
-      this.data = value;      
+      this.data = value;
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
@@ -347,7 +347,7 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
-  deSerialize(recordDataArray: any) {
+  deSerialize(recordDataArray: any) {    
     let data: any = {};
     recordDataArray.forEach((item: any) => {
       data[item?.name] = item?.value;
@@ -439,7 +439,7 @@ export class ChecklistComponent implements OnInit {
 
           } else {
             //if not found
-            this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
+            this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
             let obj = {
               assigned_Date: null,
               createdBy: this.userEmail,
@@ -472,6 +472,10 @@ export class ChecklistComponent implements OnInit {
           }
 
         } else {
+          if (cacheRecords.length > 0)
+            this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
+          else
+            this.modelBody.offlineRef = 'offline1';
           if (this.params.editMode == 'true') {
             let index = cacheRecords.findIndex((el: any) => {
               return el.record_Id == this.params.Record_Id;
@@ -524,10 +528,6 @@ export class ChecklistComponent implements OnInit {
             }
           }
           else {
-            if (cacheRecords.length > 0)
-              this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
-            else
-              this.modelBody.offlineRef = 'offline#1';
             let obj = {
               assigned_Date: null,
               createdBy: this.userEmail,
@@ -670,9 +670,9 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('formDataRef')?.setValue(this.params.offline);
         this.recordForm.get('formDataRef')?.disable();
         let recordJson = valueRecord.record; // data
-        let dataObject = (this.params.Record_Id && +this.params.Record_Id > 0) ?
-          this.deSerialize(JSON.parse(recordJson))
-          : this.deSerialize(recordJson);
+        let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
+          this.deSerialize(recordJson) :
+          this.deSerialize(JSON.parse(recordJson));
         this.form.components = JSON.parse(valueChecklist.formControls);
         this.options = {
           builder: {
