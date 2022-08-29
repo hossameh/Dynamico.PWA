@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from './http/http.service';
 
@@ -12,29 +13,45 @@ export class HelperService {
   getingCount: BehaviorSubject<any> = new BehaviorSubject(null);
   getingNotificationCount: BehaviorSubject<any> = new BehaviorSubject(null);
 
+  isOnline = true;
   constructor(
     private http: HttpService,
+    private storage: Storage
   ) { }
 
-  getNotificationCount() {
-    let body = {
-      UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
-      isRead: false
+  async getNotificationCount() {
+    let notificationCount = await this.storage.get("NotificationCount") || 0;
+    if (this.isOnline) {
+      let body = {
+        UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+        isRead: false
+      }
+      try {
+        this.http.post('Notification/GetNotificationCount', body).subscribe(async (res: any) => {
+          this.getingNotificationCount.next(+res.data);
+          notificationCount = +res.data;
+          await this.storage.set("NotificationCount", notificationCount);
+        })
+      }
+      catch (ex) { }
     }
-    try {
-      this.http.post('Notification/GetNotificationCount', body).subscribe((res: any) => {
-        this.getingNotificationCount.next(+res.data);
-      })
-    }
-    catch (ex) { }
+    else
+      this.getingNotificationCount.next(notificationCount);
   }
-  getWorkflowCount() {
-    try {
-      this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(res => {
-        this.getingCount.next(res);
-      })
+  async getWorkflowCount() {
+    let pendingWorkflowCount = await this.storage.get("PendingWorkflowCount") || 0;
+    if (this.isOnline) {
+      try {
+        this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(async res => {
+          this.getingCount.next(res);
+          pendingWorkflowCount = res;
+          await this.storage.set("PendingWorkflowCount", pendingWorkflowCount);
+        })
+      }
+      catch (ex) { }
     }
-    catch (ex) { }
+    else
+      this.getingCount.next(pendingWorkflowCount);
   }
 
 }

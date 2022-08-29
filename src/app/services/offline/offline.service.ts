@@ -29,10 +29,12 @@ export class OfflineService {
     if (this.isConnected) {
       this.currentStatus.next(this.isConnected);
       this.status = "Online";
+      this.help.isOnline = true;
       this.SendToApi();
       this.deletedRecords();
     }
     else {
+      this.help.isOnline = false;
       this.currentStatus.next(this.isConnected);
       this.toastr.error('', 'Offline Mode');
       this.status = "Offline";
@@ -44,10 +46,12 @@ export class OfflineService {
       this.isConnected = isConnected;
       if (this.isConnected) {
         this.status = "Online";
+        this.help.isOnline = true;
         this.SendToApi();
         this.deletedRecords();
       }
       else {
+        this.help.isOnline = false;
         this.toastr.error('', 'Offline Mode');
         this.status = "Offline";
 
