@@ -15,7 +15,7 @@
       <div [id]="'collapse' + i" class="accordion-collapse collapse " [class.show]="i == 0" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
         <div class="accordion-body">
           <div class="mb-3" *ngFor="let element of item.list">
-            <div class="white-box py-2">
+            <div (click)="go(element)" class="white-box py-2">
               <div class="box-content">
                 <p class="number">
                   #{{element.formId}}
@@ -25,7 +25,7 @@
                 </h5>
                 <p class="date"> {{element.endDate | date:'d MMM YYY'}}</p>
               </div>
-              <div class="box-side">
+              <!-- <div class="box-side">
                 <div class="d-flex align-items-center">
                   <p class="badge me-2">{{'Pending' | translate}}</p>
                   <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -41,7 +41,7 @@
                         {{'Delete' | translate}}</a></li>
                   </ul>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

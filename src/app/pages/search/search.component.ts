@@ -128,10 +128,10 @@ export class SearchComponent implements OnInit {
         this.loaded = true;
         this.isLoading = false;
 
-        cahsedSearchPendingRecords = (this.searchObj.pending && !this.searchObj.complete) ? this.items
+        cahsedSearchPendingRecords = (!this.searchObj.searchKey && this.searchObj.pending && !this.searchObj.complete) ? this.items
           : cahsedSearchPendingRecords;
 
-        cahsedSearchCompletedRecords = (this.searchObj.complete && !this.searchObj.pending) ? this.items : cahsedSearchCompletedRecords;
+        cahsedSearchCompletedRecords = (!this.searchObj.searchKey && this.searchObj.complete && !this.searchObj.pending) ? this.items : cahsedSearchCompletedRecords;
         await this.storage.set("SearchPendingRecords", cahsedSearchPendingRecords);
         await this.storage.set("SearchCompletedRecords", cahsedSearchCompletedRecords);
       });
@@ -142,6 +142,12 @@ export class SearchComponent implements OnInit {
         this.items.push(...cahsedSearchPendingRecords);
       if (this.searchObj.complete)
         this.items.push(...cahsedSearchCompletedRecords);
+      if (this.searchObj.searchKey) {        
+        this.items = this.items.filter((el: any) =>
+          el.formDataRef?.toString().toLowerCase().includes(this.searchObj.searchKey.toLowerCase())
+          || el.form_Title?.toString().toLowerCase().includes(this.searchObj.searchKey.toLowerCase())
+        );
+      }
     }
   }
   resetSearch() {

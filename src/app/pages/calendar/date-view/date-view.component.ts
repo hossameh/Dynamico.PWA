@@ -73,17 +73,17 @@ export class DateViewComponent implements OnInit {
   recurringEvents: RecurringEvent[] = [];
 
   constructor(
-    private router:Router
+    private router: Router
   ) { }
 
   ngOnInit(): void {
 
   }
-  toggle(){
+  toggle() {
     setTimeout(() => {
-     this.showCompletedDateView.emit(this.isChecked);
-    },50)
- }
+      this.showCompletedDateView.emit(this.isChecked);
+    }, 50)
+  }
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -99,7 +99,7 @@ export class DateViewComponent implements OnInit {
 
         daysList.forEach((date: any) => {
           this.events.push({
-            id: this.plannerModel[i].formId,
+            id: this.plannerModel[i].id,
             title: (this.plannerModel[i].title),
             color: { primary: this.plannerModel[i].color, secondary: '' },
             start: new Date(date),
@@ -148,12 +148,36 @@ export class DateViewComponent implements OnInit {
 
   }
   onEditClick(event: any) {
-    const queryParams: Params = { editMode: false };
+    // console.log(event);
 
-    this.router.navigate(['/page/checklist/'+event.id], {
-      queryParams: queryParams,
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    } )
+    let item = this.items.filter((el: any) => el.id == event.id)[0];
+    if (item && item.isCreateFormData == true && item.plannerFormsData) {
+      let formData = item.plannerFormsData.filter((el: any) =>
+        new Date(el.day).getDay() == event.start.getDay()
+      )[0];
+      let complete = false;
+      // if (this.access && this.access.toString().includes(this.accessTypes.Read)) {
+      //   if (!this.access.includes(this.accessTypes.Update))
+      complete = true;
+
+      this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true" +
+        (complete == true ? "&Complete=true" : "") +
+        "&offline=" + '' +
+        "&listName=" + item.form.formTitle +
+        "&Record_Id=" + +formData.formsDataId);
+      // }
+      // else {
+      //   this.alert.error("You have No Access")
+      //   return;
+      // }
+    }
+    else {
+      const queryParams: Params = { editMode: false };
+      this.router.navigate(['/page/checklist/' + item.formId], {
+        queryParams: queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      })
+    }
   }
 
 }

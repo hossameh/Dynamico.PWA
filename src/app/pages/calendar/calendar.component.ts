@@ -2,6 +2,7 @@ import { Subscription } from 'rxjs';
 import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-calendar',

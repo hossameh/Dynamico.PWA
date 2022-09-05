@@ -138,10 +138,10 @@ export class VisitsComponent implements OnInit {
   //   // }
   // }
   async GetChecklistUserAccess() {
-    let cashedUserAccess = await this.storage.get('ChecklistUserAccess') || [];    
+    let cashedUserAccess = await this.storage.get('ChecklistUserAccess') || [];
     let index = cashedUserAccess.findIndex((el: any) => {
       return el.userId == this.userId && el.formId == +this.id
-    });    
+    });
     if (this.isOnline)
       this.http.get('Checklist/GetChecklistUserAccess', { formId: +this.id, userId: this.userId })
         .subscribe(async (res: any) => {
@@ -173,7 +173,9 @@ export class VisitsComponent implements OnInit {
         this.pager.pages = res?.pages;
         this.loaded = true;
         this.isLoading = false;
-        await this.storage.set('Records', this.pendingItems);
+        if (!this.body.FromCreationDate && !this.body.ToCreationDate) {
+          await this.storage.set('Records', this.pendingItems);
+        }
       });
     }
     else {
@@ -196,7 +198,9 @@ export class VisitsComponent implements OnInit {
         this.pager.pages = res?.pages;
         this.loaded = true;
         this.isLoading = false;
-        await this.storage.set('CompletedRecords', this.completeItems);
+        if (!this.body.FromCreationDate && !this.body.ToCreationDate) {
+          await this.storage.set('CompletedRecords', this.completeItems);
+        }
       });
     }
     else {
@@ -208,22 +212,46 @@ export class VisitsComponent implements OnInit {
   async getPendingFromCache() {
     this.pendingItems = [];
     let cacheRecords = await this.storage.get('Records') || [];
+    cacheRecords = cacheRecords.filter((el: any) => el.form_Id == this.id);
+
+    if (this.body.FromCreationDate) {
+      cacheRecords = cacheRecords.filter((el: any) =>
+        ((new Date(el.creation_Date)).getTime() >= (new Date(this.body.FromCreationDate)).getTime())
+      );
+    }
+    if (this.body.ToCreationDate) {
+      cacheRecords = cacheRecords.filter((el: any) =>
+        ((new Date(el.creation_Date)).getTime() <= (new Date(this.body.ToCreationDate)).getTime())
+      );
+    }
+
     if (cacheRecords.length > 0) {
       cacheRecords.map((el: any) => {
         el.form_Title = this.params?.listName;
       });
     }
-    this.pendingItems = cacheRecords.filter((el: any) => el.form_Id == this.id);
+    this.pendingItems = cacheRecords;
   }
   async getCompletedFromCache() {
     this.completeItems = [];
     let cacheCompletedRecords = await this.storage.get('CompletedRecords') || [];
+    cacheCompletedRecords = cacheCompletedRecords.filter((el: any) => el.form_Id == this.id);
+    if (this.body.FromCreationDate) {
+      cacheCompletedRecords = cacheCompletedRecords.filter((el: any) =>
+        ((new Date(el.creation_Date)).getTime() >= (new Date(this.body.FromCreationDate)).getTime())
+      );
+    }
+    if (this.body.ToCreationDate) {
+      cacheCompletedRecords = cacheCompletedRecords.filter((el: any) =>
+        ((new Date(el.creation_Date)).getTime() <= (new Date(this.body.ToCreationDate)).getTime())
+      );
+    }
     if (cacheCompletedRecords.length > 0) {
       cacheCompletedRecords.map((el: any) => {
         el.form_Title = this.params?.listName;
       });
     }
-    this.completeItems = cacheCompletedRecords.filter((el: any) => el.form_Id == this.id);
+    this.completeItems = cacheCompletedRecords;
   }
   change(step: number) {
     this.resetData();
