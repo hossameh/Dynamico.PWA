@@ -30,13 +30,14 @@ export class OfflineService {
       this.currentStatus.next(this.isConnected);
       this.status = "Online";
       this.help.isOnline = true;
+      // this.toastr.success('', "Your Internet Connection Was Restored");
       this.SendToApi();
       this.deletedRecords();
     }
     else {
       this.help.isOnline = false;
       this.currentStatus.next(this.isConnected);
-      this.toastr.error('', 'Offline Mode');
+      this.toastr.error('', 'You Are Currently Offline');
       this.status = "Offline";
     }
 
@@ -47,12 +48,13 @@ export class OfflineService {
       if (this.isConnected) {
         this.status = "Online";
         this.help.isOnline = true;
+        this.toastr.success('', "Your Internet Connection Was Restored");
         this.SendToApi();
         this.deletedRecords();
       }
       else {
         this.help.isOnline = false;
-        this.toastr.error('', 'Offline Mode');
+        this.toastr.error('', 'You Are Currently Offline');
         this.status = "Offline";
 
       }

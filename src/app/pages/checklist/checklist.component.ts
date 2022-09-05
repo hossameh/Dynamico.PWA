@@ -284,6 +284,7 @@ export class ChecklistComponent implements OnInit {
           });
       }
       this.data = value;
+      this.updateCashedRecord();
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
@@ -346,8 +347,21 @@ export class ChecklistComponent implements OnInit {
       };
     });
   }
-
-  deSerialize(recordDataArray: any) {    
+  async updateCashedRecord() {
+    let cashedRecords = await this.storage.get('Records') || [];
+    if (cashedRecords) {
+      // check if Record is in cahce
+      let index = cashedRecords.findIndex((el: any) => {
+        return el.form_Id == this.id && el.record_Id == this.params.Record_Id;
+      });
+      // check if Record  is in cahce update data in this index
+      if (index >= 0) {
+        cashedRecords[index].record_Json = this.data?.record_Json;
+      }
+    }
+    await this.storage.set('Records', cashedRecords);
+  }
+  deSerialize(recordDataArray: any) {
     let data: any = {};
     recordDataArray.forEach((item: any) => {
       data[item?.name] = item?.value;
@@ -669,7 +683,8 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
         this.recordForm.get('formDataRef')?.setValue(this.params.offline);
         this.recordForm.get('formDataRef')?.disable();
-        let recordJson = valueRecord.record; // data
+        
+        let recordJson = valueRecord.record ? valueRecord.record : valueRecord.record_Json; // data
         let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
           this.deSerialize(recordJson) :
           this.deSerialize(JSON.parse(recordJson));
