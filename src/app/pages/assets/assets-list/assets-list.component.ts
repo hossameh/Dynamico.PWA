@@ -16,7 +16,7 @@ export class AssetsListComponent implements OnInit {
 
   @HostListener("window:scroll", [])
   onScroll(): void {
-    if (this.bottomReached() && this.isOnline  && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
+    if (this.bottomReached() && this.isOnline && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
       // Load Your Data Here
       this.pager.page += 1;
       this.getAssets();
@@ -63,18 +63,28 @@ export class AssetsListComponent implements OnInit {
       pageIndex: this.pager.page,
       pageSize: this.pager.pageSize
     };
+    let cashedAssets = await this.storage.get("UserAssets") || [];
     if (this.isOnline)
       this.http.get(`Assets/GetUserAssets`, params).subscribe(async (res: any) => {
+        this.assets = [];
         res?.list.map((el: any) => {
           this.assets.push(el);
         });
         this.pager.total = res?.total;
         this.pager.pages = res?.pages;
         this.loaded = true;
-        await this.storage.set("UserAssets", this.assets);
+        if (!this.searchKeyWord)
+          await this.storage.set("UserAssets", this.assets);
       })
-    else
-      this.assets = await this.storage.get("UserAssets") || [];
+    else {
+      this.assets = cashedAssets;
+      if (this.searchKeyWord) {
+        this.assets = this.assets.filter((el: any) =>
+          el.name?.toString().toLowerCase().includes(this.searchKeyWord.toLowerCase())
+          || el.code?.toString().toLowerCase().includes(this.searchKeyWord.toLowerCase())
+        );
+      }
+    }
     this.isLoading = false;
   }
   resetSearch() {

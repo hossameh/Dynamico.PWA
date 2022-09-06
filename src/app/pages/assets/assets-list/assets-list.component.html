@@ -12,7 +12,7 @@
     </div>
     <div class="page-bar">
         <div class="form-group m-0 p-0">
-            <input class="form-control form-control-md no-shadow" type="search" (keyup)="resetSearch()"
+            <input class="form-control form-control-md no-shadow" type="search" (keyup)="resetSearch()" (search)="resetSearch()"
                 placeholder="{{'Search By Name or Code' | translate}} " [(ngModel)]="searchKeyWord" aria-label="search">
             <img src="assets/img/icons/search-icon.svg" alt="search">
         </div>
