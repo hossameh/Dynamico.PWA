@@ -151,10 +151,17 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   }
 
   async loadFromCache() {
+    let cachedPendingRecords = await this.storage.get('Records') || [];
     let cacheCatgoryChecklists = await this.storage.get('CategoryChecklists') || [];
     this.items = [];
     if (cacheCatgoryChecklists.length > 0) {
       this.items = cacheCatgoryChecklists.filter((el: any) => el.categoryId == this.category_Id)[0].list;
+      this.items = this.items.map((el: any) => {
+        let records = [];
+        records = cachedPendingRecords.filter((element: any) => element.form_Id == el.formId);        
+        el.totalRecords = records.length;
+        return el;
+      })
     }
 
   }

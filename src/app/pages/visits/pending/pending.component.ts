@@ -58,6 +58,7 @@ export class PendingComponent implements OnInit {
         if (res.isPassed) {
           this.date.emit(this.rangeDate);
           this.closeModal.nativeElement.click();
+          this.deleteFromDB();
         } else {
           this.alert.error(res.message);
         }

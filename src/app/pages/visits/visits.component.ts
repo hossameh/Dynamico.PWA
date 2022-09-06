@@ -225,7 +225,7 @@ export class VisitsComponent implements OnInit {
           cashedPendingRecords[index].record_Json = recordJson;
         } else {
           //if not found id add a new record
-          cashedPendingRecords.push(record);
+          cashedPendingRecords.unshift(record);
         }
       });
     } else {
@@ -249,11 +249,11 @@ export class VisitsComponent implements OnInit {
           cashedCompletedRecords[index].record_Json = recordJson;
         } else {
           //if not found id add a new record
-          cashedCompletedRecords.push(record);
+          cashedCompletedRecords.unshift(record);
         }
       });
     } else {
-      cashedCompletedRecords.push(...this.pendingItems);
+      cashedCompletedRecords.push(...this.completeItems);
     }
     await this.storage.set('CompletedRecords', cashedCompletedRecords);
   }
