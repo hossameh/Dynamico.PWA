@@ -358,7 +358,9 @@ export class ChecklistComponent implements OnInit {
       if (index >= 0) {
         cashedRecords[index].record_Json = this.data?.record_Json;
       }
+      console.log(cashedRecords[index]);
     }
+
     await this.storage.set('Records', cashedRecords);
   }
   deSerialize(recordDataArray: any) {
@@ -683,8 +685,9 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
         this.recordForm.get('formDataRef')?.setValue(this.params.offline);
         this.recordForm.get('formDataRef')?.disable();
-        
+
         let recordJson = valueRecord.record ? valueRecord.record : valueRecord.record_Json; // data
+
         let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
           this.deSerialize(recordJson) :
           this.deSerialize(JSON.parse(recordJson));
@@ -743,6 +746,10 @@ export class ChecklistComponent implements OnInit {
             }
           }
         };
+      }
+      else {
+        this.alert.info("No Internet Connection");
+        this.location.back();
       }
 
     }

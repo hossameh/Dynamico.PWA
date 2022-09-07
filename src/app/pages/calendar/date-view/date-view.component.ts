@@ -18,6 +18,8 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
+import { Storage } from '@ionic/storage-angular';
+import { AlertService } from 'src/app/services/alert/alert.service';
 
 const colors: any = {
   red: {
@@ -73,7 +75,9 @@ export class DateViewComponent implements OnInit {
   recurringEvents: RecurringEvent[] = [];
 
   constructor(
-    private router: Router
+    private router: Router,
+    private storage: Storage,
+    private alert: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -147,7 +151,7 @@ export class DateViewComponent implements OnInit {
   }: CalendarEventTimesChangedEvent): void {
 
   }
-  onEditClick(event: any) {
+  async onEditClick(event: any) {
     // console.log(event);
 
     let item = this.items.filter((el: any) => el.id == event.id)[0];
@@ -160,8 +164,18 @@ export class DateViewComponent implements OnInit {
       //   if (!this.access.includes(this.accessTypes.Update))
       complete = true;
 
+      let cacheRecords = await this.storage.get('Records') || [];
+      if (cacheRecords) {
+        let recordData = cacheRecords.filter((el: any) => el.record_Id == +formData.formsDataId)[0];
+        let jsonData = recordData?.record ? recordData?.record : recordData?.record_Json;
+        if (!recordData || !jsonData) {
+          this.alert.error("No Internet Connection");
+          return;
+        }
+      }
+
       this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true" +
-        (complete == true ? "&Complete=true" : "") +
+        // (complete == true ? "&Complete=true" : "") +
         "&offline=" + '' +
         "&listName=" + item.form.formTitle +
         "&Record_Id=" + +formData.formsDataId);
