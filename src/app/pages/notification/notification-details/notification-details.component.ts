@@ -30,6 +30,7 @@ export class NotificationDetailsComponent implements OnInit {
   recordStatusNames = RecordStatusNames;
   isOnline = true;
   statusSubscription!: Subscription;
+  userId: any;
 
   constructor(
     private location: Location,
@@ -43,6 +44,7 @@ export class NotificationDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
     });
@@ -64,10 +66,9 @@ export class NotificationDetailsComponent implements OnInit {
   async GetNoticationDetails() {
     let cashedNotificationDetails = await this.storage.get("NotificationDetails") || [];
     this.pageProps.objDetails = null;
-    let loginId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     if (this.isOnline) {
       let params = {
-        UserId: +loginId,
+        UserId: +this.userId,
         ObjectId: +this.pageProps?.selectedObj?.objectId,
         Screen: this.pageProps?.selectedObj?.screen
       }
@@ -75,12 +76,12 @@ export class NotificationDetailsComponent implements OnInit {
         this.http.get2(`Notification/GetNotificationDetailsByScreen`, params).subscribe(async (val) => {
           if (val) {
             this.pageProps.objDetails = val;
-            this.pageProps.objDetails.userId = +loginId;
+            this.pageProps.objDetails.userId = +this.userId;
             this.pageProps.objDetails.objectId = +this.pageProps?.selectedObj?.objectId;
             this.pageProps.objDetails.screen = this.pageProps?.selectedObj?.screen;
           }
           let index = cashedNotificationDetails.findIndex((el: any) => {
-            return el.userId == +loginId && el.objectId == +this.pageProps?.selectedObj?.objectId
+            return el.userId == +this.userId && el.objectId == +this.pageProps?.selectedObj?.objectId
               && el.screen == this.pageProps?.selectedObj?.screen;
           });
           if (index >= 0)
@@ -98,7 +99,7 @@ export class NotificationDetailsComponent implements OnInit {
     }
     else {
       let obj = cashedNotificationDetails.filter((el: any) => {
-        return el.userId == +loginId && el.objectId == +this.pageProps?.selectedObj?.objectId
+        return el.userId == +this.userId && el.objectId == +this.pageProps?.selectedObj?.objectId
           && el.screen == this.pageProps?.selectedObj?.screen;
       })[0];
       this.pageProps.objDetails = obj;

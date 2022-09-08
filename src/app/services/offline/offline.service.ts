@@ -17,13 +17,15 @@ export class OfflineService {
   token: any;
   status = "Online";
   isConnected;
+  userId: any;
+
   constructor(
     private connectionService: ConnectionService,
     private toastr: ToastrService,
     private help: HelperService,
     private storage: Storage,
     private http: HttpService) {
-
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     let status = navigator.onLine;
     this.isConnected = status;
     if (this.isConnected) {
@@ -63,28 +65,38 @@ export class OfflineService {
 
   async SendToApi() {
     let cacheRecords = await this.storage.get('RecordsWillBeUpserted') || [];
-    if (cacheRecords.length > 0) {
-      cacheRecords.map((el: any, index: number) => {
+    let userCacheRecords = cacheRecords.filter((el: any) => el.userId == this.userId);
+    if (userCacheRecords.length > 0) {
+      let sentRecords: any[] = [];
+      userCacheRecords.map((el: any, index: number) => {
         this.http.post('ChecklistRecords/SaveFormRecord', el).subscribe((res: any) => {
+          if (res.isPassed)
+            sentRecords.push(el);
         });
-        if (index == (cacheRecords.length - 1)) {
-          this.storage.remove('RecordsWillBeUpserted');
-        }
       });
-
+      if (sentRecords.length > 0) {
+        cacheRecords = cacheRecords.filter((el: any) => !sentRecords.includes(el));
+        await this.storage.set('RecordsWillBeUpserted', cacheRecords);
+      }
     }
   }
   async deletedRecords() {
     let cacheRecords = await this.storage.get('RecordsWillBeDeleted') || [];
-    if (cacheRecords.length > 0) {
-      cacheRecords.map((el: any, index: number) => {
-        this.http.post('ChecklistRecords/DeleteFormRecord', null, true, el).subscribe((res: any) => {
-        });
-        if (index == (cacheRecords.length - 1)) {
-          this.storage.remove('RecordsWillBeDeleted');
-        }
-      });
+    let userCacheRecords = cacheRecords.filter((el: any) => el.userId == this.userId);
 
+    if (userCacheRecords.length > 0) {
+      let sentRecords: any[] = [];
+
+      userCacheRecords.map((el: any, index: number) => {
+        this.http.post('ChecklistRecords/DeleteFormRecord', null, true, el).subscribe((res: any) => {
+          if (res.isPassed)
+            sentRecords.push(el);
+        });
+      });
+      if (sentRecords.length > 0) {
+        cacheRecords = cacheRecords.filter((el: any) => !sentRecords.includes(el));
+        await this.storage.set("RecordsWillBeDeleted", cacheRecords);
+      }
     }
   }
 

@@ -76,6 +76,7 @@ export class DateViewComponent implements OnInit {
   recurringEvents: RecurringEvent[] = [];
   Subscription!: Subscription;
   isOnline = true;
+  userId: any;
 
   constructor(
     private router: Router,
@@ -85,6 +86,7 @@ export class DateViewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.Subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
     });
@@ -173,7 +175,7 @@ export class DateViewComponent implements OnInit {
       if (!this.isOnline) {
         let cacheRecords = await this.storage.get('Records') || [];
         if (cacheRecords) {
-          let recordData = cacheRecords.filter((el: any) => el.record_Id == +formData.formsDataId)[0];
+          let recordData = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == +formData.formsDataId)[0];
           let jsonData = recordData?.record ? recordData?.record : recordData?.record_Json;
           if (!recordData || !jsonData) {
             this.alert.error("No Internet Connection");

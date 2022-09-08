@@ -56,6 +56,7 @@ export class SearchComponent implements OnInit {
   isLoading = false;
   isOnline = true;
   statusSubscription!: Subscription;
+  userId: any;
 
   constructor(private http: HttpService,
     private location: Location,
@@ -67,6 +68,7 @@ export class SearchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
     });
@@ -109,7 +111,11 @@ export class SearchComponent implements OnInit {
     if (!this.searchObj.complete && !this.searchObj.pending)
       return;
     let cahsedSearchPendingRecords = await this.storage.get("SearchPendingRecords") || [];
+    let userCahsedSearchPendingRecords = cahsedSearchPendingRecords.filter((el: any) => el.userId == this.userId);
+    cahsedSearchPendingRecords = cahsedSearchPendingRecords.filter((el: any) => el.userId !== this.userId);
     let cahsedSearchCompletedRecords = await this.storage.get("SearchCompletedRecords") || [];
+    let userCahsedSearchCompletedRecords = cahsedSearchCompletedRecords.filter((el: any) => el.userId == this.userId);
+    cahsedSearchCompletedRecords = cahsedSearchCompletedRecords.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       this.loaded = false;
       this.isLoading = true;
@@ -121,6 +127,7 @@ export class SearchComponent implements OnInit {
       };
       this.http.get('ChecklistRecords/ReadUserFormRecords', body).subscribe(async (res: any) => {
         res?.list.map((el: any) => {
+          el.userId = this.userId;
           this.items.push(el);
         });
         this.pager.total = res?.total;
@@ -128,10 +135,15 @@ export class SearchComponent implements OnInit {
         this.loaded = true;
         this.isLoading = false;
 
-        cahsedSearchPendingRecords = (!this.searchObj.searchKey && this.searchObj.pending && !this.searchObj.complete) ? this.items
-          : cahsedSearchPendingRecords;
+        cahsedSearchPendingRecords =
+          (!this.searchObj.searchKey && this.searchObj.pending && !this.searchObj.complete)
+            ? cahsedSearchPendingRecords.push(...this.items)
+            : cahsedSearchPendingRecords;
 
-        cahsedSearchCompletedRecords = (!this.searchObj.searchKey && this.searchObj.complete && !this.searchObj.pending) ? this.items : cahsedSearchCompletedRecords;
+        cahsedSearchCompletedRecords =
+          (!this.searchObj.searchKey && this.searchObj.complete && !this.searchObj.pending)
+            ? cahsedSearchCompletedRecords.push(this.items)
+            : cahsedSearchCompletedRecords;
         await this.storage.set("SearchPendingRecords", cahsedSearchPendingRecords);
         await this.storage.set("SearchCompletedRecords", cahsedSearchCompletedRecords);
       });
@@ -139,10 +151,10 @@ export class SearchComponent implements OnInit {
     else {
       this.items = [];
       if (this.searchObj.pending)
-        this.items.push(...cahsedSearchPendingRecords);
+        this.items.push(...userCahsedSearchPendingRecords);
       if (this.searchObj.complete)
-        this.items.push(...cahsedSearchCompletedRecords);
-      if (this.searchObj.searchKey) {        
+        this.items.push(...userCahsedSearchCompletedRecords);
+      if (this.searchObj.searchKey) {
         this.items = this.items.filter((el: any) =>
           el.formDataRef?.toString().toLowerCase().includes(this.searchObj.searchKey.toLowerCase())
           || el.form_Title?.toString().toLowerCase().includes(this.searchObj.searchKey.toLowerCase())
@@ -181,20 +193,20 @@ export class SearchComponent implements OnInit {
     if (cacheRecords.length > 0) {
       if (this.selectedItem.record_Id) {
         let index = cacheRecords.findIndex((el: any) => {
-          return el.record_Id == this.selectedItem.record_Id;
+          return el.userId == this.userId && el.record_Id == this.selectedItem.record_Id;
         });
         let indexItem = this.items.findIndex((el: any) => {
-          return el.record_Id == this.selectedItem.record_Id;
+          return el.userId == this.userId && el.record_Id == this.selectedItem.record_Id;
         });
         index >= 0 ? cacheRecords.splice(index, 1) : '';
         indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
       }
       else {
         let index = cacheRecords.findIndex((el: any) => {
-          return el.offlineRef == this.selectedItem?.offlineRef;
+          return el.userId == this.userId && el.offlineRef == this.selectedItem?.offlineRef;
         });
         let indexItem = this.items.findIndex((el: any) => {
-          return el.offlineRef == this.selectedItem?.offlineRef;
+          return el.userId == this.userId && el.offlineRef == this.selectedItem?.offlineRef;
         });
         index >= 0 ? cacheRecords.splice(index, 1) : '';
         indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
@@ -202,7 +214,7 @@ export class SearchComponent implements OnInit {
     }
     if (recordsWillBeUpserted.length > 0) {
       let index = recordsWillBeUpserted.findIndex((el: any) => {
-        return el.offlineRef == this.selectedItem?.offlineRef;
+        return el.userId == this.userId && el.offlineRef == this.selectedItem?.offlineRef;
       });
       index >= 0 ? recordsWillBeUpserted.splice(index, 1) : '';
     }

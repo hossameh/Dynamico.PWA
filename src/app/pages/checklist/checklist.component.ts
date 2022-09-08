@@ -189,7 +189,7 @@ export class ChecklistComponent implements OnInit {
       if (cacheChecklists) {
         // check if Checklists  id is in cahce
         let index = cacheChecklists.findIndex((el: any) => {
-          return el.formId == +this.id;
+          return el.userId == this.userId && el.formId == +this.id;
         });
         // check if Checklists  id is in cahce update data in this index
         if (index >= 0) {
@@ -352,7 +352,7 @@ export class ChecklistComponent implements OnInit {
     if (cashedRecords) {
       // check if Record is in cahce
       let index = cashedRecords.findIndex((el: any) => {
-        return el.form_Id == this.id && el.record_Id == this.params.Record_Id;
+        return el.userId == this.userId && el.form_Id == this.id && el.record_Id == this.params.Record_Id;
       });
       // check if Record  is in cahce update data in this index
       if (index >= 0) {
@@ -419,20 +419,21 @@ export class ChecklistComponent implements OnInit {
         });
       } else {
         this.modelBody.creation_Date = new Date();
-
+        this.modelBody.userId = this.userId;
         let cacheRecords = await this.storage.get('Records') || [];
         let cacheCompletedRecords = await this.storage.get('CompletedRecords') || [];
         let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
 
         if (this.params.offline) {
           let index = cacheRecords.findIndex((el: any) => {
-            return el.offlineRef == this.params.offline;
+            return el.userId == this.userId && el.offlineRef == this.params.offline;
           });
           this.modelBody.offlineRef = this.params.offline;
           this.modelBody.formDataRef = cacheRecords[index]?.formDataRef;
           if (index >= 0) {
             cacheRecords.splice(index, 1);
             let obj = {
+              userId: this.userId,
               assigned_Date: null,
               createdBy: this.userEmail,
               creation_Date: this.modelBody.creation_Date,
@@ -457,6 +458,7 @@ export class ChecklistComponent implements OnInit {
             //if not found
             this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
             let obj = {
+              userId: this.userId,
               assigned_Date: null,
               createdBy: this.userEmail,
               creation_Date: this.modelBody.creation_Date,
@@ -478,7 +480,7 @@ export class ChecklistComponent implements OnInit {
               cacheRecords.unshift(obj);
           }
           let savedIndex = recordsWillBeUpserted.findIndex((el: any) => {
-            return el.offlineRef == this.params.offline;
+            return el.userId == this.userId && el.offlineRef == this.params.offline;
           });
           if (savedIndex >= 0) {
             recordsWillBeUpserted[savedIndex] = this.modelBody;
@@ -494,12 +496,13 @@ export class ChecklistComponent implements OnInit {
             this.modelBody.offlineRef = 'offline1';
           if (this.params.editMode == 'true') {
             let index = cacheRecords.findIndex((el: any) => {
-              return el.record_Id == this.params.Record_Id;
+              return el.userId == this.userId && el.record_Id == this.params.Record_Id;
             });
             this.modelBody.formDataRef = cacheRecords[index]?.formDataRef;
             if (index >= 0) {
               cacheRecords.splice(index, 1);
               let obj = {
+                userId: this.userId,
                 assigned_Date: null,
                 createdBy: this.userEmail,
                 creation_Date: this.modelBody.creation_Date,
@@ -522,6 +525,7 @@ export class ChecklistComponent implements OnInit {
             }
             else {
               let obj = {
+                userId: this.userId,
                 assigned_Date: null,
                 createdBy: this.userEmail,
                 creation_Date: this.modelBody.creation_Date,
@@ -545,6 +549,7 @@ export class ChecklistComponent implements OnInit {
           }
           else {
             let obj = {
+              userId: this.userId,
               assigned_Date: null,
               createdBy: this.userEmail,
               creation_Date: this.modelBody.creation_Date,
@@ -582,7 +587,7 @@ export class ChecklistComponent implements OnInit {
     let cacheChecklists = await this.storage.get('Checklists') || [];
     let value: any = {};
     if (cacheChecklists.length > 0) {
-      value = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
+      value = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
       this.selectedCashedChecklist = value;
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
@@ -664,9 +669,9 @@ export class ChecklistComponent implements OnInit {
     let valueChecklist: any = {};
     let valueRecord: any = {};
     if (cacheChecklists.length > 0 && cacheRecords.length > 0) {
-      valueChecklist = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
+      valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
       this.selectedCashedChecklist = valueChecklist;
-      valueRecord = cacheRecords.filter((el: any) => el.record_Id == this.params.Record_Id)[0];
+      valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
 
       if (valueChecklist?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {

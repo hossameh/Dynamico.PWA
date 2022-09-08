@@ -167,6 +167,7 @@ export class VisitsComponent implements OnInit {
       this.body.pageSize = this.pager.pageSize as number;
       this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe(async (res: any) => {
         res?.list.map((el: any) => {
+          el.userId = this.userId;
           this.pendingItems.push(el);
         });
         this.pager.total = res?.total;
@@ -193,6 +194,7 @@ export class VisitsComponent implements OnInit {
       this.body.pageSize = this.pager.pageSize as number;
       this.http.get('ChecklistRecords/ReadFormRecords', this.body).subscribe(async (res: any) => {
         res?.list.map((el: any) => {
+          el.userId = this.userId;
           this.completeItems.push(el);
         });
         this.pager.total = res?.total;
@@ -216,7 +218,7 @@ export class VisitsComponent implements OnInit {
       this.pendingItems.forEach((record: any) => {
         // check if Record is in cahce
         let index = cashedPendingRecords.findIndex((el: any) => {
-          return el.record_Id == record.record_Id;
+          return el.userId == this.userId && el.record_Id == record.record_Id;
         });
         // check if Record  is in cahce update data in this index        
         if (index >= 0) {
@@ -239,7 +241,7 @@ export class VisitsComponent implements OnInit {
       this.completeItems.forEach((record: any) => {
         // check if Record is in cahce
         let index = cashedCompletedRecords.findIndex((el: any) => {
-          return el.record_Id == record.record_Id;
+          return el.userId == this.userId && el.record_Id == record.record_Id;
         });
         // check if Record  is in cahce update data in this index
         if (index >= 0) {
@@ -260,7 +262,7 @@ export class VisitsComponent implements OnInit {
   async getPendingFromCache() {
     this.pendingItems = [];
     let cacheRecords = await this.storage.get('Records') || [];
-    cacheRecords = cacheRecords.filter((el: any) => el.form_Id == this.id);
+    cacheRecords = cacheRecords.filter((el: any) => el.userId == this.userId && el.form_Id == this.id);
 
     if (this.body.FromCreationDate) {
       cacheRecords = cacheRecords.filter((el: any) =>
@@ -283,7 +285,7 @@ export class VisitsComponent implements OnInit {
   async getCompletedFromCache() {
     this.completeItems = [];
     let cacheCompletedRecords = await this.storage.get('CompletedRecords') || [];
-    cacheCompletedRecords = cacheCompletedRecords.filter((el: any) => el.form_Id == this.id);
+    cacheCompletedRecords = cacheCompletedRecords.filter((el: any) => el.userId == this.userId && el.form_Id == this.id);
     if (this.body.FromCreationDate) {
       cacheCompletedRecords = cacheCompletedRecords.filter((el: any) =>
         ((new Date(el.creation_Date)).getTime() >= (new Date(this.body.FromCreationDate)).getTime())

@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   items: category[] = [];
   isOnline = true;
   statusSubscription!: Subscription;
+  userId: any;
   constructor(
     private http: HttpService,
     private storage: Storage,
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.items = [];
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
@@ -34,17 +36,24 @@ export class HomeComponent implements OnInit {
   loadFromApi() {
     this.isOnline ? this.getCategories() : '';
   }
-  getCategories() {    
+  async getCategories() {
+    let cashedList = await this.storage.get('Categories') || [];
+    if (cashedList)
+      cashedList = cashedList.filter((el: any) => el.userId !== this.userId);
+
     this.items = [];
     this.http.get('Category/GetUserCategories').subscribe(async (res: any) => {
       this.items = res;
-      await this.storage.set('Categories', res);
+      this.items.map((el: any) => { el.userId = this.userId });
+      cashedList.push(...this.items);
+      await this.storage.set('Categories', cashedList);
     });
   }
 
   async loadFromCache() {
     this.items = [];
-    this.items = await this.storage.get('Categories');
+    this.items = await this.storage.get('Categories') || [];
+    this.items = this.items.filter((el: any) => el.userId == this.userId);
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

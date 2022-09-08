@@ -36,6 +36,7 @@ export class DetailsWorkflowComponent implements OnInit {
   appUrl!: string;
   isOnline = true;
   $subscription!: Subscription;
+  userId: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,6 +49,7 @@ export class DetailsWorkflowComponent implements OnInit {
     private offline: OfflineService,
   ) { }
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.currentDate = new Date();
     this.appUrl = environment.APP_URL;
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
@@ -146,6 +148,9 @@ export class DetailsWorkflowComponent implements OnInit {
     if (this.isOnline)
       this.http.get2('Workflow/GetWorkflowProcessByFormData', body).subscribe((res: any) => {
         this.workflowProcess = res;
+        this.workflowProcess.map((el: any) => {
+          el.userId == this.userId
+        })
         this.cashRecordWorkflowProcess();
       });
     else
@@ -168,6 +173,7 @@ export class DetailsWorkflowComponent implements OnInit {
           this.router.navigateByUrl("/page/home")
         }
         this.data = value;
+        this.data.userId = this.userId;
         this.cashRecord();
         this.continueWithData();
       });
@@ -241,7 +247,7 @@ export class DetailsWorkflowComponent implements OnInit {
     if (cashedCheckListRecords) {
       // check if Record is in cahce
       let index = cashedCheckListRecords.findIndex((el: any) => {
-        return el.form_Id == this.params.Form_Id && el.record_Id == this.params.Record_Id;
+        return el.userId == this.userId && el.form_Id == this.params.Form_Id && el.record_Id == this.params.Record_Id;
       });
       // check if Record  is in cahce update data in this index
       if (index >= 0) {
@@ -260,7 +266,7 @@ export class DetailsWorkflowComponent implements OnInit {
     if (cashedCheckListRecords) {
       // check if Record is in cahce
       let index = cashedCheckListRecords.findIndex((el: any) => {
-        return el.form_Id == this.params.Form_Id && el.record_Id == this.params.Record_Id;
+        return el.userId == this.userId && el.form_Id == this.params.Form_Id && el.record_Id == this.params.Record_Id;
       });
       // check if Record  is in cahce update data in this index
       if (index >= 0) {
@@ -273,7 +279,7 @@ export class DetailsWorkflowComponent implements OnInit {
     let cashedRecordsWorkflowProcess = await this.storage.get('RecordsWorkflowProcess') || [];
     if (cashedRecordsWorkflowProcess) {
       // check if Category  id is in cahce
-      let oldList = cashedRecordsWorkflowProcess.filter((el: any) => el.formDataId == +this.params.Record_Id);
+      let oldList = cashedRecordsWorkflowProcess.filter((el: any) => el.userId == this.userId && el.formDataId == +this.params.Record_Id);
       //remove old info
       cashedRecordsWorkflowProcess = cashedRecordsWorkflowProcess.filter((el: any) => !oldList.includes(el));
       //push new list
@@ -286,7 +292,7 @@ export class DetailsWorkflowComponent implements OnInit {
   async getCashedRecordWorkflowProcess() {
     let cashedList = await this.storage.get('RecordsWorkflowProcess') || [];
     if (cashedList)
-      this.workflowProcess = cashedList.filter((el: any) => el.formDataId == +this.params.Record_Id);
+      this.workflowProcess = cashedList.filter((el: any) => el.userId == this.userId && el.formDataId == +this.params.Record_Id);
   }
   deSerialize(recordDataArray: any) {
     let data: any = {};

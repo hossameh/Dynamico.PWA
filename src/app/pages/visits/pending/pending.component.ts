@@ -34,7 +34,7 @@ export class PendingComponent implements OnInit {
   statusSubscription!: Subscription;
   recordStatus = RecordStatus;
   recordStatusNames = RecordStatusNames;
-
+  userId: any;
   constructor(
     private http: HttpService,
     private alert: AlertService,
@@ -45,6 +45,7 @@ export class PendingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
     });
@@ -79,20 +80,20 @@ export class PendingComponent implements OnInit {
     if (cacheRecords.length > 0) {
       if (this.selectedItem.record_Id) {
         let index = cacheRecords.findIndex((el: any) => {
-          return el.record_Id == this.selectedItem.record_Id;
+          return el.userId == this.userId && el.record_Id == this.selectedItem.record_Id;
         });
         let indexItem = this.items.findIndex((el: any) => {
-          return el.record_Id == this.selectedItem.record_Id;
+          return el.userId == this.userId && el.record_Id == this.selectedItem.record_Id;
         });
         index >= 0 ? cacheRecords.splice(index, 1) : '';
         indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
       }
       else {
         let index = cacheRecords.findIndex((el: any) => {
-          return el.offlineRef == this.selectedItem?.offlineRef;
+          return el.userId == this.userId && el.offlineRef == this.selectedItem?.offlineRef;
         });
         let indexItem = this.items.findIndex((el: any) => {
-          return el.offlineRef == this.selectedItem?.offlineRef;
+          return el.userId == this.userId && el.offlineRef == this.selectedItem?.offlineRef;
         });
         index >= 0 ? cacheRecords.splice(index, 1) : '';
         indexItem >= 0 ? this.items.splice(indexItem, 1) : '';
@@ -100,7 +101,7 @@ export class PendingComponent implements OnInit {
     }
     if (recordsWillBeUpserted.length > 0) {
       let index = recordsWillBeUpserted.findIndex((el: any) => {
-        return el.offlineRef == this.selectedItem?.offlineRef;
+        return el.userId == this.userId && el.offlineRef == this.selectedItem?.offlineRef;
       });
       index >= 0 ? recordsWillBeUpserted.splice(index, 1) : '';
     }

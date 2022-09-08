@@ -32,6 +32,7 @@ export class NotificationComponent implements OnInit {
   isLoading = false;
 
   items: any = [];
+  userId: any;
   // showAllItems!: boolean;
   pageProps!: NotificationPageProps;
   constructor(
@@ -46,6 +47,7 @@ export class NotificationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.pageProps = this.notificationPage.pageProps;
     this.resetPager();
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
@@ -80,6 +82,8 @@ export class NotificationComponent implements OnInit {
   }
   async getAll() {
     let cahsedNotification = await this.storage.get("Notification") || [];
+    let userCahsedNotification = cahsedNotification.filter((el: any) => el.userId == this.userId);
+    cahsedNotification = cahsedNotification.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       this.loaded = false;
       this.isLoading = true;
@@ -88,26 +92,27 @@ export class NotificationComponent implements OnInit {
         pageSize: this.pager.pageSize
       }
       let body = {
-        UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+        UserId: this.userId,
         IsRead: this.pageProps.showAll == false ? false : null
         // IsRead: this.showAllItems == false ? false : null
       }
       this.http.post('Notification/GetNotifications', body, true, params).subscribe(async (res: any) => {
         res?.data?.list.map((el: any) => {
+          el.userId = this.userId;
           this.items.push(el);
+          cahsedNotification.push(el);
         });
         // this.items = res?.data?.list;
         this.pager.total = res?.data?.total;
         this.pager.pages = res?.data?.pages;
         this.loaded = true;
         this.isLoading = false;
-        cahsedNotification = this.items;
         await this.storage.set("Notification", cahsedNotification);
       })
     }
     else
-      this.items = this.pageProps.showAll == true ? cahsedNotification :
-        cahsedNotification.filter((el: any) => el.isRead == false);
+      this.items = this.pageProps.showAll == true ? userCahsedNotification :
+        userCahsedNotification.filter((el: any) => el.isRead == false);
   }
   clickMenue(event: any) {
     event.stopPropagation();

@@ -41,6 +41,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   pager!: IPageInfo;
   loaded = true;
   isLoading = false;
+  userId: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -65,6 +66,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.resetPager();
     this.category_Id = this.route.snapshot.params.id;
     this.name = this.route.snapshot.queryParams.name;
@@ -103,6 +105,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
       this.isLoading = false;
       // this.items = res;
       let CategoryChecklist = {
+        userId: this.userId,
         categoryId: +this.category_Id,
         list: this.items
       };
@@ -133,7 +136,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
       if (cacheCatgoryChecklists) {
         // check if Category  id is in cahce
         let index = cacheCatgoryChecklists.findIndex((el: any) => {
-          return el.categoryId == this.category_Id;
+          return el.userId == this.userId && el.categoryId == this.category_Id;
         });
         // check if Category  id is in cahce update data in this index
         if (index >= 0) {
@@ -155,10 +158,10 @@ export class CategoryComponent implements OnInit, AfterViewInit {
     let cacheCatgoryChecklists = await this.storage.get('CategoryChecklists') || [];
     this.items = [];
     if (cacheCatgoryChecklists.length > 0) {
-      this.items = cacheCatgoryChecklists.filter((el: any) => el.categoryId == this.category_Id)[0].list;
+      this.items = cacheCatgoryChecklists.filter((el: any) => el.userId == this.userId && el.categoryId == this.category_Id)[0].list;
       this.items = this.items.map((el: any) => {
         let records = [];
-        records = cachedPendingRecords.filter((element: any) => element.form_Id == el.formId);        
+        records = cachedPendingRecords.filter((element: any) => element.userId == this.userId && element.form_Id == el.formId);
         el.totalRecords = records.length;
         return el;
       })

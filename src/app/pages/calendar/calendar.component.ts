@@ -15,6 +15,7 @@ export class CalendarComponent implements OnInit {
   itemsDateView = [];
   Subscription!: Subscription;
   isOnline = true;
+  userId: any;
 
   constructor(private http: HttpService,
     private offline: OfflineService,
@@ -22,6 +23,7 @@ export class CalendarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.Subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       // if (isOnline) {
@@ -43,21 +45,26 @@ export class CalendarComponent implements OnInit {
 
   async getPlans(isComplete: any = null) {
     let cashedListPlans = await this.storage.get("ListPlans") || [];
+    let userCashedListPlans = cashedListPlans.filter((el: any) => el.user == this.userId);
+    cashedListPlans = cashedListPlans.filter((el: any) => el.user !== this.userId);
     if (this.isOnline) {
       let body: any = {};
       body.pageIndex = 1;
       body.pageSize = 10;
-      body.UserId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+      body.UserId = this.userId;
       if (isComplete)
         body.ShowCompletedForms = isComplete;
       this.http.get('Plans/MobileGetPlans', body).subscribe(async (value: any) => {
         this.items = value.list;
-        cashedListPlans = this.items;
+        this.items.map((el: any) => {
+          el.userId = this.userId;
+          cashedListPlans.push(el);
+        });
         await this.storage.set("ListPlans", cashedListPlans);
       });
     }
     else
-      this.items = cashedListPlans;
+      this.items = userCashedListPlans;
   }
 
   showCompleted(event: boolean) {
@@ -68,18 +75,23 @@ export class CalendarComponent implements OnInit {
   }
   async getPlansForDateView(isComplete: any = false) {
     let cashedDateViewPlans = await this.storage.get("DateViewPlans") || [];
+    let userCashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.user == this.userId);
+    cashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.user !== this.userId);
     if (this.isOnline) {
       let body = {
         ShowCompletedForms: isComplete,
-        UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId
+        UserId: this.userId
       };
       this.http.get('Plans/GetPlans', body).subscribe(async (value: any) => {
         this.itemsDateView = value.list;
-        cashedDateViewPlans = this.itemsDateView;
+        this.itemsDateView.map((el: any) => {
+          el.userId = this.userId;
+          cashedDateViewPlans.push(el);
+        });
         await this.storage.set("DateViewPlans", cashedDateViewPlans);
       });
     }
     else
-      this.itemsDateView = cashedDateViewPlans;
+      this.itemsDateView = userCashedDateViewPlans;
   }
 }

@@ -31,6 +31,7 @@ export class AssetsListComponent implements OnInit {
   pager!: IPageInfo;
   loaded = true;
   isLoading = false;
+  userId: any;
 
   constructor(private http: HttpService,
     private helper: HelperService,
@@ -39,6 +40,7 @@ export class AssetsListComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.resetPager();
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
@@ -64,20 +66,24 @@ export class AssetsListComponent implements OnInit {
       pageSize: this.pager.pageSize
     };
     let cashedAssets = await this.storage.get("UserAssets") || [];
+    let userCashedList = cashedAssets.filter((el: any) => el.userId == this.userId);
+    cashedAssets = cashedAssets.filter((el: any) => !userCashedList.includes(el));
     if (this.isOnline)
       this.http.get(`Assets/GetUserAssets`, params).subscribe(async (res: any) => {
         this.assets = [];
         res?.list.map((el: any) => {
+          el.userId = this.userId;
           this.assets.push(el);
+          cashedAssets.push(el);
         });
         this.pager.total = res?.total;
         this.pager.pages = res?.pages;
         this.loaded = true;
         if (!this.searchKeyWord)
-          await this.storage.set("UserAssets", this.assets);
+          await this.storage.set("UserAssets", cashedAssets);
       })
     else {
-      this.assets = cashedAssets;
+      this.assets = userCashedList;
       if (this.searchKeyWord) {
         this.assets = this.assets.filter((el: any) =>
           el.name?.toString().toLowerCase().includes(this.searchKeyWord.toLowerCase())

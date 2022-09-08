@@ -14,13 +14,19 @@ export class HelperService {
   getingNotificationCount: BehaviorSubject<any> = new BehaviorSubject(null);
 
   isOnline = true;
+  userId: any;
+
   constructor(
     private http: HttpService,
     private storage: Storage
-  ) { }
+  ) {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+  }
 
   async getNotificationCount() {
-    let notificationCount = await this.storage.get("NotificationCount") || 0;
+    let notificationCounts = await this.storage.get("NotificationCounts") || [];
+    let userNotificationCount = notificationCounts.filter((el: any) => el.userId == this.userId);
+    notificationCounts = notificationCounts.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       let body = {
         UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
@@ -29,29 +35,39 @@ export class HelperService {
       try {
         this.http.post('Notification/GetNotificationCount', body).subscribe(async (res: any) => {
           this.getingNotificationCount.next(+res.data);
-          notificationCount = +res.data;
-          await this.storage.set("NotificationCount", notificationCount);
+          let obj = {
+            userId: this.userId,
+            count: +res.data
+          };
+          notificationCounts = notificationCounts.push(obj);
+          await this.storage.set("NotificationCounts", notificationCounts);
         })
       }
       catch (ex) { }
     }
     else
-      this.getingNotificationCount.next(notificationCount);
+      this.getingNotificationCount.next(userNotificationCount ? userNotificationCount.count : 0);
   }
   async getWorkflowCount() {
-    let pendingWorkflowCount = await this.storage.get("PendingWorkflowCount") || 0;
+    let pendingWorkflowCounts = await this.storage.get("PendingWorkflowCounts") || [];
+    let userPendingWorkflowCounts = pendingWorkflowCounts.filter((el: any) => el.userId == this.userId);
+    pendingWorkflowCounts = pendingWorkflowCounts.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       try {
         this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(async res => {
           this.getingCount.next(res);
-          pendingWorkflowCount = res;
-          await this.storage.set("PendingWorkflowCount", pendingWorkflowCount);
+          let obj = {
+            userId: this.userId,
+            count: res
+          };
+          pendingWorkflowCounts = pendingWorkflowCounts.push(obj);
+          await this.storage.set("PendingWorkflowCounts", pendingWorkflowCounts);
         })
       }
       catch (ex) { }
     }
     else
-      this.getingCount.next(pendingWorkflowCount);
+      this.getingCount.next(userPendingWorkflowCounts ? userPendingWorkflowCounts.count : 0);
   }
 
 }

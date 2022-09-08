@@ -69,6 +69,7 @@ export class AssetsComponent implements OnInit {
   assetDocuments: any = [];
   $subscription!: Subscription;
   params: any;
+  userId: any;
 
   constructor(
     private http: HttpService,
@@ -79,13 +80,14 @@ export class AssetsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.params = this.route.snapshot.queryParams;
     this.assetId = +this.params.assetId;
 
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       // if (isOnline) {
-        this.getAssetInfo();
+      this.getAssetInfo();
       // }
     });
   }
@@ -127,9 +129,10 @@ export class AssetsComponent implements OnInit {
   }
   async saveAssetInfoInDb() {
     let cashedAssetsInfo = await this.storage.get('AssetsInfo') || [];
+    this.assetInfo.map((el: any) => { el.userId = this.userId });
     if (cashedAssetsInfo) {
       // check if Category  id is in cahce
-      let infoList = cashedAssetsInfo.filter((el: any) => el.assetId == +this.assetId);
+      let infoList = cashedAssetsInfo.filter((el: any) => el.assetId == +this.assetId && el.userId == this.userId);
       //remove old info
       cashedAssetsInfo = cashedAssetsInfo.filter((el: any) => !infoList.includes(el));
       //push new list
@@ -140,18 +143,19 @@ export class AssetsComponent implements OnInit {
     await this.storage.set('AssetsInfo', cashedAssetsInfo);
   }
   async getAssetInfoFromDb() {
-    let cashedAssetsInfo = await this.storage.get('AssetsInfo') || [];    
+    let cashedAssetsInfo = await this.storage.get('AssetsInfo') || [];
     if (cashedAssetsInfo)
-      this.assetInfo = cashedAssetsInfo.filter((el: any) => el.assetId == +this.assetId);
+      this.assetInfo = cashedAssetsInfo.filter((el: any) => el.assetId == +this.assetId && el.userId == this.userId);
   }
   async saveAssetChecklistInDb() {
     this.assetCheckList.map((el: any) => {
-      el.assetId = + this.assetId
+      el.assetId = + this.assetId,
+        el.userId = this.userId
     })
     let cashedAssetsChecklist = await this.storage.get('AssetsChecklist') || [];
     if (cashedAssetsChecklist) {
       // check if Category  id is in cahce
-      let oldList = cashedAssetsChecklist.filter((el: any) => el.assetId == +this.assetId);
+      let oldList = cashedAssetsChecklist.filter((el: any) => el.assetId == +this.assetId && el.userId == this.userId);
       //remove old info
       cashedAssetsChecklist = cashedAssetsChecklist.filter((el: any) => !oldList.includes(el));
       //push new list
@@ -162,18 +166,19 @@ export class AssetsComponent implements OnInit {
     await this.storage.set('AssetsChecklist', cashedAssetsChecklist);
   }
   async getAssetChecklistFromDb() {
-    let cashedAssetsChecklist = await this.storage.get('AssetsChecklist') || [];    
+    let cashedAssetsChecklist = await this.storage.get('AssetsChecklist') || [];
     if (cashedAssetsChecklist)
-      this.assetCheckList = cashedAssetsChecklist.filter((el: any) => el.assetId == +this.assetId);
+      this.assetCheckList = cashedAssetsChecklist.filter((el: any) => el.assetId == +this.assetId && el.userId == this.userId);
   }
   async saveAssetDocumentsInDb() {
     this.assetDocuments.map((el: any) => {
-      el.assetId = + this.assetId
+      el.assetId = + this.assetId,
+        el.userId = this.userId
     })
     let cashedAssetsDocuments = await this.storage.get('AssetsDocuments') || [];
     if (cashedAssetsDocuments) {
       // check if Category  id is in cahce
-      let oldList = cashedAssetsDocuments.filter((el: any) => el.assetId == +this.assetId);
+      let oldList = cashedAssetsDocuments.filter((el: any) => el.assetId == +this.assetId && el.userId == this.userId);
       //remove old info
       cashedAssetsDocuments = cashedAssetsDocuments.filter((el: any) => !oldList.includes(el));
       //push new list
@@ -186,7 +191,7 @@ export class AssetsComponent implements OnInit {
   async getAssetDocumentsFromDb() {
     let cashedAssetsDocuments = await this.storage.get('AssetsDocuments') || [];
     if (cashedAssetsDocuments)
-      this.assetDocuments = cashedAssetsDocuments.filter((el: any) => el.assetId == +this.assetId);
+      this.assetDocuments = cashedAssetsDocuments.filter((el: any) => el.assetId == +this.assetId && el.userId == this.userId);
   }
 
 }
