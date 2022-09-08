@@ -11,7 +11,7 @@ import {
   isSameMonth,
   addHours,
 } from 'date-fns';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -20,6 +20,7 @@ import {
 } from 'angular-calendar';
 import { Storage } from '@ionic/storage-angular';
 import { AlertService } from 'src/app/services/alert/alert.service';
+import { OfflineService } from 'src/app/services/offline/offline.service';
 
 const colors: any = {
   red: {
@@ -73,15 +74,20 @@ export class DateViewComponent implements OnInit {
   plannerModel!: any[];
   planner!: any;
   recurringEvents: RecurringEvent[] = [];
+  Subscription!: Subscription;
+  isOnline = true;
 
   constructor(
     private router: Router,
     private storage: Storage,
-    private alert: AlertService
+    private alert: AlertService,
+    private offline: OfflineService,
   ) { }
 
   ngOnInit(): void {
-
+    this.Subscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
   }
   toggle() {
     setTimeout(() => {
@@ -164,13 +170,15 @@ export class DateViewComponent implements OnInit {
       //   if (!this.access.includes(this.accessTypes.Update))
       complete = true;
 
-      let cacheRecords = await this.storage.get('Records') || [];
-      if (cacheRecords) {
-        let recordData = cacheRecords.filter((el: any) => el.record_Id == +formData.formsDataId)[0];
-        let jsonData = recordData?.record ? recordData?.record : recordData?.record_Json;
-        if (!recordData || !jsonData) {
-          this.alert.error("No Internet Connection");
-          return;
+      if (!this.isOnline) {
+        let cacheRecords = await this.storage.get('Records') || [];
+        if (cacheRecords) {
+          let recordData = cacheRecords.filter((el: any) => el.record_Id == +formData.formsDataId)[0];
+          let jsonData = recordData?.record ? recordData?.record : recordData?.record_Json;
+          if (!recordData || !jsonData) {
+            this.alert.error("No Internet Connection");
+            return;
+          }
         }
       }
 
