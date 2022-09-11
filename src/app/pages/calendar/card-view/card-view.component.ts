@@ -1,6 +1,7 @@
 import { dates } from './../../../core/interface/api.interface';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-card-view',
@@ -11,7 +12,7 @@ export class CardViewComponent implements OnInit {
   @Input() items: dates[] = []
   @Output() showCompleted = new EventEmitter();
   isChecked = false
-  constructor(private router: Router) { }
+  constructor(private router: Router, private storage: Storage) { }
 
   ngOnInit(): void {
   }
@@ -38,5 +39,8 @@ export class CardViewComponent implements OnInit {
     //   return;
     // }
 
+  }
+  async setBack() {
+    this.storage.set("BackToPlan", "CardView");
   }
 }

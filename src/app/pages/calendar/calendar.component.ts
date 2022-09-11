@@ -34,7 +34,12 @@ export class CalendarComponent implements OnInit {
   }
 
 
-  toggle() {
+  async toggle() {
+    let goToList = await this.storage.get("BackToPlan") || null;
+    if (goToList) {
+      this.grade = false;
+      await this.storage.remove("BackToPlan");
+    }
     this.grade = !this.grade;
     if (this.grade) {
       this.getPlans();
