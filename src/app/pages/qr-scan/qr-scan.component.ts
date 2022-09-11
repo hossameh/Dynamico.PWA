@@ -43,7 +43,7 @@ export class QrScanComponent implements OnInit {
       this.http.get('Checklist/GetChecklistUserAccess', { formId: +this.formId, userId: JSON.parse(localStorage.getItem('userData') || '{}').userId })
         .subscribe((res) => {
           this.form = res;
-          this.access = this.form.access;
+          this.access = this.form?.access;
           if (this.access && this.access.includes(this.accessTypes.Create))
             this.router.navigateByUrl("/page/home/category/" + +this.id + "?name=" + this.categoryName + "&formId=" + +this.formId);
           else {
