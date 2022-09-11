@@ -25,8 +25,8 @@ export class HelperService {
 
   async getNotificationCount() {
     let notificationCounts = await this.storage.get("NotificationCounts") || [];
-    let userNotificationCount = notificationCounts.filter((el: any) => el.userId == this.userId);
-    notificationCounts = notificationCounts.filter((el: any) => el.userId !== this.userId);
+    let userNotificationCount : any = Object.values(notificationCounts).filter((el: any) => el.userId == this.userId);
+    notificationCounts = Object.values(notificationCounts).filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       let body = {
         UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
@@ -39,7 +39,7 @@ export class HelperService {
             userId: this.userId,
             count: +res.data
           };
-          notificationCounts = notificationCounts.push(obj);
+          notificationCounts.push(obj);
           await this.storage.set("NotificationCounts", notificationCounts);
         })
       }
@@ -50,8 +50,8 @@ export class HelperService {
   }
   async getWorkflowCount() {
     let pendingWorkflowCounts = await this.storage.get("PendingWorkflowCounts") || [];
-    let userPendingWorkflowCounts = pendingWorkflowCounts.filter((el: any) => el.userId == this.userId);
-    pendingWorkflowCounts = pendingWorkflowCounts.filter((el: any) => el.userId !== this.userId);
+    let userPendingWorkflowCounts :any = Object.values(pendingWorkflowCounts).filter((el: any) => el.userId == this.userId);
+    pendingWorkflowCounts = Object.values(pendingWorkflowCounts).filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       try {
         this.http.get('ChecklistRecords/GetPendingWorkflowFormDataCount').subscribe(async res => {
@@ -60,7 +60,7 @@ export class HelperService {
             userId: this.userId,
             count: res
           };
-          pendingWorkflowCounts = pendingWorkflowCounts.push(obj);
+          pendingWorkflowCounts.push(obj);
           await this.storage.set("PendingWorkflowCounts", pendingWorkflowCounts);
         })
       }
