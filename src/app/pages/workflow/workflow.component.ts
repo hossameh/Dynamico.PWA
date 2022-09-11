@@ -123,11 +123,11 @@ export class WorkflowComponent implements OnInit {
       IsHistory: isHistory
     }
     let cashedHistoryItems = await this.storage.get('HistoryWorkflow') || [];
-    let userCashedHistoryItems = cashedHistoryItems.filter((el: any) => el.userId == this.userId);
-    cashedHistoryItems = cashedHistoryItems.filter((el: any) => el.userId !== this.userId);
+    let userCashedHistoryItems = Object.values(cashedHistoryItems).filter((el: any) => el.userId == this.userId);
+    cashedHistoryItems = Object.values(cashedHistoryItems).filter((el: any) => el.userId !== this.userId);
     let cashedPendingItems = await this.storage.get('PendingWorkflow') || [];
-    let userCashedPendingItems = cashedPendingItems.filter((el: any) => el.userId == this.userId);
-    cashedPendingItems = cashedPendingItems.filter((el: any) => el.userId !== this.userId);
+    let userCashedPendingItems = Object.values(cashedPendingItems).filter((el: any) => el.userId == this.userId);
+    cashedPendingItems = Object.values(cashedPendingItems).filter((el: any) => el.userId !== this.userId);
 
     if (this.isOnline) {
       this.loaded = false;
