@@ -187,6 +187,7 @@ export class ChecklistComponent implements OnInit {
 
 
       if (cacheChecklists) {
+        value.userId = this.userId;
         // check if Checklists  id is in cahce
         let index = cacheChecklists.findIndex((el: any) => {
           return el.userId == this.userId && el.formId == +this.id;
@@ -584,10 +585,10 @@ export class ChecklistComponent implements OnInit {
   }
 
   async loadChecklistFromCacheById() {
-    let cacheChecklists = await this.storage.get('Checklists') || [];
+    let cacheChecklists = await this.storage.get('Checklists') || [];    
     let value: any = {};
     if (cacheChecklists.length > 0) {
-      value = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
+      value = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];      
       this.selectedCashedChecklist = value;
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
