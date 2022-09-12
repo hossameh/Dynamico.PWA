@@ -70,7 +70,7 @@ export class AssetsListComponent implements OnInit {
     cashedAssets = cashedAssets.filter((el: any) => !userCashedList.includes(el));
     if (this.isOnline)
       this.http.get(`Assets/GetUserAssets`, params).subscribe(async (res: any) => {
-        this.assets = [];
+        // this.assets = [];
         res?.list.map((el: any) => {
           el.userId = this.userId;
           this.assets.push(el);
