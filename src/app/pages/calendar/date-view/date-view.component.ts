@@ -173,6 +173,14 @@ export class DateViewComponent implements OnInit {
       complete = true;
 
       if (!this.isOnline) {
+        let cacheChecklists = await this.storage.get('Checklists') || [];
+        if (cacheChecklists) {
+          let valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == item.formId)[0];
+          if (!valueChecklist) {
+            this.alert.error("No Internet Connection");
+            return;
+          }
+        }
         let cacheRecords = await this.storage.get('Records') || [];
         if (cacheRecords) {
           let recordData = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == +formData.formsDataId)[0];

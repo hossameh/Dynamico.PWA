@@ -201,7 +201,7 @@ export class ChecklistComponent implements OnInit {
         }
       } else {
         cacheChecklists.push(value);
-      }
+      }      
       await this.storage.set('Checklists', cacheChecklists);
       this.data = value;
 
@@ -359,7 +359,6 @@ export class ChecklistComponent implements OnInit {
       if (index >= 0) {
         cashedRecords[index].record_Json = this.data?.record_Json;
       }
-      console.log(cashedRecords[index]);
     }
 
     await this.storage.set('Records', cashedRecords);
@@ -670,6 +669,7 @@ export class ChecklistComponent implements OnInit {
     let valueChecklist: any = {};
     let valueRecord: any = {};
     if (cacheChecklists.length > 0 && cacheRecords.length > 0) {
+      
       valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
       this.selectedCashedChecklist = valueChecklist;
       valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
@@ -693,7 +693,7 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('formDataRef')?.disable();
 
         let recordJson = valueRecord.record ? valueRecord.record : valueRecord.record_Json; // data
-
+        
         let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
           this.deSerialize(recordJson) :
           this.deSerialize(JSON.parse(recordJson));

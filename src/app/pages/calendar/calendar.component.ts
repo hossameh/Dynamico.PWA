@@ -50,8 +50,8 @@ export class CalendarComponent implements OnInit {
 
   async getPlans(isComplete: any = null) {
     let cashedListPlans = await this.storage.get("ListPlans") || [];
-    let userCashedListPlans = cashedListPlans.filter((el: any) => el.user == this.userId);
-    cashedListPlans = cashedListPlans.filter((el: any) => el.user !== this.userId);
+    let userCashedListPlans = cashedListPlans.filter((el: any) => el.userId == this.userId);
+    cashedListPlans = cashedListPlans.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       let body: any = {};
       body.pageIndex = 1;
@@ -80,8 +80,8 @@ export class CalendarComponent implements OnInit {
   }
   async getPlansForDateView(isComplete: any = false) {
     let cashedDateViewPlans = await this.storage.get("DateViewPlans") || [];
-    let userCashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.user == this.userId);
-    cashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.user !== this.userId);
+    let userCashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.userId == this.userId);
+    cashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       let body = {
         ShowCompletedForms: isComplete,
