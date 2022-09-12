@@ -30,7 +30,15 @@
               </div>
               <div class="box-side">
                 <div class="d-flex align-items-center">
-                  <p class="badge me-2">{{'Pending' | translate}}</p>
+                  <p class="badge me-2"
+                    [class.badge-created]="getStatus(element) == recordStatusNames.Created"
+                    [class.badge-assigned]="getStatus(element) == recordStatusNames.Assigned"
+                    [class.badge-pending]="getStatus(element) == recordStatusNames.PendingApproval"
+                    [class.badge-approved]="getStatus(element) == recordStatusNames.Approved"
+                    [class.badge-submitted]="getStatus(element) == recordStatusNames.Completed"
+                    [class.badge-rejected]="getStatus(element) == recordStatusNames.Rejected"
+                    >{{ getStatus(element) | translate}}</p>
+                  <!-- <p class="badge me-2">{{'Pending' | translate}}</p> -->
                   <!-- <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                   <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item py-0 px-2">

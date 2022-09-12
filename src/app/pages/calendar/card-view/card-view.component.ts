@@ -2,6 +2,7 @@ import { dates } from './../../../core/interface/api.interface';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
+import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 
 @Component({
   selector: 'app-card-view',
@@ -11,7 +12,9 @@ import { Storage } from '@ionic/storage-angular';
 export class CardViewComponent implements OnInit {
   @Input() items: dates[] = []
   @Output() showCompleted = new EventEmitter();
-  isChecked = false
+  isChecked = false;
+  recordStatus = RecordStatus;
+  recordStatusNames = RecordStatusNames;
   constructor(private router: Router, private storage: Storage) { }
 
   ngOnInit(): void {
@@ -42,5 +45,13 @@ export class CardViewComponent implements OnInit {
   }
   async setBack() {
     this.storage.set("BackToPlan", "CardView");
+  }
+  getStatus(element: any) {
+    console.log(element);
+    console.log(element.plannerFormsData[0].formsData?.recordStatusId);
+    console.log(this.recordStatus[element.plannerFormsData[0].formsData?.recordStatusId]);
+    
+    
+    return this.recordStatus[element?.plannerFormsData[0]?.formsData?.recordStatusId] ?? '';
   }
 }
