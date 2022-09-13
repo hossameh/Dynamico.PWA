@@ -25,7 +25,7 @@ export class HelperService {
 
   async getNotificationCount() {
     let notificationCounts = await this.storage.get("NotificationCounts") || [];
-    let userNotificationCount : any = Object.values(notificationCounts).filter((el: any) => el.userId == this.userId);
+    let userNotificationCount: any = Object.values(notificationCounts).filter((el: any) => el.userId == this.userId)[0];
     notificationCounts = Object.values(notificationCounts).filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       let body = {
@@ -45,12 +45,14 @@ export class HelperService {
       }
       catch (ex) { }
     }
-    else
-      this.getingNotificationCount.next(userNotificationCount ? userNotificationCount.count : 0);
+    else{
+      let count = userNotificationCount ? userNotificationCount.count : 0;
+      this.getingNotificationCount.next(count);
+    }
   }
   async getWorkflowCount() {
     let pendingWorkflowCounts = await this.storage.get("PendingWorkflowCounts") || [];
-    let userPendingWorkflowCounts :any = Object.values(pendingWorkflowCounts).filter((el: any) => el.userId == this.userId);
+    let userPendingWorkflowCounts: any = Object.values(pendingWorkflowCounts).filter((el: any) => el.userId == this.userId)[0];
     pendingWorkflowCounts = Object.values(pendingWorkflowCounts).filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       try {
@@ -66,8 +68,10 @@ export class HelperService {
       }
       catch (ex) { }
     }
-    else
-      this.getingCount.next(userPendingWorkflowCounts ? userPendingWorkflowCounts.count : 0);
+    else {
+      let count = userPendingWorkflowCounts ? userPendingWorkflowCounts.count : 0;
+      this.getingCount.next(count);
+    }
   }
 
 }
