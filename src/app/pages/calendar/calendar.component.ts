@@ -3,6 +3,7 @@ import { OfflineService } from './../../services/offline/offline.service';
 import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import { RecordStatus } from 'src/app/core/enums/status.enum';
 
 @Component({
   selector: 'app-calendar',
@@ -13,9 +14,11 @@ export class CalendarComponent implements OnInit {
   grade = true;
   items = [];
   itemsDateView = [];
+  plansRecords: any[] = [];
   Subscription!: Subscription;
   isOnline = true;
   userId: any;
+  recordStatus = RecordStatus;
 
   constructor(private http: HttpService,
     private offline: OfflineService,
@@ -49,6 +52,7 @@ export class CalendarComponent implements OnInit {
   }
 
   async getPlans(isComplete: any = null) {
+    this.plansRecords = [];
     let cashedListPlans = await this.storage.get("ListPlans") || [];
     let userCashedListPlans = cashedListPlans.filter((el: any) => el.userId == this.userId);
     cashedListPlans = cashedListPlans.filter((el: any) => el.userId !== this.userId);
@@ -64,7 +68,30 @@ export class CalendarComponent implements OnInit {
         this.items.map((el: any) => {
           el.userId = this.userId;
           cashedListPlans.push(el);
+          let records = el.list;
+          records.forEach((element: any) => {
+            if (element.isCreateFormData == true && element.plannerFormsData && element.plannerFormsData[0].formsData) {
+              let record = element.plannerFormsData[0].formsData;
+              this.plansRecords.push({
+                record_Id: record.formDataId,
+                form_Id: record.formId,
+                creation_Date: null,
+                assigned_Date: null,
+                createdBy: null,
+                form_Title: element.form.formTitle,
+                record_Status_Id: record.recordStatusId,
+                gpS_Required: false,
+                location: "",
+                formDataRef: record.formDataRef,
+                workflowId: element.form.workflowId,
+                userId: this.userId
+              });
+            }
+          });
+
         });
+        if (this.plansRecords && this.plansRecords.length > 0)
+          this.updateCashedRecord();
         await this.storage.set("ListPlans", cashedListPlans);
       });
     }
@@ -88,7 +115,7 @@ export class CalendarComponent implements OnInit {
         UserId: this.userId
       };
       this.http.get('Plans/GetPlans', body).subscribe(async (value: any) => {
-        this.itemsDateView = value.list;
+        this.itemsDateView = value.list;        
         this.itemsDateView.map((el: any) => {
           el.userId = this.userId;
           cashedDateViewPlans.push(el);
@@ -98,5 +125,33 @@ export class CalendarComponent implements OnInit {
     }
     else
       this.itemsDateView = userCashedDateViewPlans;
+  }
+  async updateCashedRecord() {
+    let cashedRecords = await this.storage.get('Records') || [];
+    let cashedCompletedRecords = await this.storage.get('CompletedRecords') || [];
+    this.plansRecords.forEach(element => {
+      if (element.record_Status_Id == this.recordStatus.Created ||
+        element.record_Status_Id == this.recordStatus.Assigned || element.record_Status_Id == this.recordStatus.PendingApproval) {
+        let index = cashedRecords.findIndex((el: any) => {
+          return el.userId == this.userId && el.form_Id == element.form_Id && el.record_Id == element.record_Id;
+        });
+        if (index >= 0)
+          cashedRecords[index].record_Status_Id = element.record_Status_Id;
+        else
+          cashedRecords.unshift(element);
+      }
+      if (element.record_Status_Id == this.recordStatus.Completed ||
+        element.record_Status_Id == this.recordStatus.Approved || element.record_Status_Id == this.recordStatus.Rejected) {
+        let index = cashedCompletedRecords.findIndex((el: any) => {
+          return el.userId == this.userId && el.form_Id == element.form_Id && el.record_Id == element.record_Id;
+        });
+        if (index >= 0)
+          cashedCompletedRecords[index].record_Status_Id = element.record_Status_Id;
+        else
+          cashedCompletedRecords.unshift(element);
+      }
+    });
+    await this.storage.set('Records', cashedRecords);
+    await this.storage.set('CompletedRecords', cashedCompletedRecords);
   }
 }

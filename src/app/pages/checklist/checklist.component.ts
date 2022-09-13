@@ -118,6 +118,8 @@ export class ChecklistComponent implements OnInit {
     this.id = this.route.snapshot.params.id;
     this.params = this.route.snapshot.queryParams;
 
+    console.log(this.params.Record_Id);
+
     this.isComplete = this.params.Complete == 'true' ? true : false;
     this.buildForm();
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
@@ -201,7 +203,7 @@ export class ChecklistComponent implements OnInit {
         }
       } else {
         cacheChecklists.push(value);
-      }      
+      }
       await this.storage.set('Checklists', cacheChecklists);
       this.data = value;
 
@@ -413,6 +415,7 @@ export class ChecklistComponent implements OnInit {
           if (res.isPassed) {
             this.alert.success('Successfully');
             this.location.back();
+            this.updateCashedPlanRecords();
           } else {
             this.alert.error(res?.message);
           }
@@ -577,6 +580,7 @@ export class ChecklistComponent implements OnInit {
         await this.storage.set('RecordsWillBeUpserted', recordsWillBeUpserted);
         await this.storage.set('Records', cacheRecords);
         await this.storage.set('CompletedRecords', cacheCompletedRecords);
+        this.updateCashedPlanRecords();
         this.location.back();
       }
     });
@@ -584,10 +588,10 @@ export class ChecklistComponent implements OnInit {
   }
 
   async loadChecklistFromCacheById() {
-    let cacheChecklists = await this.storage.get('Checklists') || [];    
+    let cacheChecklists = await this.storage.get('Checklists') || [];
     let value: any = {};
     if (cacheChecklists.length > 0) {
-      value = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];      
+      value = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
       this.selectedCashedChecklist = value;
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
@@ -669,7 +673,7 @@ export class ChecklistComponent implements OnInit {
     let valueChecklist: any = {};
     let valueRecord: any = {};
     if (cacheChecklists.length > 0 && cacheRecords.length > 0) {
-      
+
       valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
       this.selectedCashedChecklist = valueChecklist;
       valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
@@ -693,7 +697,7 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('formDataRef')?.disable();
 
         let recordJson = valueRecord.record ? valueRecord.record : valueRecord.record_Json; // data
-        
+
         let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
           this.deSerialize(recordJson) :
           this.deSerialize(JSON.parse(recordJson));
@@ -765,5 +769,19 @@ export class ChecklistComponent implements OnInit {
     //Add 'implements OnDestroy' to the class.
     this.statusSubscription.unsubscribe();
 
+  }
+  async updateCashedPlanRecords() {
+    let cashedListPlans = await this.storage.get("ListPlans") || [];
+    cashedListPlans.forEach((day: any) => {
+      day.list.forEach((element: any) => {
+        if (element.isCreateFormData == true && element.plannerFormsData && element.plannerFormsData[0].formsData) {
+          let record = element.plannerFormsData[0].formsData;
+          if (record.formDataId == +this.params.Record_Id && record.userId == this.userId) {
+            element.plannerFormsData[0].formsData.recordStatusId = this.modelBody.record_Status;
+          }
+        }
+      });
+    });
+    await this.storage.set("ListPlans", cashedListPlans)
   }
 }

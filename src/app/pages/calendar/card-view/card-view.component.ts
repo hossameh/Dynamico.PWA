@@ -47,11 +47,6 @@ export class CardViewComponent implements OnInit {
     this.storage.set("BackToPlan", "CardView");
   }
   getStatus(element: any) {
-    console.log(element);
-    console.log(element.plannerFormsData[0].formsData?.recordStatusId);
-    console.log(this.recordStatus[element.plannerFormsData[0].formsData?.recordStatusId]);
-    
-    
     return this.recordStatus[element?.plannerFormsData[0]?.formsData?.recordStatusId] ?? '';
   }
 }

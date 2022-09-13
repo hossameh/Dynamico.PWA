@@ -60,12 +60,14 @@ export class PendingComponent implements OnInit {
           this.date.emit(this.rangeDate);
           this.closeModal.nativeElement.click();
           this.deleteFromDB();
+          this.deleteCashedPlanRecords();
         } else {
           this.alert.error(res.message);
         }
       });
     } else {
       this.deleteFromDB();
+      this.deleteCashedPlanRecords();
     }
 
   }
@@ -109,6 +111,20 @@ export class PendingComponent implements OnInit {
     await this.storage.set('Records', cacheRecords);
     //save in actions to take later when online
     this.closeModal.nativeElement.click();
+  }
+  async deleteCashedPlanRecords() {
+    let cashedListPlans = await this.storage.get("ListPlans") || [];
+    cashedListPlans.forEach((day: any) => {
+      let index = day.list.findIndex((element: any) =>
+        element.isCreateFormData == true && element.plannerFormsData
+        && element.plannerFormsData[0].formsData
+        && element.plannerFormsData[0].formsData.formDataId == +this.selectedItem.record_Id
+        && element.plannerFormsData[0].formsData.userId == this.userId);
+      if (index >= 0) {
+        day.list.splice(index, 1);
+      }
+    });
+    await this.storage.set("ListPlans", cashedListPlans)
   }
   apply() {
     this.date.emit(this.rangeDate);
