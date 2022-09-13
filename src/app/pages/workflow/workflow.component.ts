@@ -122,12 +122,13 @@ export class WorkflowComponent implements OnInit {
       PageSize: this.pager.pageSize as number,
       IsHistory: isHistory
     }
-    let cashedHistoryItems = await this.storage.get('HistoryWorkflow') || [];
-    let userCashedHistoryItems = Object.values(cashedHistoryItems).filter((el: any) => el.userId == this.userId);
-    cashedHistoryItems = Object.values(cashedHistoryItems).filter((el: any) => el.userId !== this.userId);
-    let cashedPendingItems = await this.storage.get('PendingWorkflow') || [];
-    let userCashedPendingItems = Object.values(cashedPendingItems).filter((el: any) => el.userId == this.userId);
-    cashedPendingItems = Object.values(cashedPendingItems).filter((el: any) => el.userId !== this.userId);
+    let cashedHistoryItems: any[] = await this.storage.get('HistoryWorkflow') || [];
+
+    let userCashedHistoryItems: any[] = Object.values(cashedHistoryItems).filter((el: any) => el.userId == this.userId) || [];
+    cashedHistoryItems = Object.values(cashedHistoryItems).filter((el: any) => el.userId !== this.userId) || [];
+    let cashedPendingItems: any[] = await this.storage.get('PendingWorkflow') || [];
+    let userCashedPendingItems: any[] = Object.values(cashedPendingItems).filter((el: any) => el.userId == this.userId) || [];
+    cashedPendingItems = Object.values(cashedPendingItems).filter((el: any) => el.userId !== this.userId) || [];
 
     if (this.isOnline) {
       this.loaded = false;
@@ -142,8 +143,9 @@ export class WorkflowComponent implements OnInit {
         this.pager.pages = res?.pages;
         this.loaded = true;
         this.isLoading = false;
-        isHistory ? cashedHistoryItems = cashedHistoryItems.push(...this.historyItems) :
-          cashedPendingItems = cashedPendingItems.push(...this.pendingItems);
+
+        isHistory ? cashedHistoryItems.push(...this.historyItems) :
+          cashedPendingItems.push(...this.pendingItems);
         isHistory ? await this.storage.set("HistoryWorkflow", cashedHistoryItems) :
           await this.storage.set("PendingWorkflow", cashedPendingItems);
       })
