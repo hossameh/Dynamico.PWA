@@ -59,26 +59,27 @@ export class PendingComponent implements OnInit {
         if (res.isPassed) {
           this.date.emit(this.rangeDate);
           this.closeModal.nativeElement.click();
-          this.deleteFromDB();
+          this.deleteFromDB(false);
           this.deleteCashedPlanRecords();
         } else {
           this.alert.error(res.message);
         }
       });
     } else {
-      this.deleteFromDB();
+      this.deleteFromDB(true);
       this.deleteCashedPlanRecords();
     }
 
   }
 
-  async deleteFromDB() {
+  async deleteFromDB(offline: boolean) {
     let cacheRecords = await this.storage.get('Records') || [];
     let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
     let recordsWillBeDeleted = await this.storage.get('RecordsWillBeDeleted') || [];
-    if (this.selectedItem.record_Id && this.selectedItem.record_Id > 0)
-      recordsWillBeDeleted.push({ Record_Id: this.selectedItem.record_Id });
-    await this.storage.set("RecordsWillBeDeleted", recordsWillBeDeleted);
+    if (offline && this.selectedItem.record_Id && this.selectedItem.record_Id > 0) {
+      recordsWillBeDeleted.push({ userId: this.userId, Record_Id: this.selectedItem.record_Id });
+      await this.storage.set("RecordsWillBeDeleted", recordsWillBeDeleted);
+    }
     if (cacheRecords.length > 0) {
       if (this.selectedItem.record_Id) {
         let index = cacheRecords.findIndex((el: any) => {

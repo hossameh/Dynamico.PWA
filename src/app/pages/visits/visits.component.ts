@@ -213,53 +213,46 @@ export class VisitsComponent implements OnInit {
     // this.completeItems = [...value];
   }
   async upsertCashedPending() {
-    let cashedPendingRecords = await this.storage.get('Records') || [];    
+    let cashedPendingRecords = await this.storage.get('Records') || [];
+    let userCashedPendingRecords = cashedPendingRecords.filter((el: any) => el.userId == this.userId && el.form_Id == this.id);
     cashedPendingRecords = cashedPendingRecords.filter((el: any) => !(el.userId == this.userId && el.form_Id == this.id));
-    
-    if (cashedPendingRecords) {
-      this.pendingItems.forEach((record: any) => {
-        // check if Record is in cahce
-        let index = cashedPendingRecords.findIndex((el: any) => {
-          return el.userId == this.userId && el.record_Id == record.record_Id;
-        });
-        // check if Record  is in cahce update data in this index        
-        if (index >= 0) {
-          let recordJson = cashedPendingRecords[index].record_Json;
-          cashedPendingRecords[index] = record;
-          cashedPendingRecords[index].record_Json = recordJson;
-        } else {
-          //if not found id add a new record
-          cashedPendingRecords.unshift(record);
-        }
+
+    this.pendingItems.forEach((record: any) => {
+      // check if Record is in cahce
+      let index = userCashedPendingRecords.findIndex((el: any) => {
+        return el.userId == this.userId && el.record_Id == record.record_Id;
       });
-    } else {
-      cashedPendingRecords.push(...this.pendingItems);
-    }
+      // check if Record  is in cahce update data in this index        
+      if (index >= 0) {
+        let recordJson = userCashedPendingRecords[index].record_Json;
+        record.record_Json = recordJson;
+        //if not found id add a new record
+        cashedPendingRecords.unshift(record);
+      }
+      else
+        cashedPendingRecords.unshift(record);
+    });
     await this.storage.set('Records', cashedPendingRecords);
   }
   async upsertCashedCompleted() {
     let cashedCompletedRecords = await this.storage.get('CompletedRecords') || [];
+    let userCashedCompletedRecords = cashedCompletedRecords.filter((el: any) => el.userId == this.userId && el.form_Id == this.id);
     cashedCompletedRecords = cashedCompletedRecords.filter((el: any) => !(el.userId == this.userId && el.form_Id == this.id));
-    if (cashedCompletedRecords) {
-      this.completeItems.forEach((record: any) => {
-        // check if Record is in cahce
-        let index = cashedCompletedRecords.findIndex((el: any) => {
-          return el.userId == this.userId && el.record_Id == record.record_Id;
-        });
-        // check if Record  is in cahce update data in this index
-        if (index >= 0) {
-          let recordJson = cashedCompletedRecords[index].record_Json;
-
-          cashedCompletedRecords[index] = record;
-          cashedCompletedRecords[index].record_Json = recordJson;
-        } else {
-          //if not found id add a new record
-          cashedCompletedRecords.unshift(record);
-        }
+    this.completeItems.forEach((record: any) => {
+      // check if Record is in cahce
+      let index = userCashedCompletedRecords.findIndex((el: any) => {
+        return el.userId == this.userId && el.record_Id == record.record_Id;
       });
-    } else {
-      cashedCompletedRecords.push(...this.completeItems);
-    }
+      // check if Record  is in cahce update data in this index
+      if (index >= 0) {
+        let recordJson = userCashedCompletedRecords[index].record_Json;
+        record.record_Json = recordJson;
+        //if not found id add a new record
+        cashedCompletedRecords.unshift(record);
+      }
+      else
+        cashedCompletedRecords.unshift(record);
+    });
     await this.storage.set('CompletedRecords', cashedCompletedRecords);
   }
   async getPendingFromCache() {

@@ -69,15 +69,13 @@ export class OfflineService {
     if (userCacheRecords.length > 0) {
       let sentRecords: any[] = [];
       userCacheRecords.map((el: any, index: number) => {
-        this.http.post('ChecklistRecords/SaveFormRecord', el).subscribe((res: any) => {
-          if (res.isPassed)
-            sentRecords.push(el);
+        this.http.post('ChecklistRecords/SaveFormRecord', el).subscribe(async (res: any) => {
+          if (res.isPassed) {            
+            cacheRecords = cacheRecords.filter((obj: any) => !(obj == el));
+          }
+          await this.storage.set('RecordsWillBeUpserted', cacheRecords);
         });
       });
-      if (sentRecords.length > 0) {
-        cacheRecords = cacheRecords.filter((el: any) => !sentRecords.includes(el));
-        await this.storage.set('RecordsWillBeUpserted', cacheRecords);
-      }
     }
   }
   async deletedRecords() {
@@ -85,18 +83,14 @@ export class OfflineService {
     let userCacheRecords = cacheRecords.filter((el: any) => el.userId == this.userId);
 
     if (userCacheRecords.length > 0) {
-      let sentRecords: any[] = [];
-
       userCacheRecords.map((el: any, index: number) => {
-        this.http.post('ChecklistRecords/DeleteFormRecord', null, true, el).subscribe((res: any) => {
-          if (res.isPassed)
-            sentRecords.push(el);
+        this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: el.Record_Id }).subscribe(async (res: any) => {
+          if (res.isPassed) {
+            cacheRecords = cacheRecords.filter((obj: any) => !(obj.userId == this.userId && obj.Record_Id == el.Record_Id));
+            await this.storage.set("RecordsWillBeDeleted", cacheRecords);
+          }
         });
       });
-      if (sentRecords.length > 0) {
-        cacheRecords = cacheRecords.filter((el: any) => !sentRecords.includes(el));
-        await this.storage.set("RecordsWillBeDeleted", cacheRecords);
-      }
     }
   }
 
