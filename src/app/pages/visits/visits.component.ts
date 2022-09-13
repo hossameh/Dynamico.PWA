@@ -213,7 +213,9 @@ export class VisitsComponent implements OnInit {
     // this.completeItems = [...value];
   }
   async upsertCashedPending() {
-    let cashedPendingRecords = await this.storage.get('Records') || [];
+    let cashedPendingRecords = await this.storage.get('Records') || [];    
+    cashedPendingRecords = cashedPendingRecords.filter((el: any) => !(el.userId == this.userId && el.form_Id == this.id));
+    
     if (cashedPendingRecords) {
       this.pendingItems.forEach((record: any) => {
         // check if Record is in cahce
@@ -222,7 +224,7 @@ export class VisitsComponent implements OnInit {
         });
         // check if Record  is in cahce update data in this index        
         if (index >= 0) {
-          let recordJson = cashedPendingRecords[index].record_Json;          
+          let recordJson = cashedPendingRecords[index].record_Json;
           cashedPendingRecords[index] = record;
           cashedPendingRecords[index].record_Json = recordJson;
         } else {
@@ -237,6 +239,7 @@ export class VisitsComponent implements OnInit {
   }
   async upsertCashedCompleted() {
     let cashedCompletedRecords = await this.storage.get('CompletedRecords') || [];
+    cashedCompletedRecords = cashedCompletedRecords.filter((el: any) => !(el.userId == this.userId && el.form_Id == this.id));
     if (cashedCompletedRecords) {
       this.completeItems.forEach((record: any) => {
         // check if Record is in cahce
@@ -246,7 +249,7 @@ export class VisitsComponent implements OnInit {
         // check if Record  is in cahce update data in this index
         if (index >= 0) {
           let recordJson = cashedCompletedRecords[index].record_Json;
-          
+
           cashedCompletedRecords[index] = record;
           cashedCompletedRecords[index].record_Json = recordJson;
         } else {

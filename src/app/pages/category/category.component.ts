@@ -159,9 +159,9 @@ export class CategoryComponent implements OnInit, AfterViewInit {
     this.items = [];
     if (cacheCatgoryChecklists.length > 0) {
       this.items = cacheCatgoryChecklists.filter((el: any) => el.userId == this.userId && el.categoryId == this.category_Id)[0].list;
-      this.items = this.items.map((el: any) => {
+      this.items.map((el: any) => {
         let records = [];
-        records = cachedPendingRecords.filter((element: any) => element.userId == this.userId && element.form_Id == el.formId);
+        records = cachedPendingRecords.filter((element: any) => element.userId == this.userId && element.form_Id == el.formId);        
         el.totalRecords = records.length;
         return el;
       })
