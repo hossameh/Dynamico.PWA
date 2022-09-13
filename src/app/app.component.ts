@@ -10,6 +10,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { getMessaging, onMessage } from 'firebase/messaging';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationPage } from './pages/notification/notification.page';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -77,7 +78,19 @@ export class AppComponent {
     });
   }
   async createDb() {
-    await this.storage.create();
+    await this.storage.create().then(async (res) => {
+      let ver = await this.storage.get("version") || null;
+      if (ver) {
+        if (ver !== environment.version) {
+          await this.storage.clear();
+          await this.storage.set("version", environment.version);
+        }
+      }
+      else {
+        await this.storage.clear();
+        await this.storage.set("version", environment.version);
+      }
+    });
   }
 
   reloadCache() {
