@@ -23,7 +23,7 @@
   "New_Password": "كلمة مرور جديدة",
   "Confirm_Password": "تاكيد كلمة المرور",
   "Confirm_p": "يجب أن تكون كلمة المرور وتأكيد كلمة المرور هي نفسها!",
-  "Show_completed_forms": "اظهار النماذج المكتملة",
+  "Show_completed_plans": "اظهار الخطط المكتملة",
   "Pending": "معلقة",
   "Edit": "تعديل",
   "Delete": "حذف",
@@ -88,5 +88,6 @@
   "Documents": "مستندات",
   "Forms": "نماذج",
   "Search By Name or Code": "ابحث بالاسم أو الكود",
-  "Name": "الاسم"
+  "Name": "الاسم",
+  "":""
 }

@@ -53,7 +53,8 @@ export class CalendarComponent implements OnInit {
 
   async getPlans(isComplete: any = null) {
     this.plansRecords = [];
-    let cashedListPlans = await this.storage.get("ListPlans") || [];
+    let cashedListPlans = (isComplete == true) ? (await this.storage.get("CompletedListPlans") || []) :
+      (await this.storage.get("ListPlans") || []);
     let userCashedListPlans = cashedListPlans.filter((el: any) => el.userId == this.userId);
     cashedListPlans = cashedListPlans.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
@@ -92,7 +93,8 @@ export class CalendarComponent implements OnInit {
         });
         if (this.plansRecords && this.plansRecords.length > 0)
           this.updateCashedRecord();
-        await this.storage.set("ListPlans", cashedListPlans);
+        await (isComplete == true) ? this.storage.set("CompletedListPlans", cashedListPlans) :
+          this.storage.set("ListPlans", cashedListPlans);
       });
     }
     else
@@ -106,7 +108,8 @@ export class CalendarComponent implements OnInit {
     this.getPlansForDateView(event)
   }
   async getPlansForDateView(isComplete: any = false) {
-    let cashedDateViewPlans = await this.storage.get("DateViewPlans") || [];
+    let cashedDateViewPlans = isComplete ? (await this.storage.get("CompletedDateViewPlans") || [])
+      : (await this.storage.get("DateViewPlans") || []);
     let userCashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.userId == this.userId);
     cashedDateViewPlans = cashedDateViewPlans.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
@@ -115,16 +118,18 @@ export class CalendarComponent implements OnInit {
         UserId: this.userId
       };
       this.http.get('Plans/GetPlans', body).subscribe(async (value: any) => {
-        this.itemsDateView = value.list;        
+        this.itemsDateView = value.list;
         this.itemsDateView.map((el: any) => {
           el.userId = this.userId;
           cashedDateViewPlans.push(el);
         });
-        await this.storage.set("DateViewPlans", cashedDateViewPlans);
+        await isComplete ? this.storage.set("CompletedDateViewPlans", cashedDateViewPlans)
+          : this.storage.set("DateViewPlans", cashedDateViewPlans);
       });
     }
     else
       this.itemsDateView = userCashedDateViewPlans;
+
   }
   async updateCashedRecord() {
     let cashedRecords = await this.storage.get('Records') || [];
