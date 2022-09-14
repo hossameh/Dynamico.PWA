@@ -107,10 +107,12 @@ export class WorkflowComponent implements OnInit {
   }
 
   change(step: number) {
-    this.resetData();
-    this.step = step;
-    step == 1 ? this.getData(false) : '';
-    step == 2 ? this.getData(true) : '';
+    this.resetData().then((res) =>{
+      console.log(res);
+      this.step = step;
+      step == 1 ? this.getData(false) : '';
+      step == 2 ? this.getData(true) : '';
+    });
     // if (this.isOnline) {
     //   step == 1 && this.pendingItems.length == 0 ? this.getData(false) : '';
     //   step == 2 && this.historyItems.length == 0 ? this.getData(true) : '';
@@ -167,9 +169,10 @@ export class WorkflowComponent implements OnInit {
   scrollToTop() {
     window.scroll(0, 0);
   }
-  resetData() {
+  resetData(): Promise<boolean> {
     this.pendingItems = [];
     this.historyItems = [];
     this.resetPager();
+    return Promise.resolve(true);
   }
 }

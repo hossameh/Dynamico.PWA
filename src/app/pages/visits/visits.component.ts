@@ -300,25 +300,28 @@ export class VisitsComponent implements OnInit {
     this.completeItems = cacheCompletedRecords;
   }
   change(step: number) {
-    this.resetData();
-    this.step = step;
-    // if (this.isOnline) {
-    step == 1 ? this.getAllPending() : '';
-    step == 2 ? this.getAllComplete() : '';
-    // }
+    this.resetData().then((res) => {
+      this.step = step;
+      // if (this.isOnline) {
+      step == 1 ? this.getAllPending() : '';
+      step == 2 ? this.getAllComplete() : '';
+      // }
+    });
   }
 
   filterPending(event: any) {
-    this.resetData();
-    this.body.FromCreationDate = event.FromCreationDate;
-    this.body.ToCreationDate = event.ToCreationDate;
-    this.getAllPending();
+    this.resetData().then((res) => {
+      this.body.FromCreationDate = event.FromCreationDate;
+      this.body.ToCreationDate = event.ToCreationDate;
+      this.getAllPending();
+    });
   }
   filterComplete(event: any) {
-    this.resetData();
-    this.body.FromCreationDate = event.FromCreationDate;
-    this.body.ToCreationDate = event.ToCreationDate;
-    this.getAllComplete();
+    this.resetData().then((res) => {
+      this.body.FromCreationDate = event.FromCreationDate;
+      this.body.ToCreationDate = event.ToCreationDate;
+      this.getAllComplete();
+    });
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -332,11 +335,12 @@ export class VisitsComponent implements OnInit {
   scrollToTop() {
     window.scroll(0, 0);
   }
-  resetData() {
+  resetData(): Promise<boolean> {
     this.pendingItems = [];
     this.completeItems = [];
     this.body.FromCreationDate = '';
     this.body.ToCreationDate = '';
     this.resetPager();
+    return Promise.resolve(true);
   }
 }
