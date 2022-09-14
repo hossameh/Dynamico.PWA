@@ -51,6 +51,7 @@ export class ChecklistComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.getOfflineRef();
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
     this.form = {
@@ -459,7 +460,8 @@ export class ChecklistComponent implements OnInit {
 
           } else {
             //if not found
-            this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
+            this.modelBody.offlineRef = this.getOfflineRef();
+            // this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
             let obj = {
               userId: this.userId,
               assigned_Date: null,
@@ -493,10 +495,11 @@ export class ChecklistComponent implements OnInit {
           }
 
         } else {
-          if (cacheRecords.length > 0)
-            this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
-          else
-            this.modelBody.offlineRef = 'offline1';
+          this.modelBody.offlineRef = this.getOfflineRef();
+          // if (cacheRecords.length > 0)
+          //   this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
+          // else
+          //   this.modelBody.offlineRef = 'offline1';
           if (this.params.editMode == 'true') {
             let index = cacheRecords.findIndex((el: any) => {
               return el.userId == this.userId && el.record_Id == this.params.Record_Id;
@@ -783,5 +786,9 @@ export class ChecklistComponent implements OnInit {
       });
     });
     await this.storage.set("ListPlans", cashedListPlans)
+  }
+  getOfflineRef() {
+    let date = new Date().toISOString();
+    return "offline-" + date;
   }
 }
