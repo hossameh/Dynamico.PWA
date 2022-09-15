@@ -110,12 +110,14 @@ export class SearchComponent implements OnInit {
   async search() {
     if (!this.searchObj.complete && !this.searchObj.pending)
       return;
-    let cahsedSearchPendingRecords = await this.storage.get("SearchPendingRecords") || [];
-    let userCahsedSearchPendingRecords = cahsedSearchPendingRecords.filter((el: any) => el.userId == this.userId);
-    cahsedSearchPendingRecords = cahsedSearchPendingRecords.filter((el: any) => el.userId !== this.userId);
-    let cahsedSearchCompletedRecords = await this.storage.get("SearchCompletedRecords") || [];
-    let userCahsedSearchCompletedRecords = cahsedSearchCompletedRecords.filter((el: any) => el.userId == this.userId);
-    cahsedSearchCompletedRecords = cahsedSearchCompletedRecords.filter((el: any) => el.userId !== this.userId);
+    let cahsedSearchPendingRecords: any[] = await this.storage.get("SearchPendingRecords") || [];
+    let userCahsedSearchPendingRecords: any[] = Object.values(cahsedSearchPendingRecords).filter((el: any) => el.userId == this.userId);
+    if (!this.searchObj.searchKey && this.searchObj.pending && !this.searchObj.complete)
+      cahsedSearchPendingRecords = Object.values(cahsedSearchPendingRecords).filter((el: any) => el.userId !== this.userId);
+    let cahsedSearchCompletedRecords: any[] = await this.storage.get("SearchCompletedRecords") || [];
+    let userCahsedSearchCompletedRecords: any[] = Object.values(cahsedSearchCompletedRecords).filter((el: any) => el.userId == this.userId);
+    if (!this.searchObj.searchKey && this.searchObj.complete && !this.searchObj.pending)
+      cahsedSearchCompletedRecords = Object.values(cahsedSearchCompletedRecords).filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       this.loaded = false;
       this.isLoading = true;
@@ -135,15 +137,12 @@ export class SearchComponent implements OnInit {
         this.loaded = true;
         this.isLoading = false;
 
-        cahsedSearchPendingRecords =
-          (!this.searchObj.searchKey && this.searchObj.pending && !this.searchObj.complete)
-            ? cahsedSearchPendingRecords.push(...this.items)
-            : cahsedSearchPendingRecords;
+        if (!this.searchObj.searchKey && this.searchObj.pending && !this.searchObj.complete)
+          cahsedSearchPendingRecords.push(...this.items);
 
-        cahsedSearchCompletedRecords =
-          (!this.searchObj.searchKey && this.searchObj.complete && !this.searchObj.pending)
-            ? cahsedSearchCompletedRecords.push(this.items)
-            : cahsedSearchCompletedRecords;
+        if (!this.searchObj.searchKey && this.searchObj.complete && !this.searchObj.pending)
+          cahsedSearchCompletedRecords.push(...this.items);
+
         await this.storage.set("SearchPendingRecords", cahsedSearchPendingRecords);
         await this.storage.set("SearchCompletedRecords", cahsedSearchCompletedRecords);
       });
@@ -155,7 +154,7 @@ export class SearchComponent implements OnInit {
       if (this.searchObj.complete)
         this.items.push(...userCahsedSearchCompletedRecords);
       if (this.searchObj.searchKey) {
-        this.items = this.items.filter((el: any) =>
+        this.items = Object.values(this.items).filter((el: any) =>
           el.formDataRef?.toString().toLowerCase().includes(this.searchObj.searchKey.toLowerCase())
           || el.form_Title?.toString().toLowerCase().includes(this.searchObj.searchKey.toLowerCase())
         );
@@ -188,7 +187,7 @@ export class SearchComponent implements OnInit {
     let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
     let recordsWillBeDeleted = await this.storage.get('RecordsWillBeDeleted') || [];
     if (offline && this.selectedItem.record_Id && this.selectedItem.record_Id > 0) {
-      recordsWillBeDeleted.push({userId : this.userId, Record_Id: this.selectedItem.record_Id });
+      recordsWillBeDeleted.push({ userId: this.userId, Record_Id: this.selectedItem.record_Id });
       await this.storage.set("RecordsWillBeDeleted", recordsWillBeDeleted);
     }
     if (cacheRecords.length > 0) {
