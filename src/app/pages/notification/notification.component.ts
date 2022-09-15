@@ -61,7 +61,7 @@ export class NotificationComponent implements OnInit {
   clickNotification(item: any) {
     this.notificationPage.pageProps.selectedObj = item;
     if (!this.isOnline && item?.isRead == false) {
-      this.alert.info("Not Internet Connetion");
+      this.alert.error("Not Internet Connetion");
       return;
     }
     else
@@ -150,7 +150,7 @@ export class NotificationComponent implements OnInit {
       }
     }
     else
-      this.alert.info("Not Internet Connetion");
+      this.alert.error("Not Internet Connetion");
   }
   resetAll() {
     this.items = [];
