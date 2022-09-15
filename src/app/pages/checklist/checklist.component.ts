@@ -119,8 +119,6 @@ export class ChecklistComponent implements OnInit {
     this.id = this.route.snapshot.params.id;
     this.params = this.route.snapshot.queryParams;
 
-    console.log(this.params.Record_Id);
-
     this.isComplete = this.params.Complete == 'true' ? true : false;
     this.buildForm();
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
@@ -195,6 +193,7 @@ export class ChecklistComponent implements OnInit {
         let index = cacheChecklists.findIndex((el: any) => {
           return el.userId == this.userId && el.formId == +this.id;
         });
+
         // check if Checklists  id is in cahce update data in this index
         if (index >= 0) {
           cacheChecklists[index] = value;
@@ -360,10 +359,28 @@ export class ChecklistComponent implements OnInit {
       });
       // check if Record  is in cahce update data in this index
       if (index >= 0) {
+
         cashedRecords[index].record_Json = this.data?.record_Json;
       }
+      else {
+        cashedRecords.unshift({
+          record_Id: this.params.Record_Id,
+          form_Id: this.id,
+          assigned_Date: null,
+          createdBy: null,
+          form_Title: this.data?.formTitle,
+          record_Status_Id: this.data?.recordStatusId,
+          gpS_Required: this.data?.gpsRequired,
+          location: this.data?.location,
+          formDataRef: this.data?.formDataRef,
+          userId: this.userId,
+          record_Json: this.data?.record_Json,
+          creation_Date: this.data?.creationDate,
+          workflowId: this.data?.workflowId,
+          form_Layout: this.data?.form_Layout
+        });
+      }
     }
-
     await this.storage.set('Records', cashedRecords);
   }
   deSerialize(recordDataArray: any) {
@@ -681,7 +698,8 @@ export class ChecklistComponent implements OnInit {
       this.selectedCashedChecklist = valueChecklist;
       valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
 
-      if (valueChecklist?.gpsRequired) {
+      let requireGps = valueChecklist?.gpsRequired ? valueChecklist?.gpsRequired : valueRecord?.gpS_Required;
+      if (requireGps) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
           this.longitude = location.coords.longitude;
@@ -704,7 +722,7 @@ export class ChecklistComponent implements OnInit {
         let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
           this.deSerialize(recordJson) :
           this.deSerialize(JSON.parse(recordJson));
-        this.form.components = JSON.parse(valueChecklist.formControls);
+        this.form.components = JSON.parse(valueChecklist?.formControls ? valueChecklist?.formControls : valueRecord.form_Layout);
         this.options = {
           builder: {
             hideTab: true,
