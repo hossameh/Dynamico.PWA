@@ -48,6 +48,7 @@ import { AssetsInfoComponent } from './pages/assets/assets-info/assets-info.comp
 import { AssetsChecklistComponent } from './pages/assets/assets-checklist/assets-checklist.component';
 import { AssetsDocumentsComponent } from './pages/assets/assets-documents/assets-documents.component';
 import { AssetsListComponent } from './pages/assets/assets-list/assets-list.component';
+import { ExternalLoginComponent } from './auth/external-login/external-login.component';
 initializeApp(environment.firebase);
 
 
@@ -81,7 +82,8 @@ initializeApp(environment.firebase);
     AssetsInfoComponent,
     AssetsChecklistComponent,
     AssetsDocumentsComponent,
-    AssetsListComponent
+    AssetsListComponent,
+    ExternalLoginComponent
   ],
   imports: [
     BrowserModule,
