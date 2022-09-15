@@ -692,13 +692,13 @@ export class ChecklistComponent implements OnInit {
     let cacheRecords = await this.storage.get('Records') || [];
     let valueChecklist: any = {};
     let valueRecord: any = {};
-    if (cacheChecklists.length > 0 && cacheRecords.length > 0) {
+    if (cacheRecords.length > 0) {
 
       valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
       this.selectedCashedChecklist = valueChecklist;
       valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
 
-      let requireGps = valueChecklist?.gpsRequired ? valueChecklist?.gpsRequired : valueRecord?.gpS_Required;
+      let requireGps = valueChecklist?.gpsRequired ? valueChecklist?.gpsRequired : valueRecord?.gpS_Required;      
       if (requireGps) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
@@ -712,7 +712,10 @@ export class ChecklistComponent implements OnInit {
           //   }
         );
       }
+      console.log(valueRecord);
+      console.log(valueChecklist);
       if (valueRecord) {
+        
         this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
         this.recordForm.get('formDataRef')?.setValue(this.params.offline);
         this.recordForm.get('formDataRef')?.disable();
