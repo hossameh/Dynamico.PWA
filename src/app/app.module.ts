@@ -42,6 +42,13 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { AssetsComponent } from './pages/assets/assets.component';
+import { AssetsInfoComponent } from './pages/assets/assets-info/assets-info.component';
+import { AssetsChecklistComponent } from './pages/assets/assets-checklist/assets-checklist.component';
+import { AssetsDocumentsComponent } from './pages/assets/assets-documents/assets-documents.component';
+import { AssetsListComponent } from './pages/assets/assets-list/assets-list.component';
+import { ExternalLoginComponent } from './auth/external-login/external-login.component';
 initializeApp(environment.firebase);
 
 
@@ -70,7 +77,13 @@ initializeApp(environment.firebase);
     DetailsWorkflowComponent,
     ResetPasswordComponent,
     NotificationDetailsComponent,
-    QrScanComponent
+    QrScanComponent,
+    AssetsComponent,
+    AssetsInfoComponent,
+    AssetsChecklistComponent,
+    AssetsDocumentsComponent,
+    AssetsListComponent,
+    ExternalLoginComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +93,7 @@ initializeApp(environment.firebase);
     HttpClientModule,
     FormsModule,
     NgbModule,
+    NgxQRCodeModule,
     IonicStorageModule.forRoot(),
     FormioEditorModule,
     ToastrModule.forRoot({

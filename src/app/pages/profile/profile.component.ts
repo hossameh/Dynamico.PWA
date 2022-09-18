@@ -1,6 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from './../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -10,8 +11,8 @@ import { Component, OnInit } from '@angular/core';
 export class ProfileComponent implements OnInit {
 
   version = environment.version
-  userData:any
-  constructor(public translate: TranslateService) { }
+  userData: any
+  constructor(public translate: TranslateService, private router: Router) { }
 
   ngOnInit(): void {
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
@@ -21,7 +22,7 @@ export class ProfileComponent implements OnInit {
     // const elEn = document.querySelector('#bootstrap-en');
     // const elAr = document.querySelector('#bootstrap-ar');
     this.translate.use(lang)
-    localStorage.setItem('lang',lang)
+    localStorage.setItem('lang', lang)
     if (lang === 'ar') {
       // add bootstrap ar
       // elEn && elEn.remove();
@@ -57,8 +58,12 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  logout(){
-    localStorage.removeItem('token')
-    localStorage.removeItem('userData')
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    localStorage.setItem("lang", "en");
+    this.router.navigate(['/login']);
+    // localStorage.removeItem('token')
+    // localStorage.removeItem('userData')
   }
 }

@@ -1,0 +1,50 @@
+<section class="main pb-5">
+    <div class="section-heading">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="d-flex">
+                    <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" [routerLink]="['/page/assets']"
+                    routerLinkActive="router-link-active">
+                    <h4>
+                        {{ assetInfo ? assetInfo[0]?.assetName : 'Asset' | translate}}
+                        <!-- {{ asset ? asset?.name : 'Asset' | translate}} -->
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="c-tabs">
+        <div class="item " [class.active]="step == 1" (click)="change(1)">
+            <div class="d-flex align-items-center justify-content-center ">
+                <p style="font-size: 15px;font-weight: bold;">
+                    {{'Info' | translate}}
+                </p>
+            </div>
+        </div>
+        <div class="item " [class.active]="step == 2" (click)="change(2)">
+            <div class="d-flex align-items-center justify-content-center">
+                <p style="font-size: 15px;font-weight: bold;">
+                    {{'Forms' | translate}}
+                </p>
+            </div>
+        </div>
+        <div class="item " [class.active]="step == 3" (click)="change(3)">
+            <div class="d-flex align-items-center justify-content-center">
+                <p style="font-size: 15px;font-weight: bold;">
+                    {{'Documents' | translate}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="step == 1" [@slideInOut1]>
+        <app-assets-info [items]="assetInfo"></app-assets-info>
+    </div>
+    <div *ngIf="step == 2" [@slideInOut2]>
+        <app-assets-checklist [items]="assetCheckList"></app-assets-checklist>
+    </div>
+    <div *ngIf="step == 3" [@slideInOut3]>
+        <app-assets-documents [items]="assetDocuments"></app-assets-documents>
+    </div>
+
+</section>

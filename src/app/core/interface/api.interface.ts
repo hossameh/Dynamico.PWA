@@ -10,28 +10,28 @@ export interface dates {
 }
 
 export interface list {
-  id:                      number;
-  title:                   string;
-  startDate:               Date;
-  endDate:                 Date;
-  mode:                    string;
-  color:                   string;
-  days:                    string;
-  userId:                  number;
-  usersId:                 null;
-  formId:                  number;
-  companyId:               number;
-  isCreateFormData:        boolean;
+  id: number;
+  title: string;
+  startDate: Date;
+  endDate: Date;
+  mode: string;
+  color: string;
+  days: string;
+  userId: number;
+  usersId: null;
+  formId: number;
+  companyId: number;
+  isCreateFormData: boolean;
   is_Need_Delete_FormData: boolean;
-  plannerFormsData:        null;
-  company:                 null;
-  user:                    null;
-  form:                    null;
-  createdBy:               number;
-  creationDate:            Date;
-  updatedBy:               null;
-  lastUpdateDate:          null;
-  isDeleted:               boolean;
+  plannerFormsData: null;
+  company: null;
+  user: null;
+  form: null;
+  createdBy: number;
+  creationDate: Date;
+  updatedBy: null;
+  lastUpdateDate: null;
+  isDeleted: boolean;
 }
 
 
@@ -51,6 +51,8 @@ export interface Planner {
   isCreateFormData: boolean;
   Is_Need_Delete_FormData?: boolean;
   user?: any;
+  form: any;
+  plannerFormsData: any[];
 }
 
 export interface RecurringEvent {

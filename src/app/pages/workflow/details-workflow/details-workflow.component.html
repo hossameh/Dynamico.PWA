@@ -1,4 +1,53 @@
-<div class="section-heading">
+<div class="card" *ngIf="printPdf">
+  <div class="section-heading">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <div class="d-flex">
+          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl hide-in-print"
+            (click)="back()">
+          <h4 class="font-weight-bold text-primary"> {{data?.formTitle}}</h4>
+        </div>
+      </div>
+      <div class="row d-flex justify-content-end align-items-center" style="margin-right: -11px;margin-bottom: -17px;margin-top: 10px;      ">
+        <button type="button" class="btn w-100 mt-4" (click)="printWindow()">
+          <img src="assets/img/icons/printer-svgrepo-com.svg" width="20px" height="20px" alt="menu"
+          class="dropdown-toggle" type="button">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-card-body row">
+    <div class="col-12 col-sm-6 col-lg-6 form-group">
+      <div>
+        <label class="primary text-uppercase" style="font-size: 14px;" for="fomRef">{{ "Form Data Ref"|translate }}</label>
+        <input type="text" class="form-control" [value]="data?.formDataRef" id="fomRef" disabled />
+      </div>
+      <div class="d-flex justify-content-between mt-1 p-2">
+        <div>
+          <span class="primary text-uppercase d-block" style="font-size: 14px;">{{'Printed By'|translate}}</span>
+          <p class="display-block overflow-hidden">
+            {{userData?.fullName}}
+          </p>
+        </div>
+        <div>
+          <span class="primary text-uppercase d-block" style="font-size: 14px;">{{'Print Date'|translate}}</span>
+          <p class="display-block overflow-hidden">
+            {{currentDate | date}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center d-flex justify-content-end  col-sm-6 col-lg-6" *ngIf="data">
+      <div class="qrCode-wrapper">
+        <ngx-qrcode id="qrcode{{ data?.record_Id }}" [elementType]="elementType" [value]="qrLink" cssClass="aclass">
+        </ngx-qrcode>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-heading hide-in-print" *ngIf="!printPdf">
   <div class="d-flex justify-content-between align-items-center">
     <div>
       <div class="d-flex">
@@ -11,15 +60,15 @@
 
   </div>
 </div>
-<div class="c-tabs">
-  <div class="item " [class.active]="step == 1" (click)="change(1)">
+<div class="c-tabs hide-in-print" *ngIf="!printPdf">
+  <div class="item hide-in-print" [class.active]="step == 1" (click)="change(1)">
     <div class="d-flex align-items-center justify-content-center ">
       <p>
         {{'Details' | translate}}
       </p>
     </div>
   </div>
-  <div class="item " [class.active]="step == 2" (click)="change(2)">
+  <div class="item hide-in-print" [class.active]="step == 2" (click)="change(2)">
     <div class="d-flex align-items-center justify-content-center">
       <p>
         {{'Workflow' | translate}}
@@ -28,7 +77,7 @@
   </div>
 </div>
 
-<div *ngIf="step == 1">
+<div *ngIf="step == 1" id="print-section">
   <div class="content mt-3">
     <div class="p-2" *ngIf="form.components.length > 0">
       <formio-editor [form]="form" [options]="options"></formio-editor>
@@ -72,9 +121,11 @@
               {{ timeDiff(item.dueDate,item.approveDate)?.days }}
               {{ timeDiff(item.dueDate,item.approveDate).days > 1 ? (' Days ' | translate) : (' Day ' | translate) }} |
               {{ timeDiff(item.dueDate,item.approveDate)?.hours }}
-              {{ timeDiff(item.dueDate,item.approveDate).hours > 1 ? (' Hours ' | translate) : (' Hour ' | translate) }} |
+              {{ timeDiff(item.dueDate,item.approveDate).hours > 1 ? (' Hours ' | translate) : (' Hour ' | translate) }}
+              |
               {{ timeDiff(item.dueDate,item.approveDate)?.minutes}}
-              {{ timeDiff(item.dueDate,item.approveDate).minutes > 1 ? (' Minutes' | translate) : (' Minute' | translate)}}
+              {{ timeDiff(item.dueDate,item.approveDate).minutes > 1 ? (' Minutes' | translate) : (' Minute' |
+              translate)}}
             </p>
             <p [class.color-red]="checkLarger(item.rejectDate,item.dueDate)"
               [class.color-green]="!checkLarger(item.rejectDate,item.dueDate)"
@@ -84,9 +135,11 @@
               {{ timeDiff(item.dueDate,item.rejectDate)?.days }}
               {{ timeDiff(item.dueDate,item.rejectDate).days > 1 ? (' Days ' | translate) : (' Day ' | translate) }} |
               {{ timeDiff(item.dueDate,item.rejectDate)?.hours }}
-              {{ timeDiff(item.dueDate,item.rejectDate).hours > 1 ? (' Hours ' | translate) : (' Hour ' | translate) }} |
+              {{ timeDiff(item.dueDate,item.rejectDate).hours > 1 ? (' Hours ' | translate) : (' Hour ' | translate) }}
+              |
               {{ timeDiff(item.dueDate,item.rejectDate)?.minutes }}
-              {{ timeDiff(item.dueDate,item.rejectDate).minutes > 1 ? (' Minutes' | translate) : (' Minute' | translate)}}
+              {{ timeDiff(item.dueDate,item.rejectDate).minutes > 1 ? (' Minutes' | translate) : (' Minute' |
+              translate)}}
             </p>
             <p [class.color-red]="checkLarger(null,item.dueDate)" [class.color-green]="!checkLarger(null,item.dueDate)"
               *ngIf="!item.isCompleted && !item.rejectDate && !item.approveDate" class="date">
@@ -116,7 +169,7 @@
           </div>
         </div>
         <p class="comment">
-          {{item.comment}}
+          {{item?.comment}}
         </p>
         <div class="d-flex justify-content-between align-items-stretch actions" *ngIf="showActionButton(item)">
           <button class="accept" data-bs-toggle="modal" data-bs-target="#newModal" (click)="saveAction(true,item)">

@@ -1,0 +1,50 @@
+<ngb-accordion #acc="ngbAccordion">
+    <ngb-panel *ngFor="let cat of items" [title]="cat?.category_Name">
+        <ng-template ngbPanelContent>
+            <div class="content px-3 py-4">
+                <div class="mb-3" *ngFor="let item of cat?.checkLists">
+                    <div class="white-box">
+                        <div class="box-content" [routerLink]="['/page/visits/'+item.formId]"
+                            [queryParams]="{assetId : assetId, categoryName: cat?.category_Name , listName:item.formTitle , categoryId:item.categoryId}">
+                            <h5 class="font-14">
+                                {{item.formTitle}}
+                            </h5>
+                        </div>
+                        <div class="box-side" data-bs-toggle="modal" data-bs-target="#newModal"
+                            (click)="selectedItem = item ; name = cat?.category_Name">
+                            <div class="d-flex align-items-center">
+                                <p class="badge me-2" *ngIf="item.totalRecords">{{item.totalRecords}}</p>
+                                <img src="assets/img/icons/add-button.svg" alt="open">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>
+
+<div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center p-2 ">
+                <h5 class="modal-title" id="deleteLabel">{{'Start_new' | translate}} {{selectedItem?.formTitle}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating ">
+                    <input class="form-control" id="floatingInput" placeholder="{{'Name' | translate}}" [(ngModel)]="formRef"
+                        name="formRef">
+                    <label for="floatingInput"> {{'Record_reference' | translate}}</label>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal"
+                        [routerLink]="['/page/checklist/'+selectedItem.formId]" routerLinkActive="router-link-active"
+                        [queryParams]="{editMode: false ,formRef:formRef, Record_Id:selectedItem.record_Id , categoryName: name, listName:selectedItem.formTitle , categoryId:selectedItem.categoryId}"
+                        [disabled]="!formRef">{{'Start' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

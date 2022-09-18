@@ -1,0 +1,14 @@
+.box-side {
+    position: relative;
+    z-index: 99;
+    cursor: pointer;
+}
+
+.white-box {
+    padding: 0 15px;
+    cursor: pointer;
+    .box-content {
+        width: 100%;
+        padding: 25px 0;
+    }
+}

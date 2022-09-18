@@ -5,6 +5,9 @@ import { HelperService } from 'src/app/services/helper.service';
 import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 import { OfflineService } from 'src/app/services/offline/offline.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationPage, NotificationPageProps } from './notification.page';
+import { Storage } from '@ionic/storage-angular';
 
 
 @Component({
@@ -16,7 +19,7 @@ export class NotificationComponent implements OnInit {
 
   @HostListener("window:scroll", [])
   onScroll(): void {
-    if (this.bottomReached() && this.loaded && this.pager.page <= (this.pager.pages - 1) && this.isOnline) {
+    if (this.bottomReached() && this.isOnline && this.loaded && this.pager.page <= (this.pager.pages - 1) && this.isOnline) {
       // Load Your Data Here
       this.pager.page += 1;
       this.getAll();
@@ -28,73 +31,136 @@ export class NotificationComponent implements OnInit {
   isOnline = true;
   isLoading = false;
 
-  items: any = []
+  items: any = [];
+  userId: any;
+  // showAllItems!: boolean;
+  pageProps!: NotificationPageProps;
   constructor(
     private http: HttpService,
     private alert: AlertService,
     private helper: HelperService,
     private offline: OfflineService,
+    private route: ActivatedRoute,
+    private notificationPage: NotificationPage,
+    private storage: Storage,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.pageProps = this.notificationPage.pageProps;
+    this.resetPager();
+    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
+    // let params = this.route.snapshot.queryParams;
+    // let show = params?.showAll;
+    // (show && (show == "true" || show == true)) ? this.showAllItems = true : this.showAllItems = false;
+    this.getAll()
+  }
+  clickNotification(item: any) {
+    this.notificationPage.pageProps.selectedObj = item;
+    if (!this.isOnline && item?.isRead == false) {
+      this.alert.error("Not Internet Connetion");
+      return;
+    }
+    else
+      this.router.navigateByUrl("/page/notification-details");
+  }
+  resetPager() {
     this.pager = {
       page: 1,
       pages: 0,
       pageSize: 10,
       total: 0,
     };
-    this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
-      this.isOnline = isOnline;
-    });
-    this.getAll()
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.statusSubscription.unsubscribe();
   }
-  getAll() {
-    this.loaded = false;
-    this.isLoading = true;
-    let params = {
-      pageIndex: this.pager.page,
-      pageSize: this.pager.pageSize
+  async getAll() {
+    let cahsedNotification = await this.storage.get("Notification") || [];
+    let userCahsedNotification = cahsedNotification.filter((el: any) => el.userId == this.userId);
+    cahsedNotification = cahsedNotification.filter((el: any) => el.userId !== this.userId);
+    if (this.isOnline) {
+      this.loaded = false;
+      this.isLoading = true;
+      let params = {
+        pageIndex: this.pager.page,
+        pageSize: this.pager.pageSize
+      }
+      let body = {
+        UserId: this.userId,
+        IsRead: this.pageProps.showAll == false ? false : null
+        // IsRead: this.showAllItems == false ? false : null
+      }
+      this.http.post('Notification/GetNotifications', body, true, params).subscribe(async (res: any) => {
+        res?.data?.list.map((el: any) => {
+          el.userId = this.userId;
+          this.items.push(el);
+          cahsedNotification.push(el);
+        });
+        // this.items = res?.data?.list;
+        this.pager.total = res?.data?.total;
+        this.pager.pages = res?.data?.pages;
+        this.loaded = true;
+        this.isLoading = false;
+        await this.storage.set("Notification", cahsedNotification);
+      })
     }
-    let body = {
-      UserId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
-    }
-    this.http.post('Notification/GetNotifications', body, true, params).subscribe((res: any) => {
-      res?.data?.list.map((el: any) => {
-        this.items.push(el);
-      });
-      // this.items = res?.data?.list;
-      this.pager.total = res?.data?.total;
-      this.pager.pages = res?.data?.pages;
-      this.loaded = true;
-      this.isLoading = false;
-    })
-
+    else
+      this.items = this.pageProps.showAll == true ? userCahsedNotification :
+        userCahsedNotification.filter((el: any) => el.isRead == false);
+  }
+  clickMenue(event: any) {
+    event.stopPropagation();
   }
 
-  makeNotificationRead(key: string) {
-    let body = {
-      loginId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
-      messageKeys: [key],
-      isRead: true
+  makeNotificationRead(item: any) {
+    if (this.isOnline && item?.isRead == false) {
+      let body = {
+        loginId: JSON.parse(localStorage.getItem('userData') || '{}').userId,
+        messageKeys: [item?.key],
+        isRead: true
+      }
+      try {
+        this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
+          if (res)
+            this.helper.getNotificationCount();
+        });
+      }
+      catch (err) {
+        console.log(err)
+      }
     }
-    try {
-      this.http.post('Notification/MakeNotificationReadByLogin', body, false).subscribe((res) => {
-        if (res)
-          this.helper.getNotificationCount();
-      });
+  }
+  markAllAsRead() {
+    if (this.isOnline) {
+      let loginId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+      try {
+        this.http.get(`Notification/MarkeAllNotificationAsRead?loginId=${loginId}`).toPromise()
+          .then(() => {
+            this.resetAll();
+          });
+      }
+      catch (err) {
+        console.log(err)
+      }
     }
-    catch (err) {
-      console.log(err)
-    }
+    else
+      this.alert.error("Not Internet Connetion");
+  }
+  resetAll() {
+    this.items = [];
+    this.resetPager();
+    this.getAll();
   }
 
   bottomReached(): boolean {
-    return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
+    return ((document.documentElement.offsetHeight + document.documentElement.scrollTop + 100) >= document.documentElement.scrollHeight);
+    // return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
   }
   scrollToTop() {
     window.scroll(0, 0);

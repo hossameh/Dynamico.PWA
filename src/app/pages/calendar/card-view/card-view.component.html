@@ -1,21 +1,24 @@
 <div class="p-3 ">
   <div class="d-flex justify-content-between heading mb-4">
     <p>
-      {{'Show_completed_forms' | translate}}
+      {{'Show_completed_plans' | translate}}
     </p>
     <mat-slide-toggle (click)="toggle()" [(ngModel)]="isChecked"></mat-slide-toggle>
   </div>
   <div class="accordion" id="accordionExample" *ngIf="items?.length != 0">
     <div class="accordion-item" *ngFor="let item of items ; let i = index">
       <h2 class="accordion-header" [id]="'heading' + i">
-        <p class="header" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
-          {{item?.date | date:'d MMM YYY'}} <span *ngIf="item?.list?.length != 0" class="badge">{{item?.list?.length}}</span>
+        <p class="header" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="true"
+          [attr.aria-controls]="'collapse' + i">
+          {{item?.date | date:'d MMM YYY'}} <span *ngIf="item?.list?.length != 0"
+            class="badge">{{item?.list?.length}}</span>
         </p>
       </h2>
-      <div [id]="'collapse' + i" class="accordion-collapse collapse " [class.show]="i == 0" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
+      <div [id]="'collapse' + i" class="accordion-collapse collapse " [class.show]="i == 0"
+        [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
         <div class="accordion-body">
           <div class="mb-3" *ngFor="let element of item.list">
-            <div class="white-box py-2">
+            <div (click)="go(element);setBack()" class="white-box py-2">
               <div class="box-content">
                 <p class="number">
                   #{{element.formId}}
@@ -27,8 +30,16 @@
               </div>
               <div class="box-side">
                 <div class="d-flex align-items-center">
-                  <p class="badge me-2">{{'Pending' | translate}}</p>
-                  <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <p class="badge me-2"
+                    [class.badge-created]="getStatus(element) == recordStatusNames.Created"
+                    [class.badge-assigned]="getStatus(element) == recordStatusNames.Assigned"
+                    [class.badge-pending]="getStatus(element) == recordStatusNames.PendingApproval"
+                    [class.badge-approved]="getStatus(element) == recordStatusNames.Approved"
+                    [class.badge-submitted]="getStatus(element) == recordStatusNames.Completed"
+                    [class.badge-rejected]="getStatus(element) == recordStatusNames.Rejected"
+                    >{{ getStatus(element) | translate}}</p>
+                  <!-- <p class="badge me-2">{{'Pending' | translate}}</p> -->
+                  <!-- <img src="assets/img/icons/menu.svg" alt="menu" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                   <ul class="dropdown-menu  px-3" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item py-0 px-2">
                         <img src="assets/img/icons/edit-icon.svg" alt="edit" class="m-0 me-2">
@@ -39,7 +50,7 @@
                     <li><a class="dropdown-item py-0 px-2" data-bs-toggle="modal" data-bs-target="#delete">
                         <img src="assets/img/icons/trash-icon.svg" alt="trash" class="m-0 me-2">
                         {{'Delete' | translate}}</a></li>
-                  </ul>
+                  </ul> -->
                 </div>
               </div>
             </div>

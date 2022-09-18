@@ -6,6 +6,7 @@
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
+
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 @import "assets/scss/style.scss";
@@ -15,11 +16,13 @@
   src: url("assets/vendor/avenir_ff/avenir_heavy.ttf");
   font-weight: normal;
 }
+
 @font-face {
   font-family: "avenir-black";
   src: url("assets/vendor/avenir_ff/avenir_black.ttf");
   font-weight: bold;
 }
+
 @font-face {
   font-family: "avenir-medium";
   src: url("assets/vendor/avenir_ff/avenir_medium.ttf");
@@ -31,15 +34,24 @@ body {
   color: $text;
   background-color: #F2FBFD;
 }
+
 h1,
 h2,
 h3,
 h4,
 h5,
-h6{
+h6 {
   font-family: "avenir-black";
   margin: 0;
 }
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #079e16;
+}
+.mat-slide-toggle-content {
+  font-family: "avenir-heavy";
+}
+
 .fa {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
@@ -51,8 +63,47 @@ h6{
   padding-bottom: 2px;
 }
 
-p{
+p {
   margin: 0;
 }
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
+
+.accordion-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+  border: 0;
+  border-radius: 0;
+  overflow-anchor: none;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,border-radius .15s ease;
+  margin-top: 15px;
+  margin-bottom: 7px;
+}
+@media print {
+
+  .app-sidebar,
+  .hide-in-print,
+  button[type="submit"],
+  button[type="button"] {
+    width: 0;
+    display: none;
+  }
+
+  .main-panel .main-content {
+    margin: 0 !important;
+  }
+
+  .print-only {
+    display: block;
+  }
+}

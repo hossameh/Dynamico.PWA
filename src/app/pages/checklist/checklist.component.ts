@@ -30,11 +30,13 @@ export class ChecklistComponent implements OnInit {
   latitude!: number;
   longitude!: number;
   userId!: number;
+  userEmail!: string;
   modelBody!: any;
   isComplete = false;
   isOnline = true;
   statusSubscription!: Subscription;
   statusSubscription2!: Subscription;
+  selectedCashedChecklist: any;
 
   constructor(private route: ActivatedRoute,
     private http: HttpService,
@@ -49,7 +51,9 @@ export class ChecklistComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.getOfflineRef();
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
     this.form = {
       display: "form",
       components: []
@@ -120,12 +124,7 @@ export class ChecklistComponent implements OnInit {
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
       if (!isOnline) {
-        if (this.id && this.params.editMode == 'false') {
-          this.loadFromCacheById();
-        }
-        if (this.id && this.params.editMode == 'true') {
-          this.loadFromCacheByIdEdit();
-        }
+        this.loadFromCashe();
       } else {
         this.loadFromApi();
       }
@@ -136,11 +135,19 @@ export class ChecklistComponent implements OnInit {
   loadFromApi() {
     if (this.isOnline) {
       if (this.id && this.params.editMode == 'false') {
-        this.getById();
+        this.getChecklistById();
       }
       if (this.id && this.params.editMode == 'true') {
-        this.editChecklistRecord();
+        this.getRecordToEdit();
       }
+    }
+  }
+  loadFromCashe() {
+    if (this.id && this.params.editMode == 'false') {
+      this.loadChecklistFromCacheById();
+    }
+    if (this.id && this.params.editMode == 'true') {
+      this.loadRecordFromCacheToEdit();
     }
   }
 
@@ -152,7 +159,8 @@ export class ChecklistComponent implements OnInit {
       form_Record: [''],
       record_Status: [0],
       user_Id: [this.userId],
-      isNewRecord: [this.params.editMode == 'true' ? false : true],
+      isNewRecord: [this.params.Record_Id && +this.params.Record_Id > 0 ? false : true],
+      // isNewRecord: [this.params.editMode == 'true' ? false : true],
       location: [''],
       isSubmitted: [],
       offlineRef: ['']
@@ -163,7 +171,7 @@ export class ChecklistComponent implements OnInit {
   back(): void {
     this.location.back();
   };
-  getById() {
+  getChecklistById() {
     this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe(async (value: any) => {
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
@@ -180,10 +188,12 @@ export class ChecklistComponent implements OnInit {
 
 
       if (cacheChecklists) {
+        value.userId = this.userId;
         // check if Checklists  id is in cahce
         let index = cacheChecklists.findIndex((el: any) => {
-          return el.formId == +this.id;
+          return el.userId == this.userId && el.formId == +this.id;
         });
+
         // check if Checklists  id is in cahce update data in this index
         if (index >= 0) {
           cacheChecklists[index] = value;
@@ -255,7 +265,7 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
-  editChecklistRecord() {
+  getRecordToEdit() {
     let apiUrl = 'ChecklistRecords/EditChecklistRecord';
     let isQrCode = this.params.isQR;
     if (isQrCode)
@@ -277,7 +287,7 @@ export class ChecklistComponent implements OnInit {
           });
       }
       this.data = value;
-
+      this.updateCashedRecord();
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
@@ -340,7 +350,39 @@ export class ChecklistComponent implements OnInit {
       };
     });
   }
+  async updateCashedRecord() {
+    let cashedRecords = await this.storage.get('Records') || [];
+    if (cashedRecords) {
+      // check if Record is in cahce
+      let index = cashedRecords.findIndex((el: any) => {
+        return el.userId == this.userId && el.form_Id == this.id && el.record_Id == this.params.Record_Id;
+      });
+      // check if Record  is in cahce update data in this index
+      if (index >= 0) {
 
+        cashedRecords[index].record_Json = this.data?.record_Json;
+      }
+      else {
+        cashedRecords.unshift({
+          record_Id: this.params.Record_Id,
+          form_Id: this.id,
+          assigned_Date: null,
+          createdBy: null,
+          form_Title: this.data?.formTitle,
+          record_Status_Id: this.data?.recordStatusId,
+          gpS_Required: this.data?.gpsRequired,
+          location: this.data?.location,
+          formDataRef: this.data?.formDataRef,
+          userId: this.userId,
+          record_Json: this.data?.record_Json,
+          creation_Date: this.data?.creationDate,
+          workflowId: this.data?.workflowId,
+          form_Layout: this.data?.form_Layout
+        });
+      }
+    }
+    await this.storage.set('Records', cashedRecords);
+  }
   deSerialize(recordDataArray: any) {
     let data: any = {};
     recordDataArray.forEach((item: any) => {
@@ -387,63 +429,201 @@ export class ChecklistComponent implements OnInit {
     this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;
     this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
       if (isOnline) {
-        this.http.post('Records/SaveFormRecord', this.modelBody).subscribe((res: any) => {
+        this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
             this.alert.success('Successfully');
             this.location.back();
+            this.updateCashedPlanRecords();
           } else {
             this.alert.error(res?.message);
           }
         });
       } else {
         this.modelBody.creation_Date = new Date();
-
+        this.modelBody.userId = this.userId;
         let cacheRecords = await this.storage.get('Records') || [];
+        let cacheCompletedRecords = await this.storage.get('CompletedRecords') || [];
+        let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
+
         if (this.params.offline) {
           let index = cacheRecords.findIndex((el: any) => {
-            return el.offlineRef == this.params.offline;
+            return el.userId == this.userId && el.offlineRef == this.params.offline;
           });
           this.modelBody.offlineRef = this.params.offline;
+          this.modelBody.formDataRef = cacheRecords[index]?.formDataRef;
           if (index >= 0) {
-            cacheRecords[index] = this.modelBody;
+            cacheRecords.splice(index, 1);
+            let obj = {
+              userId: this.userId,
+              assigned_Date: null,
+              createdBy: this.userEmail,
+              creation_Date: this.modelBody.creation_Date,
+              formDataRef: this.modelBody.formDataRef ? this.modelBody.formDataRef : this.params.formRef,
+              form_Id: +this.id,
+              form_Title: this.selectedCashedChecklist?.formTitle,
+              gpS_Required: this.selectedCashedChecklist?.gpsRequired,
+              location: null,
+              record: this.modelBody.form_Record,
+              record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
+              workflowId: this.selectedCashedChecklist?.workflowId,
+              offlineRef: this.modelBody.offlineRef,
+            }
+            if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+              cacheCompletedRecords.unshift(obj);
+            else
+              cacheRecords.unshift(obj);
+
           } else {
             //if not found
-            this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
-            cacheRecords.push(this.modelBody);
+            this.modelBody.offlineRef = this.getOfflineRef();
+            // this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
+            let obj = {
+              userId: this.userId,
+              assigned_Date: null,
+              createdBy: this.userEmail,
+              creation_Date: this.modelBody.creation_Date,
+              formDataRef: this.modelBody.formDataRef ? this.modelBody.formDataRef : this.params.formRef,
+              form_Id: +this.id,
+              form_Title: this.selectedCashedChecklist?.formTitle,
+              gpS_Required: this.selectedCashedChecklist?.gpsRequired,
+              location: null,
+              record: this.modelBody.form_Record,
+              record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
+              workflowId: this.selectedCashedChecklist?.workflowId,
+              offlineRef: this.modelBody.offlineRef,
+            }
+            if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+              cacheCompletedRecords.unshift(obj);
+            else
+              cacheRecords.unshift(obj);
+          }
+          let savedIndex = recordsWillBeUpserted.findIndex((el: any) => {
+            return el.userId == this.userId && el.offlineRef == this.params.offline;
+          });
+          if (savedIndex >= 0) {
+            recordsWillBeUpserted[savedIndex] = this.modelBody;
+          } else {
+            //if not saved before to be upserted
+            recordsWillBeUpserted.push(this.modelBody);
           }
 
         } else {
-          if (cacheRecords.length > 0) {
-            this.modelBody.offlineRef = 'offline#' + (cacheRecords.length + 1);
-            cacheRecords.push(this.modelBody);
-          } else {
-            this.modelBody.offlineRef = 'offline#1';
-            cacheRecords.push(this.modelBody);
+          this.modelBody.offlineRef = this.getOfflineRef();
+          // if (cacheRecords.length > 0)
+          //   this.modelBody.offlineRef = 'offline' + (cacheRecords.length + 1);
+          // else
+          //   this.modelBody.offlineRef = 'offline1';
+          if (this.params.editMode == 'true') {
+            let index = cacheRecords.findIndex((el: any) => {
+              return el.userId == this.userId && el.record_Id == this.params.Record_Id;
+            });
+            this.modelBody.formDataRef = cacheRecords[index]?.formDataRef;
+            if (index >= 0) {
+              cacheRecords.splice(index, 1);
+              let obj = {
+                userId: this.userId,
+                assigned_Date: null,
+                createdBy: this.userEmail,
+                creation_Date: this.modelBody.creation_Date,
+                formDataRef: this.modelBody.formDataRef ? this.modelBody.formDataRef : this.params.formRef,
+                form_Id: +this.id,
+                form_Title: this.selectedCashedChecklist?.formTitle,
+                gpS_Required: this.selectedCashedChecklist?.gpsRequired,
+                location: null,
+                record: this.modelBody.form_Record,
+                record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+                record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                  (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
+                workflowId: this.selectedCashedChecklist?.workflowId,
+                offlineRef: this.modelBody.offlineRef ?? '',
+              }
+              if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+                cacheCompletedRecords.unshift(obj);
+              else
+                cacheRecords.unshift(obj);
+            }
+            else {
+              let obj = {
+                userId: this.userId,
+                assigned_Date: null,
+                createdBy: this.userEmail,
+                creation_Date: this.modelBody.creation_Date,
+                formDataRef: this.modelBody.formDataRef ? this.modelBody.formDataRef : this.params.formRef,
+                form_Id: +this.id,
+                form_Title: this.selectedCashedChecklist?.formTitle,
+                gpS_Required: this.selectedCashedChecklist?.gpsRequired,
+                location: null,
+                record: this.modelBody.form_Record,
+                record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+                record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                  (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
+                workflowId: this.selectedCashedChecklist?.workflowId,
+                offlineRef: this.modelBody.offlineRef ?? '',
+              }
+              if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+                cacheCompletedRecords.unshift(obj);
+              else
+                cacheRecords.unshift(obj);
+            }
           }
+          else {
+            let obj = {
+              userId: this.userId,
+              assigned_Date: null,
+              createdBy: this.userEmail,
+              creation_Date: this.modelBody.creation_Date,
+              formDataRef: this.modelBody.formDataRef ? this.modelBody.formDataRef : this.params.formRef,
+              form_Id: +this.id,
+              form_Title: this.selectedCashedChecklist?.formTitle,
+              gpS_Required: this.selectedCashedChecklist?.gpsRequired,
+              location: null,
+              record: this.modelBody.form_Record,
+              record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+              record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
+                (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
+              workflowId: this.selectedCashedChecklist?.workflowId,
+              offlineRef: this.modelBody.offlineRef ?? '',
+            }
+            if (this.modelBody.record_Status == RecordStatus.Completed && !this.selectedCashedChecklist?.workflowId)
+              cacheCompletedRecords.unshift(obj);
+            else
+              cacheRecords.unshift(obj);
+          }
+
+          recordsWillBeUpserted.push(this.modelBody);
         }
 
+        await this.storage.set('RecordsWillBeUpserted', recordsWillBeUpserted);
         await this.storage.set('Records', cacheRecords);
+        await this.storage.set('CompletedRecords', cacheCompletedRecords);
+        this.updateCashedPlanRecords();
         this.location.back();
       }
     });
     this.statusSubscription2.unsubscribe();
   }
 
-  async loadFromCacheById() {
+  async loadChecklistFromCacheById() {
     let cacheChecklists = await this.storage.get('Checklists') || [];
     let value: any = {};
     if (cacheChecklists.length > 0) {
-      value = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
+      value = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
+      this.selectedCashedChecklist = value;
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
           this.longitude = location.coords.longitude;
           this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
-        },
-          (err) => {
-            this.location.back();
-            this.alert.error('Please accept to share your location first !');
-          });
+        }
+          // ,(err) => {
+          //     this.location.back();
+          //     this.alert.error('Please accept to share your location first !');
+          //   }
+        );
       }
       if (value) {
 
@@ -506,33 +686,46 @@ export class ChecklistComponent implements OnInit {
     }
   }
 
-  async loadFromCacheByIdEdit() {
+  async loadRecordFromCacheToEdit() {
 
     let cacheChecklists = await this.storage.get('Checklists') || [];
     let cacheRecords = await this.storage.get('Records') || [];
     let valueChecklist: any = {};
     let valueRecord: any = {};
-    if (cacheChecklists.length > 0 && cacheRecords.length > 0) {
-      valueChecklist = cacheChecklists.filter((el: any) => el.formId == this.id)[0];
-      valueRecord = cacheRecords.filter((el: any) => el.offlineRef == this.params.offline)[0];
-      if (valueChecklist?.gpsRequired) {
+    if (cacheRecords.length > 0) {
+
+      valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
+      this.selectedCashedChecklist = valueChecklist;
+      valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
+
+      let requireGps = valueChecklist?.gpsRequired ? valueChecklist?.gpsRequired : valueRecord?.gpS_Required;      
+      if (requireGps) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
           this.longitude = location.coords.longitude;
           this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
-        },
-          (err) => {
-            this.location.back();
-            this.alert.error('Please accept to share your location first !');
-          });
+        }
+          // ,
+          //   (err) => {
+          //     this.location.back();
+          //     this.alert.error('Please accept to share your location first !');
+          //   }
+        );
       }
+      console.log(valueRecord);
+      console.log(valueChecklist);
       if (valueRecord) {
+        
         this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
         this.recordForm.get('formDataRef')?.setValue(this.params.offline);
         this.recordForm.get('formDataRef')?.disable();
-        let recordJson = valueRecord.form_Record; // data
-        let dataObject = this.deSerialize(recordJson);
-        this.form.components = JSON.parse(valueChecklist.formControls);
+
+        let recordJson = valueRecord.record ? valueRecord.record : valueRecord.record_Json; // data
+
+        let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
+          this.deSerialize(recordJson) :
+          this.deSerialize(JSON.parse(recordJson));
+        this.form.components = JSON.parse(valueChecklist?.formControls ? valueChecklist?.formControls : valueRecord.form_Layout);
         this.options = {
           builder: {
             hideTab: true,
@@ -588,6 +781,10 @@ export class ChecklistComponent implements OnInit {
           }
         };
       }
+      else {
+        this.alert.info("No Internet Connection");
+        this.location.back();
+      }
 
     }
   }
@@ -596,5 +793,23 @@ export class ChecklistComponent implements OnInit {
     //Add 'implements OnDestroy' to the class.
     this.statusSubscription.unsubscribe();
 
+  }
+  async updateCashedPlanRecords() {
+    let cashedListPlans = await this.storage.get("ListPlans") || [];
+    cashedListPlans.forEach((day: any) => {
+      day.list.forEach((element: any) => {
+        if (element.isCreateFormData == true && element.plannerFormsData && element.plannerFormsData[0].formsData) {
+          let record = element.plannerFormsData[0].formsData;
+          if (record.formDataId == +this.params.Record_Id && record.userId == this.userId) {
+            element.plannerFormsData[0].formsData.recordStatusId = this.modelBody.record_Status;
+          }
+        }
+      });
+    });
+    await this.storage.set("ListPlans", cashedListPlans)
+  }
+  getOfflineRef() {
+    let date = new Date().toISOString();
+    return "offline-" + date;
   }
 }

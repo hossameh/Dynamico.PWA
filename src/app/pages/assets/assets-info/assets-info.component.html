@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="card-body">
+        <div ref="component" class="formio-component formio-component-form  formio-component-label-hidden" id="ec7kxo5">
+            <div novalidate="" ref="webform" class="formio-form formio-read-only">
+                <div *ngFor="let item of items" ref="component"
+                    class="form-group has-feedback formio-component formio-component-email formio-component-email"
+                    id="ev6mja" style="margin-top: 15px;">
+                    <label id="l-ev6mja-email" for="ev6mja-email" class="col-form-label" ref="label">
+                        {{ item?.code }}
+                    </label>
+                    <div ref="element"
+                        *ngIf="item?.type !== propertyTypeEnum.QR && item?.type !== propertyTypeEnum.Image && item?.type !== propertyTypeEnum.Location">
+                        <input aria-required="false" aria-labelledby="l-eltdhm5-textField" id="eltdhm5-textField"
+                            [value]="item?.value" spellcheck="true" disabled="disabled" lang="en" class="form-control"
+                            type="text" name="data[textField]" ref="input" aria-invalid="false">
+                    </div>
+                    <div *ngIf="item?.type === propertyTypeEnum.QR"
+                        class="text-left col-sm-6 col-lg-6">
+                        <div class="qrCode-wrapper">
+                            <ngx-qrcode [elementType]="elementType" [value]="item?.value" cssClass="aclass">
+                            </ngx-qrcode>
+                        </div>
+                    </div>
+                    <div *ngIf="item?.type === propertyTypeEnum.Image"
+                        class="text-left  col-sm-6 col-lg-6">
+                        <img class="rounded" height="120" [src]="item?.value" />
+                    </div>
+                    <div *ngIf="item?.type === propertyTypeEnum.Location"
+                        class="text-left  col-sm-6 col-lg-6">
+                        <img src="assets/img/icons/map.jpg" (click)="mapClick(item?.value)" height="100px" alt="menu"
+                            class="dropdown-toggle" type="button">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

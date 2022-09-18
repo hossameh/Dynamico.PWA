@@ -1,18 +1,19 @@
 <main [@routing]="outletRef.isActivated ? outletRef.activatedRoute : ''">
   <router-outlet #outletRef="outlet"></router-outlet>
 </main>
-<a [routerLink]="['/page/notification']" *ngIf="!hideNotifcation" routerLinkActive="active" class="notification-icon">
+<a [routerLink]="['/page/notification']" *ngIf="!hideNotifcation" routerLinkActive="active" 
+class="notification-icon hide-in-print">
   <!-- <span class="dots"></span> -->
   <img src="assets/img/icons/notification-icon.svg" alt="notification">
   <span class="notification-count" *ngIf="notifcationCount">{{notifcationCount}}</span>
 </a>
-<div class="preload" *ngIf="show">
+<div class="preload hide-in-print" *ngIf="show">
   <div class="lds-ripple">
     <div></div>
     <div></div>
   </div>
 </div>
-<div class="notification" [ngClass]="update ? 'show' : 'hide'">
+<div class="notification hide-in-print" [ngClass]="update ? 'show' : 'hide'">
   <i class="fa fa-check bg-green-dark"></i>
   <h1 class="font-20 color-white">New version available!</h1>
   <!-- <strong>19:24</strong> -->

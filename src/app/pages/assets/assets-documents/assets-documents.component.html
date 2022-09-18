@@ -1,0 +1,29 @@
+<ngb-accordion #acc="ngbAccordion">
+    <ngb-panel *ngFor="let cat of items" [title]="cat?.documentCategoryName">
+        <ng-template ngbPanelContent>
+            <div class="content px-3 py-4">
+                <div class="mb-3" *ngFor="let item of cat.documentList">
+                    <div class="white-box">
+                        <div class="box-content">
+                            <h5 class="font-14">
+                                {{item?.documentName ? item?.documentName : 'NA'}}
+                            </h5>
+                            <p class="number">
+                                {{ item?.documentPath ? item?.documentPath.split('.')[1] : 'NA' }}
+                            </p>
+                        </div>
+                        <div class="box-side">
+                            <div class="d-flex align-items-center">
+                                <a placement="bottom" [href]="item?.documentPath" [download]="item.documentName"
+                                    target="_blank" class="text-secondary mb-0 mt-0 mx-1">
+                                    <img src="assets/img/icons/download.svg" width="25px" height="25px" alt="menu"
+                                        class="dropdown-toggle" type="button">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>

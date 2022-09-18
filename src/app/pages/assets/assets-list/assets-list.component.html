@@ -1,0 +1,64 @@
+<section class="main pb-5">
+    <div class="section-heading">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="d-flex">
+                    <h4>
+                        {{'Assets' | translate}}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-bar">
+        <div class="form-group m-0 p-0">
+            <input class="form-control form-control-md no-shadow" type="search" (keyup)="resetSearch()" (search)="resetSearch()"
+                placeholder="{{'Search By Name or Code' | translate}} " [(ngModel)]="searchKeyWord" aria-label="search">
+            <img src="assets/img/icons/search-icon.svg" alt="search">
+        </div>
+    </div>
+    <div class="content px-3 py-4">
+        <div class="mb-3" *ngFor="let item of assets">
+            <div class="white-box">
+                <div class="box-content" [routerLink]="['/page/assets/details']"
+                    [queryParams]="{assetId: item?.assetId}">
+                    <p class="number">
+                        {{item.code}}
+                    </p>
+                    <h5 class="font-14">
+                        {{item.name}}
+                    </h5>
+                    <p class="date">{{item.creationDate | date:'short'}}</p>
+                </div>
+                <!-- <div class="box-side">
+                    <div class="d-flex align-items-center">
+                        <img src="assets/img/icons/add-button.svg" alt="open">
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <a (click)="scrollToTop()" class="
+    back-to-top-icon
+    rounded-xs
+    back-to-top-icon-circle
+    bg-highlight
+    shadow-m
+  " style="transform: scale(1); position: fixed !important">
+        <img src="assets/img/icons/icons8-up-24.png" alt="add">
+        <!-- <img src="assets/img/icons/up-arrow.svg" alt="add"> -->
+        <!-- <svg class="bi bi-arrow-up"></svg> -->
+        <!-- Up -->
+        <!-- <img src="assets/img/icons/home-icon.svg" alt="home"> -->
+        <!-- <i class="fa fa-angle-up"></i> -->
+    </a>
+    <div *ngIf="isLoading" class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</section>

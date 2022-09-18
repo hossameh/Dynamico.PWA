@@ -11,13 +11,16 @@ import {
   isSameMonth,
   addHours,
 } from 'date-fns';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
+import { Storage } from '@ionic/storage-angular';
+import { AlertService } from 'src/app/services/alert/alert.service';
+import { OfflineService } from 'src/app/services/offline/offline.service';
 
 const colors: any = {
   red: {
@@ -71,19 +74,28 @@ export class DateViewComponent implements OnInit {
   plannerModel!: any[];
   planner!: any;
   recurringEvents: RecurringEvent[] = [];
+  Subscription!: Subscription;
+  isOnline = true;
+  userId: any;
 
   constructor(
-    private router:Router
+    private router: Router,
+    private storage: Storage,
+    private alert: AlertService,
+    private offline: OfflineService,
   ) { }
 
   ngOnInit(): void {
-
+    this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.Subscription = this.offline.currentStatus.subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
   }
-  toggle(){
+  toggle() {
     setTimeout(() => {
-     this.showCompletedDateView.emit(this.isChecked);
-    },50)
- }
+      this.showCompletedDateView.emit(this.isChecked);
+    }, 50)
+  }
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -99,7 +111,7 @@ export class DateViewComponent implements OnInit {
 
         daysList.forEach((date: any) => {
           this.events.push({
-            id: this.plannerModel[i].formId,
+            id: this.plannerModel[i].id,
             title: (this.plannerModel[i].title),
             color: { primary: this.plannerModel[i].color, secondary: '' },
             start: new Date(date),
@@ -147,13 +159,62 @@ export class DateViewComponent implements OnInit {
   }: CalendarEventTimesChangedEvent): void {
 
   }
-  onEditClick(event: any) {
-    const queryParams: Params = { editMode: false };
+  async onEditClick(event: any) {
+    // console.log(event);
 
-    this.router.navigate(['/page/checklist/'+event.id], {
-      queryParams: queryParams,
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    } )
+    let item = this.items.filter((el: any) => el.id == event.id)[0];
+    if (item && item.isCreateFormData == true && item.plannerFormsData) {
+      let formData = item.plannerFormsData.filter((el: any) =>
+        new Date(el.day).getDay() == event.start.getDay()
+      )[0];
+      let complete = false;
+      // if (this.access && this.access.toString().includes(this.accessTypes.Read)) {
+      //   if (!this.access.includes(this.accessTypes.Update))
+      complete = true;
+
+      if (!this.isOnline) {
+        // let cacheChecklists = await this.storage.get('Checklists') || [];
+        // if (cacheChecklists) {
+        //   console.log(cacheChecklists);
+        //   console.log(item.formId);
+          
+        //   let valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == item.formId)[0];
+        //   console.log(valueChecklist);
+          
+        //   if (!valueChecklist) {
+        //     this.alert.error("No Internet Connection");
+        //     return;
+        //   }
+        // }
+        let cacheRecords = await this.storage.get('Records') || [];
+        if (cacheRecords) {
+          let recordData = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == +formData.formsDataId)[0];
+          let jsonData = recordData?.record ? recordData?.record : recordData?.record_Json;
+          if (!recordData || !jsonData) {
+            this.alert.error("No Internet Connection");
+            return;
+          }
+        }
+      }
+
+      this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true" +
+        // (complete == true ? "&Complete=true" : "") +
+        "&offline=" + '' +
+        "&listName=" + item.form.formTitle +
+        "&Record_Id=" + +formData.formsDataId);
+      // }
+      // else {
+      //   this.alert.error("You have No Access")
+      //   return;
+      // }
+    }
+    else {
+      const queryParams: Params = { editMode: false };
+      this.router.navigate(['/page/checklist/' + item.formId], {
+        queryParams: queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      })
+    }
   }
 
 }
