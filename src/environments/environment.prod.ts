@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   version:'1.2.2',
-  hostAPI:"https://qa-farm.tensorforms.com/api.dynamico/api/",
+  hostAPI:"https://dynamico.cloud/api/",
   //hostAPI:"http://5.189.153.30/api.dynamico/api/"
 
   appName: 'PWA',
