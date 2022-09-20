@@ -1,23 +1,23 @@
 <section class="login">
-    <div class="w-100">
-      <div class="logo">
-        <img src="assets/img/logo.png" alt="logo">
-      </div>
-      <form [formGroup]="authForm">
-        <div class="mb-3">
-          <div class="form-floating ">
-            <input type="email" class="form-control" id="floatingInput" placeholder=" " formControlName="username">
-            <label for="floatingInput">{{'Username' | translate}}</label>
-          </div>
-          <div *ngIf="f.username.touched && (f.username.errors?.required)" class="text-danger text-start mt-2 font-12">
-            {{'Required' | translate}}
-          </div>
-          <!-- <div *ngIf="f.username.touched && (f.username.errors?.email)" class="text-danger text-start mt-2 font-12">
+  <div class="w-100">
+    <div class="logo">
+      <img src="assets/img/logo.png" alt="logo">
+    </div>
+    <form [formGroup]="authForm">
+      <div class="mb-3">
+        <div class="form-floating ">
+          <input type="email" class="form-control" id="floatingInput" placeholder=" " formControlName="email">
+          <label for="floatingInput">{{'User Email' | translate}}</label>
+        </div>
+        <div *ngIf="f.email.touched && (f.email.errors?.required)" class="text-danger text-start mt-2 font-12">
+          {{'Required' | translate}}
+        </div>
+        <!-- <div *ngIf="f.email.touched && (f.email.errors?.email)" class="text-danger text-start mt-2 font-12">
             Email Not Valid
           </div> -->
-        </div>
-        <button (click)="login()" [disabled]="authForm.invalid" class="btn btn-secondary w-100 py-3">{{'Login' | translate}}</button>
-      </form>
-    </div>
-  </section>
-  
+      </div>
+      <button (click)="login()" [disabled]="authForm.invalid" class="btn btn-secondary w-100 py-3">{{'Login' |
+        translate}}</button>
+    </form>
+  </div>
+</section>

@@ -77,7 +77,7 @@ export class ExternalLoginComponent implements OnInit {
 
   BuildRequestForm() {
     this.authForm = this.FB.group({
-      username: [null, [Validators.required]],
+      email: [null, [Validators.required]],
     });
   }
   get f() {
@@ -85,15 +85,15 @@ export class ExternalLoginComponent implements OnInit {
   }
   login() {
     let body = this.authForm.value;
-    body.Code = this.code;
+    body.code = this.code;
+
     this.http.post('Guest/LoginGuest', body, true).subscribe(async (res: any) => {
       if (res.isPassed) {
-        console.log(res);
+        
+        await localStorage.setItem('userData', JSON.stringify(res?.data?.userToken));
+        await localStorage.setItem('token', JSON.stringify(res.data?.userToken?.resetToken));
 
-        await localStorage.setItem('userData', JSON.stringify(res.data));
-        await localStorage.setItem('token', JSON.stringify(res.data.resetToken));
-
-        //this.router.navigate(['/page/home']);
+        this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
       } else {
         this.alert.error(res.message);
       }

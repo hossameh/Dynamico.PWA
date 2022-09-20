@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { RecordStatus } from 'src/app/core/enums/status.enum';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
+import { Role } from 'src/app/core/enums/role.enum';
 
 @Component({
   selector: 'app-checklist',
@@ -31,12 +32,14 @@ export class ChecklistComponent implements OnInit {
   longitude!: number;
   userId!: number;
   userEmail!: string;
+  userRole!: string;
   modelBody!: any;
   isComplete = false;
   isOnline = true;
   statusSubscription!: Subscription;
   statusSubscription2!: Subscription;
   selectedCashedChecklist: any;
+  role = Role;
 
   constructor(private route: ActivatedRoute,
     private http: HttpService,
@@ -54,6 +57,7 @@ export class ChecklistComponent implements OnInit {
     this.getOfflineRef();
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
+    this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
     this.form = {
       display: "form",
       components: []
@@ -431,7 +435,7 @@ export class ChecklistComponent implements OnInit {
       if (isOnline) {
         this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
-            this.alert.success('Successfully');
+            this.alert.success('Form Submitted Successfully');
             this.location.back();
             this.updateCashedPlanRecords();
           } else {
@@ -698,7 +702,7 @@ export class ChecklistComponent implements OnInit {
       this.selectedCashedChecklist = valueChecklist;
       valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
 
-      let requireGps = valueChecklist?.gpsRequired ? valueChecklist?.gpsRequired : valueRecord?.gpS_Required;      
+      let requireGps = valueChecklist?.gpsRequired ? valueChecklist?.gpsRequired : valueRecord?.gpS_Required;
       if (requireGps) {
         navigator.geolocation.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
@@ -715,7 +719,7 @@ export class ChecklistComponent implements OnInit {
       console.log(valueRecord);
       console.log(valueChecklist);
       if (valueRecord) {
-        
+
         this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
         this.recordForm.get('formDataRef')?.setValue(this.params.offline);
         this.recordForm.get('formDataRef')?.disable();

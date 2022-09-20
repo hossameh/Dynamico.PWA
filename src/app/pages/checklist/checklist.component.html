@@ -5,7 +5,7 @@
         <div class="d-flex">
           <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
           <h4>
-            {{params?.listName ?  params?.listName : data?.formTitle}}
+            {{params?.listName ? params?.listName : data?.formTitle}}
           </h4>
         </div>
       </div>
@@ -21,7 +21,8 @@
 </section>
 
 <a data-bs-toggle="modal" data-bs-target="#submissionModal" #openModal></a>
-<div class="modal fade" id="submissionModal" aria-labelledby="submitLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="submissionModal" aria-labelledby="submitLabel" data-bs-backdrop="static"
+  data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header text-center p-2 ">
@@ -31,8 +32,10 @@
       <div class="modal-body">
 
         <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-warning w-100 ms-e" data-bs-dismiss="modal" (click)="save()">{{'Save' | translate}}</button>
-          <button type="button" class="btn btn-primary w-100 ms-2" data-bs-dismiss="modal" (click)="submit()">{{'Submit' | translate}}</button>
+          <button type="button" *ngIf="userRole != role.Anonymous" class="btn btn-warning w-100 ms-e"
+            data-bs-dismiss="modal" (click)="save()">{{'Save' | translate}}</button>
+          <button type="button" class="btn btn-primary w-100 ms-2" data-bs-dismiss="modal" (click)="submit()">{{'Submit'
+            | translate}}</button>
         </div>
       </div>
     </div>

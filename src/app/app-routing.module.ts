@@ -30,7 +30,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'externallogin',
+    path: 'GuestLogin',
     component: ExternalLoginComponent
   },
   {

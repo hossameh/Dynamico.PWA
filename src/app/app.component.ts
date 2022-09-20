@@ -11,6 +11,7 @@ import { getMessaging, onMessage } from 'firebase/messaging';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationPage } from './pages/notification/notification.page';
 import { environment } from 'src/environments/environment';
+import { Role } from './core/enums/role.enum';
 
 
 @Component({
@@ -27,6 +28,8 @@ export class AppComponent {
   hideNotifcation = false;
   notifcationCount = 5;
   message: any = null;
+  role = Role;
+  userRole!: string;
 
   constructor(private helper: HelperService,
     private swUpdates: SwUpdate,
@@ -40,6 +43,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.update = false;
+    this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
     this.createDb();
     this.reloadCache();
 
@@ -72,7 +76,10 @@ export class AppComponent {
         return;
       } else {
         this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search')
-          || this.router.url.includes('login') || this.router.url.includes('forgot') || this.router.url.includes('resetpassword');
+          || this.router.url.includes('login')
+          || this.router.url.includes('GuestLogin')
+          || this.userRole == this.role.Anonymous
+          || this.router.url.includes('forgot') || this.router.url.includes('resetpassword');
       }
       window.scrollTo(0, 0);
     });
