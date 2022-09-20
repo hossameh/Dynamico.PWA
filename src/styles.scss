@@ -30,9 +30,11 @@
 }
 
 body {
-  font-family: "avenir-heavy";
+  // font-family: "avenir-heavy";
   color: $text;
   background-color: #F2FBFD;
+  font-family: Montserrat,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  font-weight:600 !important;
 }
 
 h1,
@@ -41,7 +43,8 @@ h3,
 h4,
 h5,
 h6 {
-  /*font-family: "avenir-black";*/
+  font-family: Montserrat,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  font-weight: 600 !important;
   margin: 0;
 }
 
