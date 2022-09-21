@@ -9,13 +9,21 @@
                                 {{item?.documentName ? item?.documentName : 'NA'}}
                             </h5>
                             <p class="number">
-                                {{ item?.documentPath ? item?.documentPath.split('.')[1] : 'NA' }}
+                                {{item?.mimeType ? item?.mimeType : ''}}
+                                <!-- {{ item?.documentPath ? item?.documentPath.split('.')[1] : 'NA' }} -->
                             </p>
                         </div>
                         <div class="box-side">
                             <div class="d-flex align-items-center">
-                                <a placement="bottom" [href]="item?.documentPath" [download]="item.documentName"
-                                    target="_blank" class="text-secondary mb-0 mt-0 mx-1">
+                                <a placement="bottom" [routerLink]="['/page/view-doc/']"
+                                    [queryParams]="{name: item?.documentName ,mimeType:item?.mimeType, documentPath:item?.documentPath}"
+                                    *ngIf="item?.canPreview" class="text-secondary mb-0 mt-0 mx-1">
+                                    <img src="assets/img/icons/eye.svg" width="25px" height="25px" alt="menu"
+                                        class="dropdown-toggle" type="button">
+                                </a>
+                                <a placement="bottom" *ngIf="item?.canDownload" [href]="item?.documentPath"
+                                    [download]="item.documentName" target="_blank"
+                                    class="text-secondary mb-0 mt-0 mx-2">
                                     <img src="assets/img/icons/download.svg" width="25px" height="25px" alt="menu"
                                         class="dropdown-toggle" type="button">
                                 </a>

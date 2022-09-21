@@ -1,0 +1,25 @@
+<section class="main pb-3">
+    <div class="section-heading">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="d-flex">
+                    <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" (click)="back()">
+                    <h4>
+                        {{ doc?.name ? doc?.name : 'NA' }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Image)" class="m-2 text-center">
+            <img [src]="doc.documentPath" height="200"> <br />
+        </div>
+        <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Video)" class="m-2 text-center">
+            <video [src]="doc.documentPath" height="200" controls></video> <br />
+        </div>
+        <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Audio)" class="m-2 text-center">
+            <audio [src]="doc.documentPath" height="200" controls></audio> <br />
+        </div>
+    </div>
+</section>

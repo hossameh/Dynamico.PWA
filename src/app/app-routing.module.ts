@@ -23,6 +23,7 @@ import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
 import { AssetsComponent } from './pages/assets/assets.component';
 import { AssetsListComponent } from './pages/assets/assets-list/assets-list.component';
 import { ExternalLoginComponent } from './auth/external-login/external-login.component';
+import { DocumentViewerComponent } from './pages/assets/document-viewer/document-viewer.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -111,6 +112,10 @@ const routes: Routes = [
         path: 'assets/details',
         component: AssetsComponent
       },
+      {
+        path: 'view-doc',
+        component: DocumentViewerComponent
+      }
     ]
   }
 ];
