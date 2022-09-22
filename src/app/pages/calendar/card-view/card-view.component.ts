@@ -1,6 +1,6 @@
 import { dates } from './../../../core/interface/api.interface';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 
@@ -26,22 +26,18 @@ export class CardViewComponent implements OnInit {
     }, 50)
   }
   go(item: any) {
-    let complete = false;
-    // if (this.access && this.access.toString().includes(this.accessTypes.Read)) {
-    //   if (!this.access.includes(this.accessTypes.Update))
-    complete = true;
-
-    this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true" +
-      (complete == true ? "&Complete=true" : "") +
-      "&offline=" + '' +
-      "&listName=" + item.form.formTitle +
-      "&Record_Id=" + item?.plannerFormsData[0]?.formsDataId);
-    // }
-    // else {
-    //   this.alert.error("You have No Access")
-    //   return;
-    // }
-
+    if (item && item.isCreateFormData == true && item.plannerFormsData)
+      this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true&Complete=true"
+        + "&offline=" + '' +
+        "&listName=" + item.form.formTitle +
+        "&Record_Id=" + item?.plannerFormsData[0]?.formsDataId);
+    else {
+      const queryParams: Params = { editMode: false };
+      this.router.navigate(['/page/checklist/' + item.formId], {
+        queryParams: queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      })
+    }
   }
   async setBack() {
     this.storage.set("BackToPlan", "CardView");

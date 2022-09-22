@@ -34,11 +34,14 @@
             <ngx-doc-viewer disableContent="none" [url]="doc.documentPath" viewer="google"
                 style="width:100%;height:100vh;"></ngx-doc-viewer>
         </div>
-        <div *ngIf="doc?.mimeType && doc?.extension 
-        && !doc.mimeType.includes(docTypes.Image)
+        <div *ngIf="(doc?.mimeType && doc?.extension)
+        &&
+        (!doc.mimeType.includes(docTypes.Image)
         && !doc.mimeType.includes(docTypes.Video)
         && !doc.mimeType.includes(docTypes.Audio)
-        && !docExtensions.includes(doc.extension)" class="white-box m-2">
+        && !docExtensions.includes(doc.extension)) 
+        || 
+        (doc?.extension === '.avi')" class="white-box m-2">
             <div class="box-content">
                 <h5 class="font-14">
                     {{doc?.name ? doc?.name : 'NA'}}

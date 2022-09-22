@@ -53,7 +53,7 @@
   "Yes": "نعم",
   "Search": "بحث",
   "search_p": "إبحث بإسم النموذج  او السجل",
-  "Completed_forms": "مناذج مكتملة",
+  "Completed_forms": "نماذج مكتملة",
   "List_filter": "عرض التفضيل",
   "Pending_forms_Filter": "تفضيل النماذج المتعلقة",
   "Complete_forms_Filter": "  تفضيل النماذج المكتلمة",
@@ -90,5 +90,5 @@
   "Forms": "نماذج",
   "Search By Name or Code": "ابحث بالاسم أو الكود",
   "Name": "الاسم",
-  "Form Submitted Successfully":"تم إرسال النموذج نجاح"
+  "Form Submitted Successfully":"تم إرسال النموذج بنجاح"
 }
