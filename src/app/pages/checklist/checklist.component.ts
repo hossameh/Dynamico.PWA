@@ -10,6 +10,7 @@ import { RecordStatus } from 'src/app/core/enums/status.enum';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { Role } from 'src/app/core/enums/role.enum';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-checklist',
@@ -48,7 +49,8 @@ export class ChecklistComponent implements OnInit {
     private offline: OfflineService,
     private storage: Storage,
     private location: Location,
-    private alert: AlertService
+    private alert: AlertService,
+    private helper: HelperService
   ) {
 
 
@@ -435,7 +437,7 @@ export class ChecklistComponent implements OnInit {
       if (isOnline) {
         this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
-            this.alert.success('Form Submitted Successfully');
+            this.alert.success(this.helper.getTranslation('Form Submitted Successfully'));
             this.location.back();
             this.updateCashedPlanRecords();
           } else {

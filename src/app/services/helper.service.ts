@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from './http/http.service';
 
@@ -18,7 +19,8 @@ export class HelperService {
 
   constructor(
     private http: HttpService,
-    private storage: Storage
+    private storage: Storage,
+    private translate: TranslateService
   ) {
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
   }
@@ -72,6 +74,9 @@ export class HelperService {
       let count = userPendingWorkflowCounts ? userPendingWorkflowCounts.count : 0;
       this.getingCount.next(count);
     }
+  }
+  getTranslation(wordYouNeedToTranslate: string): string {
+    return this.translate.instant(wordYouNeedToTranslate);
   }
 
 }
