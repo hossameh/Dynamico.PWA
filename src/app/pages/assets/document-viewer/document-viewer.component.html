@@ -15,11 +15,47 @@
         <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Image)" class="m-2 text-center">
             <img [src]="doc.documentPath" height="200"> <br />
         </div>
-        <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Video)" class="m-2 text-center">
-            <video [src]="doc.documentPath" height="200" controls></video> <br />
+        <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Video) && doc?.extension !== '.avi'"
+            class="m-2 text-center">
+            <video [src]="doc.documentPath" width="100%" height="50%" controls></video> <br />
         </div>
+        <!-- <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Video) && doc?.extension === '.avi'"
+            class="m-2 text-center">
+            <span>avi video</span>
+            <object [data]="doc.documentPath" width="360" height="250">
+                <param name="src" [value]="doc.documentPath" />
+                <embed type="video/x-ms-wm" [src]="doc.documentPath" width="360" height="250">
+            </object> <br />
+        </div> -->
         <div *ngIf="doc?.mimeType && doc.mimeType.includes(docTypes.Audio)" class="m-2 text-center">
             <audio [src]="doc.documentPath" height="200" controls></audio> <br />
+        </div>
+        <div *ngIf="doc?.extension && docExtensions.includes(doc.extension)" class="m-2 text-center">
+            <ngx-doc-viewer disableContent="none" [url]="doc.documentPath" viewer="google"
+                style="width:100%;height:100vh;"></ngx-doc-viewer>
+        </div>
+        <div *ngIf="doc?.mimeType && doc?.extension 
+        && !doc.mimeType.includes(docTypes.Image)
+        && !doc.mimeType.includes(docTypes.Video)
+        && !doc.mimeType.includes(docTypes.Audio)
+        && !docExtensions.includes(doc.extension)" class="white-box m-2">
+            <div class="box-content">
+                <h5 class="font-14">
+                    {{doc?.name ? doc?.name : 'NA'}}
+                </h5>
+                <p class="number">
+                    {{doc?.mimeType ? doc?.mimeType : 'NA'}}
+                </p>
+            </div>
+            <div class="box-side">
+                <div class="d-flex align-items-center">
+                    <a placement="bottom" [href]="doc?.documentPath" [download]="doc.name" target="_blank"
+                        class="text-secondary mb-0 mt-0 mx-2">
+                        <img src="assets/img/icons/download.svg" width="25px" height="25px" alt="menu"
+                            class="dropdown-toggle" type="button">
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>

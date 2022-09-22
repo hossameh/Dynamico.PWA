@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DocTypes } from 'src/app/core/enums/docType.enum';
+import { DocExtention, DocTypes } from 'src/app/core/enums/docType.enum';
 import { Location } from '@angular/common';
 
 @Component({
@@ -12,14 +12,17 @@ export class DocumentViewerComponent implements OnInit {
 
   docTypes = DocTypes;
   doc: any;
+  docExtensions: any[] = [];
   constructor(private route: ActivatedRoute,
     private location: Location,
   ) { }
 
   ngOnInit(): void {
+    this.docExtensions = Object.values(DocExtention)
+      .map((el) => {
+        return el.toLowerCase();
+      });
     this.doc = this.route.snapshot.queryParams;
-    console.log(this.doc);
-
   }
   back(): void {
     this.location.back();

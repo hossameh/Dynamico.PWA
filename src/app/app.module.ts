@@ -50,6 +50,7 @@ import { AssetsDocumentsComponent } from './pages/assets/assets-documents/assets
 import { AssetsListComponent } from './pages/assets/assets-list/assets-list.component';
 import { ExternalLoginComponent } from './auth/external-login/external-login.component';
 import { DocumentViewerComponent } from './pages/assets/document-viewer/document-viewer.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 initializeApp(environment.firebase);
 
 
@@ -98,6 +99,7 @@ initializeApp(environment.firebase);
     NgxQRCodeModule,
     IonicStorageModule.forRoot(),
     FormioEditorModule,
+    NgxDocViewerModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-center',
     }),
