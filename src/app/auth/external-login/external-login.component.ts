@@ -77,7 +77,7 @@ export class ExternalLoginComponent implements OnInit {
 
   BuildRequestForm() {
     this.authForm = this.FB.group({
-      email: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
     });
   }
   get f() {
@@ -89,7 +89,7 @@ export class ExternalLoginComponent implements OnInit {
 
     this.http.post('Guest/LoginGuest', body, true).subscribe(async (res: any) => {
       if (res.isPassed) {
-        
+
         await localStorage.setItem('userData', JSON.stringify(res?.data?.userToken));
         await localStorage.setItem('token', JSON.stringify(res.data?.userToken?.resetToken));
 

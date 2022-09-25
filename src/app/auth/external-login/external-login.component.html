@@ -7,14 +7,14 @@
       <div class="mb-3">
         <div class="form-floating ">
           <input type="email" class="form-control" id="floatingInput" placeholder=" " formControlName="email">
-          <label for="floatingInput">{{'User Email' | translate}}</label>
+          <label for="floatingInput">{{'Gust Email' | translate}}</label>
         </div>
         <div *ngIf="f.email.touched && (f.email.errors?.required)" class="text-danger text-start mt-2 font-12">
           {{'Required' | translate}}
         </div>
-        <!-- <div *ngIf="f.email.touched && (f.email.errors?.email)" class="text-danger text-start mt-2 font-12">
-            Email Not Valid
-          </div> -->
+        <div *ngIf="f.email.touched && (f.email.errors?.email)" class="text-danger text-start mt-2 font-12">
+          {{'Email Not Valid' | translate}}
+        </div>
       </div>
       <button (click)="login()" [disabled]="authForm.invalid" class="btn btn-secondary w-100 py-3">{{'Login' |
         translate}}</button>
