@@ -15,8 +15,8 @@
                         </div>
                         <div class="box-side">
                             <div class="d-flex align-items-center">
-                                <a placement="bottom" [routerLink]="['/page/view-doc/']"
-                                    [queryParams]="{name: item?.documentName ,mimeType:item?.mimeType,extension : item?.extension, documentPath:item?.documentPath}"
+                                <a placement="bottom" (click)="setBack()" [routerLink]="['/page/view-doc/']"
+                                    [queryParams]="{id : item?.id ,name: item?.documentName ,mimeType:item?.mimeType,extension : item?.extension, documentPath:item?.documentPath}"
                                     *ngIf="item?.canPreview" class="text-secondary mb-0 mt-0 mx-1">
                                     <img src="assets/img/icons/eye.svg" width="25px" height="25px" alt="menu"
                                         class="dropdown-toggle" type="button">

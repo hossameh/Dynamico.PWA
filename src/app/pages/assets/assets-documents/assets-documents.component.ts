@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 import { DocTypes } from 'src/app/core/enums/docType.enum';
 
 @Component({
@@ -9,9 +10,12 @@ import { DocTypes } from 'src/app/core/enums/docType.enum';
 export class AssetsDocumentsComponent implements OnInit {
 
   @Input() items: any = [];
-  constructor() { }
+  constructor(private storage: Storage) { }
 
   ngOnInit(): void {
+  }
+  async setBack() {
+    this.storage.set("BackToAssets", "Documents");
   }
 
 }

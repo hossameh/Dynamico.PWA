@@ -86,10 +86,19 @@ export class AssetsComponent implements OnInit {
 
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
-      // if (isOnline) {
-      this.getAssetInfo();
-      // }
+      this.checkStep();
     });
+  }
+  async checkStep() {
+    let goToList = await this.storage.get("BackToAssets") || null;
+    if (goToList) {
+      this.step = 3;
+      await this.storage.remove("BackToAssets").then((res) => {
+        this.change(this.step);
+      });
+    }
+    else
+      this.change(this.step);
   }
 
   change(step: number) {
