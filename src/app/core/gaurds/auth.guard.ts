@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanActivateChild } from '@angular/router';
 import { Observable } from 'rxjs';
+import { FormioConfigService } from 'src/app/services/formio-config/formio-config.service';
 import { Role } from '../enums/role.enum';
 
 @Injectable({
@@ -8,9 +9,10 @@ import { Role } from '../enums/role.enum';
 })
 export class AuthGard implements CanActivateChild {
   role = Role;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private formioService: FormioConfigService) { }
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    this.formioService.interceptFormioRequests();
     let role = JSON.parse(localStorage.getItem('userData') || '{}').userType;
     if ((state.url.includes("page/checklist") || role != this.role.Anonymous) && (localStorage.getItem('token') || sessionStorage.getItem('token'))) {
       return true;
