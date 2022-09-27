@@ -59,8 +59,8 @@ export class CalendarComponent implements OnInit {
     cashedListPlans = cashedListPlans.filter((el: any) => el.userId !== this.userId);
     if (this.isOnline) {
       let body: any = {};
-      body.pageIndex = 1;
-      body.pageSize = 10;
+      // body.pageIndex = 1;
+      // body.pageSize = 10;
       body.UserId = this.userId;
       if (isComplete)
         body.ShowCompletedForms = isComplete;
