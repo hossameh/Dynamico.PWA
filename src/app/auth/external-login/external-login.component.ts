@@ -92,6 +92,7 @@ export class ExternalLoginComponent implements OnInit {
 
         await localStorage.setItem('userData', JSON.stringify(res?.data?.userToken));
         await localStorage.setItem('token', JSON.stringify(res.data?.userToken?.resetToken));
+  
 
         this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
       } else {

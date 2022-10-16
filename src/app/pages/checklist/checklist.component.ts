@@ -11,6 +11,7 @@ import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { Role } from 'src/app/core/enums/role.enum';
 import { HelperService } from 'src/app/services/helper.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checklist',
@@ -50,7 +51,8 @@ export class ChecklistComponent implements OnInit {
     private storage: Storage,
     private location: Location,
     private alert: AlertService,
-    private helper: HelperService
+    private helper: HelperService,
+    private translate: TranslateService,
   ) {
 
 
@@ -184,6 +186,9 @@ export class ChecklistComponent implements OnInit {
           this.latitude = location.coords.latitude;
           this.longitude = location.coords.longitude;
           this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
+
+          if (value?.defaultDisplayLanguage && value?.defaultDisplayLanguage == 'ar')
+            this.langChanged('ar');
         },
           (err) => {
             this.location.back();
@@ -817,5 +822,38 @@ export class ChecklistComponent implements OnInit {
   getOfflineRef() {
     let date = new Date().toISOString();
     return "offline-" + date;
+  }
+
+
+  langChanged(lang: any) {
+    this.translate.use(lang)
+    localStorage.setItem('lang', lang);
+    if (lang === 'ar') {
+      this.generateLinkElement({
+        id: 'bootstrap-en',
+        href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
+        dir: 'rtl',
+        lang: 'ar',
+      });
+
+    } else {
+      this.generateLinkElement({
+        id: 'bootstrap-en',
+        href: 'assets/vendor/bootstrap/bootstrap.min.css',
+        dir: 'ltr',
+        lang: 'en',
+      });
+    }
+  }
+  generateLinkElement(props: any) {
+    const el = document.createElement('link');
+    const htmlEl = document.getElementsByTagName('html')[0];
+    el.rel = 'stylesheet';
+    el.href = props.href;
+    el.id = props.id;
+    document.head.prepend(el);
+    htmlEl.setAttribute('dir', props.dir);
+    htmlEl.setAttribute('lang', props.lang);
+
   }
 }
