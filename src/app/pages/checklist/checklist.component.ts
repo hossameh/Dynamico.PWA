@@ -187,14 +187,16 @@ export class ChecklistComponent implements OnInit {
           this.longitude = location.coords.longitude;
           this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
 
-          if (value?.defaultDisplayLanguage && value?.defaultDisplayLanguage == 'ar')
-            this.langChanged('ar');
+     
         },
           (err) => {
             this.location.back();
             this.alert.error('Please accept to share your location first !');
           });
       }
+      if (value?.defaultDisplayLanguage && value?.defaultDisplayLanguage == 'ar')
+        this.langChanged('ar');
+
       let cacheChecklists = await this.storage.get('Checklists') || [];
 
 
@@ -297,6 +299,9 @@ export class ChecklistComponent implements OnInit {
             this.alert.error('Please accept to share your location first !');
           });
       }
+
+      if (value?.defaultDisplayLanguage && value?.defaultDisplayLanguage == 'ar')
+        this.langChanged('ar');
       this.data = value;
       this.updateCashedRecord();
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
