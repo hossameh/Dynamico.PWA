@@ -42,7 +42,7 @@ export class ChecklistComponent implements OnInit {
   statusSubscription2!: Subscription;
   selectedCashedChecklist: any;
   role = Role;
-
+  formType: string = 'form';
   constructor(private route: ActivatedRoute,
     private http: HttpService,
     private router: Router,
@@ -63,7 +63,7 @@ export class ChecklistComponent implements OnInit {
     this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
     this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
     this.form = {
-      display: "form",
+      display: this.formType,
       components: []
     };
     this.options = {
@@ -109,17 +109,17 @@ export class ChecklistComponent implements OnInit {
           submit: (event) => { },
         },
         input: {
-          //submission: {
-          //  data: {
-          //    fullName: "mano",
-          //    emailAddress: "supddder@admin.com",
-          //    password: "a123123",
-          //    confirmPassword: "asdddd",
-          //    submit: true
-          //  }
-          //},
-          // readOnly: true,
-
+          submission: {
+            data: {}
+          },
+          renderOptions: {
+            buttonSettings: {
+              showCancel: true,
+              showNext: true,
+              showPrevious: true,
+              showSubmit: false
+            }
+          }
 
         }
       }
@@ -180,6 +180,7 @@ export class ChecklistComponent implements OnInit {
     this.location.back();
   };
   getChecklistById() {
+
     this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe(async (value: any) => {
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
@@ -194,8 +195,11 @@ export class ChecklistComponent implements OnInit {
             this.alert.error('Please accept to share your location first !');
           });
       }
-      if (value?.defaultDisplayLanguage && value?.defaultDisplayLanguage == 'ar')
-        this.langChanged('ar');
+
+      if (value?.defaultDisplayLanguage)
+        this.langChanged(value.defaultDisplayLanguage);
+
+
 
       let cacheChecklists = await this.storage.get('Checklists') || [];
 
@@ -223,6 +227,8 @@ export class ChecklistComponent implements OnInit {
       this.recordForm.get('record_Id')?.setValue(0);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
+      this.form.display = value?.formType ?? this.formType;
+      this.form.components = JSON.parse(value.formControls);
       this.options = {
         builder: {
           hideTab: true,
@@ -266,15 +272,21 @@ export class ChecklistComponent implements OnInit {
           },
           input: {
             submission: {
-
+              data: {}
             },
-            hooks: {
-
+            renderOptions: {
+              buttonSettings: {
+                showCancel: true,
+                showNext: true,
+                showPrevious: true,
+                showSubmit: false
+              }
             }
+         
           }
         }
       };
-      this.form.components = JSON.parse(value.formControls);
+   
     });
   }
 
@@ -283,7 +295,7 @@ export class ChecklistComponent implements OnInit {
     let isQrCode = this.params.isQR;
     if (isQrCode)
       apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
-    this.http.get(apiUrl, { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
+      this.http.get(apiUrl, { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
       if (!value) {
         this.alert.error("Invalid Input Data");
         this.router.navigateByUrl("/page/home")
@@ -300,8 +312,9 @@ export class ChecklistComponent implements OnInit {
           });
       }
 
-      if (value?.defaultDisplayLanguage && value?.defaultDisplayLanguage == 'ar')
-        this.langChanged('ar');
+      if (value?.defaultDisplayLanguage)
+          this.langChanged(value.defaultDisplayLanguage);
+
       this.data = value;
       this.updateCashedRecord();
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
@@ -309,6 +322,7 @@ export class ChecklistComponent implements OnInit {
       this.recordForm.get('formDataRef')?.disable();
       let recordJson = value.record_Json; // data
       let dataObject = this.deSerialize(JSON.parse(recordJson));
+      this.form.display = value?.formType ?? this.formType;
       this.form.components = JSON.parse(value.form_Layout);
       this.options = {
         builder: {
@@ -354,10 +368,15 @@ export class ChecklistComponent implements OnInit {
           input: {
             readOnly: !!this.params.Complete ? true : false,
             submission: {
-              data: dataObject
+              data: dataObject ?? {}
             },
-            hooks: {
-
+            renderOptions: {
+              buttonSettings: {
+                showCancel: true,
+                showNext: true,
+                showPrevious: true,
+                showSubmit: false
+              }
             }
 
 
@@ -646,6 +665,9 @@ export class ChecklistComponent implements OnInit {
         this.recordForm.get('record_Id')?.setValue(0);
         this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
         this.recordForm.get('formDataRef')?.disable();
+
+        this.form.display = value?.formType ?? this.formType;
+        this.form.components = JSON.parse(value.formControls);
         this.options = {
           builder: {
             hideTab: true,
@@ -689,15 +711,20 @@ export class ChecklistComponent implements OnInit {
             },
             input: {
               submission: {
-
+                data: {}
               },
-              hooks: {
-
+              renderOptions: {
+                buttonSettings: {
+                  showCancel: true,
+                  showNext: true,
+                  showPrevious: true,
+                  showSubmit: false
+                }
               }
+          
             }
           }
         };
-        this.form.components = JSON.parse(value.formControls);
       }
     }
   }
@@ -728,8 +755,8 @@ export class ChecklistComponent implements OnInit {
           //   }
         );
       }
-      console.log(valueRecord);
-      console.log(valueChecklist);
+    //  console.log(valueRecord);
+    //  console.log(valueChecklist);
       if (valueRecord) {
 
         this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
@@ -741,6 +768,8 @@ export class ChecklistComponent implements OnInit {
         let dataObject = (this.modelBody?.offlineRef || this.params?.offline) ?
           this.deSerialize(recordJson) :
           this.deSerialize(JSON.parse(recordJson));
+
+        this.form.display = valueChecklist?.formType ?? this.formType;
         this.form.components = JSON.parse(valueChecklist?.formControls ? valueChecklist?.formControls : valueRecord.form_Layout);
         this.options = {
           builder: {
@@ -786,10 +815,15 @@ export class ChecklistComponent implements OnInit {
             input: {
               readOnly: !!this.params.Complete ? true : false,
               submission: {
-                data: dataObject
+                data: dataObject ?? {}
               },
-              hooks: {
-
+              renderOptions: {
+                buttonSettings: {
+                  showCancel: true,
+                  showNext: true,
+                  showPrevious: true,
+                  showSubmit: false
+                }
               }
 
 

@@ -37,7 +37,7 @@ export class DetailsWorkflowComponent implements OnInit {
   isOnline = true;
   $subscription!: Subscription;
   userId: any;
-
+  formType: string = 'form';
   constructor(
     private route: ActivatedRoute,
     private http: HttpService,
@@ -62,7 +62,7 @@ export class DetailsWorkflowComponent implements OnInit {
     });
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
     this.form = {
-      display: "form",
+      display: this.formType,
       components: []
     };
     this.options = {
@@ -108,17 +108,17 @@ export class DetailsWorkflowComponent implements OnInit {
           submit: (event) => { },
         },
         input: {
-          //submission: {
-          //  data: {
-          //    fullName: "mano",
-          //    emailAddress: "supddder@admin.com",
-          //    password: "a123123",
-          //    confirmPassword: "asdddd",
-          //    submit: true
-          //  }
-          //},
-          // readOnly: true,
-
+          submission: {
+            data: {}
+          },
+          renderOptions: {
+            buttonSettings: {
+              showCancel: true,
+              showNext: true,
+              showPrevious: true,
+              showSubmit: false
+            }
+          }
 
         }
       }
@@ -175,6 +175,7 @@ export class DetailsWorkflowComponent implements OnInit {
         this.data = value;
         this.data.userId = this.userId;
         this.cashRecord();
+
         this.continueWithData();
       });
     }
@@ -185,6 +186,7 @@ export class DetailsWorkflowComponent implements OnInit {
   continueWithData() {
     let recordJson = this.data?.record_Json; // data
     let dataObject = this.deSerialize(JSON.parse(recordJson));
+    this.form.display = this.data.formType ?? this.formType;
     this.form.components = JSON.parse(this.data.form_Layout);
     this.options = {
       builder: {
@@ -222,9 +224,15 @@ export class DetailsWorkflowComponent implements OnInit {
         input: {
           readOnly: true,
           submission: {
-            data: dataObject
+            data: dataObject ?? {}
           },
-          hooks: {
+          renderOptions: {
+            buttonSettings: {
+              showCancel: true,
+              showNext: true,
+              showPrevious: true,
+              showSubmit: false
+            }
           }
         }
       }
