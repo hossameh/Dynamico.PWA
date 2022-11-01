@@ -20,8 +20,8 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    //this.token = JSON.parse(localStorage.getItem('token') || '{}');
-    this.token = localStorage.getItem('token') || '{}';
+    this.token = JSON.parse(localStorage.getItem('token') || '{}');
+    //this.token = localStorage.getItem('token') || '{}';
     // console.log("Token", this.token);
 
     request = request.clone({

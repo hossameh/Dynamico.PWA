@@ -30,8 +30,8 @@ export class AuthGard implements CanActivateChild {
     return false;
   }
   async setToken(token: any): Promise<void> {
-    await localStorage.setItem('token', token);
-    await sessionStorage.setItem('token', token);    
+    await localStorage.setItem('token',JSON.stringify(token));
+    await sessionStorage.setItem('token', JSON.stringify(token));    
   }
 
 }
