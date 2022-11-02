@@ -7,8 +7,9 @@
 
   <div class=" px-3 py-4">
     <div class="mb-3 content" *ngFor="let item of items">
-      <div class="white-box" [style.--background]="item.color ? item.color : '#FF6536'" [routerLink]="['/page/home/category/'+item.category_Id]"
-           [queryParams]="{ name: item.category_Name }" routerLinkActive="router-link-active">
+      <div class="white-box" [style.--background]="item.color ? item.color : '#FF6536'"
+        [routerLink]="['/page/home/category/'+item.category_Id]" [queryParams]="{ name: item.category_Name }"
+        routerLinkActive="router-link-active">
         <div class="box-content">
           <h5 class="font-14">
             {{item.category_Name}}
@@ -22,6 +23,29 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <a (click)="scrollToTop()" class="
+  back-to-top-icon
+  rounded-xs
+  back-to-top-icon-circle
+  bg-highlight
+  shadow-m
+" style="transform: scale(1); position: fixed !important">
+    <img src="assets/img/icons/icons8-up-24.png" alt="add">
+    <!-- <img src="assets/img/icons/up-arrow.svg" alt="add"> -->
+    <!-- <svg class="bi bi-arrow-up"></svg> -->
+    <!-- Up -->
+    <!-- <img src="assets/img/icons/home-icon.svg" alt="home"> -->
+    <!-- <i class="fa fa-angle-up"></i> -->
+  </a>
+  <div *ngIf="isLoading" class="loader">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
 
 </section>
