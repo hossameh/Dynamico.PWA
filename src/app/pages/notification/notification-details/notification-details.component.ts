@@ -31,6 +31,8 @@ export class NotificationDetailsComponent implements OnInit {
   isOnline = true;
   statusSubscription!: Subscription;
   userId: any;
+  currentLang!: any;
+
 
   constructor(
     private location: Location,
@@ -44,6 +46,7 @@ export class NotificationDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentLang = localStorage.getItem('lang');
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;

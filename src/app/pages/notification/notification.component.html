@@ -29,13 +29,12 @@
     <div class="content">
       <div *ngFor="let item of items ; let i = index">
         <div class="box" style="cursor: pointer;" [class.unread]="item.isRead == false">
-          <div class="box-content"
-            (click)="clickNotification(item);makeNotificationRead(item)" routerLinkActive="router-link-active"
-            >
+          <div class="box-content" (click)="clickNotification(item);makeNotificationRead(item)"
+            routerLinkActive="router-link-active">
             <!-- [queryParams]="{showAll:showAllItems}" -->
             <!-- [queryParams]="{title:item.title,body:item.body}" -->
             <h5 class="font-14">
-              {{item.title}}
+              {{ currentLang == 'en' ? item?.title : (item.arTitle ? item.arTitle : item.title) }}
             </h5>
             <p class="date pt-2">{{item.creationDate |date:'short'}}</p>
           </div>
