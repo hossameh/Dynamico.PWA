@@ -158,15 +158,16 @@ export class AppComponent {
     const messaging = getMessaging();
     onMessage(messaging, (payload: any) => {
       // occures if the user is online on this browser tab
-      console.log('Message received. ', payload);
+      // console.log('Message received. ', payload);
       this.message = payload;
-      this.showToaster();
+      this.currentLang = localStorage.getItem('lang');
+      let title = this.currentLang == 'en' ? this.message?.notification?.title : this.message?.data?.arTitle;
+      let body = this.currentLang == 'en' ? this.message?.notification?.body : this.message?.data?.arBody;
+      this.showToaster(title, body);
     });
   }
 
-  showToaster() {
-    let title = this.currentLang == 'en' ? this.message?.notification?.title : this.message?.data?.arTitle;
-    let body = this.currentLang == 'en' ? this.message?.notification?.body : this.message?.data?.arBody;
+  showToaster(title: any, body: any) {
     this.toastr.info(title, body, {
       // timeOut: 15000,
       // extendedTimeOut: 10000,
