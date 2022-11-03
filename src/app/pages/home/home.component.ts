@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit {
     this.pager = {
       page: 1,
       pages: 0,
-      pageSize: 3,
+      pageSize: 10,
       total: 0,
     };
   }

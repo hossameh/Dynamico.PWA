@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   showPasswordText = false;
   authForm!: FormGroup;
   returnUrl!: string;
-
+  currentLang!: string;
   constructor(private router: Router, private FB: FormBuilder,
     private alert: AlertService,
     private translate: TranslateService,
@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
 
     this.BuildRequestForm();
     const lang = localStorage.getItem('lang') || '{}';
+    this.currentLang = lang;
     localStorage.clear();
     localStorage.setItem('lang', lang);
     this.langChanged(lang);
@@ -101,7 +102,10 @@ export class LoginComponent implements OnInit {
       if (res.isPassed) {
         await localStorage.setItem('userData', JSON.stringify(res.data));
         await localStorage.setItem('token', JSON.stringify(res.data.resetToken));
-
+        if (this.currentLang !== res?.data?.defaultLanguage) {
+          localStorage.setItem('lang', res?.data?.defaultLanguage);
+          this.langChanged(res?.data?.defaultLanguage);
+        }
         this.CheckFCMTokenExpiration(res.data);
         //this.routeToHome();
 
