@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  version: '1.2.19',
-  hostAPI: "https://localhost:44350/api/",
-  //hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",
+  version: '1.2.20',
+  //hostAPI: "https://localhost:44350/api/",
+  hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",
  // hostAPI: "https://dynamico.cloud/api/",
   //hostAPI:"http://5.189.153.30/api.dynamico/api/"
 
