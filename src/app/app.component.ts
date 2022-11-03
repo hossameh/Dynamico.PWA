@@ -165,7 +165,9 @@ export class AppComponent {
   }
 
   showToaster() {
-    this.toastr.info(this.message?.notification?.body, this.message?.notification?.title, {
+    let title = this.currentLang == 'en' ? this.message?.notification?.title : this.message?.data?.arTitle;
+    let body = this.currentLang == 'en' ? this.message?.notification?.body : this.message?.data?.arBody;
+    this.toastr.info(title, body, {
       // timeOut: 15000,
       // extendedTimeOut: 10000,
       newestOnTop: false,
