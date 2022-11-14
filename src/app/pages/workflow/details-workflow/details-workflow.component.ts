@@ -10,6 +10,7 @@ import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
 import { Storage } from '@ionic/storage-angular';
 import { OfflineService } from 'src/app/services/offline/offline.service';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-details-workflow',
@@ -38,6 +39,8 @@ export class DetailsWorkflowComponent implements OnInit {
   $subscription!: Subscription;
   userId: any;
   formType: string = 'form';
+  formdefaultDisplayLanguage: any;
+  currentLang: any;
   constructor(
     private route: ActivatedRoute,
     private http: HttpService,
@@ -47,9 +50,11 @@ export class DetailsWorkflowComponent implements OnInit {
     private loadingService: LoadingService,
     private storage: Storage,
     private offline: OfflineService,
+    private translate: TranslateService,
   ) { }
   ngOnInit(): void {
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.currentLang = localStorage.getItem('lang');
     this.currentDate = new Date();
     this.appUrl = environment.APP_URL;
     this.$subscription = this.offline.currentStatus.subscribe(isOnline => {
@@ -137,6 +142,9 @@ export class DetailsWorkflowComponent implements OnInit {
     this.step = step;
   }
   ngOnDestroy(): void {
+    if (this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
+      this.langChanged(this.currentLang);
+    }
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.$subscription.unsubscribe();
@@ -174,6 +182,10 @@ export class DetailsWorkflowComponent implements OnInit {
         }
         this.data = value;
         this.data.userId = this.userId;
+        if (value?.defaultDisplayLanguage) {
+          this.formdefaultDisplayLanguage = value?.defaultDisplayLanguage;
+          this.langChanged(value.defaultDisplayLanguage);
+        }
         this.cashRecord();
 
         this.continueWithData();
@@ -182,6 +194,37 @@ export class DetailsWorkflowComponent implements OnInit {
     else {
       this.getRecordFromCashe();
     }
+  }
+  langChanged(lang: any) {
+    this.translate.use(lang)
+    // localStorage.setItem('lang', lang);
+    if (lang === 'ar') {
+      this.generateLinkElement({
+        id: 'bootstrap-en',
+        href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
+        dir: 'rtl',
+        lang: 'ar',
+      });
+
+    } else {
+      this.generateLinkElement({
+        id: 'bootstrap-en',
+        href: 'assets/vendor/bootstrap/bootstrap.min.css',
+        dir: 'ltr',
+        lang: 'en',
+      });
+    }
+  }
+  generateLinkElement(props: any) {
+    const el = document.createElement('link');
+    const htmlEl = document.getElementsByTagName('html')[0];
+    el.rel = 'stylesheet';
+    el.href = props.href;
+    el.id = props.id;
+    document.head.prepend(el);
+    htmlEl.setAttribute('dir', props.dir);
+    htmlEl.setAttribute('lang', props.lang);
+
   }
   continueWithData() {
     let recordJson = this.data?.record_Json; // data
