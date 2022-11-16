@@ -21,6 +21,7 @@ import {
 import { Storage } from '@ionic/storage-angular';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { OfflineService } from 'src/app/services/offline/offline.service';
+import { RecordStatus } from 'src/app/core/enums/status.enum';
 
 const colors: any = {
   red: {
@@ -77,6 +78,7 @@ export class DateViewComponent implements OnInit {
   Subscription!: Subscription;
   isOnline = true;
   userId: any;
+  recordStatus = RecordStatus;
 
   constructor(
     private router: Router,
@@ -170,17 +172,17 @@ export class DateViewComponent implements OnInit {
       let complete = false;
       // if (this.access && this.access.toString().includes(this.accessTypes.Read)) {
       //   if (!this.access.includes(this.accessTypes.Update))
-      complete = true;
+      // complete = true;
 
       if (!this.isOnline) {
         // let cacheChecklists = await this.storage.get('Checklists') || [];
         // if (cacheChecklists) {
         //   console.log(cacheChecklists);
         //   console.log(item.formId);
-          
+
         //   let valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == item.formId)[0];
         //   console.log(valueChecklist);
-          
+
         //   if (!valueChecklist) {
         //     this.alert.error("No Internet Connection");
         //     return;
@@ -196,9 +198,13 @@ export class DateViewComponent implements OnInit {
           }
         }
       }
-
+      let recordStatus = formData?.formsData.recordStatusId;
+      if (recordStatus == this.recordStatus.Assigned || recordStatus == this.recordStatus.Created)
+        complete = false;
+      else
+        complete = true;
       this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true" +
-        // (complete == true ? "&Complete=true" : "") +
+        (complete == true ? "&Complete=true" : "") +
         "&offline=" + '' +
         "&listName=" + item.form.formTitle +
         "&Record_Id=" + +formData.formsDataId);

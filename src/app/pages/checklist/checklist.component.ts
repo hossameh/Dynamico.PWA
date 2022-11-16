@@ -43,6 +43,8 @@ export class ChecklistComponent implements OnInit {
   selectedCashedChecklist: any;
   role = Role;
   formType: string = 'form';
+  formdefaultDisplayLanguage: any;
+  currentLang: any;
   constructor(private route: ActivatedRoute,
     private http: HttpService,
     private router: Router,
@@ -62,6 +64,7 @@ export class ChecklistComponent implements OnInit {
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
     this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
+    this.currentLang = localStorage.getItem('lang');
     this.form = {
       display: this.formType,
       components: []
@@ -188,7 +191,7 @@ export class ChecklistComponent implements OnInit {
           this.longitude = location.coords.longitude;
           this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
 
-     
+
         },
           (err) => {
             this.location.back();
@@ -196,8 +199,10 @@ export class ChecklistComponent implements OnInit {
           });
       }
 
-      if (value?.defaultDisplayLanguage)
+      if (value?.defaultDisplayLanguage) {
+        this.formdefaultDisplayLanguage = value?.defaultDisplayLanguage;
         this.langChanged(value.defaultDisplayLanguage);
+      }
 
 
 
@@ -282,11 +287,11 @@ export class ChecklistComponent implements OnInit {
                 showSubmit: false
               }
             }
-         
+
           }
         }
       };
-   
+
     });
   }
 
@@ -295,7 +300,7 @@ export class ChecklistComponent implements OnInit {
     let isQrCode = this.params.isQR;
     if (isQrCode)
       apiUrl = 'ChecklistRecords/CheckIfRecordAssigned';
-      this.http.get(apiUrl, { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
+    this.http.get(apiUrl, { Form_Id: this.id, Record_Id: this.params.Record_Id }).subscribe((value: any) => {
       if (!value) {
         this.alert.error("Invalid Input Data");
         this.router.navigateByUrl("/page/home")
@@ -312,8 +317,10 @@ export class ChecklistComponent implements OnInit {
           });
       }
 
-      if (value?.defaultDisplayLanguage)
-          this.langChanged(value.defaultDisplayLanguage);
+      if (value?.defaultDisplayLanguage) {
+        this.formdefaultDisplayLanguage = value?.defaultDisplayLanguage;
+        this.langChanged(value.defaultDisplayLanguage);
+      }
 
       this.data = value;
       this.updateCashedRecord();
@@ -721,7 +728,7 @@ export class ChecklistComponent implements OnInit {
                   showSubmit: false
                 }
               }
-          
+
             }
           }
         };
@@ -755,8 +762,8 @@ export class ChecklistComponent implements OnInit {
           //   }
         );
       }
-    //  console.log(valueRecord);
-    //  console.log(valueChecklist);
+      //  console.log(valueRecord);
+      //  console.log(valueChecklist);
       if (valueRecord) {
 
         this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
@@ -839,6 +846,10 @@ export class ChecklistComponent implements OnInit {
     }
   }
   ngOnDestroy(): void {
+    if (this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
+      this.langChanged(this.currentLang);
+    }
+
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.statusSubscription.unsubscribe();
@@ -866,7 +877,7 @@ export class ChecklistComponent implements OnInit {
 
   langChanged(lang: any) {
     this.translate.use(lang)
-    localStorage.setItem('lang', lang);
+    // localStorage.setItem('lang', lang);
     if (lang === 'ar') {
       this.generateLinkElement({
         id: 'bootstrap-en',

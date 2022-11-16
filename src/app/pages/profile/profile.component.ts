@@ -2,6 +2,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { environment } from './../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpService } from 'src/app/services/http/http.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,13 +14,32 @@ export class ProfileComponent implements OnInit {
 
   version = environment.version
   userData: any
-  constructor(public translate: TranslateService, private router: Router) { }
+  constructor(public translate: TranslateService,
+    private http: HttpService,
+    private alert: AlertService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
   }
 
   langChanged(lang: any) {
+    let params = {
+      lang: lang
+    }
+    try {
+      this.http.post('Users/ChangeDefaultLanguage', null, false, params).subscribe((res : any) => {
+        if (res?.isPassed)
+          this.setLang(lang);
+        else
+          this.alert.error("Failed To Change Language !")
+      });
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+  setLang(lang: any) {
     // const elEn = document.querySelector('#bootstrap-en');
     // const elAr = document.querySelector('#bootstrap-ar');
     this.translate.use(lang)

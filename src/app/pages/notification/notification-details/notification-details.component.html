@@ -4,8 +4,12 @@
             <div>
                 <div class="d-flex">
                     <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3" (click)="back()">
-                    <h4>
+                    <h4 *ngIf="currentLang == 'en'">
                         {{ pageProps?.selectedObj?.title ? pageProps?.selectedObj?.title : 'Notification' }}
+                    </h4>
+                    <h4 *ngIf="currentLang == 'ar'">
+                        {{ pageProps?.selectedObj?.arTitle ? pageProps?.selectedObj?.arTitle :
+                        pageProps?.selectedObj?.title }}
                     </h4>
                 </div>
             </div>
@@ -14,8 +18,11 @@
     </div>
 
     <div class="content" style="cursor: pointer;" (click)="go()" role="main">
-        <div class="col-10 m-4">
+        <div *ngIf="currentLang == 'en'" class="col-10 m-4">
             {{ pageProps?.selectedObj?.body ? pageProps?.selectedObj?.body : 'Message' }}
+        </div>
+        <div *ngIf="currentLang == 'ar'" class="col-10 m-4">
+            {{ pageProps?.selectedObj?.arBody ? pageProps?.selectedObj?.arBody : pageProps?.selectedObj?.body }}
         </div>
     </div>
 </section>

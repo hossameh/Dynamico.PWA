@@ -33,6 +33,8 @@ export class NotificationComponent implements OnInit {
 
   items: any = [];
   userId: any;
+
+  currentLang!: any;
   // showAllItems!: boolean;
   pageProps!: NotificationPageProps;
   constructor(
@@ -47,6 +49,7 @@ export class NotificationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentLang = localStorage.getItem('lang');
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.pageProps = this.notificationPage.pageProps;
     this.resetPager();

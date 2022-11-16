@@ -26,11 +26,19 @@ export class CardViewComponent implements OnInit {
     }, 50)
   }
   go(item: any) {
-    if (item && item.isCreateFormData == true && item.plannerFormsData)
-      this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true&Complete=true"
-        + "&offline=" + '' +
+    let complete = false;
+    let recordStatus = item.plannerFormsData[0]?.formsData?.recordStatusId;
+    if (recordStatus == this.recordStatus.Assigned || recordStatus == this.recordStatus.Created)
+      complete = false;
+    else
+      complete = true;
+    if (item && item.isCreateFormData == true && item.plannerFormsData) {
+      this.router.navigateByUrl("/page/checklist/" + item.formId + "?editMode=true" +
+        (complete == true ? "&Complete=true" : "") +
+        "&offline=" + '' +
         "&listName=" + item.form.formTitle +
         "&Record_Id=" + item?.plannerFormsData[0]?.formsDataId);
+    }
     else {
       const queryParams: Params = { editMode: false };
       this.router.navigate(['/page/checklist/' + item.formId], {
