@@ -58,14 +58,28 @@ export class DocumentViewerComponent implements OnInit {
       });
       if (index >= 0) {
         let obj = cashedDocuments[index];
-        this.doc = {
-          id: obj?.id,
-          extension: obj?.extension,
-          mimeType: obj?.mimeType,
-          name: obj?.name,
-          onlinePath: obj?.onlinePath,
-          documentPath: <string>this.sanitizer.bypassSecurityTrustResourceUrl(obj.documentPath)
-        };
+        if (!this.docExtensions.includes(obj?.extension))
+          this.doc = {
+            id: obj?.id,
+            extension: obj?.extension,
+            mimeType: obj?.mimeType,
+            name: obj?.name,
+            onlinePath: obj?.onlinePath,
+            documentPath: <string>this.sanitizer.bypassSecurityTrustResourceUrl(obj.documentPath)
+          };
+        else {
+          let rawData = (<string>obj.documentPath).split("base64,");
+          const binaryString = window.atob(<string>rawData[1]);
+          const len = binaryString.length;
+          const bytes = new Uint8Array(len);
+          for (let i = 0; i < len; ++i) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: obj?.mimeType });
+          const url = window.URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          return;
+        }
       }
       else
         this.alert.error("No Internet Connection");

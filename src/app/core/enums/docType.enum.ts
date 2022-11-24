@@ -25,11 +25,12 @@ export enum DocExtention {
     PSD = ".PSD",
     TIFF = ".TIFF",
     DXF = ".DXF",
-    SVG = ".SVG",
+    /*SVG = ".SVG",*/
     EPS = ".EPS",
     PS = ".PS",
     TTF = ".TTF",
     XPS = ".XPS",
     ZIP = ".ZIP",
     RAR = ".RAR",
+    JSON = ".JSON"
 }
