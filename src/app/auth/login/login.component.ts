@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
     let body = this.authForm.value;
     body.appName = environment.appName;
     this.http.post('Auth/Login', body, true).subscribe(async (res: any) => {
-      if (res.isPassed) {
+      if (res.data && res.isPassed) {
         await localStorage.setItem('userData', JSON.stringify(res.data));
         await localStorage.setItem('token', JSON.stringify(res.data.resetToken));
         if (this.currentLang !== res?.data?.defaultLanguage) {
@@ -110,12 +110,32 @@ export class LoginComponent implements OnInit {
         //this.routeToHome();
 
       } else {
-        this.alert.error(res.message);
+        if (res.data && res.data.username) {
+          this.alert.confirmAny(res?.message, "Logout From Other Devices", "Cancel")
+            .then((result) => {
+              if (result.value) {
+                this.reLogin(this.authForm.value);
+              }
+            });
+        }
+        else
+          this.alert.error(res.message);
       }
     },
       (err) => {
         console.log('err', err);
       });
+  }
+  async reLogin(body: any) {
+    const response = await this.logoutFromOtherDevices(body?.username, body?.username).toPromise();
+    if (response.isPassed)
+      this.login();
+    else
+      this.alert.error(response.message);
+  }
+  logoutFromOtherDevices(userName: any, email: any) {
+    let url = `Auth/logout?UserName=${userName}&Email=${email}`;
+    return this.http.post<any>(`${url}`, null);
   }
 
   CheckFCMTokenExpiration(returnObject: any) {

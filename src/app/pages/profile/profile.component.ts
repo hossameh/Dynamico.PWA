@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
       lang: lang
     }
     try {
-      this.http.post('Users/ChangeDefaultLanguage', null, false, params).subscribe((res : any) => {
+      this.http.post('Users/ChangeDefaultLanguage', null, false, params).subscribe((res: any) => {
         if (res?.isPassed)
           this.setLang(lang);
         else
@@ -79,12 +79,15 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  logout() {
+  async logout() {
+    await this.logoutFromOtherDevices(this.userData?.userEmail, this.userData?.userEmail).toPromise();
     localStorage.clear();
     sessionStorage.clear();
     localStorage.setItem("lang", "en");
     this.router.navigate(['/login']);
-    // localStorage.removeItem('token')
-    // localStorage.removeItem('userData')
+  }
+  logoutFromOtherDevices(userName: any, email: any) {
+    let url = `Auth/logout?UserName=${userName}&Email=${email}`;
+    return this.http.post<any>(`${url}`, null);
   }
 }

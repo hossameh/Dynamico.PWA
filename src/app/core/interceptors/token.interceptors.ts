@@ -51,7 +51,15 @@ export class TokenInterceptor implements HttpInterceptor {
 
 
             return throwError(error);
-          } else {
+          }
+          if (error && error.status === 424) {
+            localStorage.clear();
+            sessionStorage.clear();
+            localStorage.setItem("lang", "en");
+            this.router.navigate(['/login']);
+            return throwError(error);
+          }
+          else {
             // alertHandling
             if (error instanceof HttpErrorResponse) {
               if (error.status === 500 || error.status === 502 || error.status === 503) {
