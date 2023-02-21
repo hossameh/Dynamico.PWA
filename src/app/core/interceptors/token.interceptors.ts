@@ -63,23 +63,23 @@ export class TokenInterceptor implements HttpInterceptor {
             // alertHandling
             if (error instanceof HttpErrorResponse) {
               if (error.status === 500 || error.status === 502 || error.status === 503) {
-                this.alertService.error('!Technical Error!');
+                this.alertService.error('Something Went Wrong !');
                 console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!Technical Error!' : '!Technical Error!');
                 // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!Technical Error!' : '!Technical Error!');
               } else if (error.status === 400) {
-                this.alertService.error('!BAD REQUEST!');
+                this.alertService.error('Something Went Wrong !');
                 console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!BAD REQUEST!' : '!BAD REQUEST!');
                 // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!BAD REQUEST!' : '!BAD REQUEST!');
               } else if (error.status === 404) {
-                this.alertService.error('!METHOD NOT FOUND!');
+                this.alertService.error('Something Went Wrong !');
                 console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!METHOD NOT FOUND!' : '!METHOD NOT FOUND!');
                 // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!METHOD NOT FOUND!' : '!METHOD NOT FOUND!');
               } else if (error.status === 415) {
-                this.alertService.error('Unsupported Media Type');
+                this.alertService.error('Something Went Wrong !');
                 console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : 'Unsupported Media Type' : 'Unsupported Media Type');
                 // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : 'Unsupported Media Type' : 'Unsupported Media Type');
               } else {
-                this.alertService.error('!SYSTEM ERROR!');
+                this.alertService.error('Something Went Wrong !');
                 console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!SYSTEM ERROR!' : '!SYSTEM ERROR!');
                 // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!SYSTEM ERROR!' : '!SYSTEM ERROR!');
               }
