@@ -96,7 +96,8 @@ export class ExternalLoginComponent implements OnInit {
 
         this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
       } else {
-        this.alert.error(res.message);
+        console.log(res.message);
+        this.alert.error("Something Went Wrong !");
       }
     },
       (err) => {

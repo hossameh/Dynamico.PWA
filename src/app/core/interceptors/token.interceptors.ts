@@ -63,15 +63,25 @@ export class TokenInterceptor implements HttpInterceptor {
             // alertHandling
             if (error instanceof HttpErrorResponse) {
               if (error.status === 500 || error.status === 502 || error.status === 503) {
-                this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!Technical Error!' : '!Technical Error!');
+                this.alertService.error('!Technical Error!');
+                console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!Technical Error!' : '!Technical Error!');
+                // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!Technical Error!' : '!Technical Error!');
               } else if (error.status === 400) {
-                this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!BAD REQUEST!' : '!BAD REQUEST!');
+                this.alertService.error('!BAD REQUEST!');
+                console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!BAD REQUEST!' : '!BAD REQUEST!');
+                // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!BAD REQUEST!' : '!BAD REQUEST!');
               } else if (error.status === 404) {
-                this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!METHOD NOT FOUND!' : '!METHOD NOT FOUND!');
+                this.alertService.error('!METHOD NOT FOUND!');
+                console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!METHOD NOT FOUND!' : '!METHOD NOT FOUND!');
+                // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!METHOD NOT FOUND!' : '!METHOD NOT FOUND!');
               } else if (error.status === 415) {
-                this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : 'Unsupported Media Type' : 'Unsupported Media Type');
+                this.alertService.error('Unsupported Media Type');
+                console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : 'Unsupported Media Type' : 'Unsupported Media Type');
+                // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : 'Unsupported Media Type' : 'Unsupported Media Type');
               } else {
-                this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!SYSTEM ERROR!' : '!SYSTEM ERROR!');
+                this.alertService.error('!SYSTEM ERROR!');
+                console.log(error.error ? error.error.errorMessage ? error.error.errorMessage : '!SYSTEM ERROR!' : '!SYSTEM ERROR!');
+                // this.alertService.error(error.error ? error.error.errorMessage ? error.error.errorMessage : '!SYSTEM ERROR!' : '!SYSTEM ERROR!');
               }
             }
 

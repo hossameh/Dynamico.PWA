@@ -118,8 +118,10 @@ export class LoginComponent implements OnInit {
               }
             });
         }
-        else
-          this.alert.error(res.message);
+        else{
+          console.log(res.message);
+          this.alert.error("Something Went Wrong !");
+        }
       }
     },
       (err) => {
@@ -130,8 +132,10 @@ export class LoginComponent implements OnInit {
     const response = await this.logoutFromOtherDevices(body?.username, body?.username).toPromise();
     if (response.isPassed)
       this.login();
-    else
-      this.alert.error(response.message);
+    else{
+      console.log(response.message);
+      this.alert.error("Something Went Wrong !");
+    }
   }
   logoutFromOtherDevices(userName: any, email: any) {
     let url = `Auth/logout?UserName=${userName}&Email=${email}`;
@@ -155,11 +159,13 @@ export class LoginComponent implements OnInit {
             this.routeToHome();
           });
         } else {
-          this.alert.error('No registration token available. Request permission to generate one.')
+          console.log("No registration token available. Request permission to generate one.");
+          this.alert.error("Something Went Wrong !");
           this.routeToHome();
         }
       }).catch((err: any) => {
-        this.alert.error(err)
+        console.log(err);
+        this.alert.error("Something Went Wrong !");
         this.routeToHome();
       });
 

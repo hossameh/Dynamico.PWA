@@ -174,7 +174,8 @@ export class SearchComponent implements OnInit {
           this.resetSearch();
           this.deleteFromDB(false);
         } else {
-          this.alert.error(res.message);
+          console.log(res.message);
+          this.alert.error("Something Went Wrong !");
         }
       });
     } else {

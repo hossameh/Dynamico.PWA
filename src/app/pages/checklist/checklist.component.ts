@@ -477,7 +477,8 @@ export class ChecklistComponent implements OnInit {
             this.location.back();
             this.updateCashedPlanRecords();
           } else {
-            this.alert.error(res?.message);
+            console.log(res?.message);
+            this.alert.error("Something Went Wrong !");
           }
         });
       } else {

@@ -17,19 +17,19 @@ export class HttpService {
 
   constructor(private http: HttpClient, private alertService: AlertService) { }
 
-  get<T>(APIName: string, params?:any): Observable<T> {
-    return this.http.get<API>(`${this.serverUrl}${APIName}`,{params}).pipe(map((event) => {
+  get<T>(APIName: string, params?: any): Observable<T> {
+    return this.http.get<API>(`${this.serverUrl}${APIName}`, { params }).pipe(map((event) => {
       return event.data;
     }));
   }
-  get2<T>(APIName: string, params?:any): Observable<T> {
-    return this.http.get<API>(`${this.serverUrl}${APIName}`,{params}).pipe(map((event:any) => {
+  get2<T>(APIName: string, params?: any): Observable<T> {
+    return this.http.get<API>(`${this.serverUrl}${APIName}`, { params }).pipe(map((event: any) => {
       return event;
     }));
   }
 
-  post<T>(APIName: string, body?: any, showAlert = true,params?:any): Observable<T> {
-    return this.http.post<API>(`${this.serverUrl}${APIName}`, body ? body : null,{params}).pipe(map((event: any) => {
+  post<T>(APIName: string, body?: any, showAlert = true, params?: any): Observable<T> {
+    return this.http.post<API>(`${this.serverUrl}${APIName}`, body ? body : null, { params }).pipe(map((event: any) => {
       showAlert ? this.alertHandling(event) : '';
       return event;
     }));
@@ -54,7 +54,9 @@ export class HttpService {
       if (event.statusCode.toString().startsWith('2')) {
         this.alertService.success(event.successMessage ? event.successMessage : 'Successfully Done...');
       } else if (event.statusCode !== 200) {
-        this.alertService.error(event.errorMessage ? event.errorMessage : '!NOT HANDLED ERROR!');
+        this.alertService.error("Something Went Wrong !");
+        console.log(event.errorMessage ? event.errorMessage : '!NOT HANDLED ERROR!');
+        // this.alertService.error(event.errorMessage ? event.errorMessage : '!NOT HANDLED ERROR!');
       }
     }
   }
