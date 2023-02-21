@@ -31,9 +31,11 @@ export class AssetsDocumentsComponent implements OnInit {
     });
   }
   async viewDocument(item: any) {
-    if (this.isOnline || !this.docExtensions.includes(item?.extension))
+    if (this.isOnline || !this.docExtensions.includes(item?.extension)) {
+      item.documentPath = btoa(item?.documentPath);
       this.router.navigateByUrl("/page/view-doc?id=" + item?.id + "&name=" + item?.documentName +
         "&mimeType=" + item?.mimeType + "&extension=" + item?.extension + "&documentPath=" + item?.documentPath);
+    }
     else {
       if (item?.canDownload == true) {
         let cashedDocuments = await this.storage.get("CashedDocuments") || [];

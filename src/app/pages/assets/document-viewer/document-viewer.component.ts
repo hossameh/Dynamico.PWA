@@ -19,7 +19,7 @@ export class DocumentViewerComponent implements OnInit {
 
   docTypes = DocTypes;
   params: any;
-  doc: any;
+  doc: any = {};
   docDataAsString!: string;
   docExtensions: any[] = [];
   isOnline = true;
@@ -48,7 +48,14 @@ export class DocumentViewerComponent implements OnInit {
   }
   async setDocumentObj() {
     if (this.isOnline) {
-      this.doc = this.params;
+      let doc = {
+        documentPath: atob(this.params.documentPath),
+        extension: this.params.extension,
+        id: this.params.id,
+        mimeType: this.params.mimeType,
+        name: this.params.name
+      }
+      this.doc = doc;
       await this.getDocDataAsString();
     }
     else {
