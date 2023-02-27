@@ -1,6 +1,7 @@
 @import 'style.scss';
 .login{
-  background:radial-gradient(#046574, #02333A);
+  background:url('../../../assets/img/bg.png');
+  background-size: cover;
   padding: 20px;
   min-height: 100vh;
   display: flex;

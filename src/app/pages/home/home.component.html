@@ -7,7 +7,7 @@
 
   <div class=" px-3 py-4">
     <div class="mb-3 content" *ngFor="let item of items">
-      <div class="white-box" [style.--background]="item.color ? item.color : '#FF6536'"
+      <div class="white-box" [style.--background]="item.color ? item.color : '#00CCFF'"
         [routerLink]="['/page/home/category/'+item.category_Id]" [queryParams]="{ name: item.category_Name }"
         routerLinkActive="router-link-active">
         <div class="box-content">
