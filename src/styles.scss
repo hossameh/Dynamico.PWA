@@ -33,6 +33,9 @@ body {
   // font-family: "avenir-heavy";
   color: $text;
   background-color: #F2FBFD;
+  background-image: url(assets/img/pattern.png);
+  background-repeat: no-repeat;
+  background-position: bottom;
   font-family: Montserrat, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
   font-weight: 600 !important;
 }
@@ -126,5 +129,15 @@ div.formio-form ul.formio-wizard-nav-container li {
         border: 0;
       }
     }
+  }
+}
+.notif-mob{
+  top: 20px;
+  bottom: unset;
+  left: 20px;
+  right: 20px;
+  width: calc(100% - 40px);
+  .ngx-toastr{
+    width: 100%;
   }
 }

@@ -167,14 +167,16 @@ export class AppComponent {
     });
   }
 
+
+
   showToaster(title: any, body: any) {
     this.toastr.info(title, body, {
       // timeOut: 15000,
       // extendedTimeOut: 10000,
       newestOnTop: false,
-      closeButton: true,
+      closeButton: false,
       disableTimeOut: true,
-      positionClass: "toast-top-right"
+      positionClass: "notif-mob"
     })
       .onTap
       .subscribe(() => this.toasterClickedHandler());
