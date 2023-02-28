@@ -139,5 +139,19 @@ div.formio-form ul.formio-wizard-nav-container li {
   width: calc(100% - 40px);
   .ngx-toastr{
     width: 100%;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 13px #00000066;
+    border-radius: 10px;
+    padding: 15px;
+    &.toast-info{
+      background-image: unset !important;
+    }
+    .toast-title{
+      font-size: 15px;
+    }
+    .toast-message{
+      font-size: 12px;
+    }
   }
 }
