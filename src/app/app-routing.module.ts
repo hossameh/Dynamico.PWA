@@ -24,6 +24,7 @@ import { AssetsComponent } from './pages/assets/assets.component';
 import { AssetsListComponent } from './pages/assets/assets-list/assets-list.component';
 import { ExternalLoginComponent } from './auth/external-login/external-login.component';
 import { DocumentViewerComponent } from './pages/assets/document-viewer/document-viewer.component';
+import { MobileChecklistComponent } from './pages/checklist/mobile-checklist/mobile-checklist.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -87,6 +88,10 @@ const routes: Routes = [
       {
         path: 'checklist/:id',
         component: ChecklistComponent
+      },
+      {
+        path: 'app-checklist/:id',
+        component: MobileChecklistComponent
       },
       {
         path: 'notification',

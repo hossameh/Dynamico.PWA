@@ -51,6 +51,7 @@ import { AssetsListComponent } from './pages/assets/assets-list/assets-list.comp
 import { ExternalLoginComponent } from './auth/external-login/external-login.component';
 import { DocumentViewerComponent } from './pages/assets/document-viewer/document-viewer.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { MobileChecklistComponent } from './pages/checklist/mobile-checklist/mobile-checklist.component';
 initializeApp(environment.firebase);
 
 
@@ -86,7 +87,8 @@ initializeApp(environment.firebase);
     AssetsDocumentsComponent,
     AssetsListComponent,
     ExternalLoginComponent,
-    DocumentViewerComponent
+    DocumentViewerComponent,
+    MobileChecklistComponent
   ],
   imports: [
     BrowserModule,

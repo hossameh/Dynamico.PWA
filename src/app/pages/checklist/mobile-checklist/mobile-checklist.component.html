@@ -1,0 +1,43 @@
+<section class="main pb-5" [class.isComplete]="isComplete">
+    <div class="section-heading">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <div class="d-flex">
+            <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
+            <h4>
+              {{params?.listName ? params?.listName : data?.formTitle}}
+            </h4>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  
+    <div class="content" role="main">
+      <div class="col-10 m-4" *ngIf="form.components.length > 0">
+        <formio-editor [form]="form" [options]="options"></formio-editor>
+      </div>
+    </div>
+  </section>
+  
+  <a data-bs-toggle="modal" data-bs-target="#submissionModal" #openModal></a>
+  <div class="modal fade" id="submissionModal" aria-labelledby="submitLabel" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header text-center p-2 ">
+          <h5 class="modal-title" id="submitLabel">{{'Submit_Confirmation' | translate}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal></button>
+        </div>
+        <div class="modal-body">
+  
+          <div class="d-flex justify-content-between align-items-center">
+            <button type="button" *ngIf="userRole != role.Anonymous" class="btn btn-warning w-100 ms-e"
+              data-bs-dismiss="modal" (click)="save()">{{'Save' | translate}}</button>
+            <button type="button" class="btn btn-primary w-100 ms-2" data-bs-dismiss="modal" (click)="submit()">{{'Submit'
+              | translate}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
