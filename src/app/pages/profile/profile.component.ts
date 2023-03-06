@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
       // elEn && elEn.remove();
 
       this.generateLinkElement({
-        id: 'bootstrap-en',
+        id: 'bootstrap-ar',
         href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
         dir: 'rtl',
         lang: 'ar',
@@ -81,9 +81,10 @@ export class ProfileComponent implements OnInit {
 
   async logout() {
     await this.logoutFromOtherDevices(this.userData?.userEmail, this.userData?.userEmail).toPromise();
+    const currentLang =  localStorage.getItem("lang");
     localStorage.clear();
     sessionStorage.clear();
-    localStorage.setItem("lang", "en");
+    localStorage.setItem("lang", currentLang ?? 'en');
     this.router.navigate(['/login']);
   }
   logoutFromOtherDevices(userName: any, email: any) {

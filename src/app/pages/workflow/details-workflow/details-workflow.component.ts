@@ -196,23 +196,32 @@ export class DetailsWorkflowComponent implements OnInit {
     }
   }
   langChanged(lang: any) {
-    this.translate.use(lang)
-    // localStorage.setItem('lang', lang);
+    const elEn = document.querySelector('#bootstrap-en');
+    const elAr = document.querySelector('#bootstrap-ar');
+    this.translate.use(lang);
+    localStorage.setItem('lang', lang);
     if (lang === 'ar') {
-      this.generateLinkElement({
-        id: 'bootstrap-en',
-        href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
-        dir: 'rtl',
-        lang: 'ar',
-      });
-
+      // add bootstrap ar
+      elEn && elEn.remove();
+      if (!elAr) {
+        this.generateLinkElement({
+          id: 'bootstrap-ar',
+          href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
+          dir: 'rtl',
+          lang: 'ar',
+        });
+      }
     } else {
-      this.generateLinkElement({
-        id: 'bootstrap-en',
-        href: 'assets/vendor/bootstrap/bootstrap.min.css',
-        dir: 'ltr',
-        lang: 'en',
-      });
+      // en
+      elAr && elAr.remove() ;
+      if (!elEn) {
+        this.generateLinkElement({
+          id: 'bootstrap-en',
+          href: 'assets/vendor/bootstrap/bootstrap.min.css',
+          dir: 'ltr',
+          lang: 'en',
+        });
+      }
     }
   }
   generateLinkElement(props: any) {

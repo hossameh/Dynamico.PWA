@@ -39,30 +39,32 @@ export class LoginComponent implements OnInit {
   }
 
   langChanged(lang: any) {
-    // const elEn = document.querySelector('#bootstrap-en');
-    // const elAr = document.querySelector('#bootstrap-ar');
-    this.translate.use(lang)
-    localStorage.setItem('lang', lang)
+    const elEn = document.querySelector('#bootstrap-en');
+    const elAr = document.querySelector('#bootstrap-ar');
+    this.translate.use(lang);
+    localStorage.setItem('lang', lang);
     if (lang === 'ar') {
       // add bootstrap ar
-      // elEn && elEn.remove();
-
-      this.generateLinkElement({
-        id: 'bootstrap-en',
-        href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
-        dir: 'rtl',
-        lang: 'ar',
-      });
-
+      elEn && elEn.remove();
+      if (!elAr) {
+        this.generateLinkElement({
+          id: 'bootstrap-ar',
+          href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
+          dir: 'rtl',
+          lang: 'ar',
+        });
+      }
     } else {
       // en
-      // elAr && elAr.remove();
-      this.generateLinkElement({
-        id: 'bootstrap-en',
-        href: 'assets/vendor/bootstrap/bootstrap.min.css',
-        dir: 'ltr',
-        lang: 'en',
-      });
+      elAr && elAr.remove() ;
+      if (!elEn) {
+        this.generateLinkElement({
+          id: 'bootstrap-en',
+          href: 'assets/vendor/bootstrap/bootstrap.min.css',
+          dir: 'ltr',
+          lang: 'en',
+        });
+      }
     }
   }
   generateLinkElement(props: any) {
@@ -118,7 +120,7 @@ export class LoginComponent implements OnInit {
               }
             });
         }
-        else{
+        else {
           console.log(res.message);
           this.alert.error("Something Went Wrong !");
         }
@@ -132,7 +134,7 @@ export class LoginComponent implements OnInit {
     const response = await this.logoutFromOtherDevices(body?.username, body?.username).toPromise();
     if (response.isPassed)
       this.login();
-    else{
+    else {
       console.log(response.message);
       this.alert.error("Something Went Wrong !");
     }
@@ -197,11 +199,11 @@ export class LoginComponent implements OnInit {
 
       }
       else {
-        this.alert.error('Failed To Update FCM Token')
+        this.alert.error('Failed To Update FCM Token');
       }
     }
     catch (err) {
-      this.alert.error('Failed To Update FCM Token')
+      this.alert.error('Failed To Update FCM Token');
     };
   }
   updateUserFCMToken(body: any, authToken: any) {
@@ -209,6 +211,6 @@ export class LoginComponent implements OnInit {
       headers: {
         "Authorization": `Bearer ${authToken ? authToken : ''}`
       }
-    }).toPromise()
+    }).toPromise();
   }
 }

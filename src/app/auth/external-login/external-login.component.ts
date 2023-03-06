@@ -36,30 +36,32 @@ export class ExternalLoginComponent implements OnInit {
   }
 
   langChanged(lang: any) {
-    // const elEn = document.querySelector('#bootstrap-en');
-    // const elAr = document.querySelector('#bootstrap-ar');
-    this.translate.use(lang)
-    localStorage.setItem('lang', lang)
+    const elEn = document.querySelector('#bootstrap-en');
+    const elAr = document.querySelector('#bootstrap-ar');
+    this.translate.use(lang);
+    localStorage.setItem('lang', lang);
     if (lang === 'ar') {
       // add bootstrap ar
-      // elEn && elEn.remove();
-
-      this.generateLinkElement({
-        id: 'bootstrap-en',
-        href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
-        dir: 'rtl',
-        lang: 'ar',
-      });
-
+      elEn && elEn.remove();
+      if (!elAr) {
+        this.generateLinkElement({
+          id: 'bootstrap-ar',
+          href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
+          dir: 'rtl',
+          lang: 'ar',
+        });
+      }
     } else {
       // en
-      // elAr && elAr.remove();
-      this.generateLinkElement({
-        id: 'bootstrap-en',
-        href: 'assets/vendor/bootstrap/bootstrap.min.css',
-        dir: 'ltr',
-        lang: 'en',
-      });
+      elAr && elAr.remove() ;
+      if (!elEn) {
+        this.generateLinkElement({
+          id: 'bootstrap-en',
+          href: 'assets/vendor/bootstrap/bootstrap.min.css',
+          dir: 'ltr',
+          lang: 'en',
+        });
+      }
     }
   }
   generateLinkElement(props: any) {
@@ -92,7 +94,7 @@ export class ExternalLoginComponent implements OnInit {
 
         await localStorage.setItem('userData', JSON.stringify(res?.data?.userToken));
         await localStorage.setItem('token', JSON.stringify(res.data?.userToken?.resetToken));
-  
+
 
         this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
       } else {
