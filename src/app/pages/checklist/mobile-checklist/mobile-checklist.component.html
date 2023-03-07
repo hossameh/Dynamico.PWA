@@ -3,7 +3,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <div class="d-flex">
-            <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
+            <!-- <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()"> -->
             <h4>
               {{params?.listName ? params?.listName : data?.formTitle}}
             </h4>
@@ -32,7 +32,7 @@
         <div class="modal-body">
   
           <div class="d-flex justify-content-between align-items-center">
-            <button type="button" *ngIf="userRole != role.Anonymous" class="btn btn-warning w-100 ms-e"
+            <button type="button" class="btn btn-warning w-100 ms-e"
               data-bs-dismiss="modal" (click)="save()">{{'Save' | translate}}</button>
             <button type="button" class="btn btn-primary w-100 ms-2" data-bs-dismiss="modal" (click)="submit()">{{'Submit'
               | translate}}</button>
