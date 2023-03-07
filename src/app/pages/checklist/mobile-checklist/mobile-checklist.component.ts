@@ -385,7 +385,9 @@ export class MobileChecklistComponent implements OnInit {
   }
 
   send() {
-    this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;
+    // this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;
+    this.modelBody.formDataRef = this.recordForm.get('formDataRef')?.value ? this.recordForm.get('formDataRef')?.value : (this.params.formRef ? this.params.formRef : null);
+
     this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
       if (res.isPassed) {
         this.alert.success(this.helper.getTranslation('Form Submitted Successfully'));

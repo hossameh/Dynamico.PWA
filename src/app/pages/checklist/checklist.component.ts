@@ -468,7 +468,8 @@ export class ChecklistComponent implements OnInit {
   }
 
   send() {
-    this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;
+    // this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;    
+    this.modelBody.formDataRef = this.recordForm.get('formDataRef')?.value ? this.recordForm.get('formDataRef')?.value : (this.params.formRef ? this.params.formRef : null);
     this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
       if (isOnline) {
         this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
@@ -894,7 +895,7 @@ export class ChecklistComponent implements OnInit {
       }
     } else {
       // en
-      elAr && elAr.remove() ;
+      elAr && elAr.remove();
       if (!elEn) {
         this.generateLinkElement({
           id: 'bootstrap-en',
