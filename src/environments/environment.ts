@@ -4,15 +4,15 @@
 
 export const environment = {
   production: false,
-  version: '1.2.24',
-  hostAPI: "https://www.lab7software.com/api.dynamico/api/",
+  version: '1.2.25',
+  hostAPI: "https://lab7software.com/api.dynamico/api/",
   //hostAPI: "https://localhost:44350/api/",
   //hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",
   // hostAPI: "https://dynamico.cloud/api/",
   //hostAPI:"http://5.189.153.30/api.dynamico/api/"
 
   appName: 'PWA',
-  APP_URL: 'https://www.lab7software.com/DynamicoApp/',
+  APP_URL: 'https://lab7software.com/DynamicoApp/',
 
   //  firebase : {
   //   apiKey: "AIzaSyDZHpBV8XtrYaeOhNpJqtBkTGjTYTTCSz0",
