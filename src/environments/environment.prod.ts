@@ -1,14 +1,14 @@
 export const environment = {
   production: true,
   version: '1.2.25',
-  //hostAPI: "https://dynamico.cloud/api/",
-  hostAPI: "https://www.lab7software.com/api.dynamico/api/",
+  hostAPI: "https://lab7software.com/api.dynamico/api/",
+ // hostAPI: "https://www.lab7software.com/api.dynamico/api/",
   //hostAPI:"https://qa-farm.tensorforms.com/api.dynamico/api/",
   //hostAPI:"http://5.189.153.30/api.dynamico/api/",
 
   appName: 'PWA',
-  //APP_URL: 'https://dynamico.cloud/app/',
-  APP_URL: 'https://www.lab7software.com/DynamicoApp/',
+  APP_URL: 'https://lab7software.com/DynamicoApp/',
+ // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
   //APP_URL: 'https://qa-farm.tensorforms.com/DynamicoApp/',
 
   //firebase: {
