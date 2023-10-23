@@ -26,6 +26,7 @@
     "@davebaol/angular-formio-editor": "^0.9.5",
     "@ionic/storage-angular": "^3.0.6",
     "@ng-bootstrap/ng-bootstrap": "^12.1.2",
+    "@ng-select/ng-select": "8.3.0",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
     "@techiediaries/ngx-qrcode": "^9.1.0",

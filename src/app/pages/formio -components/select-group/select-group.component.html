@@ -1,0 +1,10 @@
+<div class="form-group">
+  <ng-select [items]="data?.values"
+             bindLabel="label"
+             bindValue="value"
+             groupBy="itemsGroupProperty"
+             [readonly]="disabled"
+             (change)="onValueChanged($event)"
+             [(ngModel)]="value">
+  </ng-select>
+</div>

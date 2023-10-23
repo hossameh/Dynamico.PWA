@@ -1,6 +1,6 @@
 import { DateViewComponent } from './pages/calendar/date-view/date-view.component';
 import { TokenInterceptor } from './core/interceptors/token.interceptors';
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -52,6 +52,9 @@ import { ExternalLoginComponent } from './auth/external-login/external-login.com
 import { DocumentViewerComponent } from './pages/assets/document-viewer/document-viewer.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { MobileChecklistComponent } from './pages/checklist/mobile-checklist/mobile-checklist.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { SelectGroupComponent } from './pages/formio -components/select-group/select-group.component';
+import { registerSelectGroupComponent } from './pages/formio -components/select-group/selectGroup-wrapper.forrmio';
 initializeApp(environment.firebase);
 
 
@@ -88,7 +91,8 @@ initializeApp(environment.firebase);
     AssetsListComponent,
     ExternalLoginComponent,
     DocumentViewerComponent,
-    MobileChecklistComponent
+    MobileChecklistComponent,
+    SelectGroupComponent
   ],
   imports: [
     BrowserModule,
@@ -119,7 +123,8 @@ initializeApp(environment.firebase);
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    NgSelectModule
   ],
   providers: [
     {
@@ -131,7 +136,13 @@ initializeApp(environment.firebase);
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(injector: Injector) {
+
+    registerSelectGroupComponent(injector);
+  }
+}
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
