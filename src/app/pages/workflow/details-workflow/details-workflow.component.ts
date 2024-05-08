@@ -11,6 +11,7 @@ import { Storage } from '@ionic/storage-angular';
 import { OfflineService } from 'src/app/services/offline/offline.service';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { HelperService } from '../../../services/helper.service';
 
 @Component({
   selector: 'app-details-workflow',
@@ -41,6 +42,7 @@ export class DetailsWorkflowComponent implements OnInit {
   formType: string = 'form';
   formdefaultDisplayLanguage: any;
   currentLang: any;
+  userEmail!: string;
   constructor(
     private route: ActivatedRoute,
     private http: HttpService,
@@ -51,9 +53,11 @@ export class DetailsWorkflowComponent implements OnInit {
     private storage: Storage,
     private offline: OfflineService,
     private translate: TranslateService,
+    private helper: HelperService,
   ) { }
   ngOnInit(): void {
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
     this.currentLang = localStorage.getItem('lang');
     this.currentDate = new Date();
     this.appUrl = environment.APP_URL;
@@ -186,7 +190,7 @@ export class DetailsWorkflowComponent implements OnInit {
           this.formdefaultDisplayLanguage = value?.defaultDisplayLanguage;
           this.langChanged(value.defaultDisplayLanguage);
         }
-        this.cashRecord();
+        this.cashRecord(this.data);
 
         this.continueWithData();
       });
@@ -271,10 +275,10 @@ export class DetailsWorkflowComponent implements OnInit {
           }
         },
         output: {
-          // submit: this.onFormSubmitted.bind(this, event),
+           submit: this.onFormSubmitted.bind(this, event),
         },
         input: {
-          readOnly: true,
+          readOnly: this.data.workflowCompleted ,
           submission: {
             data: dataObject ?? {}
           },
@@ -302,7 +306,7 @@ export class DetailsWorkflowComponent implements OnInit {
       }, 2000)
     }
   }
-  async cashRecord() {
+  async cashRecord(recordData:any) {
     let cashedCheckListRecords = await this.storage.get('CheckListRecords') || [];
     if (cashedCheckListRecords) {
       // check if Record is in cahce
@@ -311,13 +315,13 @@ export class DetailsWorkflowComponent implements OnInit {
       });
       // check if Record  is in cahce update data in this index
       if (index >= 0) {
-        cashedCheckListRecords[index] = this.data;
+        cashedCheckListRecords[index] = recordData;
       } else {
         //if not found id add a new record
-        cashedCheckListRecords.push(this.data);
+        cashedCheckListRecords.push(recordData);
       }
     } else {
-      cashedCheckListRecords.push(this.data);
+      cashedCheckListRecords.push(recordData);
     }
     await this.storage.set('CheckListRecords', cashedCheckListRecords);
   }
@@ -360,6 +364,13 @@ export class DetailsWorkflowComponent implements OnInit {
       data[item?.name] = item?.value;
     });
     return data;
+  }
+  serializeObj(obj: any) {
+    let result = [];
+    for (var property in obj) {
+      result.push({ name: property, value: obj[property] });
+    }
+    return result;
   }
   back(): void {
     this.location.back();
@@ -550,6 +561,70 @@ border:1px dashed #000
     )
     popupWin?.document.close()
   }
+
+ async onFormSubmitted(sender: any, eventData: any) {
+
+   try {
+     
+     let recordData = eventData.data;
+     let serializedData = this.serializeObj(recordData);
+
+     if (this.isOnline) {
+       const modelBody = {
+         record_Id: +this.params.Record_Id,
+         user_Id: this.userId,
+         form_Id: +this.params.Form_Id,
+         formDataRef: this.data?.formDataRef,
+         form_Record: serializedData,
+         record_Status: this.data?.recordStatusId,
+         isNewRecord: false,
+         location: this.data?.location,
+         offlineRef: this.params.offline,
+         isSubmitted: false
+       };
+       this.http.post('ChecklistRecords/SaveFormRecord', modelBody).subscribe((res: any) => {
+         if (res.isPassed) {
+           this.alert.success(this.helper.getTranslation('Form Saved Successfully'));
+           this.location.back();
+          // this.updateCashedPlanRecords();
+         } else {
+           console.log(res?.message);
+           this.alert.error("Something Went Wrong !");
+         }
+       });
+     }
+     else {
+       const cashedRecord = {
+         creationDate: new Date(),
+         formDataRef: this.data?.formDataRef,
+         createdBy: this.userEmail,
+         defaultDisplayLanguage: this.data?.defaultDisplayLanguage,
+         formTitle: this.data?.formTitle,
+         formType: this.data?.formType,
+         form_Id: +this.params.Form_Id,
+         form_Layout: this.data?.form_Layout,
+         gpsRequired: this.data?.gpsRequired,
+         location: this.data?.location,
+         recordStatusId: this.data?.recordStatusId,
+         recordTagValues: this.data?.recordTagValues,
+         record_Id: +this.params.Record_Id,
+         record_Json: serializedData,
+         workflowId: this.data?.workflowId,
+         workflowCompleted: this.data?.workflowCompleted
+       };
+       this.cashRecord(cashedRecord);
+       this.location.back();
+     }
+
+ 
+ 
+   }
+   catch (err) {
+     console.log(err);
+   }
+ 
+  }
+
 
 }
 interface IWorkflowProcessList {

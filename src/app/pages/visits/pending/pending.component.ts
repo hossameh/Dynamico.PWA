@@ -139,7 +139,8 @@ export class PendingComponent implements OnInit {
   }
   routeWithWorkFlow(item: any) {
     if (this.access && (this.access.includes(this.accessTypes.Read) || this.access.includes(this.accessTypes.Update)))
-      this.router.navigateByUrl("/page/workflow/details?Form_Id=" + item?.form_Id + "&Record_Id=" + +item?.record_Id)
+      this.router.navigateByUrl("/page/workflow/details?Form_Id=" + item?.form_Id + "&Record_Id=" + +item?.record_Id +
+        "&offline=" + (item.offlineRef ? item.offlineRef : '')) 
     else {
       this.alert.error("You have No Access")
       return;

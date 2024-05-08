@@ -91,7 +91,6 @@ export class ChecklistComponent implements OnInit {
           fullSubmission: false,
           // The json editor of the submitted resource.
           resourceJsonEditor: {
-
             input: {
 
             },
