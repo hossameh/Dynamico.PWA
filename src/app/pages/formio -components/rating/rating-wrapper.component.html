@@ -1,0 +1,14 @@
+
+<ngb-rating [(rate)]="innerValue" *ngIf="showRating"
+            [max]="maxLimit"
+            (rateChange)="onValueChanged($event)"
+            [readonly]="disabled">
+  <ng-template let-fill="fill" let-index="index">
+    <i class="{{rateIcon}}"
+       [style.color]="fill > 0 ? fillColor : ''  "
+       [style.font-size]="iconSize"></i>
+  </ng-template>
+
+</ngb-rating>
+<span *ngIf="showRating" style="margin-inline: 0.375rem; color: #BDBDBD; font-size:.8rem;">{{ innerValue + ' / ' +  maxLimit}}</span>
+

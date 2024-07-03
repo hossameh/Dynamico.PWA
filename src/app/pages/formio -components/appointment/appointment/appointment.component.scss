@@ -1,0 +1,23 @@
+.btnSelected {
+  background-color: #2F8BE6 !important;
+  color: white !important;
+}
+
+.slotContainer {
+  max-height: 290px;
+  overflow-y: auto;
+}
+
+@media print {
+  .dvalue {
+    color: black;
+  }
+
+  .emptySlot {
+    display: none;
+  }
+
+  .pieckerApp {
+    display: none;
+  }
+}

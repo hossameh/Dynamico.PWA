@@ -1,0 +1,76 @@
+
+<div *ngIf="!popupView">
+  <div class="d-flex">
+    <div class="d-flex align-items-start ">
+      <ngb-datepicker #dp class="pieckerApp"
+                      [(ngModel)]="selectDate"
+                      [disabled]="disabled"
+                      [minDate]="limitStart"
+                      [maxDate]="limitEnd"
+                      outsideDays="hidden"
+                      (dateSelect)="onDateChanged()"
+                      [markDisabled]="isDayDisabled.bind(this)"
+                      [startDate]="openDate"
+                      [firstDayOfWeek]="firstDayOfWeek">
+
+      </ngb-datepicker>
+
+    </div>
+    <div class="px-1">
+      <span class="badge badge-danger p-1 emptySlot" *ngIf="slotDurationList.length == 0">{{'No Slots Available'}}</span>
+      <div class="d-flex flex-wrap slotContainer" *ngIf="slotDurationList.length > 0">
+        <div class="" *ngFor="let slot  of slotDurationList; let i=index">
+          <button class="btn btn-outline-info mr-1 mb-1"
+                  [ngClass]="{'btnSelected' : slot.selected}"
+                  (click)="onSlotSelected(slot,$event)">
+            {{slot.h12}}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="d-flex justify-content-center  pt-1 px-1" *ngIf="displayedValue && displayedValue.length > 0">
+    <span class="badge badge-info d-block dvalue">{{displayedValue}}</span>
+  </div>
+
+</div>
+<div class="row" *ngIf="popupView">
+  <div class="input-group px-1 col-12">
+    <input class="form-control"
+           placeholder="yyyy-mm-dd"
+           name="dp"
+           ngbDatepicker
+           #d2="ngbDatepicker"
+           [(ngModel)]="selectDate"
+           [disabled]="disabled"
+           [minDate]="limitStart"
+           [maxDate]="limitEnd"
+           outsideDays="hidden"
+           (dateSelect)="onDateChanged()"
+           [markDisabled]="isDayDisabled.bind(this)"
+           [startDate]="openDate"
+           [firstDayOfWeek]="firstDayOfWeek">
+    <div class="input-group-append">
+      <div class="input-group-text" (click)="d2.toggle()">
+        <i class="fa fa-calendar" style="cursor: pointer;"></i>
+      </div>
+    </div>
+  </div>
+  <div class="px-1 col-12">
+    <span class="badge badge-danger p-1" *ngIf="slotDurationList.length == 0">{{'No Slots Available'}}</span>
+    <div class="row slotContainer" *ngIf="slotDurationList.length > 0">
+      <div class="col-6" *ngFor="let slot  of slotDurationList; let i=index">
+        <button class="btn btn-outline-info mr-1 mb-1 w-100"
+                [ngClass]="{'btnSelected' : slot.selected}"
+                (click)="onSlotSelected(slot,$event)">
+          {{slot.h12}}
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <div class="d-flex justify-content-center pt-1 col-12" *ngIf="displayedValue && displayedValue.length > 0">
+    <span class="badge badge-info d-block">{{displayedValue}}</span>
+  </div>
+</div>

@@ -40,7 +40,7 @@ import { NotificationDetailsComponent } from './pages/notification/notification-
 import { initializeApp } from 'firebase/app';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {  NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QrScanComponent } from './pages/qr-scan/qr-scan.component';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { AssetsComponent } from './pages/assets/assets.component';
@@ -55,6 +55,12 @@ import { MobileChecklistComponent } from './pages/checklist/mobile-checklist/mob
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SelectGroupComponent } from './pages/formio -components/select-group/select-group.component';
 import { registerSelectGroupComponent } from './pages/formio -components/select-group/selectGroup-wrapper.forrmio';
+import { RatingWrapperComponent } from './pages/formio -components/rating/rating-wrapper.component';
+import { registerRatingComponent } from './pages/formio -components/rating/rating-wrapper.formio';
+import { AppointmentComponent } from './pages/formio -components/appointment/appointment/appointment.component';
+import { registerAppointmentComponent } from './pages/formio -components/appointment/appointment/appointment-wrapper.formio';
+import { WorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control.component';
+import { registerWorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control-wrapper.formio';
 initializeApp(environment.firebase);
 
 
@@ -92,7 +98,10 @@ initializeApp(environment.firebase);
     ExternalLoginComponent,
     DocumentViewerComponent,
     MobileChecklistComponent,
-    SelectGroupComponent
+    SelectGroupComponent,
+    RatingWrapperComponent,
+    AppointmentComponent,
+    WorkflowControlComponent
   ],
   imports: [
     BrowserModule,
@@ -124,7 +133,8 @@ initializeApp(environment.firebase);
       registrationStrategy: 'registerWhenStable:30000'
     }),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
-    NgSelectModule
+    NgSelectModule,
+
   ],
   providers: [
     {
@@ -139,10 +149,12 @@ initializeApp(environment.firebase);
 export class AppModule {
 
   constructor(injector: Injector) {
-
+    registerRatingComponent(injector);
     registerSelectGroupComponent(injector);
+    registerWorkflowControlComponent(injector)
+  //  registerAppointmentComponent(injector);
   }
 }
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, "assets/i18n/", ".json");
 }
