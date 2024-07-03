@@ -404,8 +404,9 @@ export class DetailsWorkflowComponent implements OnInit {
     this.http.post('Workflow/UpdateWorkflowProcess', this.body).subscribe(res => {
       this.alert.success('Successfully');
       this.closeModal.nativeElement.click();
-      this.comment = '';
-      this.getWorkflowProcess();
+      window.location.reload();
+      //this.comment = '';
+      //this.getWorkflowProcess();
     })
   }
   checkLarger(start: any, end: any) {
