@@ -4,20 +4,20 @@
 }
 
 .slotContainer {
-  max-height: 290px;
-  overflow-y: auto;
+  max-height: 290px !important;
+  overflow-y: auto !important;
 }
 
 @media print {
   .dvalue {
-    color: black;
+    color: black !important;
   }
 
   .emptySlot {
-    display: none;
+    display: none !important;
   }
 
   .pieckerApp {
-    display: none;
+    display: none !important;
   }
 }

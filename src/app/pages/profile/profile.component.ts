@@ -1,10 +1,11 @@
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from './../../../environments/environment';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http/http.service';
 import { AlertService } from 'src/app/services/alert/alert.service';
-
+import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+const now: any = new Date();
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -13,7 +14,9 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 export class ProfileComponent implements OnInit {
 
   version = environment.version
-  userData: any
+  userData: any;
+  @ViewChild('d2') dp!: NgbInputDatepicker;
+  selectDate  : NgbDateStruct = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
   constructor(public translate: TranslateService,
     private http: HttpService,
     private alert: AlertService,
@@ -90,5 +93,12 @@ export class ProfileComponent implements OnInit {
   logoutFromOtherDevices(userName: any, email: any) {
     let url = `Auth/logout?UserName=${userName}&Email=${email}`;
     return this.http.post<any>(`${url}`, null);
+  }
+
+  toggle() {
+    this.dp.toggle();
+  }
+  onDateChanged() {
+    console.log(this.selectDate)
   }
 }

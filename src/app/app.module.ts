@@ -152,7 +152,7 @@ export class AppModule {
     registerRatingComponent(injector);
     registerSelectGroupComponent(injector);
     registerWorkflowControlComponent(injector)
-  //  registerAppointmentComponent(injector);
+    registerAppointmentComponent(injector);
   }
 }
 export function HttpLoaderFactory(http: HttpClient) {
