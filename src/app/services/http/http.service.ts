@@ -54,9 +54,9 @@ export class HttpService {
       if (event.statusCode.toString().startsWith('2')) {
         this.alertService.success(event.successMessage ? event.successMessage : 'Successfully Done...');
       } else if (event.statusCode !== 200) {
-        this.alertService.error("Something Went Wrong !");
+        this.alertService.error(environment.friendlyErrorMessage);
         console.log(event.errorMessage ? event.errorMessage : '!NOT HANDLED ERROR!');
-        // this.alertService.error(event.errorMessage ? event.errorMessage : '!NOT HANDLED ERROR!');
+   
       }
     }
   }

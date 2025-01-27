@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { API } from 'src/app/core/interface/api.interface';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { LangEnum } from 'src/app/core/enums/common.enum';
 
 @Component({
   selector: 'app-external-login',
@@ -28,10 +29,14 @@ export class ExternalLoginComponent implements OnInit {
     this.code = this.route.snapshot.queryParams['code'] || '/';
 
     this.BuildRequestForm();
-    const lang = localStorage.getItem('lang') || '{}';
+    const lang = localStorage.getItem('lang') ?? '';
     localStorage.clear();
-    localStorage.setItem('lang', lang);
-    this.langChanged(lang);
+ 
+    if(lang)
+     this.langChanged(lang);
+    else
+     this.langChanged(LangEnum.English);
+ 
 
   }
 

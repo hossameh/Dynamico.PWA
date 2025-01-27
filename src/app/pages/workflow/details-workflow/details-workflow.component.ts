@@ -146,7 +146,7 @@ export class DetailsWorkflowComponent implements OnInit {
     this.step = step;
   }
   ngOnDestroy(): void {
-    if (this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
+    if (this.currentLang && this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
       this.langChanged(this.currentLang);
     }
     //Called once, before the instance is destroyed.
@@ -199,6 +199,7 @@ export class DetailsWorkflowComponent implements OnInit {
       this.getRecordFromCashe();
     }
   }
+
   langChanged(lang: any) {
     const elEn = document.querySelector('#bootstrap-en');
     const elAr = document.querySelector('#bootstrap-ar');

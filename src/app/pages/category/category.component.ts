@@ -43,6 +43,10 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   isLoading = false;
   userId: any;
 
+  enableRecordRef = false;
+
+  mandatoryRecordRef = false;
+
   constructor(
     private route: ActivatedRoute,
     private offline: OfflineService,
@@ -67,6 +71,11 @@ export class CategoryComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.enableRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').enableRecordRef;
+    this.mandatoryRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').mandatoryRecordRef;
+
+
+
     this.resetPager();
     this.category_Id = this.route.snapshot.params.id;
     this.name = this.route.snapshot.queryParams.name;
@@ -118,11 +127,8 @@ export class CategoryComponent implements OnInit, AfterViewInit {
         else {
           let index = this.items.findIndex((ww: any) => ww.formId == +this.formId);
           if (index >= 0) {
-            this.selectedItem = this.items[index];
-            // setTimeout(() => {
-            //   this.openModal.nativeElement.click();
-            // }, 500);
-            this.openNewModal(this.newRecord, "md");
+            this.openRecordRefModal(this.items[index])
+        
           }
           else {
             this.alert.error("Invalid Input Data");
@@ -170,8 +176,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
+ 
     this.statusSubscription.unsubscribe();
   }
   openNewModal(modalName: any, size = 'lg') {
@@ -185,12 +190,41 @@ export class CategoryComponent implements OnInit, AfterViewInit {
         size: size
       });
   }
+
+  openRecordRefModal(item:any){
+    this.selectedItem = item ;
+    if(this.enableRecordRef)
+      this.openNewModal(this.newRecord, "md");
+    else
+    this.router.navigate(['/page/checklist/'+this.selectedItem.formId] , {queryParams :{
+      editMode: false ,
+      formRef:'',
+      Record_Id:this.selectedItem.record_Id,
+      categoryName: this.name,
+      listName:this.selectedItem.formTitle,
+      categoryId:this.selectedItem.categoryId 
+ }});
+
+  }
   bottomReached(): boolean {
     return ((document.documentElement.offsetHeight + document.documentElement.scrollTop + 100) >= document.documentElement.scrollHeight);
     // return (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 0.5);
   }
   scrollToTop() {
     window.scroll(0, 0);
+  }
+
+
+  startExecute(){
+    this.modalService.dismissAll();
+    this.router.navigate(['/page/checklist/'+this.selectedItem.formId] , {queryParams :{
+         editMode: false ,
+         formRef:this.formRef,
+         Record_Id:this.selectedItem.record_Id,
+         categoryName: this.name,
+         listName:this.selectedItem.formTitle,
+         categoryId:this.selectedItem.categoryId 
+    }});
   }
 
 }

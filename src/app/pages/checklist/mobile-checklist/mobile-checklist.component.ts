@@ -400,7 +400,8 @@ export class MobileChecklistComponent implements OnInit {
     });
   }
   ngOnDestroy(): void {
-    if (this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
+    if (this.currentLang && this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
+
       this.langChanged(this.currentLang);
     }
 

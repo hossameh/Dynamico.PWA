@@ -3,11 +3,14 @@ import { AlertService } from './../../services/alert/alert.service';
 import { HttpService } from './../../services/http/http.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { API } from 'src/app/core/interface/api.interface';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { getMessaging, getToken } from 'firebase/messaging';
+import { LangEnum } from 'src/app/core/enums/common.enum';
+import { first } from 'rxjs/operators';
+import { API } from 'src/app/core/interface/api.interface';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-login',
@@ -19,24 +22,83 @@ export class LoginComponent implements OnInit {
   authForm!: FormGroup;
   returnUrl!: string;
   currentLang!: string;
-  constructor(private router: Router, private FB: FormBuilder,
-    private alert: AlertService,
-    private translate: TranslateService,
-    private httpClient: HttpClient,
-    private route: ActivatedRoute,
-    private http: HttpService) { }
+  passwordNeeded = false;
+  loginKey = '';
+  constructor(private readonly router: Router,
+    private readonly FB: FormBuilder,
+    private readonly alert: AlertService,
+    private readonly translate: TranslateService,
+    private readonly httpClient: HttpClient,
+    private readonly route: ActivatedRoute,
+    private readonly http: HttpService,
+    private readonly helper: HelperService) { }
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.route.queryParams.subscribe((params) => {
+      const data = params['data'];
+      if (data) {
+        this.processToken(data);
+      }
+    });
 
     this.BuildRequestForm();
-    const lang = localStorage.getItem('lang') || '{}';
+    const lang = localStorage.getItem('lang') ?? '';
     this.currentLang = lang;
-    localStorage.clear();
-    localStorage.setItem('lang', lang);
-    this.langChanged(lang);
+    //localStorage.clear();
+
+
+    if (lang?.length === 2) // indicate to ar , en , fr not null
+      this.langChanged(lang);
+    else
+      this.langChanged(LangEnum.English);
 
   }
+
+  generateSignature(responseAsStr: string) {
+    const signature = responseAsStr?.length + responseAsStr?.charCodeAt(0) + responseAsStr?.charCodeAt(responseAsStr?.length - 1);
+    return signature;
+  }
+  processToken(token: string) {
+    try {
+      this.loginKey = '';
+      const decodedTxt = this.helper.decryptnBToa(token);
+
+      if (!decodedTxt) {
+        this.alert.error('Login_Attemp_Failed');
+        return;
+      }
+      const splittedArr = decodedTxt.split('._');
+      const responseAsStr = splittedArr[0];
+      const responseSignature = splittedArr[1];
+      if (responseAsStr && responseSignature) {
+        const signature = this.generateSignature(responseAsStr);
+        if (responseSignature === signature?.toString()) {
+          const response = JSON.parse(responseAsStr);
+          if (response.IsPassed) {
+            this.loginKey = response.Data;
+            this.loginWithKey(response.Data);
+          }
+          else {
+            this.alert.error('Login_Attemp_Failed');
+          }
+        }
+        else {
+          this.alert.error('Login_Attemp_Failed');
+        }
+      }
+      else {
+        this.alert.error('Login_Attemp_Failed');
+      }
+
+    }
+    catch (error) {
+      this.alert.error('Login_Attemp_Failed');
+    }
+
+  }
+
+
 
   langChanged(lang: any) {
     const elEn = document.querySelector('#bootstrap-en');
@@ -56,7 +118,7 @@ export class LoginComponent implements OnInit {
       }
     } else {
       // en
-      elAr && elAr.remove() ;
+      elAr && elAr.remove();
       if (!elEn) {
         this.generateLinkElement({
           id: 'bootstrap-en',
@@ -76,18 +138,14 @@ export class LoginComponent implements OnInit {
     document.head.prepend(el);
     htmlEl.setAttribute('dir', props.dir);
     htmlEl.setAttribute('lang', props.lang);
-    // this.loaderService.isLoading.next(false);
+
   }
 
 
   BuildRequestForm() {
     this.authForm = this.FB.group({
       username: [null, [Validators.required]],
-      password: [null, [Validators.required, Validators.minLength(8),
-      Validators.pattern(
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$-\/:-?{-~!"^_`\[\]@%$*])(?=.{8,})/
-      )]],
-      // companyCode: []
+      password: [null],
     });
   }
 
@@ -97,51 +155,138 @@ export class LoginComponent implements OnInit {
   get f() {
     return this.authForm.controls;
   }
-  login() {
-    let body = this.authForm.value;
-    body.appName = environment.appName;
-    this.http.post('Auth/Login', body, true).subscribe(async (res: any) => {
+
+  setUserData(res: API) {
+    localStorage.setItem('userData', JSON.stringify(res.data));
+    localStorage.setItem('token', JSON.stringify(res.data.resetToken));
+  }
+
+  handleLoginResponse(res: API) {
+    try {
       if (res.data && res.isPassed) {
-        await localStorage.setItem('userData', JSON.stringify(res.data));
-        await localStorage.setItem('token', JSON.stringify(res.data.resetToken));
-        if (this.currentLang !== res?.data?.defaultLanguage) {
+        this.setUserData(res);
+        if (res?.data?.defaultLanguage && this.currentLang && this.currentLang !== res?.data?.defaultLanguage) {
           localStorage.setItem('lang', res?.data?.defaultLanguage);
           this.langChanged(res?.data?.defaultLanguage);
         }
         this.CheckFCMTokenExpiration(res.data);
-        //this.routeToHome();
-
-      } else {
-        if (res.data && res.data.username) {
-          this.alert.confirmAny(res?.message, "Logout From Other Devices", "Cancel")
-            .then((result) => {
-              if (result.value) {
-                this.reLogin(this.authForm.value);
-              }
-            });
-        }
-        else {
-          console.log(res.message);
-          this.alert.error("Something Went Wrong !");
-        }
       }
-    },
-      (err) => {
-        console.log('err', err);
-      });
+      else if (res?.data?.username) {
+        this.alert.confirmAny(res?.message, "Logout From Other Devices", "Cancel")
+          .then((result) => {
+            if (result.value) {
+              this.reLogin(this.authForm.value);
+            }
+          });
+      }
+      else {
+        this.alert.error(res?.message);
+      }
+    }
+    catch (err) {
+      this.alert.error(environment.friendlyErrorMessage);
+    }
+
+
   }
-  async reLogin(body: any) {
-    const response = await this.logoutFromOtherDevices(body?.username, body?.username).toPromise();
-    if (response.isPassed)
-      this.login();
-    else {
-      console.log(response.message);
-      this.alert.error("Something Went Wrong !");
+
+
+login(body:any){
+  
+  this.http.post<API>('Auth/Login', body, true)
+  .pipe(first())
+  .subscribe((res: API) => {
+    this.handleLoginResponse(res);
+  },
+    (err) => {
+      this.alert.error(environment.friendlyErrorMessage);
+    });
+}
+
+  loginWithPassword() {
+    if (this.authForm.invalid)
+      return;
+
+    const body = this.authForm.value;
+    body.appName = environment.appName;
+
+    this.login(body);
+  }
+
+  loginWithKey(key: string) {
+    try {
+      this.http.post<API>('Auth/LoginWithKey', { key: key, appName: environment.appName }, true)
+        .pipe(first())
+        .subscribe((res: API) => {
+          this.handleLoginResponse(res);
+        },
+          (err) => {
+            this.alert.error(environment.friendlyErrorMessage);
+          });
+
+    }
+    catch (err) {
+      this.alert.error(environment.friendlyErrorMessage);
     }
   }
-  logoutFromOtherDevices(userName: any, email: any) {
-    let url = `Auth/logout?UserName=${userName}&Email=${email}`;
-    return this.http.post<any>(`${url}`, null);
+  async reLogin(body: any) {
+
+    const userName = this.authForm.get('username')?.value ? this.authForm.get('username')?.value : localStorage.getItem('tempDynamicoUserName');
+
+    const response:API = await this.logoutFromOtherDevices(userName).toPromise();
+    if (response.isPassed){
+        if(this.loginKey)
+          this.loginWithKey(this.loginKey);
+        else
+         this.login(body);
+    }
+  
+    else {
+      this.alert.error(response?.message);
+    }
+  }
+  logoutFromOtherDevices(userName: any) {
+    let url = `Auth/logout?UserName=${userName}`;
+    return this.http.post<API>(`${url}`, null);
+  }
+
+  onSubmitClicked() {
+   this.passwordNeeded ? this.loginWithPassword() : this.checkEmail(this.authForm.get('username')?.value);
+
+  }
+
+  async checkEmail(email: string) {
+    try {
+
+      if (this.authForm.invalid)
+        return;
+
+      const res: API = await this.http.get2<API>('Auth/VerifyAccountAuth', { Username: this.authForm.get('username')?.value }).toPromise();
+      if (res.isPassed) {
+        if (res.data.url) {
+          localStorage.setItem('tempDynamicoUserName', this.authForm.get('username')?.value);
+          setTimeout(() => {
+            window.location.href = res.data.url;
+          }, 500);
+        }
+        else {
+          setTimeout(() => {
+            this.passwordNeeded = true;
+            this.changeControlValidation(this.authForm.get('password'), false);
+          })
+
+        }
+
+      }
+      else {
+        this.alert.error(res?.message);
+      }
+
+
+    }
+    catch (err) {
+      this.alert.error(environment.friendlyErrorMessage);
+    }
   }
 
   CheckFCMTokenExpiration(returnObject: any) {
@@ -212,5 +357,21 @@ export class LoginComponent implements OnInit {
         "Authorization": `Bearer ${authToken ? authToken : ''}`
       }
     }).toPromise();
+  }
+
+
+  changeControlValidation(control: any, clearValidation = true) {
+    if (clearValidation) {
+      control.clearValidators();
+      control.setErrors(null);
+    }
+    else {
+      control.setValidators([Validators.required, Validators.minLength(8),
+      Validators.pattern(
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$-\/:-?{-~!"^_`\[\]@%$*])(?=.{8,})/
+      )]);
+      control.setErrors({ required: true });
+    }
+    control.updateValueAndValidity();
   }
 }

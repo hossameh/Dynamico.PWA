@@ -65,30 +65,7 @@
 
       </div>
 
-      <!--<div class="d-flex align-items-center ">
-        <ngb-datepicker #dp class="pieckerApp"
-                        [(ngModel)]="selectDate"
-                        outsideDays="hidden"
-                        (dateSelect)="onDateChanged()">
 
-        </ngb-datepicker>
-      </div>-->
-
-      <div class="d-flex align-items-center ">
-        <input class="form-control"
-               placeholder="yyyy-mm-dd"
-               name="dp"
-               ngbDatepicker
-               #d2="ngbDatepicker"
-               [(ngModel)]="selectDate"
-               (dateSelect)="onDateChanged()"
->
-        <div class="input-group-append">
-          <div class="input-group-text" (click)="d2.toggle()">
-            <i class="fa fa-calendar" style="cursor: pointer;"></i>
-          </div>
-        </div>
-      </div>
 
       <div class="mt-4">
         <h6 class="text-danger font-14" (click)="logout()" routerLinkActive="router-link-active">{{"LOGOUT" | translate}}</h6>

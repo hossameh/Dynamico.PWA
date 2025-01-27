@@ -1,11 +1,14 @@
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from './../../../environments/environment';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http/http.service';
 import { AlertService } from 'src/app/services/alert/alert.service';
-import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
-const now: any = new Date();
+import { API } from 'src/app/core/interface/api.interface';
+import { HelperService } from 'src/app/services/helper.service';
+import { LangEnum } from 'src/app/core/enums/common.enum';
+
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -15,12 +18,12 @@ export class ProfileComponent implements OnInit {
 
   version = environment.version
   userData: any;
-  @ViewChild('d2') dp!: NgbInputDatepicker;
-  selectDate  : NgbDateStruct = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-  constructor(public translate: TranslateService,
-    private http: HttpService,
-    private alert: AlertService,
-    private router: Router) { }
+
+  constructor(public readonly translate: TranslateService,
+    private readonly http: HttpService,
+    private readonly alert: AlertService,
+    private readonly router: Router,
+    private readonly helper:HelperService) { }
 
   ngOnInit(): void {
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
@@ -32,8 +35,8 @@ export class ProfileComponent implements OnInit {
     }
     try {
       this.http.post('Users/ChangeDefaultLanguage', null, false, params).subscribe((res: any) => {
-        if (res?.isPassed)
-          this.setLang(lang);
+        if (res?.isPassed && lang)
+           this.setLang(lang);
         else
           this.alert.error("Failed To Change Language !")
       });
@@ -43,14 +46,11 @@ export class ProfileComponent implements OnInit {
     }
   }
   setLang(lang: any) {
-    // const elEn = document.querySelector('#bootstrap-en');
-    // const elAr = document.querySelector('#bootstrap-ar');
+ 
     this.translate.use(lang)
     localStorage.setItem('lang', lang)
     if (lang === 'ar') {
-      // add bootstrap ar
-      // elEn && elEn.remove();
-
+    
       this.generateLinkElement({
         id: 'bootstrap-ar',
         href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
@@ -59,8 +59,7 @@ export class ProfileComponent implements OnInit {
       });
 
     } else {
-      // en
-      // elAr && elAr.remove();
+ 
       this.generateLinkElement({
         id: 'bootstrap-en',
         href: 'assets/vendor/bootstrap/bootstrap.min.css',
@@ -78,27 +77,44 @@ export class ProfileComponent implements OnInit {
     document.head.prepend(el);
     htmlEl.setAttribute('dir', props.dir);
     htmlEl.setAttribute('lang', props.lang);
-    // this.loaderService.isLoading.next(false);
+   
+  }
+
+clearData(){
+  localStorage.clear();
+  sessionStorage.clear();
+  const currentLang =  localStorage.getItem("lang");
+  
+ 
+  localStorage.setItem("lang", currentLang ?? LangEnum.English);
+}
+   logout() {
+      this.logoutFromOtherDevices(this.userData?.userEmail).subscribe((res)=>{
+        if(res.isPassed){
+          this.clearData();
+          if(res.data?.url) {
+            this.router.navigate(['/login']).then(()=>{
+              setTimeout(this.helper.openLogoutWindow.bind(this,res.data?.url));
+            });
+          }
+          else{
+            this.router.navigate(['/login']);
+          }
+        }
+        else{
+          this.alert.error(res?.message);
+        }
+
+      },
+      (error)=>{
+       this.alert.error(error?.message);
+      });
+
+  }
+  logoutFromOtherDevices(userName: any ) {
+    let url = `Auth/logout?UserName=${userName}`;
+    return this.http.post<API>(`${url}`, null);
   }
 
 
-  async logout() {
-    await this.logoutFromOtherDevices(this.userData?.userEmail, this.userData?.userEmail).toPromise();
-    const currentLang =  localStorage.getItem("lang");
-    localStorage.clear();
-    sessionStorage.clear();
-    localStorage.setItem("lang", currentLang ?? 'en');
-    this.router.navigate(['/login']);
-  }
-  logoutFromOtherDevices(userName: any, email: any) {
-    let url = `Auth/logout?UserName=${userName}&Email=${email}`;
-    return this.http.post<any>(`${url}`, null);
-  }
-
-  toggle() {
-    this.dp.toggle();
-  }
-  onDateChanged() {
-    console.log(this.selectDate)
-  }
 }

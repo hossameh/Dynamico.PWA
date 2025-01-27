@@ -847,8 +847,8 @@ export class ChecklistComponent implements OnInit {
     }
   }
   ngOnDestroy(): void {
-    if (this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
-      this.langChanged(this.currentLang);
+    if (this.currentLang && this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
+        this.langChanged(this.currentLang);
     }
 
     //Called once, before the instance is destroyed.

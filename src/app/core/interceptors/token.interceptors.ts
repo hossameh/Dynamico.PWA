@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { LangEnum } from '../enums/common.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -16,13 +17,16 @@ export class TokenInterceptor implements HttpInterceptor {
 
   private token: string | null = null;
 
-  constructor(private loadingService: LoadingService, private http: HttpService, private router: Router, private alertService: AlertService) { }
+  constructor(
+    private readonly loadingService: LoadingService,
+    private readonly http: HttpService,
+    private readonly router: Router,
+    private readonly alertService: AlertService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     this.token = JSON.parse(localStorage.getItem('token') || '{}');
-    //this.token = localStorage.getItem('token') || '{}';
-    // console.log("Token", this.token);
+
 
     request = request.clone({
       setHeaders: {
@@ -48,14 +52,12 @@ export class TokenInterceptor implements HttpInterceptor {
         catchError((error: HttpErrorResponse) => {
           if (error && error.status === 401) {
             // 401 errors are most likely going to be because we have an expired token that we need to refresh.
-
-
             return throwError(error);
           }
           if (error && error.status === 424) {
             localStorage.clear();
             sessionStorage.clear();
-            localStorage.setItem("lang", "en");
+            localStorage.setItem("lang", LangEnum.English);
             this.router.navigate(['/login']);
             return throwError(error);
           }

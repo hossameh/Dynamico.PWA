@@ -10,8 +10,7 @@
                                 {{item.formTitle}}
                             </h5>
                         </div>
-                        <div class="box-side" data-bs-toggle="modal" data-bs-target="#newModal"
-                            (click)="selectedItem = item ; name = cat?.category_Name">
+                        <div class="box-side"   (click)="openRecordRefModal(item,cat)">
                             <div class="d-flex align-items-center">
                                 <p class="badge me-2" *ngIf="item.totalRecords">{{item.totalRecords}}</p>
                                 <img src="assets/img/icons/add-button.svg" alt="open">
@@ -24,27 +23,25 @@
     </ngb-panel>
 </ngb-accordion>
 
-<div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header text-center p-2 ">
-                <h5 class="modal-title" id="deleteLabel">{{'Start_new' | translate}} {{selectedItem?.formTitle}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating ">
-                    <input class="form-control" id="floatingInput" placeholder="{{'Name' | translate}}" [(ngModel)]="formRef"
-                        name="formRef">
-                    <label for="floatingInput"> {{'Record_reference' | translate}}</label>
-                </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal"
-                        [routerLink]="['/page/checklist/'+selectedItem.formId]" routerLinkActive="router-link-active"
-                        [queryParams]="{editMode: false ,formRef:formRef, Record_Id:selectedItem.record_Id , categoryName: name, listName:selectedItem.formTitle , categoryId:selectedItem.categoryId}"
-                        [disabled]="!formRef">{{'Start' | translate}}</button>
-                </div>
-            </div>
-        </div>
+
+
+
+<ng-template #executeFormModal let-c="close" let-d="dismiss">
+    <div class="modal-header text-center p-2 ">
+      <h5 class="modal-title" id="deleteLabel">{{'Start_new' | translate}} {{selectedItem?.formTitle}}</h5>
+      <button type="button" class="btn-close" (click)="d()" aria-label="Close"></button>
     </div>
-</div>
+    <div class="modal-body">
+      <div class="form-floating ">
+        <input class="form-control" id="floatingInput" placeholder="{{'Name' | translate}}" [(ngModel)]="formRef" name="formRef">
+        <label for="floatingInput"> {{'Record_reference' | translate}}</label>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal" (click)="startExecute()"
+           routerLinkActive="router-link-active"
+   
+          [disabled]="!formRef && mandatoryRecordRef">{{'Start' | translate}}</button>
+      </div>
+    </div>
+  </ng-template>

@@ -175,7 +175,7 @@ export const workflowControlFormEdit = [
                           "include": "score",
                           "threshold": 0.3
                         },
-                        "defaultValue": {}
+                        "defaultValue": null
                       },
                       {
                         "label": "User/Role",
@@ -191,6 +191,16 @@ export const workflowControlFormEdit = [
                           {
                             "label": "Role",
                             "value": "2",
+                            "shortcut": ""
+                          },
+                          {
+                            "label": "Creator",
+                            "value": "3",
+                            "shortcut": ""
+                          },
+                          {
+                            "label": "Manager",
+                            "value": "4",
                             "shortcut": ""
                           }
                         ],
@@ -224,55 +234,6 @@ export const workflowControlFormEdit = [
                         "inputType": "radio",
                         "fieldSet": false
                       },
-                    ],
-                    "width": 12,
-                    "offset": 0,
-                    "push": 0,
-                    "pull": 0,
-                    "size": "md",
-                    "currentWidth": 12
-                  },
-                  {
-                    "components": [],
-                    "width": 6,
-                    "offset": 0,
-                    "push": 0,
-                    "pull": 0,
-                    "size": "md",
-                    "currentWidth": 6
-                  }
-                ],
-                "hideLabel": true,
-                "dataGridLabel": false,
-                "key": "stageColumn",
-                "logic": [],
-                "attributes": {},
-                "type": "columns",
-                "input": false,
-                "tableView": false,
-                "protected": false,
-                "unique": false,
-                "persistent": false,
-                "clearOnHide": false,
-                "refreshOn": "",
-                "redrawOn": "",
-                "labelPosition": "top",
-                "tabindex": "",
-                "disabled": false,
-                "autofocus": false,
-                "dbIndex": false,
-                "widget": null,
-                "validateOn": "change",
-                "encrypted": false,
-                "addons": [],
-                "tree": false,
-                "lazyLoad": false,
-              },
-              {
-                "label": "secondColumn",
-                "columns": [
-                  {
-                    "components": [
                       {
                         "label": "User",
                         "labelPosition": "top",
@@ -451,10 +412,9 @@ export const workflowControlFormEdit = [
                     "currentWidth": 6
                   }
                 ],
-
                 "hideLabel": true,
                 "dataGridLabel": false,
-                "key": "userOrRoleColumn",
+                "key": "stageColumn",
                 "logic": [],
                 "attributes": {},
                 "type": "columns",
@@ -469,6 +429,7 @@ export const workflowControlFormEdit = [
                 "labelPosition": "top",
                 "tabindex": "",
                 "disabled": false,
+                "autofocus": false,
                 "dbIndex": false,
                 "widget": null,
                 "validateOn": "change",
@@ -476,8 +437,8 @@ export const workflowControlFormEdit = [
                 "addons": [],
                 "tree": false,
                 "lazyLoad": false,
-
               }
+         
 
             ],
            

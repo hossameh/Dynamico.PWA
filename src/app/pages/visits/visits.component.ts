@@ -5,16 +5,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from './../../services/http/http.service';
 import {
   trigger,
-  state,
   style,
   animate,
   transition,
-} from "@angular/animations"; import { Component, HostListener, OnInit } from '@angular/core';
+} from "@angular/animations"; import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { RecordStatus } from 'src/app/core/enums/status.enum';
 import { AccessTypes } from 'src/app/core/enums/access.enum';
 import { IPageInfo } from 'src/app/core/interface/page-info.interface';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-visits',
   templateUrl: './visits.component.html',
@@ -57,6 +57,8 @@ import { IPageInfo } from 'src/app/core/interface/page-info.interface';
 })
 export class VisitsComponent implements OnInit {
 
+  @ViewChild('executeNewRecord') newRecord!: TemplateRef<any>;
+  
   @HostListener("window:scroll", [])
   onScroll(): void {
     if (this.bottomReached() && this.isOnline && this.loaded && this.pager.page <= (this.pager.pages - 1)) {
@@ -97,6 +99,10 @@ export class VisitsComponent implements OnInit {
   isLoading = false;
   userId: any;
 
+  enableRecordRef = false;
+
+  mandatoryRecordRef = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -104,11 +110,15 @@ export class VisitsComponent implements OnInit {
     private offline: OfflineService,
     private storage: Storage,
     private helper: HelperService,
-    private http: HttpService) { }
+    private http: HttpService,
+  
+    private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.resetData();
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.enableRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').enableRecordRef;
+    this.mandatoryRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').mandatoryRecordRef;
     this.id = this.route.snapshot.params.id;
     this.id ? this.body.FormId = +this.id : '';
     this.params = this.route.snapshot.queryParams;
@@ -132,11 +142,7 @@ export class VisitsComponent implements OnInit {
       total: 0,
     };
   }
-  // loadFromApi() {
-  //   // if (this.isOnline) {
-  //   this.getAllPending();
-  //   // }
-  // }
+
   async GetChecklistUserAccess() {
     let cashedUserAccess = await this.storage.get('ChecklistUserAccess') || [];
     let index = cashedUserAccess.findIndex((el: any) => {
@@ -342,5 +348,35 @@ export class VisitsComponent implements OnInit {
     this.body.ToCreationDate = '';
     this.resetPager();
     return Promise.resolve(true);
+  }
+
+  openNewModal(modalName: any, size = 'lg') {
+    this.modalService.open(
+      modalName,
+      {
+        windowClass: 'modal-holder',
+        backdropClass: 'light-blue-backdrop',
+        centered: true, keyboard: false,
+        backdrop: 'static',
+        size: size
+      });
+  }
+  openRecordRefModal(){
+ 
+    if(this.enableRecordRef)
+      this.openNewModal(this.newRecord, "md");
+    else
+    this.router.navigate(['/page/checklist/'+this.id] , {queryParams :{
+      editMode: false ,
+      formRef:'',
+    }});
+  }
+
+  startExecute(){
+    this.modalService.dismissAll();
+    this.router.navigate(['/page/checklist/'+this.id] , {queryParams :{
+         editMode: false ,
+         formRef:this.formRef, 
+    }});
   }
 }

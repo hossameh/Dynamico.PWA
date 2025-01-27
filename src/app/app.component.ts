@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NotificationPage } from './pages/notification/notification.page';
 import { environment } from 'src/environments/environment';
 import { Role } from './core/enums/role.enum';
+import { LangEnum } from './core/enums/common.enum';
 
 
 @Component({
@@ -31,15 +32,15 @@ export class AppComponent {
   role = Role;
   userRole!: string;
 
-  constructor(private helper: HelperService,
-    private swUpdates: SwUpdate,
-    private http: HttpService,
-    private translate: TranslateService,
-    private toastr: ToastrService,
-    private storage: Storage,
-    private router: Router,
-    private notificationPage: NotificationPage,
-    private loadingService: LoadingService) { }
+  constructor(private readonly helper: HelperService,
+    private readonly swUpdates: SwUpdate,
+    private readonly http: HttpService,
+    private readonly translate: TranslateService,
+    private readonly toastr: ToastrService,
+    private readonly storage: Storage,
+    private readonly router: Router,
+    private readonly notificationPage: NotificationPage,
+    private readonly loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.update = false;
@@ -49,8 +50,7 @@ export class AppComponent {
 
     this.listenToFCM();
 
-    // this.getWorkflowCount();
-    // this.helper.getNotificationCount();
+ 
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;
@@ -61,10 +61,10 @@ export class AppComponent {
       this.notifcationCount = count
     })
     window.scrollTo(0, 0);
-    this.currentLang = localStorage.getItem('lang');
+    this.currentLang = localStorage.getItem('lang') ?? '';
     if (!this.currentLang) {
-      localStorage.setItem('lang', 'en');
-      this.currentLang = 'en';
+      localStorage.setItem('lang', LangEnum.English);
+      this.currentLang = LangEnum.English;
     } else {
       localStorage.setItem('lang', this.currentLang);
     }

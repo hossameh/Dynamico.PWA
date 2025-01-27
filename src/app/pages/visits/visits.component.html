@@ -42,10 +42,14 @@
   <div *ngIf="step == 2" [@slideInOut2]>
     <app-completed [items]="completeItems" [access]="access" (date)="filterComplete($event)"></app-completed>
   </div>
-  <div *ngIf="access && access.includes(accessTypes.Create)" class="fixed-btn" data-bs-toggle="modal"
-    data-bs-target="#newModal">
-    <img src="assets/img/icons/add.svg" alt="add">
+
+
+
+
+  <div *ngIf="access && access.includes(accessTypes.Create)" class="fixed-btn" (click)="openRecordRefModal()">
+   <img src="assets/img/icons/add.svg" alt="add">
   </div>
+
 
   <a (click)="scrollToTop()" class="
   back-to-top-icon
@@ -55,11 +59,7 @@
   shadow-m
 " style="transform: scale(1); position: fixed !important">
     <img src="assets/img/icons/icons8-up-24.png" alt="add">
-    <!-- <img src="assets/img/icons/up-arrow.svg" alt="add"> -->
-    <!-- <svg class="bi bi-arrow-up"></svg> -->
-    <!-- Up -->
-    <!-- <img src="assets/img/icons/home-icon.svg" alt="home"> -->
-    <!-- <i class="fa fa-angle-up"></i> -->
+
   </a>
   <div *ngIf="isLoading" class="loader">
     <span></span>
@@ -71,27 +71,24 @@
   </div>
 </section>
 
-<div class="modal fade" id="newModal" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
-  <div class="modal-dialog  modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header text-center p-2 ">
-        <h5 class="modal-title" id="deleteLabel">{{'Start_new' | translate}} {{params?.listName}}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-floating ">
-          <input type="text" class="form-control" id="floatingInput" placeholder="{{'Name' | translate}}"
-            [(ngModel)]="formRef" name="formRef">
-          <label for="floatingInput"> {{'Record_reference' | translate}}</label>
-        </div>
 
-        <div class="d-flex justify-content-between align-items-center">
-          <button type="button" class="btn btn-primary w-100 mt-4" data-bs-dismiss="modal"
-            [routerLink]="['/page/checklist/'+id]" [queryParams]="{editMode: false}"
-            routerLinkActive="router-link-active" [queryParams]="{editMode: false ,formRef:formRef}"
-            [disabled]="!formRef">{{'Start' | translate}}</button>
-        </div>
-      </div>
+
+
+
+<ng-template #executeNewRecord let-c="close" let-d="dismiss">
+  <div class="modal-header text-center p-2 ">
+    <h5 class="modal-title" id="deleteLabel">{{'Start_new' | translate}} {{params?.listName}}</h5>
+    <button type="button" class="btn-close" (click)="d()" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-floating ">
+      <input class="form-control" id="floatingInput" placeholder="{{'Name' | translate}}" [(ngModel)]="formRef" name="formRef">
+      <label for="floatingInput"> {{'Record_reference' | translate}}</label>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <button type="button" class="btn btn-primary w-100 mt-4"   (click)="startExecute()"
+        
+        [disabled]="!formRef && mandatoryRecordRef">{{'Start' | translate}}</button>
     </div>
   </div>
-</div>
+</ng-template>

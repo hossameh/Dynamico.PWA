@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  version: '1.2.29',
+  version: '1.2.31',
   hostAPI: "https://lab7software.com/api.dynamico/api/",
   //hostAPI: "https://localhost:44350/api/",
   //hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",
@@ -45,7 +45,7 @@ export const environment = {
     appId: "1:678182888011:web:f9acf48c202a0f8aea63ce",
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
-
+  friendlyErrorMessage:'Something Went Wrong !'
 
 };
 
