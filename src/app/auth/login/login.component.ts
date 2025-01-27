@@ -261,7 +261,8 @@ login(body:any){
       if (this.authForm.invalid)
         return;
 
-      const res: API = await this.http.get2<API>('Auth/VerifyAccountAuth', { Username: this.authForm.get('username')?.value }).toPromise();
+      const res: API = await this.http.get2<API>('Auth/VerifyAccountAuth',
+         { Username: this.authForm.get('username')?.value ,appName:environment.redirectUrl }).toPromise();
       if (res.isPassed) {
         if (res.data.url) {
           localStorage.setItem('tempDynamicoUserName', this.authForm.get('username')?.value);

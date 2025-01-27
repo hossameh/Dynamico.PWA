@@ -45,8 +45,8 @@ export const environment = {
     appId: "1:678182888011:web:f9acf48c202a0f8aea63ce",
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
-  friendlyErrorMessage:'Something Went Wrong !'
-
+  friendlyErrorMessage:'Something Went Wrong !',
+  redirectUrl:'/DynamicoApp/login',
 };
 
 /*
