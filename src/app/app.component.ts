@@ -13,6 +13,7 @@ import { NotificationPage } from './pages/notification/notification.page';
 import { environment } from 'src/environments/environment';
 import { Role } from './core/enums/role.enum';
 import { LangEnum } from './core/enums/common.enum';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -37,10 +38,12 @@ export class AppComponent {
     private readonly http: HttpService,
     private readonly translate: TranslateService,
     private readonly toastr: ToastrService,
-    private readonly storage: Storage,
+    private readonly storage: Storage, private titleService: Title,
     private readonly router: Router,
     private readonly notificationPage: NotificationPage,
-    private readonly loadingService: LoadingService) { }
+    private readonly loadingService: LoadingService) {
+    this.setTitle();
+  }
 
   ngOnInit(): void {
     this.update = false;
@@ -206,5 +209,7 @@ export class AppComponent {
     catch (err) {
       console.log(err)
     }
+  } setTitle() {
+    this.titleService.setTitle(environment.appTitle);
   }
 }

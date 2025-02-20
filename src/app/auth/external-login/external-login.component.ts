@@ -17,6 +17,7 @@ import { LangEnum } from 'src/app/core/enums/common.enum';
 export class ExternalLoginComponent implements OnInit {
   authForm!: FormGroup;
   code!: string;
+  companyName: string = environment.companyName;
 
   constructor(private router: Router, private FB: FormBuilder,
     private alert: AlertService,
