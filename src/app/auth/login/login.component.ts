@@ -170,6 +170,8 @@ export class LoginComponent implements OnInit {
           this.langChanged(res?.data?.defaultLanguage);
         }
         this.CheckFCMTokenExpiration(res.data);
+        this.routeToHome();
+        
       }
       else if (res?.data?.username) {
         this.alert.confirmAny(res?.message, "Logout From Other Devices", "Cancel")
@@ -233,17 +235,21 @@ login(body:any){
 
     const userName = this.authForm.get('username')?.value ? this.authForm.get('username')?.value : localStorage.getItem('tempDynamicoUserName');
 
-    const response:API = await this.logoutFromOtherDevices(userName).toPromise();
-    if (response.isPassed){
-        if(this.loginKey)
-          this.loginWithKey(this.loginKey);
-        else
-         this.login(body);
+    if(userName){
+      const response:API = await this.logoutFromOtherDevices(userName).toPromise();
+      if (response.isPassed){
+          if(this.loginKey)
+            this.loginWithKey(this.loginKey);
+          else
+           this.login(body);
+      }
+      else {
+        this.alert.error(response?.message);
+      }
+
     }
+
   
-    else {
-      this.alert.error(response?.message);
-    }
   }
   logoutFromOtherDevices(userName: any) {
     let url = `Auth/logout?UserName=${userName}`;
@@ -295,7 +301,7 @@ login(body:any){
     let fcmTokenExpiration = returnObject?.fcmTokenExpiryDate;
     if (fcmTokenExpiration) {
       localStorage.setItem('fcmTokenExpireDate', fcmTokenExpiration);
-      this.routeToHome();
+    
     }
     else {
       const messaging = getMessaging();
@@ -313,8 +319,8 @@ login(body:any){
         }
       }).catch((err: any) => {
         console.log(err);
-        this.alert.error("Something Went Wrong !");
-        this.routeToHome();
+       // this.alert.error("Something Went Wrong !");
+    
       });
 
     }
