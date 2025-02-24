@@ -17,6 +17,7 @@ export class ResetPasswordComponent implements OnInit {
   userForm!: FormGroup;
   same: boolean = false;
   showPasswordText = false;
+  companyName: string = environment.companyName;
 
   constructor(
     private fb: FormBuilder,

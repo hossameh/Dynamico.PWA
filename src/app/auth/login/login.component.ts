@@ -24,6 +24,8 @@ export class LoginComponent implements OnInit {
   currentLang!: string;
   passwordNeeded = false;
   loginKey = '';
+  companyName: string = environment.companyName;
+
   constructor(private readonly router: Router,
     private readonly FB: FormBuilder,
     private readonly alert: AlertService,

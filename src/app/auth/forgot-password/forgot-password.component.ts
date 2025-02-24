@@ -20,6 +20,7 @@ export class ForgotPasswordComponent implements OnInit {
   linkSent: boolean = false;
   @ViewChild('f') forogtPasswordForm!: NgForm;
   userForm!: FormGroup;
+  companyName: string = environment.companyName;
 
   ngOnInit(): void {
     this.buildForm()
