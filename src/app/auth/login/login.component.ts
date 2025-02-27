@@ -11,6 +11,7 @@ import { LangEnum } from 'src/app/core/enums/common.enum';
 import { first } from 'rxjs/operators';
 import { API } from 'src/app/core/interface/api.interface';
 import { HelperService } from 'src/app/services/helper.service';
+import { AuthType } from 'src/app/core/enums/AuthType';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,8 @@ export class LoginComponent implements OnInit {
   passwordNeeded = false;
   loginKey = '';
   companyName: string = environment.companyName;
+
+  companyLogo :string = environment.companyLogo;
 
   constructor(private readonly router: Router,
     private readonly FB: FormBuilder,
@@ -163,7 +166,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('token', JSON.stringify(res.data.resetToken));
   }
 
-  handleLoginResponse(res: API) {
+  handleLoginResponse(res: API , authType?:AuthType) {
     try {
       if (res.data && res.isPassed) {
         this.setUserData(res);
@@ -179,7 +182,8 @@ export class LoginComponent implements OnInit {
         this.alert.confirmAny(res?.message, "Logout From Other Devices", "Cancel")
           .then((result) => {
             if (result.value) {
-              this.reLogin(this.authForm.value);
+             
+              this.reLogin(this.authForm.value , authType);
             }
           });
       }
@@ -200,7 +204,7 @@ login(body:any){
   this.http.post<API>('Auth/Login', body, true)
   .pipe(first())
   .subscribe((res: API) => {
-    this.handleLoginResponse(res);
+    this.handleLoginResponse(res,AuthType.BasicAuth);
   },
     (err) => {
       this.alert.error(environment.friendlyErrorMessage);
@@ -222,7 +226,7 @@ login(body:any){
       this.http.post<API>('Auth/LoginWithKey', { key: key, appName: environment.appName }, true)
         .pipe(first())
         .subscribe((res: API) => {
-          this.handleLoginResponse(res);
+          this.handleLoginResponse(res ,AuthType.SAML);
         },
           (err) => {
             this.alert.error(environment.friendlyErrorMessage);
@@ -233,17 +237,29 @@ login(body:any){
       this.alert.error(environment.friendlyErrorMessage);
     }
   }
-  async reLogin(body: any) {
+  async reLogin(body: any , authType?:AuthType) {
 
     const userName = this.authForm.get('username')?.value ? this.authForm.get('username')?.value : localStorage.getItem('tempDynamicoUserName');
 
     if(userName){
+
       const response:API = await this.logoutFromOtherDevices(userName).toPromise();
       if (response.isPassed){
-          if(this.loginKey)
+
+        switch(authType){
+          case AuthType.SAML:
             this.loginWithKey(this.loginKey);
-          else
-           this.login(body);
+            break;
+
+            case AuthType.SingleCode:
+              this.checkEmail(userName);
+              break;
+
+            default:
+              this.login(body);
+              break;
+        }
+        
       }
       else {
         this.alert.error(response?.message);
@@ -272,21 +288,28 @@ login(body:any){
       const res: API = await this.http.get2<API>('Auth/VerifyAccountAuth',
          { Username: this.authForm.get('username')?.value ,appName:environment.redirectUrl }).toPromise();
       if (res.isPassed) {
-        if (res.data.url) {
-          localStorage.setItem('tempDynamicoUserName', this.authForm.get('username')?.value);
-          setTimeout(() => {
-            window.location.href = res.data.url;
-          }, 500);
-        }
-        else {
-          setTimeout(() => {
-            this.passwordNeeded = true;
-            this.changeControlValidation(this.authForm.get('password'), false);
-          })
+        switch(res.data.authType){
+          case AuthType.SAML:
+            localStorage.setItem('tempDynamicoUserName', this.authForm.get('username')?.value);
+            setTimeout(() => {
+              window.location.href = res.data.url;
+            }, 500);
+            break;
 
+            case AuthType.SingleCode:
+              this.handleLoginResponse(res.data.loginData ,AuthType.SingleCode);
+              break;
+
+            default:
+              setTimeout(() => {
+                this.passwordNeeded = true;
+                this.changeControlValidation(this.authForm.get('password'), false);
+              })
+              break;
         }
 
       }
+
       else {
         this.alert.error(res?.message);
       }
