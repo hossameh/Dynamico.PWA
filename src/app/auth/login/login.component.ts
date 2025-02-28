@@ -166,7 +166,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('token', JSON.stringify(res.data.resetToken));
   }
 
-  handleLoginResponse(res: API , authType?:AuthType) {
+  handleLoginResponse(res: API , authType:AuthType) {
     try {
       if (res.data && res.isPassed) {
         this.setUserData(res);

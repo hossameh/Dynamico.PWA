@@ -89,7 +89,7 @@ clearData(){
   localStorage.setItem("lang", currentLang ?? LangEnum.English);
 }
    logout() {
-      this.logoutFromOtherDevices(this.userData?.userEmail).subscribe((res)=>{
+      this.logoutFromOtherDevices(this.userData?.username).subscribe((res)=>{
         if(res.isPassed){
           this.clearData();
           if(res.data?.url) {

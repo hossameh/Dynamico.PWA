@@ -1,13 +1,13 @@
 export const environment = {
   production: true,
-  version: '1.2.32',
+  version: '1.2.35',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
  // hostAPI: "https://internal.egybell-apps.com/api/api/",
 
-  hostAPI: "https://lab7software.com/api.dynamico/api/",
- // hostAPI: "https://www.lab7software.com/api.dynamico/api/",
+  //hostAPI: "https://lab7software.com/api.dynamico/api/",
+  hostAPI: "https://dynamico.cloud/api.beyti/api/",
   //hostAPI:"https://qa-farm.tensorforms.com/api.dynamico/api/",
   //hostAPI:"http://5.189.153.30/api.dynamico/api/",
 
@@ -16,12 +16,13 @@ export const environment = {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  // companyName: 'Internal',
-  companyName: 'Lab7',
+  companyName: 'Dynamico',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //  appTitle: 'Egybell.Internal',
-  appTitle: 'Lab7.Internal',
+  //appTitle: 'Lab7.Internal',
+  appTitle: 'Beyti',
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,9 +33,10 @@ export const environment = {
   appName: 'PWA',
  // APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
 
-  APP_URL: 'https://lab7software.com/DynamicoApp/',
+  //APP_URL: 'https://lab7software.com/DynamicoApp/',
+    APP_URL: 'https://dynamico.cloud/beytiapp/',
  // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
-  //APP_URL: 'https://qa-farm.tensorforms.com/DynamicoApp/',
+ 
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +63,7 @@ export const environment = {
   },
   friendlyErrorMessage:'Something Went Wrong !',
   //redirectUrl:'',
-  redirectUrl:'/DynamicoApp/login',
+  redirectUrl:'/beytiapp/login',
 };
 
 

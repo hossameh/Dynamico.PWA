@@ -45,6 +45,8 @@ export class ChecklistComponent implements OnInit {
   formType: string = 'form';
   formdefaultDisplayLanguage: any;
   currentLang: any;
+
+  showSaveButton = true;
   constructor(private route: ActivatedRoute,
     private http: HttpService,
     private router: Router,
