@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="view-icon" opacity="0.5">
+    <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" fill="none"/>
+    <path id="eye-f" d="M10,12C4.958,12.007,0,9.314,0,6S4.984-.017,10,0,20,2.686,20,6,15.042,11.993,10,12Zm0-2A4,4,0,1,0,6,6,4,4,0,0,0,10,10Zm0-2a2,2,0,1,1,2-2A2,2,0,0,1,10,8Z" transform="translate(2 6)"/>
+  </g>
+</svg>

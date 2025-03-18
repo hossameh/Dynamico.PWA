@@ -1,0 +1,15 @@
+{
+	"appId": "com.beyti.app",
+	"appName": "beytiapp",
+	"webDir": "dist/dynamico",
+	"server": {
+		"cleartext": true,
+		"androidScheme": "https",
+		"url": "https://dynamico.cloud/beytiapp/login"
+	},
+	"packageClassList": [
+		"CAPCameraPlugin",
+		"FilesystemPlugin",
+		"GeolocationPlugin"
+	]
+}

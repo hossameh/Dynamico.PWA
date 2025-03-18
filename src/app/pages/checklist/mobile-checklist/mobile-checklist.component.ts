@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { Role } from 'src/app/core/enums/role.enum';
 import { HelperService } from 'src/app/services/helper.service';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../../../../environments/environment.prod';
 @Component({
   selector: 'app-mobile-checklist',
   templateUrl: './mobile-checklist.component.html',
@@ -45,7 +46,7 @@ export class MobileChecklistComponent implements OnInit {
   formdefaultDisplayLanguage: any;
   currentLang: any;
 
-  showSaveButton = true;
+  showSaveButton = environment.showSaveButton;
   constructor(private route: ActivatedRoute,
     private http: HttpService,
     private router: Router,

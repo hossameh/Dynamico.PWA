@@ -1,0 +1,87 @@
+
+.font-10 {
+  font-size: .675rem !important;
+}
+.font-11 {
+  font-size: .7rem !important;
+}
+.font-12 {
+  font-size: .75rem !important;
+}
+.font-13{
+  font-size: .85rem !important;
+}
+.font-14 {
+  font-size: clamp(.8rem, 1vw, .9rem) !important;
+}
+
+.font-15 {
+  font-size: 15px !important;
+}
+
+.font-16 {
+  font-size: clamp(.8rem, 1vw, 1.2rem) !important
+}
+
+.font-18 {
+  font-size: clamp(1.15rem, 1vw, 1.3rem) !important;
+}
+
+.font-20 {
+  font-size: clamp(1.35rem, 1vw, 1.4rem) !important;
+}
+
+.font-22 {
+  font-size: clamp(1.5rem, 1vw, 1.5rem) !important;
+}
+
+.font-24 {
+  font-size: clamp(1.65rem, 1vw, 1.6rem) !important;
+}
+
+.font-26 {
+  font-size: clamp(1.8rem, 1vw, 1.7rem) !important;
+}
+.font-30 {
+  font-size: clamp(22px,2.8vw,30px) !important;
+}
+.font-32 {
+  font-size: clamp(24px,3vw,32px) !important;
+}
+.font-34 {
+  font-size: clamp(26px,3vw,34px) !important;
+}
+.font-36 {
+  font-size: clamp(28px,3vw,36px) !important;
+}
+.font-38 {
+  font-size: clamp(30px,3vw,38px) !important;
+}
+.font-40 {
+  font-size: clamp(32px,3vw,40px) !important;
+}
+.font-42 {
+  font-size: clamp(34px,3vw,42px) !important;
+}
+.font-45 {
+  font-size: clamp(35px,3.5vw,45px) !important;
+}
+.font-55 {
+  font-size: clamp(40px, 4vw,55px) !important;
+}
+.font-weight-600{
+  font-weight: 600;
+}
+
+.text-second{
+  color: $second !important;
+}
+.text-main{
+  color: $main !important;
+}
+.text-underline{
+  text-decoration: underline !important;
+  &:hover{
+    text-decoration: none !important;
+  }
+}
