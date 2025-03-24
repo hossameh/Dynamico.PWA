@@ -1,17 +1,14 @@
 export const environment = {
   production: true,
-  version: '1.2.35',
+  version: '1.2.36',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
  // hostAPI: "https://internal.egybell-apps.com/api/api/",
 
-  //hostAPI: "https://lab7software.com/api.dynamico/api/",
-  hostAPI: "https://dynamico.cloud/api.beyti/api/",
-  //hostAPI:"https://qa-farm.tensorforms.com/api.dynamico/api/",
-  //hostAPI:"http://5.189.153.30/api.dynamico/api/",
-
-  /////////////////////////////////////////////////////////////////////////////////////////
+ // hostAPI: "https://lab7software.com/api.dynamico/api/",
+   hostAPI: "https://dynamico.cloud/api.beyti/api/",
+ 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,10 +20,11 @@ export const environment = {
 //  appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
   appTitle: 'Beyti',
+  // appTitle: 'Lab7',
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  companyLogo: 'assets/img/beyti.png',
+ companyLogo: 'assets/img/beyti.png',
   // companyLogo:'assets/img/logoNoName.png',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +32,7 @@ export const environment = {
  // APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
 
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-    APP_URL: 'https://dynamico.cloud/beytiapp/',
+   APP_URL: 'https://dynamico.cloud/beytiapp/',
  // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
  
 
@@ -51,7 +49,7 @@ export const environment = {
     measurementId: "G-H0NER3WF13",
     vapidKey: "BKTm9vxTjCIbTS1mfN-EPmFaOpA8GrpbjcX6fa0a0v_QRy0bkIaTkSowq5IVD5a1gS3sy7M2hvnrxKc1xlTY4JM"
   }, */
-  showSaveButton  : true,
+  showSaveButton  : false,
 
   firebase: {
     apiKey: "AIzaSyAz-VXCUhh8cytvpEM5OZhD0JnxMsoyGrk",
@@ -65,6 +63,7 @@ export const environment = {
   friendlyErrorMessage:'Something Went Wrong !',
   //redirectUrl:'',
   redirectUrl:'/beytiapp/login',
+ // redirectUrl:'/DynamicoApp/login',
 };
 
 
