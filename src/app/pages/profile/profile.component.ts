@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
     private readonly http: HttpService,
     private readonly alert: AlertService,
     private readonly router: Router,
-    private readonly helper:HelperService) { }
+    private readonly helper: HelperService) { }
 
   ngOnInit(): void {
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit {
     try {
       this.http.post('Users/ChangeDefaultLanguage', null, false, params).subscribe((res: any) => {
         if (res?.isPassed && lang)
-           this.setLang(lang);
+          this.setLang(lang);
         else
           this.alert.error("Failed To Change Language !")
       });
@@ -46,11 +46,11 @@ export class ProfileComponent implements OnInit {
     }
   }
   setLang(lang: any) {
- 
+
     this.translate.use(lang)
     localStorage.setItem('lang', lang)
     if (lang === 'ar') {
-    
+
       this.generateLinkElement({
         id: 'bootstrap-ar',
         href: 'assets/vendor/bootstrap/bootstrap.rtl.min.css',
@@ -59,7 +59,7 @@ export class ProfileComponent implements OnInit {
       });
 
     } else {
- 
+
       this.generateLinkElement({
         id: 'bootstrap-en',
         href: 'assets/vendor/bootstrap/bootstrap.min.css',
@@ -77,41 +77,39 @@ export class ProfileComponent implements OnInit {
     document.head.prepend(el);
     htmlEl.setAttribute('dir', props.dir);
     htmlEl.setAttribute('lang', props.lang);
-   
+
   }
 
-clearData(){
-  localStorage.clear();
-  sessionStorage.clear();
-  const currentLang =  localStorage.getItem("lang");
-  
- 
-  localStorage.setItem("lang", currentLang ?? LangEnum.English);
-}
-   logout() {
-      this.logoutFromOtherDevices(this.userData?.username).subscribe((res)=>{
-        if(res.isPassed){
-          this.clearData();
-          if(res.data?.url) {
-            this.router.navigate(['/login']).then(()=>{
-              setTimeout(this.helper.openLogoutWindow.bind(this,res.data?.url));
-            });
-          }
-          else{
-            this.router.navigate(['/login']);
-          }
+  clearData() {
+    localStorage.clear();
+    sessionStorage.clear();
+    const currentLang = localStorage.getItem("lang");
+    localStorage.setItem("lang", currentLang ?? LangEnum.English);
+  }
+  logout() {
+    this.logoutFromOtherDevices(this.userData?.username).subscribe((res) => {
+      if (res.isPassed) {
+        this.clearData();
+        if (res.data?.url) {
+          this.router.navigate(['/login']).then(() => {
+            setTimeout(this.helper.openLogoutWindow.bind(this, res.data?.url));
+          });
         }
-        else{
-          this.alert.error(res?.message);
+        else {
+          this.router.navigate(['/login']);
         }
+      }
+      else {
+        this.alert.error(res?.message);
+      }
 
-      },
-      (error)=>{
-       this.alert.error(error?.message);
+    },
+      (error) => {
+        this.alert.error(error?.message);
       });
 
   }
-  logoutFromOtherDevices(userName: any ) {
+  logoutFromOtherDevices(userName: any) {
     let url = `Auth/logout?UserName=${userName}`;
     return this.http.post<API>(`${url}`, null);
   }

@@ -61,8 +61,11 @@ import { AppointmentComponent } from './pages/formio -components/appointment/app
 import { registerAppointmentComponent } from './pages/formio -components/appointment/appointment/appointment-wrapper.formio';
 import { WorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control.component';
 import { registerWorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control-wrapper.formio';
-initializeApp(environment.firebase);
+import localAr from '@angular/common/locales/ar-EG';
+import { registerLocaleData } from '@angular/common';
 
+initializeApp(environment.firebase);
+registerLocaleData(localAr);
 
 @NgModule({
   declarations: [

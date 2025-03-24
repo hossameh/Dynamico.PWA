@@ -488,7 +488,7 @@ export class ChecklistComponent implements OnInit {
         this.modelBody.creation_Date = new Date();
         this.modelBody.userId = this.userId;
         let cacheRecords = await this.storage.get('Records') || [];
-        let cacheCompletedRecords = await this.storage.get('CompletedRecords') || [];
+        let cacheCompletedRecords:any[] = await this.storage.get('CompletedRecords') || [];
         let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
 
         if (this.params.offline) {

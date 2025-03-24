@@ -26,3 +26,25 @@
 filter: contrast(0) brightness(20.5);
   }
 }
+
+
+mwl-calendar-month-view >>> .cal-days-of-week .cal-day-header {
+  font-size: 12px;
+  text-transform: uppercase;
+  width: 3ch;  /* Limits to 3 characters */
+  overflow: hidden;
+  white-space: nowrap;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.day-header {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+}

@@ -1,15 +1,9 @@
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { dates, Planner, RecurringEvent } from './../../../core/interface/api.interface';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {   Params, Router } from '@angular/router';
+import {   Planner, RecurringEvent } from './../../../core/interface/api.interface';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
   isSameDay,
   isSameMonth,
-  addHours,
 } from 'date-fns';
 import { Subject, Subscription } from 'rxjs';
 import {
@@ -45,6 +39,8 @@ const colors: any = {
 })
 export class DateViewComponent implements OnInit {
   @Input() items: Planner[] = [];
+
+  locale = 'en';
   @Output() showCompletedDateView = new EventEmitter();
   isChecked = false
   viewDate: Date = new Date();
@@ -56,21 +52,7 @@ export class DateViewComponent implements OnInit {
   activeDayIsOpen: boolean = true;
   refresh: Subject<any> = new Subject();
   actions: CalendarEventAction[] = [
-    // {
-    //   label: '<i class="fa fa-fw fa-pencil"></i>',
-    //   onClick: ({ event }: { event: CalendarEvent; }): void => {
-
-    //     this.onEditClick(event);
-    //   }
-    // },
-    // {
-    //   label: '<i class="fa fa-fw fa-times"></i>',
-    //   onClick: ({ event }: { event: CalendarEvent; }): void => {
-
-    //     this.onDeleteClick(event);
-
-    //   }
-    // }
+  
   ];
   plannerModel!: any[];
   planner!: any;
@@ -79,7 +61,7 @@ export class DateViewComponent implements OnInit {
   isOnline = true;
   userId: any;
   recordStatus = RecordStatus;
-
+  currentLang:any;
   constructor(
     private router: Router,
     private storage: Storage,
@@ -89,6 +71,8 @@ export class DateViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
+    this.currentLang = localStorage.getItem('lang');
+    this.locale = this.currentLang == 'en' ? 'en' : 'ar-EG';
     this.Subscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
     });
@@ -223,4 +207,7 @@ export class DateViewComponent implements OnInit {
     }
   }
 
+
+
+ 
 }
