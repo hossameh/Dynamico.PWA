@@ -69,7 +69,11 @@ export class DetailsWorkflowComponent implements OnInit {
         this.isLoading = isLoading;
       });
     });
-    this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
+
+    this.params = this.route.snapshot.queryParams;
+    this.printPdf = this.params.printPdf;
+    this.hasWorkFlow = this.params.hasWorkflow;
+    this.userData = JSON.parse(localStorage.getItem('userData') || '{}');
     this.form = {
       display: this.formType,
       components: []
@@ -133,9 +137,7 @@ export class DetailsWorkflowComponent implements OnInit {
       }
     };
 
-    this.params = this.route.snapshot.queryParams;
-    this.printPdf = this.params.printPdf;
-    this.hasWorkFlow = this.params.hasWorkflow;
+
     if (this.params) {
       this.getRecord();
       this.getWorkflowProcess();
@@ -279,7 +281,7 @@ export class DetailsWorkflowComponent implements OnInit {
            submit: this.onFormSubmitted.bind(this, event),
         },
         input: {
-          readOnly: this.data.workflowCompleted ,
+          readOnly: this.data.workflowCompleted || this.printPdf == "true" ,
           submission: {
             data: dataObject ?? {}
           },

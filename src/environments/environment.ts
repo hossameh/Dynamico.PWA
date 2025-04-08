@@ -8,7 +8,7 @@ export const environment = {
   hostAPI: "https://lab7software.com/api.dynamico/api/",
   //hostAPI: "https://localhost:44350/api/",
   //hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",
-  // hostAPI: "https://dynamico.cloud/api/",
+ // hostAPI: "https://dynamico.cloud/api.beyti/api/",
   //hostAPI:"http://5.189.153.30/api.dynamico/api/"
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
