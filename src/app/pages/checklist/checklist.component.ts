@@ -13,6 +13,7 @@ import { Role } from 'src/app/core/enums/role.enum';
 import { HelperService } from 'src/app/services/helper.service';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
+import { SubmittionState } from './../../core/enums/submittionState';
 
 @Component({
   selector: 'app-checklist',
@@ -23,7 +24,8 @@ export class ChecklistComponent implements OnInit {
   @ViewChild('openModal') openModal!: ElementRef;
   @ViewChild('closeModal') closeModal!: ElementRef;
 
-
+  SubmittionState = SubmittionState;
+  submitionState = SubmittionState.SaveAndSubmit;
   form: any;
   options!: FormioEditorOptions;
   data: any;
@@ -185,7 +187,7 @@ export class ChecklistComponent implements OnInit {
     this.location.back();
   };
   getChecklistById() {
-
+    
     this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe(async (value: any) => {
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
@@ -229,8 +231,10 @@ export class ChecklistComponent implements OnInit {
         cacheChecklists.push(value);
       }
       await this.storage.set('Checklists', cacheChecklists);
+      
       this.data = value;
-
+      this.data.submitionState = value?.submitionState ?? SubmittionState.SaveAndSubmit;
+      this.submitionState = this.data.submitionState;
       this.recordForm.get('record_Id')?.setValue(0);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
       this.recordForm.get('formDataRef')?.disable();
@@ -325,6 +329,8 @@ export class ChecklistComponent implements OnInit {
       }
 
       this.data = value;
+      this.data.submitionState = value?.submitionState ?? SubmittionState.SaveAndSubmit;
+      this.submitionState = this.data.submitionState;
       this.updateCashedRecord();
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);
@@ -750,6 +756,8 @@ export class ChecklistComponent implements OnInit {
 
       valueChecklist = cacheChecklists.filter((el: any) => el.userId == this.userId && el.formId == this.id)[0];
       this.selectedCashedChecklist = valueChecklist;
+      this.selectedCashedChecklist.submitionState = valueChecklist?.submitionState ?? SubmittionState.SaveAndSubmit;
+      this.submitionState = this.selectedCashedChecklist.submitionState;
       valueRecord = cacheRecords.filter((el: any) => el.userId == this.userId && el.record_Id == this.params.Record_Id)[0];
 
       let requireGps = valueChecklist?.gpsRequired ? valueChecklist?.gpsRequired : valueRecord?.gpS_Required;

@@ -13,6 +13,8 @@ import { Role } from 'src/app/core/enums/role.enum';
 import { HelperService } from 'src/app/services/helper.service';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../../environments/environment.prod';
+import { SubmittionState } from './../../../core/enums/submittionState';
+
 @Component({
   selector: 'app-mobile-checklist',
   templateUrl: './mobile-checklist.component.html',
@@ -23,6 +25,8 @@ export class MobileChecklistComponent implements OnInit {
   @ViewChild('closeModal') closeModal!: ElementRef;
 
 
+  SubmittionState = SubmittionState; 
+  submitionState = SubmittionState.SaveAndSubmit;
   form: any;
   options!: FormioEditorOptions;
   data: any;
@@ -166,8 +170,10 @@ export class MobileChecklistComponent implements OnInit {
   //   this.location.back();
   // };
   getChecklistById() {
-
+    
     this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe(async (value: any) => {
+
+     
       if (value?.gpsRequired) {
         navigator?.geolocation?.getCurrentPosition((location) => {
           this.latitude = location.coords.latitude;
@@ -278,6 +284,8 @@ export class MobileChecklistComponent implements OnInit {
       }
 
       this.data = value;
+      this.data.submitionState = value?.submitionState ?? SubmittionState.SaveAndSubmit;
+      this.submitionState = this.data.submitionState;
       // this.updateCashedRecord();
       this.recordForm.get('record_Id')?.setValue(+this.params.Record_Id);
       this.recordForm.get('formDataRef')?.setValue(value?.formDataRef);

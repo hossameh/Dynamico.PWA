@@ -32,9 +32,9 @@
         <div class="modal-body">
   
           <div class="d-flex justify-content-between align-items-center">
-            <button type="button" class="btn btn-warning w-100 ms-e" *ngIf="showSaveButton"
+            <button type="button" class="btn btn-warning w-100 ms-e" *ngIf="submitionState === SubmittionState.Save || submitionState === SubmittionState.SaveAndSubmit"
               data-bs-dismiss="modal" (click)="save()">{{'Save' | translate}}</button>
-            <button type="button" class="btn btn-primary w-100 ms-2" data-bs-dismiss="modal" (click)="submit()">{{'Submit'
+            <button type="button" class="btn btn-primary w-100 ms-2" data-bs-dismiss="modal" (click)="submit()" *ngIf="submitionState === SubmittionState.Submit || submitionState === SubmittionState.SaveAndSubmit">{{'Submit'
               | translate}}</button>
           </div>
         </div>
