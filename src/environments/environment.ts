@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  version: '1.2.37',
+  version: '1.2.38',
   hostAPI: "https://lab7software.com/api.dynamico/api/",
   //hostAPI: "https://localhost:44350/api/",
   //hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",

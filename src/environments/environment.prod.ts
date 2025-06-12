@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: '1.2.37',
+  version: '1.2.38',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +49,7 @@ export const environment = {
     measurementId: "G-H0NER3WF13",
     vapidKey: "BKTm9vxTjCIbTS1mfN-EPmFaOpA8GrpbjcX6fa0a0v_QRy0bkIaTkSowq5IVD5a1gS3sy7M2hvnrxKc1xlTY4JM"
   }, */
-  showSaveButton  : false,
+  showSaveButton  : true,
 
   firebase: {
     apiKey: "AIzaSyAz-VXCUhh8cytvpEM5OZhD0JnxMsoyGrk",
