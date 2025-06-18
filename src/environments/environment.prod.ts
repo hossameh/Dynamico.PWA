@@ -4,35 +4,43 @@ export const environment = {
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
- // hostAPI: "https://internal.egybell-apps.com/api/api/",
+  //hostAPI: "https://admi.egybell-apps.com/api/api/",
+   //hostAPI: "https://internal.egybell-apps.com/api/api/",
 
- // hostAPI: "https://lab7software.com/api.dynamico/api/",
-   hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  hostAPI: "https://lab7software.com/api.dynamico/api/",
+   //hostAPI: "https://dynamico.cloud/api.beyti/api/",
  
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- // companyName: 'Internal',
+  //companyName: 'Internal',
   companyName: 'Dynamico',
+  //companyName: 'ADMI',
+  //companyName: 'Internal',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//  appTitle: 'Egybell.Internal',
+  //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  appTitle: 'Beyti',
+  //appTitle: 'Beyti',
   // appTitle: 'Lab7',
+   appTitle: 'Dynamico',
+
+  //appTitle: 'Egybell.ADMI',
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- companyLogo: 'assets/img/beyti.png',
-  // companyLogo:'assets/img/logoNoName.png',
+ //companyLogo: 'assets/img/beyti.png',
+   companyLogo:'assets/img/logoNoName.png',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   appName: 'PWA',
- // APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
-
+  //APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-   APP_URL: 'https://dynamico.cloud/beytiapp/',
+  //APP_URL: 'https://app-admi.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
+
+  APP_URL: 'https://lab7software.com/DynamicoApp/',
+ //  APP_URL: 'https://dynamico.cloud/beytiapp/',
  // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
  
 
@@ -61,9 +69,11 @@ export const environment = {
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
   friendlyErrorMessage:'Something Went Wrong !',
-  //redirectUrl:'',
-  redirectUrl:'/beytiapp/login',
- // redirectUrl:'/DynamicoApp/login',
+  //redirectUrl: '', // admi - internal
+  //redirectUrl: '/login',
+
+ // redirectUrl:'/beytiapp/login',
+  redirectUrl:'/DynamicoApp/login',
 };
 
 

@@ -151,3 +151,6 @@ span:nth-child(4) {
 span:nth-child(5) {
   animation-delay: 0.5s;
 }
+::ng-deep.ng-dropdown-panel {
+  z-index: 10000 !important
+}

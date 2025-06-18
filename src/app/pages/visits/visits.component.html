@@ -85,10 +85,21 @@
       <input class="form-control" id="floatingInput" placeholder="{{'Name' | translate}}" [(ngModel)]="formRef" name="formRef">
       <label for="floatingInput"> {{'Record_reference' | translate}}</label>
     </div>
+    <div class="form-floating pt-3" >
+      <ng-select [items]="customersList" 
+                 bindLabel="name"
+                 class=" "
+                 appendTo="body" name="customer"  [(ngModel)]="customerId"
+                 bindValue="id"
+                 placeholder="{{'Select Customer' | translate}}"
+                >
+      </ng-select>      
+    </div>
     <div class="d-flex justify-content-between align-items-center">
-      <button type="button" class="btn btn-primary w-100 mt-4"   (click)="startExecute()"
-        
-        [disabled]="!formRef && mandatoryRecordRef">{{'Start' | translate}}</button>
+      <button type="button" class="btn btn-primary w-100 mt-4" (click)="startExecute()"
+              [disabled]="!formRef && mandatoryRecordRef">
+        {{'Start' | translate}}
+      </button>
     </div>
   </div>
 </ng-template>

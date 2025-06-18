@@ -25,7 +25,8 @@ export class CategoryComponent implements OnInit, AfterViewInit {
     }
   }
 
-
+  checklistService: any; customersList: any[] = [];
+  customerId: any = null;
   @ViewChild('openModal') openModal!: ElementRef;
   @ViewChild('newRecord') newRecord!: TemplateRef<any>;
   items: any = [];
@@ -70,6 +71,11 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    let currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    
+    if (currentUser.allowMultiCustomers)
+      this.getCustomers();
+
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.enableRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').enableRecordRef;
     this.mandatoryRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').mandatoryRecordRef;
@@ -223,8 +229,21 @@ export class CategoryComponent implements OnInit, AfterViewInit {
          Record_Id:this.selectedItem.record_Id,
          categoryName: this.name,
          listName:this.selectedItem.formTitle,
-         categoryId:this.selectedItem.categoryId 
+      categoryId: this.selectedItem.categoryId,
+      customerId: this.customerId ? this.customerId : null
     }});
   }
+  async getCustomers() {
 
+
+    if (this.isOnline)
+      this.http.get(`Customer/GetCustomersDDL`, {}).subscribe(async (res: any) => {
+        // this.assets = [];
+        this.customersList = res;
+
+      })
+    else {
+
+    }
+  }
 }

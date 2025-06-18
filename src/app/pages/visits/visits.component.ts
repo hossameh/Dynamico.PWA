@@ -58,6 +58,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class VisitsComponent implements OnInit {
 
   @ViewChild('executeNewRecord') newRecord!: TemplateRef<any>;
+    checklistService: any;
   
   @HostListener("window:scroll", [])
   onScroll(): void {
@@ -93,12 +94,13 @@ export class VisitsComponent implements OnInit {
   assetId!: any;
   access!: any;
   accessTypes = AccessTypes;
+  customersList: any[] = [];
 
   pager!: IPageInfo;
   loaded = true;
   isLoading = false;
   userId: any;
-
+  customerId: any = null;
   enableRecordRef = false;
 
   mandatoryRecordRef = false;
@@ -116,6 +118,10 @@ export class VisitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.resetData();
+    let currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    debugger
+    if (currentUser.allowMultiCustomers)
+      this.getCustomers();
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.enableRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').enableRecordRef;
     this.mandatoryRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').mandatoryRecordRef;
@@ -376,7 +382,24 @@ export class VisitsComponent implements OnInit {
     this.modalService.dismissAll();
     this.router.navigate(['/page/checklist/'+this.id] , {queryParams :{
          editMode: false ,
-         formRef:this.formRef, 
+      formRef: this.formRef,
+         customerId: this.customerId ? this.customerId : null
     }});
   }
+  async getCustomers() {
+
+
+    if (this.isOnline)
+      this.http.get(`Customer/GetCustomersDDL`, {}).subscribe(async (res: any) => {
+        // this.assets = [];
+        this.customersList = res;
+
+      })
+    else {
+     
+    }
+  }
+
+
+   
 }

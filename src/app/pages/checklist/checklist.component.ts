@@ -171,6 +171,7 @@ export class ChecklistComponent implements OnInit {
       form_Id: [+this.id],
       record_Id: [this.params.Record_Id ? +this.params.Record_Id : 0],
       formDataRef: ['', Validators.required],
+      customerId: [this.params.customerId ? +this.params.customerId : null],
       form_Record: [''],
       record_Status: [0],
       user_Id: [this.userId],
