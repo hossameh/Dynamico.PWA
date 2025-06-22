@@ -416,6 +416,7 @@ export class ChecklistComponent implements OnInit {
       else {
         cashedRecords.unshift({
           record_Id: this.params.Record_Id,
+          customerId: this.params.customerId ? +this.params.customerId : null,
           form_Id: this.id,
           assigned_Date: null,
           createdBy: null,
@@ -488,7 +489,7 @@ export class ChecklistComponent implements OnInit {
             this.updateCashedPlanRecords();
           } else {
             console.log(res?.message);
-            this.alert.error(res?.messag);
+            this.alert.success(this.helper.getTranslation('Something Went Wrong'));
           }
         });
       } else {
@@ -518,6 +519,7 @@ export class ChecklistComponent implements OnInit {
               location: null,
               record: this.modelBody.form_Record,
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+              customerId: this.params.customerId ? +this.params.customerId : null,
               record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                 (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
               workflowId: this.selectedCashedChecklist?.workflowId,
@@ -544,6 +546,7 @@ export class ChecklistComponent implements OnInit {
               location: null,
               record: this.modelBody.form_Record,
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+              customerId: this.params.customerId ? +this.params.customerId : null,
               record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                 (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
               workflowId: this.selectedCashedChecklist?.workflowId,
@@ -589,6 +592,7 @@ export class ChecklistComponent implements OnInit {
                 location: null,
                 record: this.modelBody.form_Record,
                 record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+                customerId: this.params.customerId ? +this.params.customerId : null,
                 record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                   (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
                 workflowId: this.selectedCashedChecklist?.workflowId,
@@ -612,6 +616,7 @@ export class ChecklistComponent implements OnInit {
                 location: null,
                 record: this.modelBody.form_Record,
                 record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
+                customerId: this.params.customerId ? +this.params.customerId : null,
                 record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                   (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
                 workflowId: this.selectedCashedChecklist?.workflowId,

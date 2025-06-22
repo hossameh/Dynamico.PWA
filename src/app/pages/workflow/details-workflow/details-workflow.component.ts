@@ -584,7 +584,9 @@ border:1px dashed #000
          isNewRecord: false,
          location: this.data?.location,
          offlineRef: this.params.offline,
-         isSubmitted: false
+         isSubmitted: false,
+         customerId: this.data?.customerId,
+
        };
        this.http.post('ChecklistRecords/SaveFormRecord', modelBody).subscribe((res: any) => {
          if (res.isPassed) {
