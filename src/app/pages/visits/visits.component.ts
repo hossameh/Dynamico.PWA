@@ -374,9 +374,12 @@ export class VisitsComponent implements OnInit {
     else
     this.router.navigate(['/page/checklist/'+this.id] , {queryParams :{
       editMode: false ,
-      formRef:'',
+      formRef: '',
+      customerId: this.customerId ? this.customerId : null
+
     }});
   }
+
 
   startExecute(){
     this.modalService.dismissAll();

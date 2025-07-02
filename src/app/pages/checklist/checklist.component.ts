@@ -31,6 +31,7 @@ export class ChecklistComponent implements OnInit {
   data: any;
   id!: number;
   editMode = '';
+  customerId: any = null;
   recordForm!: FormGroup;
   params: any;
   latitude!: number;
@@ -171,7 +172,7 @@ export class ChecklistComponent implements OnInit {
       form_Id: [+this.id],
       record_Id: [this.params.Record_Id ? +this.params.Record_Id : 0],
       formDataRef: ['', Validators.required],
-      customerId: [this.params.customerId ? +this.params.customerId : null],
+      customerId: [this.params.customerId ? +this.params.customerId : (this.customerId ? +this.customerId : null)],
       form_Record: [''],
       record_Status: [0],
       user_Id: [this.userId],
@@ -195,7 +196,11 @@ export class ChecklistComponent implements OnInit {
           this.latitude = location.coords.latitude;
           this.longitude = location.coords.longitude;
           this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
+          if (value?.customerId) {
+            this.customerId = value?.customerId;
+            this.recordForm.get('customerId')?.setValue(value?.customerId);
 
+          }
 
         },
           (err) => {
@@ -323,7 +328,10 @@ export class ChecklistComponent implements OnInit {
             this.alert.error('Please accept to share your location first !');
           });
       }
-
+      if (value?.customerId) { 
+        this.customerId = value?.customerId;
+        this.recordForm.get('customerId')?.setValue(value?.customerId);
+      }
       if (value?.defaultDisplayLanguage) {
         this.formdefaultDisplayLanguage = value?.defaultDisplayLanguage;
         this.langChanged(value.defaultDisplayLanguage);
@@ -416,7 +424,7 @@ export class ChecklistComponent implements OnInit {
       else {
         cashedRecords.unshift({
           record_Id: this.params.Record_Id,
-          customerId: this.params.customerId ? +this.params.customerId : null,
+          customerId: this.params.customerId ? +this.params.customerId : (this.customerId ? this.customerId : null),
           form_Id: this.id,
           assigned_Date: null,
           createdBy: null,
@@ -478,6 +486,7 @@ export class ChecklistComponent implements OnInit {
   }
 
   send() {
+    debugger
     // this.modelBody.formDataRef = this.params.formRef ? this.params.formRef : null;    
     this.modelBody.formDataRef = this.recordForm.get('formDataRef')?.value ? this.recordForm.get('formDataRef')?.value : (this.params.formRef ? this.params.formRef : null);
     this.statusSubscription2 = this.offline.currentStatus.subscribe(async (isOnline) => {
@@ -519,7 +528,7 @@ export class ChecklistComponent implements OnInit {
               location: null,
               record: this.modelBody.form_Record,
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-              customerId: this.params.customerId ? +this.params.customerId : null,
+              customerId: this.params.customerId ? +this.params.customerId : (this.customerId ? +this.customerId : null),
               record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                 (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
               workflowId: this.selectedCashedChecklist?.workflowId,
@@ -546,7 +555,7 @@ export class ChecklistComponent implements OnInit {
               location: null,
               record: this.modelBody.form_Record,
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-              customerId: this.params.customerId ? +this.params.customerId : null,
+              customerId: this.params.customerId ? +this.params.customerId : (this.customerId ? +this.customerId : null),
               record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                 (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
               workflowId: this.selectedCashedChecklist?.workflowId,
@@ -592,7 +601,7 @@ export class ChecklistComponent implements OnInit {
                 location: null,
                 record: this.modelBody.form_Record,
                 record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-                customerId: this.params.customerId ? +this.params.customerId : null,
+                customerId: this.params.customerId ? +this.params.customerId : (this.customerId ?+this.customerId : null),
                 record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                   (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
                 workflowId: this.selectedCashedChecklist?.workflowId,
@@ -616,7 +625,7 @@ export class ChecklistComponent implements OnInit {
                 location: null,
                 record: this.modelBody.form_Record,
                 record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-                customerId: this.params.customerId ? +this.params.customerId : null,
+                customerId: this.params.customerId ? +this.params.customerId : (this.customerId ? +this.customerId : null),
                 record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                   (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
                 workflowId: this.selectedCashedChecklist?.workflowId,
@@ -640,6 +649,8 @@ export class ChecklistComponent implements OnInit {
               gpS_Required: this.selectedCashedChecklist?.gpsRequired,
               location: null,
               record: this.modelBody.form_Record,
+              customerId: this.params.customerId ? +this.params.customerId : (this.customerId ? +this.customerId : null),
+
               record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
               record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                 (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),

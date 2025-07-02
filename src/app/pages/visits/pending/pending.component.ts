@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { RecordStatus, RecordStatusNames } from 'src/app/core/enums/status.enum';
 import { AccessTypes } from 'src/app/core/enums/access.enum';
 import { Router } from '@angular/router';
+import { Role } from '../../../core/enums/role.enum';
 
 @Component({
   selector: 'app-pending',
@@ -24,17 +25,19 @@ export class PendingComponent implements OnInit {
   accessTypes = AccessTypes;
   id!: number;
   selectedItem: any;
+  userRole!: string;
 
   rangeDate = {
     FromCreationDate: '',
     ToCreationDate: ''
   };
-
+  currentUser: any;
   isOnline = true;
   statusSubscription!: Subscription;
   recordStatus = RecordStatus;
   recordStatusNames = RecordStatusNames;
-  userId: any;
+  userId: any; role = Role;
+
   constructor(
     private http: HttpService,
     private alert: AlertService,
@@ -45,6 +48,9 @@ export class PendingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
+
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.statusSubscription = this.offline.currentStatus.subscribe(isOnline => {
       this.isOnline = isOnline;
@@ -147,12 +153,19 @@ export class PendingComponent implements OnInit {
     }
   }
   routeWithNoWorkFlow(item: any) {
-    if (this.access && (this.access.includes(this.accessTypes.Read) || this.access.includes(this.accessTypes.Update)))
-      this.router.navigateByUrl("/page/checklist/" + +item?.form_Id + "?editMode=true&Complete=true" +
+    let complete = true;
+
+    if (this.access && (this.access.includes(this.accessTypes.Read) || this.access.includes(this.accessTypes.Update))) {
+      if (this.currentUser?.allowMultiCustomers && this.userRole == this.role.CompanyAdmin)
+        complete = false;
+
+      this.router.navigateByUrl("/page/checklist/" + +item?.form_Id + "?editMode=true" +
+
+        (complete == true ? "&Complete=true" : "") +
         "&offline=" + (item.offlineRef ? item.offlineRef : '') +
         "&listName=" + item.form_Title +
         "&Record_Id=" + +item.record_Id);
-    else {
+    } else {
       this.alert.error("You have No Access")
       return;
     }

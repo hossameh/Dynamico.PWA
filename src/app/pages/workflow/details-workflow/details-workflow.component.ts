@@ -12,6 +12,7 @@ import { OfflineService } from 'src/app/services/offline/offline.service';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { HelperService } from '../../../services/helper.service';
+import { Role } from '../../../core/enums/role.enum';
 
 @Component({
   selector: 'app-details-workflow',
@@ -39,10 +40,15 @@ export class DetailsWorkflowComponent implements OnInit {
   isOnline = true;
   $subscription!: Subscription;
   userId: any;
+
   formType: string = 'form';
   formdefaultDisplayLanguage: any;
   currentLang: any;
   userEmail!: string;
+  userRole!: string;
+  role = Role;
+  currentUser: any;
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpService,
@@ -56,6 +62,8 @@ export class DetailsWorkflowComponent implements OnInit {
     private helper: HelperService,
   ) { }
   ngOnInit(): void {
+    this.currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
     this.currentLang = localStorage.getItem('lang');
@@ -220,7 +228,7 @@ export class DetailsWorkflowComponent implements OnInit {
       }
     } else {
       // en
-      elAr && elAr.remove() ;
+      elAr && elAr.remove();
       if (!elEn) {
         this.generateLinkElement({
           id: 'bootstrap-en',
@@ -278,10 +286,10 @@ export class DetailsWorkflowComponent implements OnInit {
           }
         },
         output: {
-           submit: this.onFormSubmitted.bind(this, event),
+          submit: this.onFormSubmitted.bind(this, event),
         },
         input: {
-          readOnly: this.data.workflowCompleted || this.printPdf == "true" ,
+          readOnly: this.checkReadOnly(),
           submission: {
             data: dataObject ?? {}
           },
@@ -308,6 +316,18 @@ export class DetailsWorkflowComponent implements OnInit {
         this.printWindow()
       }, 2000)
     }
+  }
+
+  checkReadOnly() {
+    debugger
+    if (this.currentUser?.allowMultiCustomers && this.userRole == this.role.CompanyAdmin) { 
+      return  false;
+    }else if (this.data.workflowCompleted || this.printPdf == "true") {
+      return true;
+    } else {
+      return false; 
+    }
+
   }
   async cashRecord(recordData:any) {
     let cashedCheckListRecords = await this.storage.get('CheckListRecords') || [];

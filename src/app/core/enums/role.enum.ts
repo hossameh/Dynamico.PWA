@@ -1,4 +1,7 @@
 export enum Role {
     User = "User",
-    Anonymous = 'Anonymous',
+  Anonymous = 'Anonymous',
+  CompanyAdmin = 'CompanyAdmin',
+  FormCreator = 'FormCreator',
+  Customer = "Customer",
 }

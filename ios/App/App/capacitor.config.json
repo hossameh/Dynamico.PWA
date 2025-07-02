@@ -5,9 +5,10 @@
 	"server": {
 		"cleartext": true,
 		"androidScheme": "https",
-		"url": "https://dynamico.cloud/beytiapp/login"
+		"url": "https://lab7software.com/DynamicoApp/login"
 	},
 	"packageClassList": [
+		"CameraPreview",
 		"CAPCameraPlugin",
 		"FilesystemPlugin",
 		"GeolocationPlugin"

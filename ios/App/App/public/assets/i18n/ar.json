@@ -92,5 +92,6 @@
   "Search By Name or Code": "ابحث بالاسم أو الكود",
   "Name": "الاسم",
   "Form Submitted Successfully": "تم إرسال النموذج بنجاح",
-  "Continue":""
+  "Continue": "استمر" ,
+  "Something Went Wrong": "حدث خطأ ما",
 }

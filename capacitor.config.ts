@@ -7,7 +7,8 @@ const config: CapacitorConfig = {
   "server": {
     cleartext:true,// just for test
     "androidScheme": "https",
-    "url": "https://dynamico.cloud/beytiapp/login"
+    //  "url": "https://dynamico.cloud/beytiapp/login"  
+    "url": "https://lab7software.com/DynamicoApp/login"
   }
 };
 
