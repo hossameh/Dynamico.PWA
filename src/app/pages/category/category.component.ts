@@ -43,7 +43,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   loaded = true;
   isLoading = false;
   userId: any;
-
+  currentUser: any;
   enableRecordRef = false;
 
   mandatoryRecordRef = false;
@@ -71,9 +71,9 @@ export class CategoryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    let currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
     
-    if (currentUser.allowMultiCustomers)
+    if (this.currentUser.allowMultiCustomers)
       this.getCustomers();
 
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;

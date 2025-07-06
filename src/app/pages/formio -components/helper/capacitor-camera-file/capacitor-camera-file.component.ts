@@ -6,8 +6,8 @@ const BaseFileComponent = Components.components.file;
 export class CapacitorCameraFileComponent extends BaseFileComponent {
   attach(element: HTMLElement) {
     super.attach(element);
-
-    const fileBrowseBtn = (this as any).refs?.fileBrowse || element.querySelector('button');
+    debugger
+    const fileBrowseBtn = (this as any).refs?.toggleCameraMode || element.querySelector('[ref="toggleCameraMode"]');
 
     if (fileBrowseBtn) {
       fileBrowseBtn.addEventListener('click', async (e: Event) => {
@@ -39,7 +39,7 @@ export class CapacitorCameraFileComponent extends BaseFileComponent {
 
   dataURLtoFile(dataUrl: string, filename: string): File {
     const arr = dataUrl.split(',');
-    const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+    const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/png';
     const bstr = atob(arr[1]);
     const u8arr = new Uint8Array(bstr.length);
     for (let i = 0; i < bstr.length; i++) u8arr[i] = bstr.charCodeAt(i);
@@ -48,14 +48,13 @@ export class CapacitorCameraFileComponent extends BaseFileComponent {
   setFileData(file: File, base64Data: string) {
     const fileData = {
       name: file.name,
+      storage: 'base64', // Assuming base64 storage, change if needed
+      originalName: file.name,
       size: file.size,
       type: file.type,
-      data: {
-        url: base64Data,
-        name: file.name,
-        size: file.size,
-        type: file.type,
-      },
+      url: base64Data
+
+      
     };
 
     // Append the new file to existing dataValue array, or start a new one if empty
@@ -77,5 +76,5 @@ export class CapacitorCameraFileComponent extends BaseFileComponent {
       this.redraw();
     }
   }
-
+  
 }

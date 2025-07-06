@@ -95,7 +95,7 @@ export class VisitsComponent implements OnInit {
   access!: any;
   accessTypes = AccessTypes;
   customersList: any[] = [];
-
+  currentUser: any;
   pager!: IPageInfo;
   loaded = true;
   isLoading = false;
@@ -118,9 +118,9 @@ export class VisitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.resetData();
-    let currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.currentUser = JSON.parse(localStorage.getItem('userData') || '{}');
     debugger
-    if (currentUser.allowMultiCustomers)
+    if (this.currentUser.allowMultiCustomers)
       this.getCustomers();
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.enableRecordRef = JSON.parse(localStorage.getItem('userData') || '{}').enableRecordRef;

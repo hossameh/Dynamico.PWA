@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from './http/http.service';
+import { ContainerControlTypesEnum, ControlTypeEnum, labeledTypes } from '../core/enums/role.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -149,5 +150,171 @@ export class HelperService {
       },2000);
     }
   
+  }
+  getPrimitiveComponents(component: any, considerButton: boolean = false): any[] {
+    let primControls :any = [];
+    switch (component?.type) {
+      case ContainerControlTypesEnum.columns:
+        component?.columns?.forEach((column:any) => {
+          column.components?.forEach((comp:any) => {
+            if (Object.keys(ControlTypeEnum).includes(comp?.type) || (considerButton && comp.type == labeledTypes.button))
+              primControls.push(comp);
+            else {
+              const firstChildsCompoenent = this.getPrimitiveComponents(comp, considerButton);
+              if (firstChildsCompoenent?.length > 0)
+                primControls = [...primControls, ...firstChildsCompoenent];
+            }
+          });
+
+        });
+        break;
+      case ContainerControlTypesEnum.table:
+        component?.rows?.forEach((row:any) => {
+          row?.forEach((rowItem:any) => {
+            rowItem?.components?.forEach((comp:any) => {
+              if (Object.keys(ControlTypeEnum).includes(comp.type) || (considerButton && comp.type == labeledTypes.button))
+                primControls.push(comp);
+              else {
+                const primitiveChilds = this.getPrimitiveComponents(comp, considerButton);
+                if (primitiveChilds?.length > 0)
+                  primControls = [...primControls, ...primitiveChilds]
+              }
+            });
+          });
+        });
+        break;
+      case ContainerControlTypesEnum.well:
+        component?.components?.forEach((comp:any) => {
+          if (Object.keys(ControlTypeEnum).includes(comp.type) || (considerButton && comp.type == labeledTypes.button))
+            primControls.push(comp);
+          else {
+            const primitiveChilds = this.getPrimitiveComponents(comp, considerButton);
+            if (primitiveChilds?.length > 0)
+              primControls = [...primControls, ...primitiveChilds]
+          }
+        });
+        break;
+      case ContainerControlTypesEnum.tabs:
+        component?.components?.forEach((comp:any) => {
+          comp?.components?.forEach((innerComponent:any) => {
+
+            if (Object.keys(ControlTypeEnum).includes(innerComponent.type) || (considerButton && comp.type == labeledTypes.button))
+              primControls.push(innerComponent);
+            else {
+              const primitiveChilds = this.getPrimitiveComponents(innerComponent, considerButton);
+              if (primitiveChilds?.length > 0)
+                primControls = [...primControls, ...primitiveChilds]
+            }
+
+          });
+
+        });
+        break;
+      case ContainerControlTypesEnum.panel:
+        component?.components?.forEach((comp:any) => {
+          if (Object.keys(ControlTypeEnum).includes(comp.type) || (considerButton && comp.type == labeledTypes.button))
+            primControls.push(comp);
+          else {
+            const primitiveChilds = this.getPrimitiveComponents(comp, considerButton);
+            if (primitiveChilds?.length > 0)
+              primControls = [...primControls, ...primitiveChilds]
+          }
+
+        });
+        break;
+      case ContainerControlTypesEnum.fieldset:
+        component?.components?.forEach((comp:any) => {
+
+          if (Object.keys(ControlTypeEnum).includes(comp.type) || (considerButton && comp.type == labeledTypes.button))
+            primControls.push(comp);
+          else {
+            const primitiveChilds = this.getPrimitiveComponents(comp, considerButton);
+            if (primitiveChilds?.length > 0)
+              primControls = [...primControls, ...primitiveChilds]
+          }
+
+        });
+        break;
+    }
+    return primControls;
+  }
+
+  adaptFormIoDateTimeValue(serializedData: any[], allComponents: any[]): any[] {
+    try {
+      if (allComponents && serializedData) {
+        let primitiveControls = allComponents.filter((item) => { return Object.keys(ControlTypeEnum).includes(item.type); });
+
+        allComponents.forEach((item) => {
+          if (Object.keys(ContainerControlTypesEnum).includes(item.type)) {
+            const primControls = this.getPrimitiveComponents(item);
+            primitiveControls = [...primitiveControls, ...primControls]
+          }
+        });
+
+        const dateAndDataGridControls = primitiveControls.filter((item) => (item.type === ControlTypeEnum.datetime));
+        if (dateAndDataGridControls?.length > 0) {
+
+          serializedData.forEach((controlValue) => {
+
+            const controlItem = dateAndDataGridControls.filter(x => x.key === controlValue.name)[0];
+
+            if (controlItem && controlItem.type === ControlTypeEnum.datetime) {
+              if (controlValue.value) {
+                let adjustedDateValue = this.ajustDate(controlValue.value);
+                // check for time if not enbale remobe it
+                adjustedDateValue = controlItem.enableTime ? adjustedDateValue : adjustedDateValue.split('T')[0];
+                controlValue.value = adjustedDateValue;
+
+              }
+            }
+
+
+          });
+
+
+
+          return serializedData;
+        }
+        else {
+          return serializedData;
+        }
+
+
+
+      }
+      else {
+        return serializedData;
+      }
+
+    }
+    catch (ex) {
+      return serializedData;
+    }
+
+  }
+  ajustDate(input: string | Date): string {
+    try {
+      if (!input) return '';
+
+      // If input is a Date object
+      if (input instanceof Date) {
+        // Just return the local datetime as string, without milliseconds or 'Z'
+        const year = input.getFullYear();
+        const month = String(input.getMonth() + 1).padStart(2, '0');
+        const day = String(input.getDate()).padStart(2, '0');
+        const hours = String(input.getHours()).padStart(2, '0');
+        const minutes = String(input.getMinutes()).padStart(2, '0');
+        const seconds = String(input.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+      }
+
+      // If input is a string, strip timezone like +03:00, -02:00 or Z
+      return input.replace(/\.\d{3}/, '').replace(/([+-]\d{2}:\d{2}|Z)$/, '');
+    }
+    catch (ex) {
+      return input as string;
+    }
+
   }
 }

@@ -464,6 +464,7 @@ export class ChecklistComponent implements OnInit {
     let recordData = eventData.data;
     let serializedData = this.serializeObj(recordData);
     let formDataStr = JSON.stringify(serializedData);
+    serializedData = this.helper.adaptFormIoDateTimeValue(serializedData, this.form.components);
 
     this.modelBody = { ...this.recordForm.value };
     this.modelBody.form_Record = serializedData;
@@ -498,7 +499,10 @@ export class ChecklistComponent implements OnInit {
             this.updateCashedPlanRecords();
           } else {
             console.log(res?.message);
-            this.alert.success(this.helper.getTranslation('Something Went Wrong'));
+            this.alert.alertError(this.helper.getTranslation('Something Went Wrong'));
+            this.alert.alertError(this.helper.getTranslation(res?.message));
+            this.alert.alertError(this.helper.getTranslation(this.modelBody));
+
           }
         });
       } else {

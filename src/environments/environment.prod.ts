@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: '1.2.50',
+  version: '1.2.55',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -72,7 +72,7 @@ export const environment = {
   //redirectUrl: '', // admi - internal
   //redirectUrl: '/login',
 
- // redirectUrl:'/beytiapp/login',
+  //redirectUrl:'/beytiapp/login',
   redirectUrl:'/DynamicoApp/login',
 };
 

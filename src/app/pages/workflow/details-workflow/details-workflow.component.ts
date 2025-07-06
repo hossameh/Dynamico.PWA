@@ -592,6 +592,7 @@ border:1px dashed #000
      
      let recordData = eventData.data;
      let serializedData = this.serializeObj(recordData);
+     serializedData = this.helper.adaptFormIoDateTimeValue(serializedData, this.form.components);
 
      if (this.isOnline) {
        const modelBody = {

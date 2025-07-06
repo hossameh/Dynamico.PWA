@@ -376,6 +376,7 @@ export class MobileChecklistComponent implements OnInit {
     let recordData = eventData.data;
     let serializedData = this.serializeObj(recordData);
     let formDataStr = JSON.stringify(serializedData);
+    serializedData = this.helper.adaptFormIoDateTimeValue(serializedData, this.form.components);
 
     this.modelBody = { ...this.recordForm.value };
     this.modelBody.form_Record = serializedData;
