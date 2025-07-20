@@ -7,6 +7,7 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 import { API } from 'src/app/core/interface/api.interface';
 import { HelperService } from 'src/app/services/helper.service';
 import { LangEnum } from 'src/app/core/enums/common.enum';
+import { LocationLoggerService } from '../../services/location-logger/location-logger.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class ProfileComponent implements OnInit {
   version = environment.version
   userData: any;
 
-  constructor(public readonly translate: TranslateService,
+  constructor(public readonly translate: TranslateService, private logger: LocationLoggerService,
     private readonly http: HttpService,
     private readonly alert: AlertService,
     private readonly router: Router,
@@ -98,6 +99,8 @@ export class ProfileComponent implements OnInit {
         else {
           this.router.navigate(['/login']);
         }
+        this.logger.stopLogger();
+
       }
       else {
         this.alert.error(res?.message);

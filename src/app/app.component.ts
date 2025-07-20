@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { Role } from './core/enums/role.enum';
 import { LangEnum } from './core/enums/common.enum';
 import { Title } from '@angular/platform-browser';
+import { LocationLoggerService } from './services/location-logger/location-logger.service';
 
 
 @Component({
@@ -32,8 +33,8 @@ export class AppComponent {
   message: any = null;
   role = Role;
   userRole!: string;
-
-  constructor(private readonly helper: HelperService,
+  userEmail: any;
+  constructor(private readonly helper: HelperService, private logger: LocationLoggerService,
     private readonly swUpdates: SwUpdate,
     private readonly http: HttpService,
     private readonly translate: TranslateService,
@@ -48,6 +49,8 @@ export class AppComponent {
   ngOnInit(): void {
     this.update = false;
     this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
+    this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
+    this.logger.startLogger(this.userEmail);
     this.createDb();
     this.reloadCache();
 

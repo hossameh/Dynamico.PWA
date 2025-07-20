@@ -5,7 +5,7 @@
 	"server": {
 		"cleartext": true,
 		"androidScheme": "https",
-		"url": "https://lab7software.com/DynamicoApp/login"
+		"url": "https://dynamico.cloud/beytiapp/login"
 	},
 	"packageClassList": [
 		"CameraPreview",
