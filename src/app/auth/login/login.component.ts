@@ -12,6 +12,7 @@ import { first } from 'rxjs/operators';
 import { API } from 'src/app/core/interface/api.interface';
 import { HelperService } from 'src/app/services/helper.service';
 import { AuthType } from 'src/app/core/enums/AuthType';
+import { LocationLoggerService } from '../../services/location-logger/location-logger.service';
 
 @Component({
   selector: 'app-login',
@@ -26,10 +27,11 @@ export class LoginComponent implements OnInit {
   passwordNeeded = false;
   loginKey = '';
   companyName: string = environment.companyName;
+  userEmail: any;
 
   companyLogo :string = environment.companyLogo;
 
-  constructor(private readonly router: Router,
+  constructor(private readonly router: Router, private logger: LocationLoggerService,
     private readonly FB: FormBuilder,
     private readonly alert: AlertService,
     private readonly translate: TranslateService,
@@ -170,6 +172,9 @@ export class LoginComponent implements OnInit {
     try {
       if (res.data && res.isPassed) {
         this.setUserData(res);
+        this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
+        this.logger.startLogger(this.userEmail);
+
         if (res?.data?.defaultLanguage && this.currentLang && this.currentLang !== res?.data?.defaultLanguage) {
           localStorage.setItem('lang', res?.data?.defaultLanguage);
           this.langChanged(res?.data?.defaultLanguage);

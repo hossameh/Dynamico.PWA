@@ -7,34 +7,34 @@ export const environment = {
   //hostAPI: "https://admi.egybell-apps.com/api/api/",
    //hostAPI: "https://internal.egybell-apps.com/api/api/",
 
-  //hostAPI: "https://lab7software.com/api.dynamico/api/",
-   hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  hostAPI: "https://lab7software.com/api.dynamico/api/",
+   //hostAPI: "https://dynamico.cloud/api.beyti/api/",
  
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   //companyName: 'Internal',
-  companyName: 'Dynamico',
+  //companyName: 'Dynamico',
   //companyName: 'ADMI',
   //companyName: 'Internal',
-  //companyName: '',
+  companyName: '',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  appTitle: 'Beyti',
+  //appTitle: 'Beyti',
   // appTitle: 'Lab7',
    //appTitle: 'Dynamico',
-  //appTitle: 'Mystro',
+  appTitle: 'Mystro',
 
   //appTitle: 'Egybell.ADMI',
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- companyLogo: 'assets/img/beyti.png',
+ //companyLogo: 'assets/img/beyti.png',
   // companyLogo:'assets/img/logoNoName.png',
-  //companyLogo: 'assets/img/MystroLogo2.png',
+  companyLogo: 'assets/img/MystroLogo2.png',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   appName: 'PWA',
@@ -75,10 +75,12 @@ export const environment = {
   //redirectUrl: '', // admi - internal
   //redirectUrl: '/login',
 
-  redirectUrl:'/beytiapp/login',
+  //redirectUrl:'/beytiapp/login',
   //  redirectUrl:'/DynamicoApp/login',
+  redirectUrl:'/mystroApp/login',
 
-  apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
+  //apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
+  apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',
 
   locationLogger: {
     timer: 5 * 60 * 1000, // 15 minutes in milliseconds

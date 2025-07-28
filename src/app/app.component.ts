@@ -33,8 +33,7 @@ export class AppComponent {
   message: any = null;
   role = Role;
   userRole!: string;
-  userEmail: any;
-  constructor(private readonly helper: HelperService, private logger: LocationLoggerService,
+  constructor(private readonly helper: HelperService, 
     private readonly swUpdates: SwUpdate,
     private readonly http: HttpService,
     private readonly translate: TranslateService,
@@ -49,8 +48,7 @@ export class AppComponent {
   ngOnInit(): void {
     this.update = false;
     this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
-    this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
-    this.logger.startLogger(this.userEmail);
+    
     this.createDb();
     this.reloadCache();
 
