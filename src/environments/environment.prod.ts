@@ -8,8 +8,9 @@ export const environment = {
    //hostAPI: "https://internal.egybell-apps.com/api/api/",
 
   //hostAPI: "https://lab7software.com/api.dynamico/api/",
-   hostAPI: "https://dynamico.cloud/api.beyti/api/",
+   //hostAPI: "https://dynamico.cloud/api.beyti/api/",
  
+  hostAPI: "https://vacation.dynamico.cloud/api/",
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,17 +24,17 @@ export const environment = {
 
   //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  appTitle: 'Beyti',
+  //appTitle: 'Beyti',
   // appTitle: 'Lab7',
-   //appTitle: 'Dynamico',
+   appTitle: 'Vacation',
   //appTitle: 'Mystro',
 
   //appTitle: 'Egybell.ADMI',
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- companyLogo: 'assets/img/beyti.png',
-  // companyLogo:'assets/img/logoNoName.png',
+ //companyLogo: 'assets/img/beyti.png',
+   companyLogo:'assets/img/logoNoName.png',
   //companyLogo: 'assets/img/MystroLogo2.png',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +44,9 @@ export const environment = {
   //APP_URL: 'https://app-admi.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
 
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-   APP_URL: 'https://dynamico.cloud/beytiapp/',
+  //APP_URL: 'https://dynamico.cloud/beytiapp/',
+  APP_URL: 'https://app-vacation.dynamico.cloud/',
+
  // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
  
 
@@ -72,10 +75,10 @@ export const environment = {
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
   friendlyErrorMessage:'Something Went Wrong !',
-  //redirectUrl: '', // admi - internal
+  redirectUrl: '', // admi - internal
   //redirectUrl: '/login',
 
-  redirectUrl:'/beytiapp/login',
+  //redirectUrl:'/beytiapp/login',
   //  redirectUrl:'/DynamicoApp/login',
   //redirectUrl:'/mystroApp/login',
 
@@ -86,7 +89,7 @@ export const environment = {
     timer: 5 * 60 * 1000, // 15 minutes in milliseconds
     dayStart: '08:00',
     dayEnd: '18:00',
-    activateLocationLogger: true,
+    activateLocationLogger: false,
     formId: 26,
   }
 };
