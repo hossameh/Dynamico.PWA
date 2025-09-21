@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1751810657163,
+  "timestamp": 1758450522821,
   "index": "/beytiapp/index.html",
   "assetGroups": [
     {
@@ -14,7 +14,7 @@
         "/beytiapp/favicon.ico",
         "/beytiapp/firebase-messaging-sw.js",
         "/beytiapp/index.html",
-        "/beytiapp/main.4e99088e5154901cda15.js",
+        "/beytiapp/main.234d6e44e52e3d160ac5.js",
         "/beytiapp/polyfills.c481238ae77e022526d5.js",
         "/beytiapp/runtime.ade70670412a41504dcd.js",
         "/beytiapp/styles.f369fc6fc2a95ed2f93e.css"
@@ -51,6 +51,7 @@
         "/beytiapp/assets/icons/touch-icon-ipad-retina.png",
         "/beytiapp/assets/icons/touch-icon-ipad.png",
         "/beytiapp/assets/icons/touch-icon-iphone-retina.png",
+        "/beytiapp/assets/img/MystroLogo2.png",
         "/beytiapp/assets/img/beyti.png",
         "/beytiapp/assets/img/bg.png",
         "/beytiapp/assets/img/icons/accept.png",
@@ -147,6 +148,7 @@
     "/beytiapp/assets/icons/touch-icon-ipad-retina.png": "f86e6c0deae70bf4febc6bbe918286d50f726578",
     "/beytiapp/assets/icons/touch-icon-ipad.png": "f86e6c0deae70bf4febc6bbe918286d50f726578",
     "/beytiapp/assets/icons/touch-icon-iphone-retina.png": "d1c06a25b5aed2c2d46d7fd36f04efba27efe423",
+    "/beytiapp/assets/img/MystroLogo2.png": "87ae25fd6fd015f9dec58b39cf4a49723c1d756e",
     "/beytiapp/assets/img/beyti.png": "6182ade37480c1d359c6b93e7a8430e650f68f76",
     "/beytiapp/assets/img/bg.png": "8ad9c8fd56d231db7e68c78e3f672f99848828ae",
     "/beytiapp/assets/img/icons/accept.png": "ab0d6c02c2b8b665f336058b717128bc0784e5fe",
@@ -216,8 +218,8 @@
     "/beytiapp/fontawesome-webfont.20fd1704ea223900efa9.woff2": "d6f48cba7d076fb6f2fd6ba993a75b9dc1ecbf0c",
     "/beytiapp/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg": "98a8aa5cf7d62c2eff5f07ede8d844b874ef06ed",
     "/beytiapp/fontawesome-webfont.f691f37e57f04c152e23.woff": "28b782240b3e76db824e12c02754a9731a167527",
-    "/beytiapp/index.html": "ceb1a17672d45241928930d89ff8df32bb700fbd",
-    "/beytiapp/main.4e99088e5154901cda15.js": "b8b2abc1f31d56cd7f2c668033a74066b97b20ff",
+    "/beytiapp/index.html": "1e3fbd37a8351e3494e76ae220790703b92be459",
+    "/beytiapp/main.234d6e44e52e3d160ac5.js": "1790dfd91595ed94d9612f94d1450eebf2924d3e",
     "/beytiapp/pattern.e02e512c504bfbdde5d4.png": "5b1ea7ec20b412b419b07a45b064634d7ceb1f75",
     "/beytiapp/polyfills.c481238ae77e022526d5.js": "a68888a1a3f71ca479b6f51003c8733ed05cd8e7",
     "/beytiapp/runtime.ade70670412a41504dcd.js": "53d371128dc86792f7a07a0d2cd702495d0c390f",

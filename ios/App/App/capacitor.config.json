@@ -3,9 +3,22 @@
 	"appName": "beytiapp",
 	"webDir": "dist/dynamico",
 	"server": {
-		"cleartext": true,
+		"url": "https://dynamico.cloud/beytiapp/login",
+		"cleartext": false,
 		"androidScheme": "https",
-		"url": "https://dynamico.cloud/beytiapp/login"
+		"allowNavigation": [
+			"lab7software.com",
+			"www.lab7software.com",
+			"dynamico.cloud",
+			"www.dynamico.cloud",
+			"api.dynamico.cloud",
+			"app-admi.egybell-apps.com",
+			"app-internal.egybell-apps.com",
+			"app-vacation.dynamico.cloud",
+			"admi.egybell-apps.com",
+			"internal.egybell-apps.com",
+			"vacation.dynamico.cloud"
+		]
 	},
 	"packageClassList": [
 		"CameraPreview",
