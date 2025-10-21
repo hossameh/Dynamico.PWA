@@ -18,6 +18,7 @@ export class ExternalLoginComponent implements OnInit {
   authForm!: FormGroup;
   code!: string;
   companyName: string = environment.companyName;
+  companyLogo: string = environment.companyLogo;
 
   constructor(private router: Router, private FB: FormBuilder,
     private alert: AlertService,

@@ -2,14 +2,15 @@
   <div class="w-100">
     <div class="logo">
       <div class="image-containerLogin">
-        <img src="assets/img/logoNoName.png" alt="Dynamico Logo" class="logo-imgLogin">
+        <img [src]="companyLogo" alt="Dynamico Logo" class="logo-imgLogin">
+
         <p class="overlay-textLogin">{{companyName}}</p>
       </div>    </div>
     <form [formGroup]="authForm">
       <div class="mb-3">
         <div class="form-floating ">
           <input type="email" class="form-control" id="floatingInput" placeholder=" " formControlName="email">
-          <label for="floatingInput">{{'Gust Email' | translate}}</label>
+          <label for="floatingInput">{{'Guest Email' | translate}}</label>
         </div>
         <div *ngIf="f.email.touched && (f.email.errors?.required)" class="text-danger text-start mt-2 font-12">
           {{'Required' | translate}}
