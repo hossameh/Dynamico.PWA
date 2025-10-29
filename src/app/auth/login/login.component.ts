@@ -403,7 +403,7 @@ login(body:any){
       control.setErrors(null);
     }
     else {
-      control.setValidators([Validators.required, Validators.minLength(8),
+      control.setValidators([Validators.required, Validators.minLength(6),
       Validators.pattern(
         /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$-\/:-?{-~!"^_`\[\]@%$*])(?=.{8,})/
       )]);
