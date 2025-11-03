@@ -5,6 +5,9 @@
 export const environment = {
   production: false,
   version: '1.2.38',
+  signUpEmail: 'shopper@registration.com',
+  //hostAPI: "https://mystro.dynamico.cloud/api/api/",
+
   hostAPI: "https://lab7software.com/api.dynamico/api/",
   //hostAPI: "https://localhost:44350/api/",
   //hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",
@@ -30,6 +33,7 @@ export const environment = {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   appName: 'PWA',
   APP_URL: 'https://lab7software.com/DynamicoApp/',
+  //APP_URL: 'https://app-mystro.dynamico.cloud/',   // Internal  app-internal.egybell-apps.com pwa admi
 
   //  firebase : {
   //   apiKey: "AIzaSyDZHpBV8XtrYaeOhNpJqtBkTGjTYTTCSz0",
@@ -71,9 +75,11 @@ export const environment = {
     timer: 5 * 60 * 1000, // 15 minutes in milliseconds
     dayStart: '08:00',
     dayEnd: '18:00',
-    activateLocationLogger: true,
+    activateLocationLogger: false,
     formId: 26,
-  }
+  },
+
+
 };
 
 /*

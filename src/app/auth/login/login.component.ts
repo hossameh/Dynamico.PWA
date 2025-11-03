@@ -405,10 +405,16 @@ login(body:any){
     else {
       control.setValidators([Validators.required, Validators.minLength(6),
       Validators.pattern(
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$-\/:-?{-~!"^_`\[\]@%$*])(?=.{8,})/
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$-\/:-?{-~!"^_`\[\]@%$*])(?=.{6,})/
       )]);
       control.setErrors({ required: true });
     }
     control.updateValueAndValidity();
+  }
+
+  onSignUpClicked() {
+
+    window.open('https://app-mystro.dynamico.cloud/GuestLogin?code=51b5c671-7514-40c0-b6f2-20e240bc0fad', '_blank');
+
   }
 }

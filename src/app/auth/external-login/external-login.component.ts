@@ -37,9 +37,11 @@ export class ExternalLoginComponent implements OnInit {
     if(lang)
      this.langChanged(lang);
     else
-     this.langChanged(LangEnum.English);
- 
-
+      this.langChanged(LangEnum.English);
+      debugger
+    if (this.code) { 
+    this.redirectOnInit();
+    }
   }
 
   langChanged(lang: any) {
@@ -112,5 +114,29 @@ export class ExternalLoginComponent implements OnInit {
       (err) => {
         console.log('err', err);
       });
+  }
+
+  redirectOnInit() {
+    let body = {
+      email: environment.signUpEmail, 
+      code: this.code
+    }
+    this.http.post('Guest/LoginGuest', body, true).subscribe(async (res: any) => {
+      if (res.isPassed) {
+
+        await localStorage.setItem('userData', JSON.stringify(res?.data?.userToken));
+        await localStorage.setItem('token', JSON.stringify(res.data?.userToken?.resetToken));
+
+
+        this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
+      } else {
+        console.log(res.message);
+        this.alert.error("Something Went Wrong !");
+      }
+    },
+      (err) => {
+        console.log('err', err);
+      });
+
   }
 }

@@ -1,7 +1,7 @@
 <main [@routing]="outletRef.isActivated ? outletRef.activatedRoute : ''">
   <router-outlet #outletRef="outlet"></router-outlet>
 </main>
-<a [routerLink]="['/page/notification']" *ngIf="!hideNotifcation && userRole !== this.role.Anonymous" routerLinkActive="active" 
+<a [routerLink]="['/page/notification']" *ngIf="!hideNotifcation && userRole != this.role.Anonymous" routerLinkActive="active" 
 class="notification-icon hide-in-print">
   <!-- <span class="dots"></span> -->
   <img src="assets/img/icons/notification-icon.svg" alt="notification">

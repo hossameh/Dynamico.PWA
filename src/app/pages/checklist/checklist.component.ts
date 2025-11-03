@@ -674,7 +674,12 @@ export class ChecklistComponent implements OnInit {
         await this.storage.set('Records', cacheRecords);
         await this.storage.set('CompletedRecords', cacheCompletedRecords);
         this.updateCashedPlanRecords();
+        if (this.userRole == Role.Anonymous) {
+          this.router.navigateByUrl('/login');
+
+        } else { 
         this.location.back();
+        }
       }
     });
     this.statusSubscription2.unsubscribe();

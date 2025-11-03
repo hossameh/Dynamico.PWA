@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   version: '1.2.60',
+  signUpEmail: 'shopper@registration.com',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,9 +93,10 @@ export const environment = {
     timer: 5 * 60 * 1000, // 15 minutes in milliseconds
     dayStart: '08:00',
     dayEnd: '18:00',
-    activateLocationLogger: true,
+    activateLocationLogger: false,
     formId: 26,
   }
+
 };
 
 
