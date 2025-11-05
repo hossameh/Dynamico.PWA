@@ -186,10 +186,15 @@ export class ChecklistComponent implements OnInit {
 
 
   back(): void {
-    this.location.back();
+    if (this.userRole === Role.Anonymous) {
+      this.router.navigateByUrl('/login');
+
+    } else {
+      this.location.back();
+    }
   };
   getChecklistById() {
-    
+
     this.http.get('Checklist/GetChecklistById', { Id: this.id }).subscribe(async (value: any) => {
       if (value?.gpsRequired) {
         navigator.geolocation.getCurrentPosition((location) => {
@@ -204,8 +209,12 @@ export class ChecklistComponent implements OnInit {
 
         },
           (err) => {
-            this.location.back();
-            this.alert.error('Please accept to share your location first !');
+            if (this.userRole === Role.Anonymous) {
+              this.router.navigateByUrl('/login');
+
+            } else {
+              this.location.back();
+            }            this.alert.error('Please accept to share your location first !');
           });
       }
 
@@ -237,7 +246,7 @@ export class ChecklistComponent implements OnInit {
         cacheChecklists.push(value);
       }
       await this.storage.set('Checklists', cacheChecklists);
-      
+
       this.data = value;
       this.data.submitionState = value?.submitionState ?? SubmittionState.SaveAndSubmit;
       this.submitionState = this.data.submitionState;
@@ -324,11 +333,15 @@ export class ChecklistComponent implements OnInit {
           this.recordForm.get('location')?.setValue(`${this.latitude},${this.longitude}`);
         },
           (err) => {
-            this.location.back();
-            this.alert.error('Please accept to share your location first !');
+            if (this.userRole === Role.Anonymous) {
+              this.router.navigateByUrl('/login');
+
+            } else {
+              this.location.back();
+            }            this.alert.error('Please accept to share your location first !');
           });
       }
-      if (value?.customerId) { 
+      if (value?.customerId) {
         this.customerId = value?.customerId;
         this.recordForm.get('customerId')?.setValue(value?.customerId);
       }
@@ -495,8 +508,12 @@ export class ChecklistComponent implements OnInit {
         this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
             this.alert.success(this.helper.getTranslation('Form Submitted Successfully'));
-            this.location.back();
-            this.updateCashedPlanRecords();
+            if (this.userRole == Role.Anonymous) {
+              this.router.navigateByUrl('/login');
+
+            } else {
+              this.location.back();
+            }            this.updateCashedPlanRecords();
           } else {
             console.log(res?.message);
             this.alert.alertError(this.helper.getTranslation('Something Went Wrong'));
@@ -509,7 +526,7 @@ export class ChecklistComponent implements OnInit {
         this.modelBody.creation_Date = new Date();
         this.modelBody.userId = this.userId;
         let cacheRecords = await this.storage.get('Records') || [];
-        let cacheCompletedRecords:any[] = await this.storage.get('CompletedRecords') || [];
+        let cacheCompletedRecords: any[] = await this.storage.get('CompletedRecords') || [];
         let recordsWillBeUpserted = await this.storage.get('RecordsWillBeUpserted') || [];
 
         if (this.params.offline) {
@@ -605,7 +622,7 @@ export class ChecklistComponent implements OnInit {
                 location: null,
                 record: this.modelBody.form_Record,
                 record_Id: this.params.Record_Id ? +this.params.Record_Id : 0,
-                customerId: this.params.customerId ? +this.params.customerId : (this.customerId ?+this.customerId : null),
+                customerId: this.params.customerId ? +this.params.customerId : (this.customerId ? +this.customerId : null),
                 record_Status_Id: this.modelBody.record_Status == RecordStatus.Created ? RecordStatus.Created :
                   (this.selectedCashedChecklist?.workflowId ? RecordStatus.PendingApproval : RecordStatus.Completed),
                 workflowId: this.selectedCashedChecklist?.workflowId,
@@ -674,7 +691,13 @@ export class ChecklistComponent implements OnInit {
         await this.storage.set('Records', cacheRecords);
         await this.storage.set('CompletedRecords', cacheCompletedRecords);
         this.updateCashedPlanRecords();
-        this.location.back();
+        debugger
+        if (this.userRole === Role.Anonymous) {
+          this.router.navigateByUrl('/login');
+
+        } else {
+          this.location.back();
+        }
       }
     });
     this.statusSubscription2.unsubscribe();
@@ -873,14 +896,18 @@ export class ChecklistComponent implements OnInit {
       }
       else {
         this.alert.info("No Internet Connection");
-        this.location.back();
-      }
+        if (this.userRole === Role.Anonymous) {
+          this.router.navigateByUrl('/login');
+
+        } else {
+          this.location.back();
+        }      }
 
     }
   }
   ngOnDestroy(): void {
     if (this.currentLang && this.formdefaultDisplayLanguage && this.formdefaultDisplayLanguage != this.currentLang) {
-        this.langChanged(this.currentLang);
+      this.langChanged(this.currentLang);
     }
 
     //Called once, before the instance is destroyed.

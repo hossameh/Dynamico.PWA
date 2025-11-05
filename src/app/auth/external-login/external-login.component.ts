@@ -18,6 +18,7 @@ export class ExternalLoginComponent implements OnInit {
   authForm!: FormGroup;
   code!: string;
   companyName: string = environment.companyName;
+  companyLogo: string = environment.companyLogo;
 
   constructor(private router: Router, private FB: FormBuilder,
     private alert: AlertService,
@@ -32,13 +33,15 @@ export class ExternalLoginComponent implements OnInit {
     this.BuildRequestForm();
     const lang = localStorage.getItem('lang') ?? '';
     localStorage.clear();
- 
-    if(lang)
-     this.langChanged(lang);
-    else
-     this.langChanged(LangEnum.English);
- 
 
+    if (lang)
+      this.langChanged(lang);
+    else
+      this.langChanged(LangEnum.English);
+    debugger
+    if (this.code) {
+      this.redirectOnInit();
+    }
   }
 
   langChanged(lang: any) {
@@ -59,7 +62,7 @@ export class ExternalLoginComponent implements OnInit {
       }
     } else {
       // en
-      elAr && elAr.remove() ;
+      elAr && elAr.remove();
       if (!elEn) {
         this.generateLinkElement({
           id: 'bootstrap-en',
@@ -111,5 +114,29 @@ export class ExternalLoginComponent implements OnInit {
       (err) => {
         console.log('err', err);
       });
+  }
+
+  redirectOnInit() {
+    let body = {
+      email: environment.signUpEmail,
+      code: this.code
+    }
+    this.http.post('Guest/LoginGuest', body, true).subscribe(async (res: any) => {
+      if (res.isPassed) {
+
+        await localStorage.setItem('userData', JSON.stringify(res?.data?.userToken));
+        await localStorage.setItem('token', JSON.stringify(res.data?.userToken?.resetToken));
+
+
+        this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
+      } else {
+        console.log(res.message);
+        this.alert.error("Something Went Wrong !");
+      }
+    },
+      (err) => {
+        console.log('err', err);
+      });
+
   }
 }

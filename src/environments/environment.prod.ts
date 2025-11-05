@@ -1,14 +1,15 @@
 export const environment = {
   production: true,
-  version: '1.2.61',
+  version: '1.2.62',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
   //hostAPI: "https://admi.egybell-apps.com/api/api/",
    //hostAPI: "https://internal.egybell-apps.com/api/api/",
+  signUpEmail: 'form@registration.com',
 
-  //hostAPI: "https://lab7software.com/api.dynamico/api/",
-   hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  hostAPI: "https://lab7software.com/api.dynamico/api/",
+   //hostAPI: "https://dynamico.cloud/api.beyti/api/",
  
   //hostAPI: "https://vacation.dynamico.cloud/api/",
 
@@ -24,8 +25,8 @@ export const environment = {
 
   //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  appTitle: 'Beyti',
-  // appTitle: 'Lab7',
+  //appTitle: 'Beyti',
+   appTitle: 'Lab7',
   // appTitle: 'Vacation',
   //appTitle: 'Mystro',
 
@@ -33,18 +34,18 @@ export const environment = {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- companyLogo: 'assets/img/beyti.png',
-  // companyLogo:'assets/img/logoNoName.png',
+ //companyLogo: 'assets/img/beyti.png',
+   companyLogo:'assets/img/logoNoName.png',
   //companyLogo: 'assets/img/MystroLogo2.png',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   appName: 'PWA',
   //APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
-  //APP_URL: 'https://lab7software.com/DynamicoApp/',
+  APP_URL: 'https://lab7software.com/DynamicoApp/',
   //APP_URL: 'https://app-admi.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
 
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-  APP_URL: 'https://dynamico.cloud/beytiapp/',
+  //APP_URL: 'https://dynamico.cloud/beytiapp/',
   //APP_URL: 'https://app-vacation.dynamico.cloud/',
 
  // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
@@ -78,18 +79,18 @@ export const environment = {
   //redirectUrl: '', // admi - internal
   //redirectUrl: '/login',
 
-  redirectUrl:'/beytiapp/login',
-  //  redirectUrl:'/DynamicoApp/login',
+  //redirectUrl:'/beytiapp/login',
+    redirectUrl:'/DynamicoApp/login',
   //redirectUrl:'/mystroApp/login',
 
-  apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
-  //apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',
+  //apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
+  apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',
 
   locationLogger: {
     timer: 5 * 60 * 1000, // 15 minutes in milliseconds
     dayStart: '08:00',
     dayEnd: '18:00',
-    activateLocationLogger: true,
+    activateLocationLogger: false,
     formId: 26,
   }
 };
