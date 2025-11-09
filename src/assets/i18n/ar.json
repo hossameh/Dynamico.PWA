@@ -92,6 +92,14 @@
   "Search By Name or Code": "ابحث بالاسم أو الكود",
   "Name": "الاسم",
   "Form Submitted Successfully": "تم إرسال النموذج بنجاح",
-  "Continue": "استمر" ,
-  "Something Went Wrong": "حدث خطأ ما"
+  "Continue": "استمر",
+  "Something Went Wrong": "حدث خطأ ما",
+  "Thank you for visiting": "شكرا لزيارتك",
+  "website. We have received your request.": "لقد استلمنا طلبك من موقعنا الإلكتروني.",
+  "Thank You !": "شكرا لك !",
+  "We have received your request.": "لقد استلمنا طلبك.",
+  "thankYou": {
+    "title": "شكرًا لك!",
+    "lead": "لقد استلمنا طلبك."
+  }
 }

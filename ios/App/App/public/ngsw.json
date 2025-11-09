@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1758450522821,
+  "timestamp": 1762688676170,
   "index": "/beytiapp/index.html",
   "assetGroups": [
     {
@@ -14,10 +14,10 @@
         "/beytiapp/favicon.ico",
         "/beytiapp/firebase-messaging-sw.js",
         "/beytiapp/index.html",
-        "/beytiapp/main.234d6e44e52e3d160ac5.js",
+        "/beytiapp/main.f28a15c7693300fe6f2a.js",
         "/beytiapp/polyfills.c481238ae77e022526d5.js",
         "/beytiapp/runtime.ade70670412a41504dcd.js",
-        "/beytiapp/styles.f369fc6fc2a95ed2f93e.css"
+        "/beytiapp/styles.e381ed2dcaeff7c6a7aa.css"
       ],
       "patterns": []
     },
@@ -29,6 +29,7 @@
         "ignoreVary": true
       },
       "urls": [
+        "/beytiapp/assets/data/formioI18n.json",
         "/beytiapp/assets/i18n/ar.json",
         "/beytiapp/assets/i18n/en.json",
         "/beytiapp/assets/icons/icon-128.webp",
@@ -88,6 +89,7 @@
         "/beytiapp/assets/img/icons/workflow.svg",
         "/beytiapp/assets/img/logo.png",
         "/beytiapp/assets/img/logoNoName.png",
+        "/beytiapp/assets/img/logoNoNameBlack.png",
         "/beytiapp/assets/img/pattern.png",
         "/beytiapp/assets/scss/base/variables.scss",
         "/beytiapp/assets/scss/basics/_button.scss",
@@ -126,8 +128,9 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/beytiapp/assets/i18n/ar.json": "8988f4a368c50b81b6394a9beaedf850be0dabca",
-    "/beytiapp/assets/i18n/en.json": "f9a434704be1dc8fac94ea00d83234598365ea7b",
+    "/beytiapp/assets/data/formioI18n.json": "6fe653ed5746efec5a035f44c0c0589313a4d3a8",
+    "/beytiapp/assets/i18n/ar.json": "afe2aa97de20007033d33269b31f00cc3454ce38",
+    "/beytiapp/assets/i18n/en.json": "7617d2b7efaa6ffcb321b2829e4a17d61198ed9c",
     "/beytiapp/assets/icons/icon-128.webp": "536694e3a0caf6f988cd5b2d102bdfcce76b1d23",
     "/beytiapp/assets/icons/icon-128x128.png": "2ae8554e52cd61f469255ce3e989f725fbe46d85",
     "/beytiapp/assets/icons/icon-144x144.png": "37f71cfff97913ec60da88e423b741106443f98f",
@@ -185,6 +188,7 @@
     "/beytiapp/assets/img/icons/workflow.svg": "e4d954f3931e97721ced3fbe513dfdb225223e74",
     "/beytiapp/assets/img/logo.png": "e6eb03f2cfae681f51a25c183c622044afe1a073",
     "/beytiapp/assets/img/logoNoName.png": "082be582a53234b6480e4b4fd5fa4652367980db",
+    "/beytiapp/assets/img/logoNoNameBlack.png": "bec640201bfc62451896f975e8e5606827948a54",
     "/beytiapp/assets/img/pattern.png": "5b1ea7ec20b412b419b07a45b064634d7ceb1f75",
     "/beytiapp/assets/scss/base/variables.scss": "88e798b21743ac7f9995a3df88fd6f1299a5341a",
     "/beytiapp/assets/scss/basics/_button.scss": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
@@ -218,12 +222,12 @@
     "/beytiapp/fontawesome-webfont.20fd1704ea223900efa9.woff2": "d6f48cba7d076fb6f2fd6ba993a75b9dc1ecbf0c",
     "/beytiapp/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg": "98a8aa5cf7d62c2eff5f07ede8d844b874ef06ed",
     "/beytiapp/fontawesome-webfont.f691f37e57f04c152e23.woff": "28b782240b3e76db824e12c02754a9731a167527",
-    "/beytiapp/index.html": "1e3fbd37a8351e3494e76ae220790703b92be459",
-    "/beytiapp/main.234d6e44e52e3d160ac5.js": "1790dfd91595ed94d9612f94d1450eebf2924d3e",
+    "/beytiapp/index.html": "427046ab944f193be38dea32360ee17ac8b90272",
+    "/beytiapp/main.f28a15c7693300fe6f2a.js": "21d293d57c5b6e0b28b3a2e60847b0282c9f14cc",
     "/beytiapp/pattern.e02e512c504bfbdde5d4.png": "5b1ea7ec20b412b419b07a45b064634d7ceb1f75",
     "/beytiapp/polyfills.c481238ae77e022526d5.js": "a68888a1a3f71ca479b6f51003c8733ed05cd8e7",
     "/beytiapp/runtime.ade70670412a41504dcd.js": "53d371128dc86792f7a07a0d2cd702495d0c390f",
-    "/beytiapp/styles.f369fc6fc2a95ed2f93e.css": "63e782755b18f84d7e554f7043e1ebd1748e80f0"
+    "/beytiapp/styles.e381ed2dcaeff7c6a7aa.css": "b4a0c011418ead721018c9bd779c8e62bc391159"
   },
   "navigationUrls": [
     {

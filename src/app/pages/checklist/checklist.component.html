@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <div>
         <div class="d-flex">
-          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
+          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" *ngIf="userRole !== this.role.Anonymous"class="me-3 rotateRtl" (click)="back()">
           <h4>
             {{params?.listName ? params?.listName : data?.formTitle}}
           </h4>
@@ -14,7 +14,8 @@
   </div>
 
   <div class="content" role="main">
-    <div class="col-10 m-4" *ngIf="form.components.length > 0">
+    <!--col-10-->
+    <div class="" *ngIf="form.components.length > 0">
       <formio-editor [form]="form" [options]="options"></formio-editor>
     </div>
   </div>

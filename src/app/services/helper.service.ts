@@ -4,11 +4,15 @@ import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from './http/http.service';
 import { ContainerControlTypesEnum, ControlTypeEnum, labeledTypes } from '../core/enums/role.enum';
+import { environment } from '../../environments/environment';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
+  formioI18n: any;
+  formioLocURL = environment.formioI18n;
 
   currentLang: BehaviorSubject<string> = new BehaviorSubject('ar');
   checklistData: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -21,11 +25,24 @@ export class HelperService {
   constructor(
     private http: HttpService,
     private storage: Storage,
-    private translate: TranslateService
+    private translate: TranslateService, private httpBackend: HttpBackend
   ) {
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
-  }
+    this.getFormIOI18Data();
 
+  }
+  getFormIOI18Data() {
+    try {
+      const rawHttp = new HttpClient(this.httpBackend); // no interceptors
+      rawHttp.get('assets/data/formioI18n.json')
+        .subscribe((data: any) => {
+          this.formioI18n = data;
+        });
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
   async getNotificationCount() {
     let notificationCounts = await this.storage.get("NotificationCounts") || [];
     let userNotificationCount: any = Object.values(notificationCounts).filter((el: any) => el.userId == this.userId)[0];

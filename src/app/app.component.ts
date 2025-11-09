@@ -82,7 +82,7 @@ export class AppComponent {
         this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search')
           || this.router.url.includes('login')
           || this.router.url.includes('GuestLogin')
-          || this.userRole == this.role.Anonymous
+          || this.userRole === this.role.Anonymous || !this.userRole 
           || this.router.url.includes('forgot') || this.router.url.includes('resetpassword');
       }
       window.scrollTo(0, 0);

@@ -25,6 +25,7 @@ import { AssetsListComponent } from './pages/assets/assets-list/assets-list.comp
 import { ExternalLoginComponent } from './auth/external-login/external-login.component';
 import { DocumentViewerComponent } from './pages/assets/document-viewer/document-viewer.component';
 import { MobileChecklistComponent } from './pages/checklist/mobile-checklist/mobile-checklist.component';
+import { ThankYouComponent } from './auth/thank-you/thank-you.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
@@ -43,6 +44,10 @@ const routes: Routes = [
     path: 'resetpassword',
     canActivate: [ResetPasswordGuard],
     component: ResetPasswordComponent
+  },
+  {
+    path: 'thankyou',
+    component: ThankYouComponent
   },
   {
     path: 'page',

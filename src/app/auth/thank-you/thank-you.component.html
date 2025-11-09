@@ -1,0 +1,42 @@
+<section class="ty  login">
+  <div class="ty__inner">
+    <!-- Logo on top -->
+    <img class="ty__logo"
+         [src]="companyLogo || 'assets/img/logo.svg'"
+         alt="Company logo" />
+
+    <!-- Title & lead -->
+    <h1 class="ty__title">
+      {{ (env.thankYou.titleKey || 'thankYou.title') | translate }}
+    </h1>
+    <p class="ty__lead">
+      {{ (env.thankYou.leadKey  || 'thankYou.lead')  | translate }}
+    </p>
+
+    <!-- Big green check -->
+    <div class="ty__check" aria-hidden="true">
+      <svg viewBox="0 0 220 180" class="ty__check-svg">
+        <defs>
+          <linearGradient id="tyGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#22c55e" />
+            <stop offset="100%" stop-color="#15803d" />
+          </linearGradient>
+        </defs>
+
+        <!-- soft “puddle” shadow -->
+        <ellipse cx="110" cy="150" rx="62" ry="18" class="ty__shadow"></ellipse>
+
+        <!-- animated tick -->
+        <path d="M60 95 L97 128 L160 70"
+              class="ty__tick"></path>
+      </svg>
+    </div>
+
+    <!-- CTA & note -->
+    <!--<h3 class="ty__cta">Check your Email</h3>
+    <p class="ty__note">
+      If you didn’t receive any mail contact
+      <a href="mailto:info@company.com">info@company.com</a>.
+    </p>-->
+  </div>
+</section>

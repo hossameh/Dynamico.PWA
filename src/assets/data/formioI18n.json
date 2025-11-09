@@ -1,0 +1,33 @@
+{
+  "ar": {
+    "Name": "الاسم",
+    "Upload Files": "رفع الملفات",
+    "required": "{{field}} مطلوب",
+    "File Name": "اسم الملف",
+    "Size": "الحجم",
+    "Drop files to attach,": "من فضلك ارفق الملفات هنا",
+    "browse": "تصفح",
+    "or": "أو",
+    "Remove": "إزالة",
+    "Invalid File Type": "نوع الملف غير صالح",
+ "Next": "التالي",
+    "Previous": "السابق",
+    "Submit": "إرسال",
+    "Edit": "تعديل",
+    "Cancel": "إلغاء",
+    "Save": "حفظ",
+    "Loading...": "جار التحميل...",
+    "Form": "النموذج",
+    "Back": "العودة"  ,
+    "Continue": "استمرار",
+    "is required": "مطلوب",
+     "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "edit": "تعديل",
+    "cancel": "إلغاء"
+  },
+  "en": {
+
+  }
+}

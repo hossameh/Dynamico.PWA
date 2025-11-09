@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from './../../services/alert/alert.service';
 import { HttpService } from './../../services/http/http.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { FormioEditorOptions } from '@davebaol/angular-formio-editor';
 import { Location } from '@angular/common';
 import { RecordStatus } from 'src/app/core/enums/status.enum';
@@ -23,6 +23,7 @@ import { SubmittionState } from './../../core/enums/submittionState';
 export class ChecklistComponent implements OnInit {
   @ViewChild('openModal') openModal!: ElementRef;
   @ViewChild('closeModal') closeModal!: ElementRef;
+  public langEmitter: EventEmitter<string> = new EventEmitter<string>();
 
   SubmittionState = SubmittionState;
   submitionState = SubmittionState.SaveAndSubmit;
@@ -49,6 +50,7 @@ export class ChecklistComponent implements OnInit {
   formType: string = 'form';
   formdefaultDisplayLanguage: any;
   currentLang: any;
+  formioI18n: any;
 
   showSaveButton = environment.showSaveButton;
   constructor(private route: ActivatedRoute,
@@ -66,6 +68,8 @@ export class ChecklistComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.formioI18n = this.helper.formioI18n;
+
     this.getOfflineRef();
     this.userId = JSON.parse(localStorage.getItem('userData') || '{}').userId;
     this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
@@ -79,7 +83,11 @@ export class ChecklistComponent implements OnInit {
       builder: {
         hideTab: true,
         hideDisplaySelect: true,
-
+        input: {
+          options: {
+            i18n: this.formioI18n
+          }
+        }
       },
       json: {
         hideTab: true,
@@ -128,6 +136,7 @@ export class ChecklistComponent implements OnInit {
               showSubmit: false
             }
           }
+          , language: this.langEmitter,
 
         }
       }
@@ -256,10 +265,15 @@ export class ChecklistComponent implements OnInit {
       this.form.display = value?.formType ?? this.formType;
       this.form.components = JSON.parse(value.formControls);
       this.options = {
+        
         builder: {
           hideTab: true,
           hideDisplaySelect: true,
-
+          input: {
+            options: {
+              i18n: this.formioI18n
+            }
+          }
         },
         json: {
           hideTab: true,
@@ -296,7 +310,9 @@ export class ChecklistComponent implements OnInit {
           output: {
             submit: this.onFormSubmitted.bind(this, event),
           },
-          input: {
+          input: {     options: {
+                i18n: this.formioI18n
+              },
             submission: {
               data: {}
             },
@@ -308,6 +324,7 @@ export class ChecklistComponent implements OnInit {
                 showSubmit: false
               }
             }
+            , language: this.langEmitter,
 
           }
         }
@@ -365,7 +382,11 @@ export class ChecklistComponent implements OnInit {
         builder: {
           hideTab: true,
           hideDisplaySelect: true,
-
+          input: {
+            options: {
+              i18n: this.formioI18n
+            }
+          }
         },
         json: {
           hideTab: true,
@@ -403,6 +424,9 @@ export class ChecklistComponent implements OnInit {
             submit: this.onFormSubmitted.bind(this, event),
           },
           input: {
+            options: {
+              i18n: this.formioI18n
+            },
             readOnly: !!this.params.Complete ? true : false,
             submission: {
               data: dataObject ?? {}
@@ -415,6 +439,7 @@ export class ChecklistComponent implements OnInit {
                 showSubmit: false
               }
             }
+            , language: this.langEmitter,
 
 
           }
@@ -507,11 +532,12 @@ export class ChecklistComponent implements OnInit {
       if (isOnline) {
         this.http.post('ChecklistRecords/SaveFormRecord', this.modelBody).subscribe((res: any) => {
           if (res.isPassed) {
-            this.alert.success(this.helper.getTranslation('Form Submitted Successfully'));
             if (this.userRole == Role.Anonymous) {
-              this.router.navigateByUrl('/login');
+              this.router.navigateByUrl('/thankyou');
 
             } else {
+              this.alert.success(this.helper.getTranslation('Form Submitted Successfully'));
+
               this.location.back();
             }            this.updateCashedPlanRecords();
           } else {
@@ -691,9 +717,9 @@ export class ChecklistComponent implements OnInit {
         await this.storage.set('Records', cacheRecords);
         await this.storage.set('CompletedRecords', cacheCompletedRecords);
         this.updateCashedPlanRecords();
-        debugger
+        
         if (this.userRole === Role.Anonymous) {
-          this.router.navigateByUrl('/login');
+          this.router.navigateByUrl('/thankyou');
 
         } else {
           this.location.back();
@@ -733,7 +759,11 @@ export class ChecklistComponent implements OnInit {
           builder: {
             hideTab: true,
             hideDisplaySelect: true,
-
+            input: {
+              options: {
+                i18n: this.formioI18n
+              }
+            }
           },
           json: {
             hideTab: true,
@@ -771,6 +801,9 @@ export class ChecklistComponent implements OnInit {
               submit: this.onFormSubmitted.bind(this, event),
             },
             input: {
+              options: {
+                i18n: this.formioI18n
+              },
               submission: {
                 data: {}
               },
@@ -781,7 +814,8 @@ export class ChecklistComponent implements OnInit {
                   showPrevious: true,
                   showSubmit: false
                 }
-              }
+              },
+                        language: this.langEmitter,
 
             }
           }
@@ -936,11 +970,13 @@ export class ChecklistComponent implements OnInit {
 
 
   langChanged(lang: any) {
+    debugger
     const elEn = document.querySelector('#bootstrap-en');
     const elAr = document.querySelector('#bootstrap-ar');
     this.translate.use(lang);
     localStorage.setItem('lang', lang);
     if (lang === 'ar') {
+      this.onDisplayLanguagedChanged(lang)
       // add bootstrap ar
       elEn && elEn.remove();
       if (!elAr) {
@@ -953,6 +989,8 @@ export class ChecklistComponent implements OnInit {
       }
     } else {
       // en
+            this.onDisplayLanguagedChanged(lang)
+
       elAr && elAr.remove();
       if (!elEn) {
         this.generateLinkElement({
@@ -975,4 +1013,14 @@ export class ChecklistComponent implements OnInit {
     htmlEl.setAttribute('lang', props.lang);
 
   }
+
+  onDisplayLanguagedChanged(event: any) {
+    this.formioI18n = this.helper.formioI18n;
+
+    if (event) {
+      this.langEmitter.emit(event);
+    }
+  }
+
+
 }

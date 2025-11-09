@@ -19,19 +19,24 @@ export const environment = {
   companyName: '',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  appTitle: 'Dynamico',
 
   //appTitle: 'Egybell.Internal',
-  appTitle: 'Mystro',
+  //appTitle: 'Mystro',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  // companyLogo: 'assets/img/beyti.png',
- // companyLogo:'assets/img/logoNoName.png',
-  companyLogo: 'assets/img/MystroLogo2.png',
+  companyLogo: 'assets/img/logoNoName.png',
+  //companyLogo: 'assets/img/logoNoNameBlack.png',
+  companyLogoBlack: 'assets/img/logoNoNameBlack.png',
+
+  //companyLogo: 'assets/img/MystroLogo2.png',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   appName: 'PWA',
   APP_URL: 'https://lab7software.com/DynamicoApp/',
+  formioI18n: 'assets/data/formioI18n.json',
 
   //  firebase : {
   //   apiKey: "AIzaSyDZHpBV8XtrYaeOhNpJqtBkTGjTYTTCSz0",
@@ -75,6 +80,16 @@ export const environment = {
     dayEnd: '18:00',
     activateLocationLogger: true,
     formId: 26,
+  },
+
+
+  ui: {
+    companyName: 'Dynamico',
+    logo: 'assets/img/logo.svg',
+    thankYou: {
+      titleKey: 'thankYou.title',
+      leadKey: 'thankYou.lead'
+    }
   }
 };
 

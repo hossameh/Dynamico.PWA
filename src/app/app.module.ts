@@ -63,6 +63,7 @@ import { WorkflowControlComponent } from './pages/formio -components/workflow-co
 import { registerWorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control-wrapper.formio';
 import localAr from '@angular/common/locales/ar-EG';
 import { registerLocaleData } from '@angular/common';
+import { ThankYouComponent } from './auth/thank-you/thank-you.component';
 
 initializeApp(environment.firebase);
 registerLocaleData(localAr);
@@ -104,7 +105,8 @@ registerLocaleData(localAr);
     SelectGroupComponent,
     RatingWrapperComponent,
     AppointmentComponent,
-    WorkflowControlComponent
+    WorkflowControlComponent,
+    ThankYouComponent
   ],
   imports: [
     BrowserModule,

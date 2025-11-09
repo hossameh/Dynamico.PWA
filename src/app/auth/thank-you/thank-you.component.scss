@@ -1,0 +1,127 @@
+
+// Main container, inspired by your .login style
+
+
+.login {
+  /*  background: url('../../../assets/img/bg.png');
+*/ background-size: cover;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .logo {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+}
+:root {
+  --success-1: #22c55e;
+  --success-2: #15803d;
+  --text-strong: #0f172a;
+  --text-soft: #475569;
+}
+
+.ty {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+/*  background: #fff;
+*/  padding: 3rem 1rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.ty__inner {
+  text-align: center;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ty__logo {
+  margin-bottom: 2rem !important;
+  width: 18rem;
+  height: auto;
+  margin: 0 auto 18px;
+  display: block;
+}
+
+.ty__title {
+  font-size: clamp(36px, 6vw, 56px);
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: var(--text-strong);
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+.ty__lead {
+  margin: 0 auto 26px;
+  color: var(--text-soft);
+  font-size: clamp(16px, 2.6vw, 18px);
+  max-width: 620px;
+}
+
+.ty__brand {
+  color: var(--success-2);
+  font-weight: 700;
+}
+
+.ty__check {
+  margin: 10px auto 14px;
+}
+
+.ty__check-svg {
+  width: clamp(180px, 30vw, 280px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 10px 24px rgba(16, 185, 129, 0.25));
+}
+
+/* shadow ellipse */
+.ty__shadow {
+  fill: rgba(34, 197, 94, 0.18);
+}
+
+/* green tick */
+.ty__tick {
+  stroke: url(#tyGrad);
+  stroke-width: 26;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  /* draw-on animation */
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: tyDraw 800ms ease forwards 150ms;
+}
+
+@keyframes tyDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ty__cta {
+  margin: 18px 0 6px;
+  font-size: clamp(20px, 3.5vw, 28px);
+  color: var(--text-strong);
+  font-weight: 800;
+}
+
+.ty__note {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
+.ty__note a {
+  color: var(--success-2);
+  text-decoration: none;
+}
+
+.ty__note a:hover {
+  text-decoration: underline;
+}
