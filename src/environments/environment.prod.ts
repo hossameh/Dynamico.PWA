@@ -7,7 +7,7 @@ export const environment = {
   //hostAPI: "https://admi.egybell-apps.com/api/api/",
    //hostAPI: "https://internal.egybell-apps.com/api/api/",
   signUpEmail: 'form@registration.com',
-
+  muteConsole: true ,
   //hostAPI: "https://lab7software.com/api.dynamico/api/",
    hostAPI: "https://dynamico.cloud/api.beyti/api/",
  

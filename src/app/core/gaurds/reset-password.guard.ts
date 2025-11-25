@@ -21,7 +21,6 @@ export class ResetPasswordGuard implements CanActivate {
                                 return true;
                             else {
                                 this.router.navigateByUrl('/login');
-                                console.log(res?.message);
                                 this.alert.error("Something Went Wrong !");
                                 return false;
                             }

@@ -135,7 +135,6 @@ export class NotificationComponent implements OnInit {
         });
       }
       catch (err) {
-        console.log(err)
       }
     }
   }
@@ -149,7 +148,6 @@ export class NotificationComponent implements OnInit {
           });
       }
       catch (err) {
-        console.log(err)
       }
     }
     else

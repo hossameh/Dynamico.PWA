@@ -97,7 +97,6 @@ export class NotificationDetailsComponent implements OnInit {
       }
       catch (err) {
         this.alert.error("Failed To Load Details");
-        console.log(err)
       }
     }
     else {
@@ -143,7 +142,6 @@ export class NotificationDetailsComponent implements OnInit {
       + "&listName=" + item?.formTitle + "&categoryId=" + item?.categoryId);
   }
   routeWithWorkFlow(item: any) {
-    console.log(item);
 
     if (item.access && (item.access.includes(this.accessTypes.Read) || item.access.includes(this.accessTypes.Update)))
       this.router.navigateByUrl("/page/workflow/details?Form_Id=" + item?.formId + "&Record_Id=" + +item?.formDataId)

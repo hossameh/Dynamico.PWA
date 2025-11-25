@@ -208,7 +208,6 @@ export class AppComponent {
       });
     }
     catch (err) {
-      console.log(err)
     }
   } setTitle() {
     this.titleService.setTitle(environment.appTitle);

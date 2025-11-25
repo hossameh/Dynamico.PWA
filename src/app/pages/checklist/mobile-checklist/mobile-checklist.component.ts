@@ -406,7 +406,6 @@ export class MobileChecklistComponent implements OnInit {
         // this.location.back();
         // this.updateCashedPlanRecords();
       } else {
-        console.log(res?.message);
         this.alert.error("Something Went Wrong !");
       }
     });

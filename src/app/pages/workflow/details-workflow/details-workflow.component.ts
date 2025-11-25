@@ -615,7 +615,6 @@ border:1px dashed #000
            this.location.back();
           // this.updateCashedPlanRecords();
          } else {
-           console.log(res?.message);
            this.alert.error("Something Went Wrong !");
          }
        });
@@ -647,7 +646,6 @@ border:1px dashed #000
  
    }
    catch (err) {
-     console.log(err);
    }
  
   }

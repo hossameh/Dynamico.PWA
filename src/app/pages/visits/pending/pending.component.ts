@@ -68,7 +68,6 @@ export class PendingComponent implements OnInit {
           this.deleteFromDB(false);
           this.deleteCashedPlanRecords();
         } else {
-          console.log(res.message);
           this.alert.error("Something Went Wrong !");
         }
       });

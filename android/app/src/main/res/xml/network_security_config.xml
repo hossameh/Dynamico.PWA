@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+  <!-- Global default: no cleartext anywhere -->
+  <base-config cleartextTrafficPermitted="false" />
+
+  <!-- PINNED: Your API domain(s) that you control -->
+  <domain-config cleartextTrafficPermitted="false" >
+    <domain includeSubdomains="false">api.dynamico.cloud</domain>
+    <pin-set expiration="2026-01-30">
+      <!-- Replace these with SPKI SHA-256 pins (see Step 3) -->
+      <pin digest="SHA-256">G3w1wJ6kHlZADdHaZ46QsBZrPkxGoZOnn6xyqTNyxLs=</pin>
+      <pin digest="SHA-256">mSdoQRbKGQxzO3hnJsV4m9b0d4hBGR7wkGHX/cketIs=</pin>
+    </pin-set>
+  </domain-config>
+
+  <!-- HTTPS-only (no pin) for remote app host if served via CDN or keys you don’t own -->
+  <domain-config cleartextTrafficPermitted="false" >
+    <domain includeSubdomains="true">dynamico.cloud</domain>
+    <pin-set expiration="2026-01-30">
+      <!-- Replace these with SPKI SHA-256 pins (see Step 3) -->
+      <pin digest="SHA-256">G3w1wJ6kHlZADdHaZ46QsBZrPkxGoZOnn6xyqTNyxLs=</pin>
+      <pin digest="SHA-256">mSdoQRbKGQxzO3hnJsV4m9b0d4hBGR7wkGHX/cketIs=</pin>
+    </pin-set>
+  </domain-config>
+
+  <domain-config cleartextTrafficPermitted="false" >
+    <domain includeSubdomains="true">lab7software.com</domain>
+  </domain-config>
+</network-security-config>

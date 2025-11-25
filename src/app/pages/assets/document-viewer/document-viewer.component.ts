@@ -128,12 +128,10 @@ export class DocumentViewerComponent implements OnInit {
           await this.storage.set("CashedDocuments", cashedDocuments);
         };
         reader.onerror = (event: any) => {
-          console.log("File could not be read: " + event?.target?.error?.code);
         };
       });
     }
     catch (err) {
-      console.log(err);
     }
   }
   getDocByURL(url: any) {

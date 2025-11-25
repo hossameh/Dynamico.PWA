@@ -40,7 +40,6 @@ export class HelperService {
         });
     }
     catch (e) {
-      console.log(e);
     }
   }
   async getNotificationCount() {

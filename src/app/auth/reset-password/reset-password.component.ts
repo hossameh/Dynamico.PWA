@@ -92,12 +92,10 @@ export class ResetPasswordComponent implements OnInit {
           this.alert.success(res?.message);
           this.routeToLogin();
         } else {
-          console.log(res?.message);
           this.alert.error("Something Went Wrong !");
         }
       });
     } catch (error: any) {
-      console.log(error);
       this.alert.error("Something Went Wrong !");
     }
   }

@@ -108,7 +108,6 @@ export class WorkflowComponent implements OnInit {
 
   change(step: number) {
     this.resetData().then((res) =>{
-      console.log(res);
       this.step = step;
       step == 1 ? this.getData(false) : '';
       step == 2 ? this.getData(true) : '';

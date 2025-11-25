@@ -38,12 +38,10 @@ export class ForgotPasswordComponent implements OnInit {
           this.linkSent = true;
           localStorage.setItem('email', this.userForm.value.email)
         } else {
-          console.log(res?.message);
           this.alert.error("Something Went Wrong !");
         }
       });
     } catch (err: any) {
-      console.log(err);
       this.alert.error("Something Went Wrong !");
     }
   }

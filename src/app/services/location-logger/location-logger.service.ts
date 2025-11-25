@@ -83,9 +83,8 @@ export class LocationLoggerService {
 
   private sendLog(data: any): void {
     this.http.post(environment.apiEndpoint, data).subscribe({
-      next: () => console.log('Location sent'),
+      next: () => this.cacheLog('Location sent'),
       error: err => {
-        console.error('Error sending log. Caching instead.', err);
         this.cacheLog(data);
       }
     });
@@ -110,7 +109,7 @@ export class LocationLoggerService {
       const failedLogs: any[] = [];
       logs.forEach(log => {
         this.http.post(environment.apiEndpoint, log).subscribe({
-          next: () => console.log('Cached log sent'),
+          next: () => this.cacheLog('Cached log sent')  ,
           error: () => {
             failedLogs.push(log);
           }

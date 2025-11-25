@@ -240,7 +240,6 @@ export class AppointmentComponent implements FormioCustomComponent<string>, OnIn
       }
     }
     catch (err) {
-      console.log(err);
     }
   }
 

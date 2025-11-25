@@ -107,12 +107,10 @@ export class ExternalLoginComponent implements OnInit {
 
         this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
       } else {
-        console.log(res.message);
-        this.alert.error("Something Went Wrong !");
+        this.alert.error(res.message);
       }
     },
       (err) => {
-        console.log('err', err);
       });
   }
 
@@ -130,12 +128,10 @@ export class ExternalLoginComponent implements OnInit {
 
         this.router.navigateByUrl("/page/checklist/" + res?.data?.checkListId + "?editMode=false&formRef=" + body?.email);
       } else {
-        console.log(res.message);
         this.alert.error("Something Went Wrong !");
       }
     },
       (err) => {
-        console.log('err', err);
       });
 
   }

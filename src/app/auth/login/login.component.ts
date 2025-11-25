@@ -343,12 +343,10 @@ login(body:any){
             this.routeToHome();
           });
         } else {
-          console.log("No registration token available. Request permission to generate one.");
           this.alert.error("Something Went Wrong !");
           this.routeToHome();
         }
       }).catch((err: any) => {
-        console.log(err);
        // this.alert.error("Something Went Wrong !");
     
       });
@@ -372,12 +370,10 @@ login(body:any){
         userId: userId
       };
       const res: any = await this.updateUserFCMToken(body, authToken);
-      console.log(res);
 
       if (res.isPassed) {
         let fcmTokenExpiration = res.data;
         localStorage.setItem('fcmTokenExpireDate', fcmTokenExpiration);
-        console.log("fcmTokenExpireDate", fcmTokenExpiration);
 
       }
       else {
