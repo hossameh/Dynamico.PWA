@@ -29,7 +29,6 @@ export class CapacitorCameraFileComponent extends BaseFileComponent {
 
           this.setFileData(file, base64Data);
         } catch (err) {
-          console.error('Camera capture failed:', err);
         }
       }, true);
     }

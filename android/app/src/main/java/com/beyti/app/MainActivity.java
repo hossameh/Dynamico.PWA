@@ -58,6 +58,9 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
         return;
     }
     super.onCreate(savedInstanceState);
+
+    // Tapjacking soft guard
+    enableTapjackingProtection();
      View rootView = getWindow().getDecorView().getRootView();
     rootView.setFilterTouchesWhenObscured(true);
     final View content = getWindow().getDecorView().findViewById(android.R.id.content);
@@ -242,6 +245,22 @@ webView.setWebViewClient(new com.beyti.app.security.SafeWebViewClient(this, host
     for (String p : suspect) { if (new File(p).exists()) return true; }
     return false;
   }
+  private void enableTapjackingProtection() {
+  final View root = getWindow().getDecorView().getRootView();
+  if (root != null) {
+    root.setFilterTouchesWhenObscured(true);
+  }
+
+  final View content = getWindow().getDecorView().findViewById(android.R.id.content);
+  if (content != null) {
+    com.beyti.app.security.TapShield.protectTree(content);
+  }
+
+  WebView webView = getBridge().getWebView();
+  if (webView != null) {
+    webView.setFilterTouchesWhenObscured(true);
+  }
+}
   private String getProp(String key) {
     try {
       Process p = Runtime.getRuntime().exec(new String[]{"getprop", key});
@@ -266,4 +285,6 @@ webView.setWebViewClient(new com.beyti.app.security.SafeWebViewClient(this, host
     guard = HookingGuard.attach(this, true);  // <— restarts checks every time
   }
 }
+
+
 }

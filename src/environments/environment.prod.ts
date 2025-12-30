@@ -1,16 +1,16 @@
 export const environment = {
   production: true,
-  version: '1.2.62',
+  version: '1.2.63',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
   //hostAPI: "https://admi.egybell-apps.com/api/api/",
    //hostAPI: "https://internal.egybell-apps.com/api/api/",
   signUpEmail: 'form@registration.com',
-  muteConsole: true ,
   //hostAPI: "https://lab7software.com/api.dynamico/api/",
-   hostAPI: "https://dynamico.cloud/api.beyti/api/",
- 
+   //hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  hostAPI: "https://dochub.dynamico.cloud/api/api/",
+
   //hostAPI: "https://vacation.dynamico.cloud/api/",
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,23 +20,25 @@ export const environment = {
   //companyName: 'ADMI',
   //companyName: 'Internal',
   companyName: '',
+  //companyName: 'Dochub',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  appTitle: 'Beyti',
+  //appTitle: 'Beyti',
+  //appTitle: 'Dochub',
+
   // appTitle: 'Lab7',
   // appTitle: 'Vacation',
-  //appTitle: 'Mystro',
-
+  appTitle: 'Mystro',
   //appTitle: 'Egybell.ADMI',
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- companyLogo: 'assets/img/beyti.png',
+ //companyLogo: 'assets/img/beyti.png',
   // companyLogo:'assets/img/logoNoName.png',
-  //companyLogo: 'assets/img/MystroLogo2.png',
+  companyLogo: 'assets/img/MystroLogo2.png',
   formioI18n: 'assets/data/formioI18n.json',
   //companyLogo: 'assets/img/logoNoNameBlack.png',
   companyLogoBlack: 'assets/img/logoNoNameBlack.png',
@@ -45,10 +47,13 @@ export const environment = {
   appName: 'PWA',
   //APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
+  APP_URL: 'https://lab7software.com/mystroApp/',
+
   //APP_URL: 'https://app-admi.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
+  //APP_URL: 'https://app-dochub.dynamico.cloud/',  
 
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-  APP_URL: 'https://dynamico.cloud/beytiapp/',
+  //APP_URL: 'https://dynamico.cloud/beytiapp/',
   //APP_URL: 'https://app-vacation.dynamico.cloud/',
 
  // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
@@ -82,9 +87,9 @@ export const environment = {
   //redirectUrl: '', // admi - internal
   //redirectUrl: '/login',
 
-  redirectUrl:'/beytiapp/login',
+  //redirectUrl:'/beytiapp/login',
   //  redirectUrl:'/DynamicoApp/login',
-  //redirectUrl:'/mystroApp/login',
+  redirectUrl:'/mystroApp/login',
 
   apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
   /*apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',*/
