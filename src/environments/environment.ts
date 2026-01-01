@@ -79,7 +79,13 @@ export const environment = {
     formId: 26,
   },
 
+  //mystroProd
+  // mystroGuestLoginBaseUrl: 'https://app-mystro.dynamico.cloud/GuestLogin',
+  //mystroGuestLoginCode: '51b5c671-7514-40c0-b6f2-20e240bc0fad'
 
+  //mystroLab7]
+  mystroGuestLoginBaseUrl: 'https://app-mystro.dynamico.cloud/GuestLogin',
+  mystroGuestLoginCode: '51b5c671-7514-40c0-b6f2-20e240bc0fad'
 };
 
 /*

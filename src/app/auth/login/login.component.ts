@@ -412,9 +412,13 @@ login(body:any){
     control.updateValueAndValidity();
   }
 
+  //onSignUpClicked() {
+
+  //  window.open('https://app-mystro.dynamico.cloud/GuestLogin?code=51b5c671-7514-40c0-b6f2-20e240bc0fad', '_blank');
+
+  //}
   onSignUpClicked() {
-
-    window.open('https://app-mystro.dynamico.cloud/GuestLogin?code=51b5c671-7514-40c0-b6f2-20e240bc0fad', '_blank');
-
+    const url = `${environment.mystroGuestLoginBaseUrl}?code=${environment.mystroGuestLoginCode}`;
+    window.open(url, '_blank');
   }
 }
