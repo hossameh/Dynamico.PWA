@@ -1,36 +1,59 @@
 // location-logger.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { interval, Subscription, fromEvent } from 'rxjs';
+import { interval, Subscription, fromEvent, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LocationLoggerService {
+export class LocationLoggerService implements OnDestroy {
   private timerSubscription: Subscription | null = null;
+  private onlineSubscription: Subscription | null = null;
   private cacheKey = 'offlineLocationLogs';
+  private currentUserEmail: string | null = null;
 
   constructor(private http: HttpClient) {
     this.setupOnlineListener();
   }
 
+  ngOnDestroy(): void {
+    this.stopLogger();
+    this.onlineSubscription?.unsubscribe();
+  }
+
   startLogger(userEmail: string): void {
     if (!environment.locationLogger.activateLocationLogger) return;
 
-    this.timerSubscription = interval(environment.locationLogger.timer).subscribe(() => {
-      const now = new Date();
-      const start = this.parseTime(environment.locationLogger.dayStart);
-      const end = this.parseTime(environment.locationLogger.dayEnd);
+    this.currentUserEmail = userEmail;
 
-      if (now >= start && now <= end) {
-        this.logLocation(userEmail);
-      }
+    // Log immediately on login (if within schedule)
+    this.logLocationIfInSchedule(userEmail);
+
+    // Then start the interval for subsequent logs
+    this.timerSubscription = interval(environment.locationLogger.timer).subscribe(() => {
+      this.logLocationIfInSchedule(userEmail);
     });
+
+    // Also try to send any previously cached logs
+    this.sendCachedLogs();
   }
 
   stopLogger(): void {
     this.timerSubscription?.unsubscribe();
+    this.timerSubscription = null;
+    this.currentUserEmail = null;
+  }
+
+  private logLocationIfInSchedule(userEmail: string): void {
+    const now = new Date();
+    const start = this.parseTime(environment.locationLogger.dayStart);
+    const end = this.parseTime(environment.locationLogger.dayEnd);
+
+    if (now >= start && now <= end) {
+      this.logLocation(userEmail);
+    }
   }
 
   private parseTime(timeStr: string): Date {
@@ -48,7 +71,9 @@ export class LocationLoggerService {
 
     navigator.geolocation.getCurrentPosition(
       position => {
-        const dateTime = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 23);
+        const dateTime = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+          .toISOString()
+          .slice(0, 23);
         const location = `${position.coords.latitude},${position.coords.longitude}`;
 
         const formData = [
@@ -62,8 +87,8 @@ export class LocationLoggerService {
           Action: 'Add',
           FormDataRef: '',
           Form_Data: JSON.stringify(formData),
-          Form_Id: environment.locationLogger.formId, 
-          Record_Id: 0,         
+          Form_Id: environment.locationLogger.formId,
+          Record_Id: 0,
           isSubmitted: false,
           location
         };
@@ -80,13 +105,10 @@ export class LocationLoggerService {
     );
   }
 
-
   private sendLog(data: any): void {
     this.http.post(environment.apiEndpoint, data).subscribe({
-      next: () => this.cacheLog('Location sent'),
-      error: err => {
-        this.cacheLog(data);
-      }
+      next: () => console.log('Location logged successfully'),
+      error: () => this.cacheLog(data)
     });
   }
 
@@ -98,31 +120,41 @@ export class LocationLoggerService {
 
   private getCachedLogs(): any[] {
     const json = localStorage.getItem(this.cacheKey);
-    return json ? JSON.parse(json) : [];
+    if (!json) return [];
+
+    try {
+      const logs = JSON.parse(json);
+      // Filter out any string entries (garbage from previous bug)
+      return logs.filter((log: any) => typeof log === 'object' && log !== null);
+    } catch {
+      return [];
+    }
   }
 
   private setupOnlineListener(): void {
-    fromEvent(window, 'online').subscribe(() => {
-      const logs = this.getCachedLogs();
-      if (logs.length === 0) return;
-
-      const failedLogs: any[] = [];
-      logs.forEach(log => {
-        this.http.post(environment.apiEndpoint, log).subscribe({
-          next: () => this.cacheLog('Cached log sent')  ,
-          error: () => {
-            failedLogs.push(log);
-          }
-        });
-      });
-
-      setTimeout(() => {
-        if (failedLogs.length > 0) {
-          localStorage.setItem(this.cacheKey, JSON.stringify(failedLogs));
-        } else {
-          localStorage.removeItem(this.cacheKey);
-        }
-      }, 3000); // Allow some time for requests to finish
+    this.onlineSubscription = fromEvent(window, 'online').subscribe(() => {
+      this.sendCachedLogs();
     });
+  }
+
+  private sendCachedLogs(): void {
+    const logs = this.getCachedLogs();
+    if (logs.length === 0) return;
+
+    // Clear cache immediately to prevent duplicates
+    localStorage.removeItem(this.cacheKey);
+
+    // Use forkJoin to properly wait for all requests
+    const requests = logs.map(log =>
+      this.http.post(environment.apiEndpoint, log).pipe(
+        catchError(() => {
+          // Re-cache failed logs
+          this.cacheLog(log);
+          return of(null);
+        })
+      )
+    );
+
+    forkJoin(requests).subscribe();
   }
 }

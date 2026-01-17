@@ -75,7 +75,7 @@ export const environment = {
   apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',
 
   locationLogger: {
-    timer: 5 * 60 * 1000, // 15 minutes in milliseconds
+    timer: 5 * 60 * 1000, 
     dayStart: '08:00',
     dayEnd: '18:00',
     activateLocationLogger: true,
