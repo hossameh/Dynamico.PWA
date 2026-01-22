@@ -119,6 +119,7 @@ body {
 
 div.formio-form ul.formio-wizard-nav-container li {
   display: inline !important;
+
 }
 
 .table-borderless {
@@ -132,38 +133,46 @@ div.formio-form ul.formio-wizard-nav-container li {
     }
   }
 }
-.notif-mob{
+
+.notif-mob {
   top: 20px;
   bottom: unset;
   left: 20px;
   right: 20px;
   width: calc(100% - 40px);
-  .ngx-toastr{
+
+  .ngx-toastr {
     width: 100%;
     background: #fff;
     color: #000;
     box-shadow: 0 0 13px #00000066;
     border-radius: 10px;
     padding: 15px;
-    &.toast-info{
+
+    &.toast-info {
       background-image: unset !important;
     }
-    .toast-title{
+
+    .toast-title {
       font-size: 15px;
     }
-    .toast-message{
+
+    .toast-message {
       font-size: 12px;
     }
   }
 
 }
+
 .image-containerLogin {
-  position: relative; /* Ensures absolute positioning works */
+  position: relative;
+  /* Ensures absolute positioning works */
   display: inline-block;
 }
 
 .logo-imgLogin {
-  width: 280px; /* Adjust as needed */
+  width: 280px;
+  /* Adjust as needed */
   display: block;
 }
 
@@ -176,4 +185,463 @@ div.formio-form ul.formio-wizard-nav-container li {
   font-weight: 300;
   text-shadow: 0 0 5px rgba(102, 204, 255, 0.7);
   white-space: nowrap;
+}
+
+// ============================================
+// Comprehensive styling for Form.io rendered forms
+// ============================================
+
+// Base Form Container
+.formio-form {
+  font-family: Montserrat, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  // Panel Components (Section Headers)
+  .formio-component-panel {
+    margin-bottom: 20px;
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      overflow: visible; // Changed from hidden to allow dropdowns to expand
+
+      .card-header {
+        background: linear-gradient(135deg, #11006E 0%, #2a1a8e 100%);
+        color: #fff;
+        padding: 14px 18px;
+        border: none;
+        border-radius: 12px 12px 0 0; // Maintain top rounding
+
+        .card-title {
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          margin: 0;
+          color: #fff;
+          display: flex;
+          align-items: center;
+        }
+
+        // Collapsed/expanded icons - ensure visibility on dark header
+        .formio-collapse-icon,
+        i.fa,
+        i.fas,
+        i.far,
+        .fa-plus-square-o,
+        .fa-minus-square-o,
+        [ref="icon"] {
+          color: #fff !important;
+          font-size: 14px;
+        }
+      }
+
+      .card-body {
+        padding: 20px 18px;
+        background-color: #fff;
+        border-radius: 0 0 12px 12px; // Maintain bottom rounding
+      }
+    }
+  }
+
+  // General Component Spacing
+  .formio-component {
+    margin-bottom: 12px;
+
+    // Question Labels - slightly larger for hierarchy
+    label.col-form-label,
+    label.form-label,
+    .control-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #3E3E3E;
+      margin-bottom: 4px;
+      display: block;
+      line-height: 1.4;
+    }
+
+    // Required asterisk - more prominent
+    .field-required:after {
+      content: " *";
+      color: #e74c3c;
+      font-weight: 700;
+      margin-left: 2px;
+    }
+  }
+
+  // Input Fields
+  .form-control {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    min-height: 42px;
+
+    &:focus {
+      border-color: #00CCFF;
+      box-shadow: 0 0 0 3px rgba(0, 204, 255, 0.15);
+      outline: none;
+    }
+
+    &::placeholder {
+      color: #aaa;
+    }
+  }
+
+  // Select Dropdowns
+  .formio-component-select {
+    .choices__inner {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      min-height: 42px;
+      padding: 8px 12px;
+
+      &:focus {
+        border-color: #00CCFF;
+      }
+    }
+
+    .choices__list--dropdown {
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Radio Buttons & Checkboxes
+  .formio-component-radio,
+  .formio-component-checkbox,
+  .formio-component-selectboxes {
+    .form-check {
+      margin-bottom: 10px;
+      padding: 6px 10px 6px 32px;
+      border-radius: 6px;
+      transition: background-color 0.15s ease;
+      margin-left: -10px;
+      margin-right: -10px;
+
+      &:hover {
+        background-color: rgba(17, 0, 110, 0.03);
+      }
+
+      .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        margin-left: -24px;
+        border: 2px solid #bbb;
+        cursor: pointer;
+
+        &:checked {
+          background-color: #11006E;
+          border-color: #11006E;
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(17, 0, 110, 0.2);
+        }
+      }
+
+      &:has(.form-check-input:checked) {
+        background-color: rgba(17, 0, 110, 0.06);
+      }
+
+      .form-check-label {
+        font-size: 12px;
+        color: #555;
+        padding-top: 2px;
+        font-weight: 400;
+        cursor: pointer;
+      }
+    }
+
+    // Inline radio buttons
+    .form-check-inline {
+      margin-right: 16px;
+      margin-bottom: 8px;
+      padding: 6px 12px 6px 28px;
+    }
+  }
+
+  // HTML Content / Info Panels
+  .formio-component-htmlelement,
+  .formio-component-content {
+    .card {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      background-color: #f8f9fa;
+
+      .card-body {
+        padding: 14px 16px;
+        font-size: 13px;
+        line-height: 1.5;
+        color: #555;
+      }
+    }
+  }
+
+  // Tables
+  .formio-component-table {
+    .table {
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 0;
+
+      th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        font-size: 13px;
+        color: #3E3E3E;
+        padding: 14px 16px;
+        border-bottom: 2px solid #e0e0e0;
+        border-top: none;
+      }
+
+      td {
+        padding: 14px 16px;
+        font-size: 14px;
+        vertical-align: middle;
+        border-bottom: 1px solid #eee;
+        border-top: none;
+      }
+    }
+  }
+
+  // DataGrid & EditGrid (Repeating items like Transactions)
+  .formio-component-datagrid,
+  .formio-component-editgrid {
+    .editgrid-listgroup {
+      border: none;
+
+      .list-group-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    // Headers for grids
+    .card-header {
+      background: #f8f9fa;
+      border-bottom: 1px solid #eee;
+      padding: 12px 18px;
+
+      .card-title {
+        color: #333;
+        font-size: 14px;
+      }
+    }
+  }
+
+  // Buttons
+  .btn {
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  .btn-primary {
+    background-color: #11006E;
+    border-color: #11006E;
+
+    &:hover,
+    &:focus {
+      background-color: #1a0a8a;
+      border-color: #1a0a8a;
+    }
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+
+  // Date/Time Pickers - Enhanced Integrated Look
+  .formio-component-datetime,
+  .formio-component-day,
+  .formio-component-time {
+    .input-group {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: nowrap;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+      &:focus-within {
+        border-color: #00CCFF;
+        box-shadow: 0 0 0 3px rgba(0, 204, 255, 0.15);
+      }
+
+      // Disabled state - dimmed gray like time input
+      &:has(.form-control:disabled),
+      &.disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+
+        .form-control {
+          color: #6c757d;
+        }
+      }
+
+      .form-control {
+        border: none !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
+        height: auto;
+        min-height: 42px;
+        padding-right: 0;
+        z-index: 2;
+      }
+
+      .input-group-append,
+      .input-group-text {
+        background-color: transparent;
+        border: none;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+
+        button,
+        .btn {
+          background: transparent !important;
+          border: none !important;
+          padding: 8px !important;
+          box-shadow: none !important;
+          color: #666;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            color: #11006E;
+          }
+
+          i,
+          .fa,
+          .fas,
+          .far {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    // Fallback for standalone inputs
+    .form-control {
+      border: 1px solid #ddd;
+    }
+  }
+
+  // File Upload
+  .formio-component-file {
+    .fileSelector {
+      border: 2px dashed #ddd;
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      background-color: #fafafa;
+      transition: border-color 0.2s ease;
+
+      &:hover {
+        border-color: #00CCFF;
+      }
+    }
+  }
+
+  // Signature
+  .formio-component-signature {
+    .signature-pad-canvas {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+  }
+
+  // Alert Messages
+  .alert {
+    border-radius: 10px;
+    border: none;
+    padding: 14px 18px;
+
+    &.alert-danger {
+      background-color: #fce4e4;
+      color: #c0392b;
+    }
+
+    &.alert-success {
+      background-color: #e8f5e9;
+      color: #27ae60;
+    }
+
+    &.alert-warning {
+      background-color: #fff8e1;
+      color: #f39c12;
+    }
+
+    &.alert-info {
+      background-color: #e3f2fd;
+      color: #2980b9;
+    }
+  }
+
+  // Wizard Navigation
+  .formio-wizard-nav-container {
+    .pagination {
+      .page-item {
+        .page-link {
+          border-radius: 8px;
+          margin: 0 4px;
+          border: 1px solid #ddd;
+          color: #3E3E3E;
+
+          &:hover {
+            background-color: #f0f0f0;
+          }
+        }
+
+        &.active .page-link {
+          background-color: #11006E;
+          border-color: #11006E;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 576px) {
+    .formio-component-panel .card .card-header {
+      padding: 12px 14px;
+
+      .card-title {
+        font-size: 14px;
+      }
+    }
+
+    .form-control {
+      font-size: 16px; // Prevents zoom on iOS
+    }
+
+    .btn {
+      padding: 12px 16px;
+      width: 100%;
+    }
+  }
 }
