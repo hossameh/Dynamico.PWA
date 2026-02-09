@@ -14,10 +14,10 @@ android {
 
   defaultConfig {
     applicationId "com.beyti.app"
-    minSdkVersion 29
+    minSdkVersion 27
     targetSdkVersion rootProject.ext.targetSdkVersion
     versionCode 103
-    versionName "1.0.3"
+    versionName "1.0.4"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     aaptOptions {
       // Files and dirs to omit from packaged assets (kept from your file)
@@ -40,7 +40,7 @@ android {
 
         def f = file(keystoreProps['storeFile'])
         if (!f.exists()) {
-          throw new GradleException("Keystore not found at: " + f)
+      //    throw new GradleException("Keystore not found at: " + f)
         }
 
         storeFile f
@@ -49,11 +49,11 @@ android {
         keyPassword keystoreProps['keyPassword']
 
         // Janus-safe schemes:
-        v1SigningEnabled false   // keep if you support very old devices
+        v1SigningEnabled true   // keep if you support very old devices
         v2SigningEnabled true   // REQUIRED
         // v3/v4 optional
       } else {
-        throw new GradleException("Missing keys in keystore.properties (storeFile/storePassword/keyAlias/keyPassword).")
+       // throw new GradleException("Missing keys in keystore.properties (storeFile/storePassword/keyAlias/keyPassword).")
       }
     }
   }
@@ -75,8 +75,8 @@ android {
            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro'
 
-      buildConfigField "boolean", "ENFORCE_HOOK_BLOCK", "true"
-      buildConfigField "boolean", "ENFORCE_ROOT_BLOCK", "true"
+      buildConfigField "boolean", "ENFORCE_HOOK_BLOCK", "false"
+      buildConfigField "boolean", "ENFORCE_ROOT_BLOCK", "false"
     }
   }
 }
@@ -100,10 +100,10 @@ dependencies {
   androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
 
   // WebView hardening (Safe Browsing, Service Worker settings)
-  implementation "androidx.webkit:webkit:1.11.0"
+  implementation "androidx.webkit:webkit:1.15.0"
 
   // If you’re using EncryptedSharedPreferences:
-  implementation "androidx.security:security-crypto:1.1.0-alpha06"
+  implementation "androidx.security:security-crypto:1.1.0"
 }
 
 apply from: 'capacitor.build.gradle'
@@ -113,6 +113,6 @@ try {
   if (servicesJSON.text) {
     apply plugin: 'com.google.gms.google-services'
   }
-} catch(Exception e) {
+} catch(Exception ignored) {
   logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
 }

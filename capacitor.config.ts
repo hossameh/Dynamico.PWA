@@ -4,11 +4,10 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.beyti.app',
   appName: 'beytiapp',
-  webDir: 'dist/dynamico', 
-    server: {
-      url: 'https://dynamico.cloud/beytiapp/login',
-
-    //url: 'https://lab7software.com/DynamicoApp/login',
+  webDir: 'dist/dynamico',
+  server: {
+    //url: 'https://dynamico.cloud/beytiapp/login',
+    url: 'https://lab7software.com/DynamicoApp/login',
     cleartext: false,           // keep it OFF
     androidScheme: 'https',
     allowNavigation: [
@@ -23,9 +22,8 @@ const config: CapacitorConfig = {
       'admi.egybell-apps.com',
       'internal.egybell-apps.com',
       'vacation.dynamico.cloud',
-
-
-      
+      'beyti.dynamico.cloud',
+      'app-beyti.dynamico.cloud'
     ]
   }
 };

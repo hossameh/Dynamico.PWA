@@ -119,7 +119,8 @@ try {
   "egybell-apps.com",
   "admi.egybell-apps.com",
   "internal.egybell-apps.com",
-  "vacation.dynamico.cloud"
+  "vacation.dynamico.cloud",
+  "beyti.dynamico.cloud"
   // add others you truly need
 ));
 webView.setWebViewClient(new com.beyti.app.security.SafeWebViewClient(this, hosts));

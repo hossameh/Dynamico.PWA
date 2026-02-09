@@ -3,7 +3,7 @@
 	"appName": "beytiapp",
 	"webDir": "dist/dynamico",
 	"server": {
-		"url": "https://dynamico.cloud/beytiapp/login",
+		"url": "https://lab7software.com/DynamicoApp/login",
 		"cleartext": false,
 		"androidScheme": "https",
 		"allowNavigation": [
@@ -17,7 +17,9 @@
 			"app-vacation.dynamico.cloud",
 			"admi.egybell-apps.com",
 			"internal.egybell-apps.com",
-			"vacation.dynamico.cloud"
+			"vacation.dynamico.cloud",
+			"beyti.dynamico.cloud",
+			"app-beyti.dynamico.cloud"
 		]
 	},
 	"packageClassList": [

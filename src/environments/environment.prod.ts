@@ -5,11 +5,12 @@ export const environment = {
   /////////////////////////////////////////////////////////////////////////////////////////
 
   //hostAPI: "https://admi.egybell-apps.com/api/api/",
-   //hostAPI: "https://internal.egybell-apps.com/api/api/",
+  //hostAPI: "https://internal.egybell-apps.com/api/api/",
   signUpEmail: 'form@registration.com',
-  //hostAPI: "https://lab7software.com/api.dynamico/api/",
-   //hostAPI: "https://dynamico.cloud/api.beyti/api/",
-  hostAPI: "https://dochub.dynamico.cloud/api/api/",
+  hostAPI: "https://lab7software.com/api.dynamico/api/",
+  // hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  //hostAPI: "https://dochub.dynamico.cloud/api/api/",
+  // hostAPI: "https://beyti.dynamico.cloud/api/",
 
   //hostAPI: "https://vacation.dynamico.cloud/api/",
 
@@ -26,19 +27,19 @@ export const environment = {
 
   //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  //appTitle: 'Beyti',
+  appTitle: 'Beyti',
   //appTitle: 'Dochub',
 
   // appTitle: 'Lab7',
   // appTitle: 'Vacation',
-  appTitle: 'Mystro',
+  //appTitle: 'Mystro',
   //appTitle: 'Egybell.ADMI',
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- //companyLogo: 'assets/img/beyti.png',
+  companyLogo: 'assets/img/beyti.png',
   // companyLogo:'assets/img/logoNoName.png',
-  companyLogo: 'assets/img/MystroLogo2.png',
+  //companyLogo: 'assets/img/MystroLogo2.png',
   formioI18n: 'assets/data/formioI18n.json',
   //companyLogo: 'assets/img/logoNoNameBlack.png',
   companyLogoBlack: 'assets/img/logoNoNameBlack.png',
@@ -47,32 +48,33 @@ export const environment = {
   appName: 'PWA',
   //APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-  APP_URL: 'https://lab7software.com/mystroApp/',
+  //APP_URL: 'https://lab7software.com/mystroApp/',
 
   //APP_URL: 'https://app-admi.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
-  //APP_URL: 'https://app-dochub.dynamico.cloud/',  
+  //APP_URL: 'https://app-dochub.dynamico.cloud/',
 
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-  //APP_URL: 'https://dynamico.cloud/beytiapp/',
+  // APP_URL: 'https://dynamico.cloud/beytiapp/',
   //APP_URL: 'https://app-vacation.dynamico.cloud/',
+  // APP_URL: 'https://app-beyti.dynamico.cloud/',
 
- // APP_URL: 'https://www.lab7software.com/DynamicoApp/',
- 
+  APP_URL: 'https://www.lab7software.com/DynamicoApp/',
+
 
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
-/*   firebase: {
-    apiKey: "AIzaSyD3opHG18VdZ1OYGJZICGRMAK5B6OVDQIs",
-    authDomain: "dynamicocloud.firebaseapp.com",
-    projectId: "dynamicocloud",
-    storageBucket: "dynamicocloud.appspot.com",
-    messagingSenderId: "178261450313",
-    appId: "1:178261450313:web:ddbd34310fe88d688f6998",
-    measurementId: "G-H0NER3WF13",
-    vapidKey: "BKTm9vxTjCIbTS1mfN-EPmFaOpA8GrpbjcX6fa0a0v_QRy0bkIaTkSowq5IVD5a1gS3sy7M2hvnrxKc1xlTY4JM"
-  }, */
-  showSaveButton  : true,
+  /*   firebase: {
+      apiKey: "AIzaSyD3opHG18VdZ1OYGJZICGRMAK5B6OVDQIs",
+      authDomain: "dynamicocloud.firebaseapp.com",
+      projectId: "dynamicocloud",
+      storageBucket: "dynamicocloud.appspot.com",
+      messagingSenderId: "178261450313",
+      appId: "1:178261450313:web:ddbd34310fe88d688f6998",
+      measurementId: "G-H0NER3WF13",
+      vapidKey: "BKTm9vxTjCIbTS1mfN-EPmFaOpA8GrpbjcX6fa0a0v_QRy0bkIaTkSowq5IVD5a1gS3sy7M2hvnrxKc1xlTY4JM"
+    }, */
+  showSaveButton: true,
 
   firebase: {
     apiKey: "AIzaSyAz-VXCUhh8cytvpEM5OZhD0JnxMsoyGrk",
@@ -83,25 +85,26 @@ export const environment = {
     appId: "1:678182888011:web:f9acf48c202a0f8aea63ce",
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
-  friendlyErrorMessage:'Something Went Wrong !',
+  friendlyErrorMessage: 'Something Went Wrong !',
   //redirectUrl: '', // admi - internal
   //redirectUrl: '/login',
 
-  //redirectUrl:'/beytiapp/login',
+  redirectUrl: '/beytiapp/login',
   //  redirectUrl:'/DynamicoApp/login',
-  redirectUrl:'/mystroApp/login',
+  //redirectUrl:'/mystroApp/login',
 
-  apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
-  /*apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',*/
+  // apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
+  apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',
+  // apiEndpoint: 'https://beyti.dynamico.cloud/api/ChecklistRecords/SaveChecklistRecord',
 
   locationLogger: {
-    timer: 5 * 60 * 1000, // 15 minutes in milliseconds
+    timer: .1 * 60 * 1000, // 15 minutes in milliseconds
     dayStart: '08:00',
     dayEnd: '18:00',
-    activateLocationLogger: false,
-    formId: 26,
+    activateLocationLogger: true,
+    formId: 356,
   },
-   ui: {
+  ui: {
     companyName: 'Dynamico',
     logo: 'assets/img/logo.svg',
     thankYou: {
