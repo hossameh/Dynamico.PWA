@@ -13,6 +13,7 @@ import { API } from 'src/app/core/interface/api.interface';
 import { HelperService } from 'src/app/services/helper.service';
 import { AuthType } from 'src/app/core/enums/AuthType';
 import { LocationLoggerService } from '../../services/location-logger/location-logger.service';
+import { FlutterBridgeService } from '../../services/flutter-bridge/flutter-bridge.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit {
   companyName: string = environment.companyName;
   userEmail: any;
 
-  companyLogo :string = environment.companyLogo;
+  companyLogo: string = environment.companyLogo;
 
   constructor(private readonly router: Router, private logger: LocationLoggerService,
     private readonly FB: FormBuilder,
@@ -38,7 +39,8 @@ export class LoginComponent implements OnInit {
     private readonly httpClient: HttpClient,
     private readonly route: ActivatedRoute,
     private readonly http: HttpService,
-    private readonly helper: HelperService) { }
+    private readonly helper: HelperService,
+    private readonly flutterBridge: FlutterBridgeService) { }
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -166,11 +168,15 @@ export class LoginComponent implements OnInit {
   setUserData(res: API) {
     localStorage.setItem('userData', JSON.stringify(res.data));
     localStorage.setItem('token', JSON.stringify(res.data.resetToken));
+
+    // Notify Flutter app about successful login
+    this.flutterBridge.notifyLogin(res.data.resetToken, res.data.refreshToken);
   }
 
-  handleLoginResponse(res: API , authType:AuthType) {
+  handleLoginResponse(res: API, authType: AuthType) {
     try {
       if (res.data && res.isPassed) {
+
         this.setUserData(res);
         this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
         this.logger.startLogger(this.userEmail);
@@ -181,14 +187,14 @@ export class LoginComponent implements OnInit {
         }
         this.CheckFCMTokenExpiration(res.data);
         this.routeToHome();
-        
+
       }
       else if (res?.data?.username) {
         this.alert.confirmAny(res?.message, "Logout From Other Devices", "Cancel")
           .then((result) => {
             if (result.value) {
-             
-              this.reLogin(this.authForm.value , authType);
+
+              this.reLogin(this.authForm.value, authType);
             }
           });
       }
@@ -204,17 +210,17 @@ export class LoginComponent implements OnInit {
   }
 
 
-login(body:any){
-  
-  this.http.post<API>('Auth/Login', body, true)
-  .pipe(first())
-  .subscribe((res: API) => {
-    this.handleLoginResponse(res,AuthType.BasicAuth);
-  },
-    (err) => {
-      this.alert.error(environment.friendlyErrorMessage);
-    });
-}
+  login(body: any) {
+
+    this.http.post<API>('Auth/Login', body, true)
+      .pipe(first())
+      .subscribe((res: API) => {
+        this.handleLoginResponse(res, AuthType.BasicAuth);
+      },
+        (err) => {
+          this.alert.error(environment.friendlyErrorMessage);
+        });
+  }
 
   loginWithPassword() {
     if (this.authForm.invalid)
@@ -231,7 +237,7 @@ login(body:any){
       this.http.post<API>('Auth/LoginWithKey', { key: key, appName: environment.appName }, true)
         .pipe(first())
         .subscribe((res: API) => {
-          this.handleLoginResponse(res ,AuthType.SAML);
+          this.handleLoginResponse(res, AuthType.SAML);
         },
           (err) => {
             this.alert.error(environment.friendlyErrorMessage);
@@ -242,29 +248,29 @@ login(body:any){
       this.alert.error(environment.friendlyErrorMessage);
     }
   }
-  async reLogin(body: any , authType?:AuthType) {
+  async reLogin(body: any, authType?: AuthType) {
 
     const userName = this.authForm.get('username')?.value ? this.authForm.get('username')?.value : localStorage.getItem('tempDynamicoUserName');
 
-    if(userName){
+    if (userName) {
 
-      const response:API = await this.logoutFromOtherDevices(userName).toPromise();
-      if (response.isPassed){
+      const response: API = await this.logoutFromOtherDevices(userName).toPromise();
+      if (response.isPassed) {
 
-        switch(authType){
+        switch (authType) {
           case AuthType.SAML:
             this.loginWithKey(this.loginKey);
             break;
 
-            case AuthType.SingleCode:
-              this.checkEmail(userName);
-              break;
+          case AuthType.SingleCode:
+            this.checkEmail(userName);
+            break;
 
-            default:
-              this.login(body);
-              break;
+          default:
+            this.login(body);
+            break;
         }
-        
+
       }
       else {
         this.alert.error(response?.message);
@@ -272,7 +278,7 @@ login(body:any){
 
     }
 
-  
+
   }
   logoutFromOtherDevices(userName: any) {
     let url = `Auth/logout?UserName=${userName}`;
@@ -280,7 +286,7 @@ login(body:any){
   }
 
   onSubmitClicked() {
-   this.passwordNeeded ? this.loginWithPassword() : this.checkEmail(this.authForm.get('username')?.value);
+    this.passwordNeeded ? this.loginWithPassword() : this.checkEmail(this.authForm.get('username')?.value);
 
   }
 
@@ -291,9 +297,9 @@ login(body:any){
         return;
 
       const res: API = await this.http.get2<API>('Auth/VerifyAccountAuth',
-         { Username: this.authForm.get('username')?.value ,appName:environment.redirectUrl }).toPromise();
+        { Username: this.authForm.get('username')?.value, appName: environment.redirectUrl }).toPromise();
       if (res.isPassed) {
-        switch(res.data.authType){
+        switch (res.data.authType) {
           case AuthType.SAML:
             localStorage.setItem('tempDynamicoUserName', this.authForm.get('username')?.value);
             setTimeout(() => {
@@ -301,16 +307,16 @@ login(body:any){
             }, 500);
             break;
 
-            case AuthType.SingleCode:
-              this.handleLoginResponse(res.data.loginData ,AuthType.SingleCode);
-              break;
+          case AuthType.SingleCode:
+            this.handleLoginResponse(res.data.loginData, AuthType.SingleCode);
+            break;
 
-            default:
-              setTimeout(() => {
-                this.passwordNeeded = true;
-                this.changeControlValidation(this.authForm.get('password'), false);
-              })
-              break;
+          default:
+            setTimeout(() => {
+              this.passwordNeeded = true;
+              this.changeControlValidation(this.authForm.get('password'), false);
+            })
+            break;
         }
 
       }
@@ -331,7 +337,7 @@ login(body:any){
     let fcmTokenExpiration = returnObject?.fcmTokenExpiryDate;
     if (fcmTokenExpiration) {
       localStorage.setItem('fcmTokenExpireDate', fcmTokenExpiration);
-    
+
     }
     else {
       const messaging = getMessaging();
@@ -347,8 +353,8 @@ login(body:any){
           this.routeToHome();
         }
       }).catch((err: any) => {
-       // this.alert.error("Something Went Wrong !");
-    
+        // this.alert.error("Something Went Wrong !");
+
       });
 
     }

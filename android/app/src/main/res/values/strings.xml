@@ -4,4 +4,8 @@
     <string name="title_activity_main">beytiapp</string>
     <string name="package_name">com.beyti.app</string>
     <string name="custom_url_scheme">com.beyti.app</string>
+    
+    <!-- Background Geolocation notification config -->
+    <string name="capacitor_background_geolocation_notification_channel_name">Location Tracking</string>
+    <string name="capacitor_background_geolocation_notification_icon">mipmap/ic_launcher</string>
 </resources>

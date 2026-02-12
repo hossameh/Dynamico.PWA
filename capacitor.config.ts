@@ -5,6 +5,9 @@ const config: CapacitorConfig = {
   appId: 'com.beyti.app',
   appName: 'beytiapp',
   webDir: 'dist/dynamico',
+  android: {
+    useLegacyBridge: true  // Required for background geolocation - prevents updates stopping after 5 min
+  },
   server: {
     //url: 'https://dynamico.cloud/beytiapp/login',
     url: 'https://lab7software.com/DynamicoApp/login',

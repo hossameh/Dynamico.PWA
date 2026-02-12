@@ -8,6 +8,7 @@ import { API } from 'src/app/core/interface/api.interface';
 import { HelperService } from 'src/app/services/helper.service';
 import { LangEnum } from 'src/app/core/enums/common.enum';
 import { LocationLoggerService } from '../../services/location-logger/location-logger.service';
+import { FlutterBridgeService } from '../../services/flutter-bridge/flutter-bridge.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class ProfileComponent implements OnInit {
     private readonly http: HttpService,
     private readonly alert: AlertService,
     private readonly router: Router,
-    private readonly helper: HelperService) { }
+    private readonly helper: HelperService,
+    private readonly flutterBridge: FlutterBridgeService) { }
 
   ngOnInit(): void {
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
@@ -90,6 +92,10 @@ export class ProfileComponent implements OnInit {
     this.logoutFromOtherDevices(this.userData?.username).subscribe((res) => {
       if (res.isPassed) {
         this.clearData();
+
+        // Notify Flutter app about logout
+        this.flutterBridge.notifyLogout();
+
         if (res.data?.url) {
           this.router.navigate(['/login']).then(() => {
             setTimeout(this.helper.openLogoutWindow.bind(this, res.data?.url));

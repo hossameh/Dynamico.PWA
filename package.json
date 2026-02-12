@@ -30,6 +30,7 @@
     "@capacitor/core": "^7.0.1",
     "@capacitor/filesystem": "^7.0.0",
     "@capacitor/geolocation": "^7.1.1",
+    "@capgo/background-geolocation": "^8.0.19",
     "@davebaol/angular-formio-editor": "^0.9.5",
     "@ionic/storage-angular": "^3.0.6",
     "@ng-bootstrap/ng-bootstrap": "10.0.0",
