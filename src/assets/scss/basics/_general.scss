@@ -11,6 +11,7 @@ ul {
   padding: 0;
   list-style: none;
 }
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -19,11 +20,13 @@ ul {
 .dropdown-item:active {
   background-color: unset;
 }
+
 .dropdown-item {
   img {
     margin-inline-start: 20px;
   }
 }
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -48,20 +51,24 @@ input[type="number"] {
     font-weight: 500;
   }
 }
-.form-floating > .form-control:focus ~ label,
-.form-floating > .form-control:not(:placeholder-shown) ~ label,
-.form-floating > .form-select ~ label {
+
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-select~label {
   font-weight: 900;
 }
 
 .btn {
   border-radius: 5px;
 }
+
 .has-icon {
   position: relative;
+
   .form-control {
     padding-right: calc(1.5em + 0.75rem);
   }
+
   .icon {
     position: absolute;
     top: 50%;
@@ -80,13 +87,14 @@ input[type="number"] {
 }
 
 .section-heading {
-  background-color: #fafdfe;
+  background-color: var(--section-header-bg, #fafdfe);
   border-radius: 0 0 20px 20px;
   padding: 25px;
-  box-shadow: 0 5px 20px 0px rgba($color: #000000, $alpha: 0.05);
+  box-shadow: 0 5px 20px 0px var(--section-header-shadow, rgba(0, 0, 0, 0.05));
   color: #000;
   position: relative;
   z-index: 9;
+
   h4 {
     font-size: 20px;
     font-weight: bold;
@@ -100,22 +108,24 @@ input[type="number"] {
 
 .white-box {
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: var(--card-border-radius, 10px);
   padding: 20px 15px;
-  box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
+  box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
 
 }
+
 .badge {
-  background-color: $second;
+  background-color: var(--second-color, #00CCFF);
   border-radius: 55px;
   min-width: 30px;
   min-height: 20px;
   line-height: 20px;
   padding: 0 10px;
 }
+
 .dropdown-menu {
   box-shadow: 0 3px 10px 0px rgba($color: #000000, $alpha: 0.05);
   border: unset;
@@ -128,6 +138,7 @@ input[type="number"] {
     font-size: 12px;
     color: #848484;
   }
+
   .date {
     font-size: 10px;
     color: #848484;
@@ -140,17 +151,20 @@ input[type="number"] {
   right: 10px;
   transition: all 0.3s ease-in-out;
 }
+
 .c-tabs {
   border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
   padding: 15px 20px;
   display: flex;
   align-items: center;
+
   .item {
     text-align: center;
     width: 50%;
     transition: all 0.3s ease-in-out;
     position: relative;
     opacity: 0.4;
+
     &:after {
       transition: all 0.3s ease-in-out;
       content: "";
@@ -161,46 +175,55 @@ input[type="number"] {
       bottom: -18px;
       left: 0;
     }
+
     &.active {
       opacity: 1;
 
       &:after {
-        background-color: $main;
+        background-color: var(--main-color);
       }
     }
+
     .badge {
-      background-color: $second;
+      background-color: var(--second-color, #00CCFF);
       border-radius: 55px;
       min-width: 30px;
       min-height: 20px;
       line-height: 20px;
       padding: 0 10px;
     }
+
     &:first-child {
       border-right: 2px solid rgba($color: #000000, $alpha: 0.1);
     }
   }
 }
+
 .filter {
   p {
     color: #000000;
     font-size: 16px;
   }
+
   span {
     color: #848484;
     font-size: 12px;
   }
 }
+
 .modal-content {
-  border-radius: 15px;
+  border-radius: var(--card-border-radius, 15px);
 }
+
 .modal-header {
   justify-content: center;
   position: relative;
   border: unset;
+
   h5 {
     font-size: 16px;
   }
+
   .btn-close {
     position: absolute;
     top: 10px;
@@ -218,6 +241,7 @@ input[type="number"] {
 input::-webkit-datetime-edit {
   font-size: 12px;
 }
+
 #filter input[type="date" i]::-webkit-calendar-picker-indicator {
   position: absolute;
   left: 0;
@@ -231,19 +255,23 @@ input::-webkit-datetime-edit {
     max-height: 160px;
   }
 }
-.form-control.no-shadow{
+
+.form-control.no-shadow {
   transition: all 0.3s ease-in-out;
-  &:focus{
-    box-shadow: unset ;
+
+  &:focus {
+    box-shadow: unset;
     border-color: #ced4da;
     padding-inline-start: 45px;
   }
 
 }
+
 .form-control::placeholder {
   color: #766861;
   opacity: 0.5;
 }
+
 .form-check-input:focus {
   box-shadow: unset;
 }
@@ -256,40 +284,48 @@ input::-webkit-datetime-edit {
   padding: 20px;
   padding-top: 40px;
 }
-.mat-slide-toggle-bar{
+
+.mat-slide-toggle-bar {
   background-color: #F0EFEF !important;
 }
-.mat-slide-toggle-thumb{
+
+.mat-slide-toggle-thumb {
   background-color: #D0D1D1;
 }
-.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
-  background-color: #11006E;
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--main-color);
 }
-.accordion-item{
+
+.accordion-item {
   background-color: unset;
   padding: unset;
   border: unset;
+
   // margin-top: 15px;
-  p.header{
+  p.header {
     color: #707070;
     font-size: 12px;
     margin-bottom: 12px;
   }
 }
-.accordion-body{
+
+.accordion-body {
   padding: unset;
 }
 
 
-.toast-container.toast-top-center .ngx-toastr, .toast-container.toast-bottom-center .ngx-toastr{
+.toast-container.toast-top-center .ngx-toastr,
+.toast-container.toast-bottom-center .ngx-toastr {
   border-radius: 55px;
   padding: 5px 15px;
   box-shadow: unset;
   font-size: 14px;
   text-align: center;
   width: auto;
-  background-image:unset
+  background-image: unset
 }
+
 .toast-bottom-center {
   bottom: 0;
   right: 50%;
@@ -307,17 +343,17 @@ input::-webkit-datetime-edit {
   height: 80px;
 }
 
- .lds-ripple div {
-    position: absolute;
-    border: 4px solid #fff;
-    opacity: 1;
-    border-radius: 50%;
-    animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-  }
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
 
 .lds-ripple div:nth-child(2) {
-      animation-delay: -0.5s;
-    }
+  animation-delay: -0.5s;
+}
 
 @keyframes lds-ripple {
   0% {
@@ -348,41 +384,46 @@ input::-webkit-datetime-edit {
   align-items: center;
   inset: 0;
 }
-#renderer-tab{
+
+#renderer-tab {
   display: none;
 }
 
-#myTab{
+#myTab {
   border: unset;
 }
-formio{
-  button[type="submit"]{
+
+formio {
+  button[type="submit"] {
     margin: 20px 0;
     width: 100%;
   }
-  formio-alerts{
-    .alert-success{
+
+  formio-alerts {
+    .alert-success {
       display: none;
     }
   }
 }
 
-.isComplete{
-  formio{
-    button[type="submit"]{
-     display: none;
+.isComplete {
+  formio {
+    button[type="submit"] {
+      display: none;
     }
   }
 }
 
 .cal-month-view .cal-cell-top,
-.cal-month-view .cal-day-cell{
+.cal-month-view .cal-day-cell {
   min-height: 50px;
 }
-.cal-month-view .cal-day-number{
+
+.cal-month-view .cal-day-number {
   font-size: 14px;
 }
-.cal-month-view .cal-day-cell.cal-today .cal-day-number{
+
+.cal-month-view .cal-day-cell.cal-today .cal-day-number {
   font-size: 14px;
 
 }

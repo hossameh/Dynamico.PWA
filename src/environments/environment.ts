@@ -10,11 +10,11 @@ export const environment = {
   hostAPI: "https://lab7software.com/api.dynamico/api/",
   //hostAPI: "https://localhost:44350/api/",
   //hostAPI: "https://qa-farm.tensorforms.com/api.dynamico/api/",
- // hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  // hostAPI: "https://dynamico.cloud/api.beyti/api/",
   //hostAPI:"http://5.189.153.30/api.dynamico/api/"
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- // companyName: 'Internal',
+  // companyName: 'Internal',
   //companyName: 'Dynamico',
   companyName: '',
 
@@ -25,9 +25,23 @@ export const environment = {
   //appTitle: 'Mystro',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  companyLogo: 'assets/img/diriyah.png',
 
- // companyLogo: 'assets/img/beyti.png',
-  companyLogo: 'assets/img/logoNoName.png',
+  // companyLogo: 'assets/img/beyti.png',
+  // companyLogo: 'assets/img/logoNoName.png',
+  primaryColor: '#C17251',
+  hoverColor: '#96583dff',
+  backgroundImage: 'assets/img/diriyahBG2.jpg',
+  useCustomLoginLayout: true,
+
+  // ── Diriyah extended brand tokens ─────────────────────────
+  // Set these for Diriyah; omit / comment-out for other companies
+  secondaryColor: '#C17251',        // badge, active-tab accent (replaces default cyan)
+  bodyBg: '#f8f2eb',                // warm sand page background
+  sectionHeaderBg: '#ffffff',       // section heading card background
+  sectionHeaderShadow: 'rgba(193,114,80,0.10)', // subtle warm shadow on headers
+  cardBorderRadius: '14px',         // consistent rounded cards
+
   //companyLogo: 'assets/img/logoNoNameBlack.png',
   companyLogoBlack: 'assets/img/logoNoNameBlack.png',
 
@@ -70,12 +84,12 @@ export const environment = {
     appId: "1:678182888011:web:f9acf48c202a0f8aea63ce",
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
-  friendlyErrorMessage:'Something Went Wrong !',
+  friendlyErrorMessage: 'Something Went Wrong !',
   redirectUrl: '/DynamicoApp/login',
   apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',
 
   locationLogger: {
-    timer: 5 * 60 * 1000, 
+    timer: 5 * 60 * 1000,
     dayStart: '08:00',
     dayEnd: '18:00',
     activateLocationLogger: true,

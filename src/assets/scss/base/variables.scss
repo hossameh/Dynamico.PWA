@@ -1,3 +1,18 @@
-$text:#3E3E3E;
-$main:#11006E;
-$second:#00CCFF;
+:root {
+    --main-color: #11006E;
+    --second-color: #00CCFF;
+    --text-color: #3E3E3E;
+    --bg-image: url('../../img/pattern.png');
+    --hover-color: #0d005e;
+    /* Default, roughly darken($main, 10%) */
+
+    /* Extended brand tokens — overridden at runtime per company */
+    --body-bg: #F2FBFD;
+    --section-header-bg: #fafdfe;
+    --section-header-shadow: rgba(0, 0, 0, 0.05);
+    --card-border-radius: 10px;
+}
+
+$text: var(--text-color);
+$main: var(--main-color);
+$second: var(--second-color);

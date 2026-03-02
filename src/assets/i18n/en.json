@@ -19,6 +19,8 @@
   "Password": "Password",
   "pass_p": "Password must contains Uppercase, lowercase letters, one number and a symbol",
   "Login": "Login",
+  "Welcome_back": "Welcome Back",
+  "Sign_in_to_continue": "Sign in to your account to continue",
   "Reset_password": "Reset your password !",
   "New_Password": "New Password",
   "Confirm_Password": "Confirm Password",

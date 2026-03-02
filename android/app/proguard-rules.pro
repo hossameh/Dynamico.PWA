@@ -42,3 +42,38 @@
 -dontskipnonpubliclibraryclasses
 -optimizationpasses 5
 -overloadaggressively
+
+# ========================================
+# Capacitor Core - Required for all plugins
+# ========================================
+-keep class com.getcapacitor.** { *; }
+-keep class com.getcapacitor.plugin.** { *; }
+-keepclassmembers class com.getcapacitor.** { *; }
+
+# Keep Capacitor Plugin annotations
+-keep @com.getcapacitor.annotation.** class * { *; }
+-keep @com.getcapacitor.* class * { *; }
+
+# Keep all Plugin classes
+-keep class * extends com.getcapacitor.Plugin { *; }
+-keepclassmembers class * extends com.getcapacitor.Plugin {
+    public <methods>;
+}
+
+# ========================================
+# Capgo Background Geolocation Plugin
+# ========================================
+-keep class com.capgo.** { *; }
+-keep class com.capgo.capacitor_background_geolocation.** { *; }
+-keepclassmembers class com.capgo.capacitor_background_geolocation.** { *; }
+
+# ========================================
+# Capacitor HTTP Plugin (for native HTTP)
+# ========================================
+-keep class com.getcapacitor.plugin.http.** { *; }
+
+# ========================================
+# Google Play Services Location
+# ========================================
+-keep class com.google.android.gms.location.** { *; }
+-keep class com.google.android.gms.common.** { *; }

@@ -1,45 +1,80 @@
-<section class="login">
-  <div class="w-100">
-    <div class="logo">
-      <div class="image-containerLogin">
-        <img [src]="companyLogo" alt="Dynamico Logo" class="logo-imgLogin">
-        <p class="overlay-textLogin">{{companyName}}</p>
-      </div>
- 
-    </div>
-    <form [formGroup]="authForm">
-      <div class="mb-3">
-        <div class="form-floating ">
-          <input type="email" class="form-control" id="floatingInput" placeholder=" " formControlName="username">
-          <label for="floatingInput">{{'Username' | translate}}</label>
-        </div>
-        <div *ngIf="f.username.touched && (f.username.errors?.required)" class="text-danger text-start mt-2 font-12">
-          {{'Required' | translate}}
-        </div>
-  
-      </div>
-      <div class="form-floating has-icon"  *ngIf="passwordNeeded">
-        <input [type]="showPasswordText ? 'text' : 'password'" class="form-control " id="floatingPassword" placeholder=" " formControlName="password">
-        <label for="floatingPassword">{{'Password' | translate}}</label>
+<section class="login" [ngClass]="{'custom-login': useCustomLoginLayout}">
 
-        <div class="icon" (click)="showPassword()">
-          <img src="assets/img/icons/view-icon.svg" alt="view">
+  <ng-container *ngIf="useCustomLoginLayout">
+    <!-- Left brand panel -->
+    <div class="login-brand">
+      <div class="logo">
+        <div class="image-containerLogin">
+          <img [src]="companyLogo" alt="Diriyah Company Logo" class="logo-imgLogin">
+          <p class="overlay-textLogin">{{companyName}}</p>
         </div>
       </div>
-      <div *ngIf="passwordNeeded && f.password.touched && (f.password.errors?.required)" class="text-danger text-start mt-2 font-12">
+    </div>
+
+    <!-- Right form panel -->
+    <div class="login-form-panel">
+      <div class="login-card">
+        <h2 class="login-title">{{'Welcome_back' | translate}}</h2>
+        <p class="login-subtitle">{{'Sign_in_to_continue' | translate}}</p>
+        <ng-container *ngTemplateOutlet="loginForm"></ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!useCustomLoginLayout">
+    <div class="w-100" style="max-width: 400px; margin: 0 auto;">
+      <div class="logo">
+        <div class="image-containerLogin">
+          <img [src]="companyLogo" alt="Dynamico Logo" class="logo-imgLogin" style="max-width: 200px;">
+          <p class="overlay-textLogin text-white" style="margin-top: 10px; font-weight: bold;">{{companyName}}</p>
+        </div>
+      </div>
+      <ng-container *ngTemplateOutlet="loginForm"></ng-container>
+    </div>
+  </ng-container>
+
+</section>
+
+<ng-template #loginForm>
+  <form [formGroup]="authForm">
+
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="email" class="form-control" id="floatingInput" placeholder=" " formControlName="username">
+        <label for="floatingInput">{{'Username' | translate}}</label>
+      </div>
+      <div *ngIf="f['username'].touched && (f['username'].errors?.['required'])"
+        class="text-danger text-start mt-2 font-12">
         {{'Required' | translate}}
       </div>
-      <div *ngIf="passwordNeeded && f.password.touched && (f.password.errors?.pattern)" class="text-danger text-start mt-2 font-12">
-        {{'pass_p' | translate}}
-      </div>
-    <!--   <div class="mb-4 d-flex justify-content-end">
-        <a class="text-white mt-2" [routerLink]="['/forgot']" routerLinkActive="router-link-active"> {{'Forgot_password' | translate}}</a>
-      </div> -->
-      <button (click)="onSubmitClicked()" [disabled]="authForm.invalid" class="btn btn-secondary w-100 py-3">
-        {{ passwordNeeded  ? ('Login' | translate ) : ('Continue' | translate)}}
-        
-      </button>
+    </div>
 
-    </form>
-  </div>
-</section>
+    <div class="form-floating has-icon" *ngIf="passwordNeeded">
+      <input [type]="showPasswordText ? 'text' : 'password'" class="form-control" id="floatingPassword" placeholder=" "
+        formControlName="password">
+      <label for="floatingPassword">{{'Password' | translate}}</label>
+      <div class="icon" (click)="showPassword()">
+        <img src="assets/img/icons/view-icon.svg" alt="view">
+      </div>
+    </div>
+    <div *ngIf="passwordNeeded && f['password'].touched && (f['password'].errors?.['required'])"
+      class="text-danger text-start mt-2 font-12">
+      {{'Required' | translate}}
+    </div>
+    <div *ngIf="passwordNeeded && f['password'].touched && (f['password'].errors?.['pattern'])"
+      class="text-danger text-start mt-2 font-12">
+      {{'pass_p' | translate}}
+    </div>
+
+    <div class="mb-4 d-flex justify-content-end" *ngIf="!useCustomLoginLayout">
+      <a class="text-white mt-2" [routerLink]="['/forgot']" routerLinkActive="router-link-active"> {{'Forgot_password' |
+        translate}}</a>
+    </div>
+
+    <button (click)="onSubmitClicked()" [disabled]="authForm.invalid" class="btn w-100 py-3 mt-2"
+      [ngClass]="useCustomLoginLayout ? 'btn-secondary' : 'btn-secondary'">
+      {{ passwordNeeded ? ('Login' | translate) : ('Continue' | translate) }}
+    </button>
+
+  </form>
+</ng-template>

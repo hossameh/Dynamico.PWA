@@ -14,6 +14,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { AuthType } from 'src/app/core/enums/AuthType';
 import { LocationLoggerService } from '../../services/location-logger/location-logger.service';
 import { FlutterBridgeService } from '../../services/flutter-bridge/flutter-bridge.service';
+import { ThemeService } from '../../services/theme/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
   userEmail: any;
 
   companyLogo: string = environment.companyLogo;
+  useCustomLoginLayout: boolean = environment.useCustomLoginLayout || false;
 
   constructor(private readonly router: Router, private logger: LocationLoggerService,
     private readonly FB: FormBuilder,
@@ -40,6 +42,7 @@ export class LoginComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly http: HttpService,
     private readonly helper: HelperService,
+    private readonly themeService: ThemeService,
     private readonly flutterBridge: FlutterBridgeService) { }
 
   ngOnInit(): void {
@@ -178,6 +181,8 @@ export class LoginComponent implements OnInit {
       if (res.data && res.isPassed) {
 
         this.setUserData(res);
+        // Apply pwaStyle branding from login response; falls back to env defaults for null fields
+        this.themeService.applyPwaStyle(res.data.pwaStyle ?? null);
         this.userEmail = JSON.parse(localStorage.getItem('userData') || '{}').userEmail;
         this.logger.startLogger(this.userEmail);
 

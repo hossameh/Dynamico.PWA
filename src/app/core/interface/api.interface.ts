@@ -4,6 +4,16 @@ export interface API {
   message: string;
 }
 
+export interface PwaStyle {
+  primaryColor?: string | null;
+  hoverColor?: string | null;
+  sidebarBackgroundColor?: string | null;
+  sidebarLogo?: string | null;
+  sidebarText?: string | null;
+  sidebarLogoWidth?: number | null;
+  sidebarLogoHeight?: number | null;
+}
+
 export interface dates {
   date: Date;
   list: list[]

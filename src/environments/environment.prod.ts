@@ -1,17 +1,20 @@
 export const environment = {
   production: true,
-  version: '1.2.65',
+  version: '1.2.66',
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
   //hostAPI: "https://admi.egybell-apps.com/api/api/",
+  // hostAPI: "https://alorica.egybell-apps.com/api/api/",
+
   //hostAPI: "https://internal.egybell-apps.com/api/api/",
   signUpEmail: 'form@registration.com',
-  hostAPI: "https://lab7software.com/api.dynamico/api/",
-  // hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  // hostAPI: "https://lab7software.com/api.dynamico/api/",
+  //hostAPI: "https://dynamico.cloud/api.beyti/api/",
   //hostAPI: "https://dochub.dynamico.cloud/api/api/",
   // hostAPI: "https://beyti.dynamico.cloud/api/",
-
+  // hostAPI: "https://diriyah.dynamico.cloud/api/api/",
+  hostAPI: "https://viavi.dynamico.cloud/api/api/",
   //hostAPI: "https://vacation.dynamico.cloud/api/",
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,12 +25,18 @@ export const environment = {
   //companyName: 'Internal',
   companyName: '',
   //companyName: 'Dochub',
+  //companyName: 'Alorica',
+  // companyName: 'Diriyah',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  appTitle: 'Beyti',
+  //appTitle: 'Beyti',
+  //appTitle: 'Egybell.Alorica',
+  // appTitle: 'Diriyah',
+  appTitle: 'Viavi',
+
   //appTitle: 'Dochub',
 
   // appTitle: 'Lab7',
@@ -37,8 +46,28 @@ export const environment = {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  companyLogo: 'assets/img/beyti.png',
-  // companyLogo:'assets/img/logoNoName.png',
+  //companyLogo: 'assets/img/beyti.png',
+  // companyLogo: 'assets/img/logoNoName.png',
+
+  // companyLogo: 'assets/img/diriyah.png',
+  companyLogo: 'assets/img/viaviLogoWhite.png',
+  // primaryColor: '#C17251',
+  primaryColor: '#491E88',
+  // hoverColor: '#96583dff',
+  hoverColor: '#3A166D',
+  // backgroundImage: 'assets/img/diriyahBG2.jpg',
+  backgroundImage: '',
+  useCustomLoginLayout: false,
+
+  // ── Diriyah extended brand tokens ─────────────────────────
+  // Set these for Diriyah; omit / comment-out for other companies
+  // secondaryColor: '#C17251',        // badge, active-tab accent (replaces default cyan)
+  // bodyBg: '#f8f2eb',                // warm sand page background
+  // sectionHeaderBg: '#ffffff',       // section heading card background
+  // sectionHeaderShadow: 'rgba(193,114,80,0.10)', // subtle warm shadow on headers
+  // cardBorderRadius: '14px',         // consistent rounded cards
+
+
   //companyLogo: 'assets/img/MystroLogo2.png',
   formioI18n: 'assets/data/formioI18n.json',
   //companyLogo: 'assets/img/logoNoNameBlack.png',
@@ -47,6 +76,10 @@ export const environment = {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   appName: 'PWA',
   //APP_URL: 'https://app-internal.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
+  //APP_URL: 'https://app-alorica.egybell-apps.com/',   // Internal  app-internal.egybell-apps.com pwa admi
+
+  // APP_URL: 'https://app-diriyah.dynamico.cloud/',   // Internal  app-internal.egybell-apps.com pwa admi
+  APP_URL: 'https://app-viavi.dynamico.cloud/',
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
   //APP_URL: 'https://lab7software.com/mystroApp/',
 
@@ -58,7 +91,7 @@ export const environment = {
   //APP_URL: 'https://app-vacation.dynamico.cloud/',
   // APP_URL: 'https://app-beyti.dynamico.cloud/',
 
-  APP_URL: 'https://www.lab7software.com/DynamicoApp/',
+  //APP_URL: 'https://www.lab7software.com/DynamicoApp/',
 
 
 
@@ -86,11 +119,11 @@ export const environment = {
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
   friendlyErrorMessage: 'Something Went Wrong !',
-  //redirectUrl: '', // admi - internal
-  //redirectUrl: '/login',
+  // redirectUrl: '', // admi - internal
+  redirectUrl: '/login',
 
-  redirectUrl: '/beytiapp/login',
-  //  redirectUrl:'/DynamicoApp/login',
+  //redirectUrl: '/beytiapp/login',
+  // redirectUrl:'/DynamicoApp/login',
   //redirectUrl:'/mystroApp/login',
 
   // apiEndpoint: 'https://dynamico.cloud/api.beyti/api/ChecklistRecords/SaveChecklistRecord',
@@ -98,11 +131,11 @@ export const environment = {
   // apiEndpoint: 'https://beyti.dynamico.cloud/api/ChecklistRecords/SaveChecklistRecord',
 
   locationLogger: {
-    timer: .1 * 60 * 1000, // 15 minutes in milliseconds
+    timer: 5 * 60 * 1000, // 15 minutes in milliseconds
     dayStart: '08:00',
     dayEnd: '18:00',
-    activateLocationLogger: true,
-    formId: 356,
+    activateLocationLogger: false,
+    formId: 26,
   },
   ui: {
     companyName: 'Dynamico',

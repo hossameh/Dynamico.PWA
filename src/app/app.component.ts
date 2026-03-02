@@ -15,6 +15,7 @@ import { Role } from './core/enums/role.enum';
 import { LangEnum } from './core/enums/common.enum';
 import { Title } from '@angular/platform-browser';
 import { LocationLoggerService } from './services/location-logger/location-logger.service';
+import { ThemeService } from './services/theme/theme.service';
 
 
 @Component({
@@ -33,7 +34,7 @@ export class AppComponent {
   message: any = null;
   role = Role;
   userRole!: string;
-  constructor(private readonly helper: HelperService, 
+  constructor(private readonly helper: HelperService,
     private readonly swUpdates: SwUpdate,
     private readonly http: HttpService,
     private readonly translate: TranslateService,
@@ -41,20 +42,21 @@ export class AppComponent {
     private readonly storage: Storage, private titleService: Title,
     private readonly router: Router,
     private readonly notificationPage: NotificationPage,
-    private readonly loadingService: LoadingService) {
+    private readonly loadingService: LoadingService,
+    private readonly themeService: ThemeService) {
     this.setTitle();
   }
 
   ngOnInit(): void {
     this.update = false;
     this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
-    
+
     this.createDb();
     this.reloadCache();
 
     this.listenToFCM();
 
- 
+
     this.loadingService.isLoading.subscribe(isLoading => {
       setTimeout(() => {
         this.show = isLoading;
@@ -82,11 +84,23 @@ export class AppComponent {
         this.hideNotifcation = this.router.url.includes('notification') || this.router.url.includes('visits') || this.router.url.includes('search')
           || this.router.url.includes('login')
           || this.router.url.includes('GuestLogin')
-          || this.userRole === this.role.Anonymous || !this.userRole 
+          || this.userRole === this.role.Anonymous || !this.userRole
           || this.router.url.includes('forgot') || this.router.url.includes('resetpassword');
+        // Dynamic Background Logic
+        const env = environment as any;
+        if (env.backgroundImage) {
+          if (this.router.url.includes('login')) {
+            document.documentElement.style.setProperty('--bg-image', `url(${env.backgroundImage})`);
+          } else {
+            document.documentElement.style.setProperty('--bg-image', `url(assets/img/pattern.png)`);
+          }
+        }
       }
       window.scrollTo(0, 0);
     });
+
+    // Apply theme: restores persisted pwaStyle from localStorage, or falls back to env defaults
+    this.themeService.applyFromStorage();
   }
   async createDb() {
     await this.storage.create().then(async (res) => {
@@ -139,7 +153,7 @@ export class AppComponent {
       }
     } else {
       // en
-      elAr && elAr.remove() ;
+      elAr && elAr.remove();
       if (!elEn) {
         this.generateLinkElement({
           id: 'bootstrap-en',

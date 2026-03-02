@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <div>
         <div class="d-flex">
-          <img src="assets/img/icons/arrow-left-icon.svg" alt="back" class="me-3 rotateRtl" (click)="back()">
+          <i class="bi bi-arrow-left text-primary me-3 rotateRtl font-24" (click)="back()" style="cursor: pointer;"></i>
           <h4>
             {{'Search' | translate}}
           </h4>
@@ -156,13 +156,8 @@
   back-to-top-icon-circle
   bg-highlight
   shadow-m
-" style="transform: scale(1); position: fixed !important">
-    <img src="assets/img/icons/icons8-up-24.png" alt="add">
-    <!-- <img src="assets/img/icons/up-arrow.svg" alt="add"> -->
-    <!-- <svg class="bi bi-arrow-up"></svg> -->
-    <!-- Up -->
-    <!-- <img src="assets/img/icons/home-icon.svg" alt="home"> -->
-    <!-- <i class="fa fa-angle-up"></i> -->
+" style="transform: scale(1); position: fixed !important; display: flex; justify-content: center; align-items: center;">
+    <i class="bi bi-arrow-up text-white font-20"></i>
   </a>
   <div *ngIf="isLoading" class="loader">
     <span></span>

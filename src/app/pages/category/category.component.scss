@@ -1,4 +1,5 @@
 @import "style.scss";
+
 .box-side {
   position: relative;
   z-index: 99;
@@ -80,7 +81,7 @@
 }
 
 .bg-highlight {
-  background-color: #11006E !important;
+  background-color: var(--main-color) !important;
   // background-color: #004685 !important;
   color: #FFF !important;
 }
@@ -151,6 +152,7 @@ span:nth-child(4) {
 span:nth-child(5) {
   animation-delay: 0.5s;
 }
+
 ::ng-deep.ng-dropdown-panel {
   z-index: 10000 !important
 }
