@@ -68,5 +68,15 @@
   "thankYou": {
     "title": "Thank You !",
     "lead": "We have received your request."
-  }
+  },
+  "Change_Password": "Change Password",
+  "Old_Password": "Old Password",
+  "Old_Password_Required": "Old Password Is Required",
+  "New_Password_Required": "New Password Is Required",
+  "Minimum_Length_Allowed_Is_8": "Minimum length allowed is 8",
+  "Password_Must_Contains_Uppercase_Lowercase_Number_And_Symbol": "Password must contains Uppercase, lowercase, number and symbol",
+  "Please_Confirm_Password": "Please Confirm Password",
+  "Password_Doesnot_Match": "Password Doesnot Match",
+  "Change": "Change",
+  "Password Changed Successfully": "Password Changed Successfully"
 }

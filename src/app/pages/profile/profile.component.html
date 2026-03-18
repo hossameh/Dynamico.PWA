@@ -41,6 +41,19 @@
           <img class="rotateRtl" src="assets/img/icons/right-chevron-icon.svg" alt="open">
         </div>
       </div>
+
+      <!-- Change Password Row -->
+      <div class="d-flex justify-content-between align-items-center control mt-4"
+           data-bs-toggle="modal" data-bs-target="#changePasswordModal"
+           (click)="openChangePasswordModal()" style="cursor: pointer;">
+        <h6>
+          {{'Change_Password' | translate}}
+        </h6>
+        <div class="d-flex align-items-center">
+          <img class="rotateRtl" src="assets/img/icons/right-chevron-icon.svg" alt="open">
+        </div>
+      </div>
+
 <!-- 
       <div class="d-flex justify-content-between align-items-center control mt-4">
         <h6>
@@ -78,3 +91,120 @@
     </div>
   </div>
 </section>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel">
+          <i class="fa fa-lock me-2"></i>
+          {{'Change_Password' | translate}}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="passForm">
+        <form [formGroup]="passForm" (ngSubmit)="changeUserPassword()">
+
+          <!-- Old Password -->
+          <div class="mb-3">
+            <label class="label mb-1">{{'Old_Password' | translate}}</label>
+            <div class="input-group">
+              <input
+                id="oldPassword"
+                [type]="showOld ? 'text' : 'password'"
+                class="form-control"
+                formControlName="oldPassword"
+                [ngClass]="{
+                  'is-invalid': passForm.get('oldPassword')?.dirty && passForm.get('oldPassword')?.hasError('required')
+                }">
+              <span class="input-group-text" style="cursor:pointer" (click)="togglePassword('old')">
+                <i [class]="showOld ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+              </span>
+            </div>
+            <div class="text-danger small mt-1"
+                 *ngIf="passForm.get('oldPassword')?.dirty && passForm.get('oldPassword')?.hasError('required')">
+              {{'Old_Password_Required' | translate}}
+            </div>
+          </div>
+
+          <!-- New Password -->
+          <div class="mb-3">
+            <label class="label mb-1">{{'New_Password' | translate}}</label>
+            <div class="input-group">
+              <input
+                id="newPassword"
+                [type]="showPass ? 'text' : 'password'"
+                class="form-control"
+                formControlName="newPassword"
+                (keyup)="checkPasswords()"
+                [ngClass]="{
+                  'is-invalid': passForm.get('newPassword')?.dirty && passForm.get('newPassword')?.invalid
+                }">
+              <span class="input-group-text" style="cursor:pointer" (click)="togglePassword('pass')">
+                <i [class]="showPass ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+              </span>
+            </div>
+            <div class="text-danger small mt-1"
+                 *ngIf="passForm.get('newPassword')?.dirty && passForm.get('newPassword')?.hasError('required')">
+              {{'New_Password_Required' | translate}}
+            </div>
+            <div class="text-danger small mt-1"
+                 *ngIf="passForm.get('newPassword')?.dirty && passForm.get('newPassword')?.hasError('minlength')">
+              {{'Minimum_Length_Allowed_Is_8' | translate}}
+            </div>
+            <div class="text-danger small mt-1"
+                 *ngIf="passForm.get('newPassword')?.dirty && passForm.get('newPassword')?.hasError('pattern')">
+              {{'Password_Must_Contains_Uppercase_Lowercase_Number_And_Symbol' | translate}}
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-3">
+            <label class="label mb-1">{{'Confirm_Password' | translate}}</label>
+            <div class="input-group">
+              <input
+                id="confirmPassword"
+                [type]="showConfirm ? 'text' : 'password'"
+                class="form-control"
+                formControlName="confirmPassword"
+                (keyup)="checkPasswords()"
+                [ngClass]="{
+                  'is-invalid': passForm.get('confirmPassword')?.dirty && (!same || passForm.get('confirmPassword')?.hasError('required'))
+                }">
+              <span class="input-group-text" style="cursor:pointer" (click)="togglePassword('confirm')">
+                <i [class]="showConfirm ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+              </span>
+            </div>
+            <div class="text-danger small mt-1"
+                 *ngIf="passForm.get('confirmPassword')?.dirty && passForm.get('confirmPassword')?.hasError('required')">
+              {{'Please_Confirm_Password' | translate}}
+            </div>
+            <div class="text-danger small mt-1"
+                 *ngIf="passForm.get('confirmPassword')?.dirty && !same">
+              {{'Password_Doesnot_Match' | translate}}
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+          {{'Cancel' | translate}}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          (click)="changeUserPassword()"
+          [disabled]="passForm?.invalid || !same || isChangingPassword">
+          <span *ngIf="isChangingPassword" class="spinner-border spinner-border-sm me-1" role="status"></span>
+          {{'Change' | translate}}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -103,5 +103,15 @@
   "thankYou": {
     "title": "شكرًا لك!",
     "lead": "لقد استلمنا طلبك."
-  }
+  },
+  "Change_Password": "تغيير كلمة المرور",
+  "Old_Password": "كلمة المرور القديمة",
+  "Old_Password_Required": "حقل كلمة المرور القديمة مطلوب",
+  "New_Password_Required": "حقل كلمة المرور الجديدة مطلوب",
+  "Minimum_Length_Allowed_Is_8": "الحد الأدنى المسموح به هو 8 أحرف",
+  "Password_Must_Contains_Uppercase_Lowercase_Number_And_Symbol": "يجب أن تحتوي كلمة المرور على أحرف كبيرة وأحرف صغيرة ورقم ورمز",
+  "Please_Confirm_Password": "يرجى تأكيد كلمة المرور",
+  "Password_Doesnot_Match": "كلمات المرور غير متطابقة",
+  "Change": "تغيير",
+  "Password Changed Successfully": "تم تغيير كلمة المرور بنجاح"
 }

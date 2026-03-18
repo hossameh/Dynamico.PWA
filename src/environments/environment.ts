@@ -85,6 +85,7 @@ export const environment = {
     vapidKey: "BCgzg0XU9HxJayM2r-b8zsZ1n97KcOfr6YDXBhP9F01IXLwVgdBq1QMZgR6ITWtQWpUONpMmIadYOUDKcWnu9tc",
   },
   friendlyErrorMessage: 'Something Went Wrong !',
+  ChangeUserPassword: 'Users/ChangeUserPassword',
   redirectUrl: '/DynamicoApp/login',
   apiEndpoint: 'https://lab7software.com/api.dynamico/api/ChecklistRecords/SaveChecklistRecord',
 

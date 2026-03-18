@@ -9,6 +9,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { LangEnum } from 'src/app/core/enums/common.enum';
 import { LocationLoggerService } from '../../services/location-logger/location-logger.service';
 import { FlutterBridgeService } from '../../services/flutter-bridge/flutter-bridge.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -21,15 +22,25 @@ export class ProfileComponent implements OnInit {
   version = environment.version
   userData: any;
 
+  // Change Password
+  passForm!: FormGroup;
+  showOld = false;
+  showPass = false;
+  showConfirm = false;
+  same = false;
+  isChangingPassword = false;
+
   constructor(public readonly translate: TranslateService, private logger: LocationLoggerService,
     private readonly http: HttpService,
     private readonly alert: AlertService,
     private readonly router: Router,
     private readonly helper: HelperService,
-    private readonly flutterBridge: FlutterBridgeService) { }
+    private readonly flutterBridge: FlutterBridgeService,
+    private readonly fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.userData = JSON.parse(localStorage.getItem('userData') || '{}')
+    this.buildPassForm();
   }
 
   langChanged(lang: any) {
@@ -120,6 +131,69 @@ export class ProfileComponent implements OnInit {
   logoutFromOtherDevices(userName: any) {
     let url = `Auth/logout?UserName=${userName}`;
     return this.http.post<API>(`${url}`, null);
+  }
+
+  /******************Change Password******************/
+  buildPassForm() {
+    this.passForm = this.fb.group({
+      oldPassword: ['', Validators.required],
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$\-\/:-?{-~!"^_`\[\]@%$*])(?=.{8,})/)
+      ]],
+      confirmPassword: ['', Validators.required]
+    });
+  }
+
+  checkPasswords() {
+    this.same = this.passForm.get('newPassword')?.value === this.passForm.get('confirmPassword')?.value;
+  }
+
+  togglePassword(control: string) {
+    if (control === 'old') this.showOld = !this.showOld;
+    else if (control === 'pass') this.showPass = !this.showPass;
+    else if (control === 'confirm') this.showConfirm = !this.showConfirm;
+  }
+
+  openChangePasswordModal() {
+    this.passForm.reset();
+    this.same = false;
+    this.showOld = false;
+    this.showPass = false;
+    this.showConfirm = false;
+  }
+
+  changeUserPassword() {
+    if (this.passForm.invalid || !this.same) return;
+    this.isChangingPassword = true;
+    const body = {
+      userId: this.userData?.userId,
+      password: this.passForm.get('newPassword')?.value,
+      oldPassword: this.passForm.get('oldPassword')?.value
+    };
+    this.http.post<any>(environment.ChangeUserPassword, body, false).subscribe(
+      (res: any) => {
+        this.isChangingPassword = false;
+        if (res?.isPassed) {
+          this.alert.success(this.alert.getTranslation('Password Changed Successfully'));
+          // Close modal
+          const modalEl = document.getElementById('changePasswordModal');
+          if (modalEl) {
+            const bsModal = (window as any).bootstrap?.Modal?.getInstance(modalEl);
+            bsModal?.hide();
+          }
+          this.passForm.reset();
+          this.same = false;
+        } else {
+          this.alert.error(res?.message || this.alert.getTranslation('Something Went Wrong !'));
+        }
+      },
+      (error) => {
+        this.isChangingPassword = false;
+        this.alert.error(error?.message || this.alert.getTranslation('Something Went Wrong !'));
+      }
+    );
   }
 
 
