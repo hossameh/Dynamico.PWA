@@ -85,7 +85,7 @@
     <div class="form-floating ">
       <input class="form-control" id="floatingInput" placeholder="{{'Name' | translate}}" [(ngModel)]="formRef"
         name="formRef">
-      <label for="floatingInput"> {{'Record_reference' | translate}}</label>
+      <label for="floatingInput"> {{'Record_reference' | translate}}</label> 
     </div>
     <div class="form-floating pt-3" *ngIf="currentUser?.allowMultiCustomers">
       <ng-select [items]="customersList" bindLabel="name" class=" " appendTo="body" name="customer"
