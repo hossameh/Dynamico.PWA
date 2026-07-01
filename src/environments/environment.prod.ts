@@ -10,7 +10,9 @@ export const environment = {
   //hostAPI: "https://internal.egybell-apps.com/api/api/",
   signUpEmail: 'form@registration.com',
   // hostAPI: "https://lab7software.com/api.dynamico/api/",
-  hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  //hostAPI: "https://dynamico.cloud/api.beyti/api/",
+  hostAPI: "https://sunrise.dynamico.cloud/api/api/",
+
   //hostAPI: "https://dochub.dynamico.cloud/api/api/",
   // hostAPI: "https://beyti.dynamico.cloud/api/",
   // hostAPI: "https://diriyah.dynamico.cloud/api/api/",
@@ -32,10 +34,11 @@ export const environment = {
 
   //appTitle: 'Egybell.Internal',
   //appTitle: 'Lab7.Internal',
-  appTitle: 'Beyti',
+  //appTitle: 'Beyti',
   //appTitle: 'Egybell.Alorica',
   // appTitle: 'Diriyah',
   //appTitle: 'Viavi',
+  appTitle: 'Sunrise',
 
   //appTitle: 'Dochub',
 
@@ -45,8 +48,9 @@ export const environment = {
   //appTitle: 'Egybell.ADMI',
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  companyLogo: 'assets/img/sunriseLogo.png',
 
-  companyLogo: 'assets/img/beyti.png',
+  //companyLogo: 'assets/img/beyti.png',
   // companyLogo: 'assets/img/logoNoName.png',
 
   // companyLogo: 'assets/img/diriyah.png',
@@ -80,6 +84,8 @@ export const environment = {
 
   // APP_URL: 'https://app-diriyah.dynamico.cloud/',   // Internal  app-internal.egybell-apps.com pwa admi
   //APP_URL: 'https://app-viavi.dynamico.cloud/',
+  APP_URL: 'https://app-sunrise.dynamico.cloud/',
+
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
   //APP_URL: 'https://lab7software.com/mystroApp/',
 
@@ -87,7 +93,7 @@ export const environment = {
   //APP_URL: 'https://app-dochub.dynamico.cloud/',
 
   //APP_URL: 'https://lab7software.com/DynamicoApp/',
-  APP_URL: 'https://dynamico.cloud/beytiapp/',
+  //APP_URL: 'https://dynamico.cloud/beytiapp/',
   //APP_URL: 'https://app-vacation.dynamico.cloud/',
   // APP_URL: 'https://app-beyti.dynamico.cloud/',
 
@@ -121,9 +127,9 @@ export const environment = {
   friendlyErrorMessage: 'Something Went Wrong !',
   ChangeUserPassword: 'Users/ChangeUserPassword',
   // redirectUrl: '', // admi - internal
-  //redirectUrl: '/login',
+  redirectUrl: '/login',
 
-  redirectUrl: '/beytiapp/login',
+  //redirectUrl: '/beytiapp/login',
   // redirectUrl:'/DynamicoApp/login',
   //redirectUrl:'/mystroApp/login',
 

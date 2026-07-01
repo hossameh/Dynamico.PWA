@@ -16,6 +16,7 @@ import { LangEnum } from './core/enums/common.enum';
 import { Title } from '@angular/platform-browser';
 import { LocationLoggerService } from './services/location-logger/location-logger.service';
 import { ThemeService } from './services/theme/theme.service';
+import { FlutterBridgeService } from './services/flutter-bridge/flutter-bridge.service';
 
 
 @Component({
@@ -43,11 +44,15 @@ export class AppComponent {
     private readonly router: Router,
     private readonly notificationPage: NotificationPage,
     private readonly loadingService: LoadingService,
-    private readonly themeService: ThemeService) {
+    private readonly themeService: ThemeService,
+    private readonly flutterBridge: FlutterBridgeService) {
     this.setTitle();
   }
 
   ngOnInit(): void {
+    // Register Flutter auth callback early so it's ready when the Android app reopens
+    this.flutterBridge.listenForFlutterAuth();
+
     this.update = false;
     this.userRole = JSON.parse(localStorage.getItem('userData') || '{}').userType;
 

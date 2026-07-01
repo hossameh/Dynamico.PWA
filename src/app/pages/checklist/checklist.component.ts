@@ -20,6 +20,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 import { SubmittionState } from './../../core/enums/submittionState';
+import { clearCaptureCache } from '../formio -components/capture/capture.component';
 
 @Component({
   selector: 'app-checklist',
@@ -72,6 +73,11 @@ export class ChecklistComponent implements OnInit {
     private translate: TranslateService
   ) {}
   ngOnInit(): void {
+    // Clear any stale captured-image data left over from a previous form session.
+    // This must happen before Form.io renders so that the module-level cache
+    // only contains images captured or loaded during THIS form session.
+    clearCaptureCache();
+
     this.formioI18n =  this.helper.formioI18n;
 
     this.getOfflineRef();
@@ -491,9 +497,19 @@ export class ChecklistComponent implements OnInit {
   }
 
   serializeObj(obj: any) {
-    let result = [];
+    let result: any[] = [];
     for (var property in obj) {
-      result.push({ name: property, value: obj[property] });
+      let val = obj[property];
+      
+      // Fix for Form.io custom component double-array issue (Capture component)
+      if (Array.isArray(val) && val.length > 0 && Array.isArray(val[0])) {
+        const isCapture = val[0].length > 0 && typeof val[0][0] === 'object' && 'storage' in val[0][0];
+        if (isCapture || val[0].length === 0) {
+           val = val.reduce((acc, curr) => acc.concat(curr), []);
+        }
+      }
+
+      result.push({ name: property, value: val });
     }
     return result;
   }

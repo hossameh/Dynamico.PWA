@@ -1,0 +1,35 @@
+<!-- Camera capture button -->
+<button
+  *ngIf="showCaptureButton"
+  type="button"
+  class="capture-btn"
+  [disabled]="capturing"
+  (click)="openCamera()"
+>
+  <i class="fa" [ngClass]="capturing ? 'fa-spinner fa-spin' : 'fa-camera'"></i>
+  <span>{{ capturing ? 'Opening Camera…' : 'Capture Photo' }}</span>
+</button>
+
+<!-- Thumbnail grid -->
+<div class="capture-grid" *ngIf="images && images.length > 0">
+  <div class="capture-thumb" *ngFor="let img of images; let i = index">
+    <div class="capture-img-wrap" (click)="downloadImage(img)" title="Click to download">
+      <img [src]="img.url" [alt]="img.originalName || 'Captured photo'" />
+      <div class="capture-download-hint">
+        <i class="fa fa-download"></i>
+      </div>
+    </div>
+    <button
+      *ngIf="!disabled"
+      type="button"
+      class="remove-btn"
+      (click)="removeImage(i)"
+      title="Remove"
+    >
+      <i class="fa fa-times"></i>
+    </button>
+    <div class="thumb-info">
+      <span class="thumb-name">{{ img.originalName }}</span>
+    </div>
+  </div>
+</div>

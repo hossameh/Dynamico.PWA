@@ -61,6 +61,8 @@ import { AppointmentComponent } from './pages/formio -components/appointment/app
 import { registerAppointmentComponent } from './pages/formio -components/appointment/appointment/appointment-wrapper.formio';
 import { WorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control.component';
 import { registerWorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control-wrapper.formio';
+import { CaptureComponent } from './pages/formio -components/capture/capture.component';
+import { registerCaptureComponent } from './pages/formio -components/capture/capture-wrapper.formio';
 import localAr from '@angular/common/locales/ar-EG';
 import { registerLocaleData } from '@angular/common';
 import { ThankYouComponent } from './auth/thank-you/thank-you.component';
@@ -106,6 +108,7 @@ registerLocaleData(localAr);
     RatingWrapperComponent,
     AppointmentComponent,
     WorkflowControlComponent,
+    CaptureComponent,
     ThankYouComponent
   ],
   imports: [
@@ -156,8 +159,9 @@ export class AppModule {
   constructor(injector: Injector) {
     registerRatingComponent(injector);
     registerSelectGroupComponent(injector);
-    registerWorkflowControlComponent(injector)
+    registerWorkflowControlComponent(injector);
     registerAppointmentComponent(injector);
+    registerCaptureComponent(injector);
   }
 }
 export function HttpLoaderFactory(http: HttpClient) {

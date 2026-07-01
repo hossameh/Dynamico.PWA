@@ -1,0 +1,128 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* ── Camera Button ─────────────────────────────────────────── */
+.capture-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.2rem;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  margin-bottom: 0.75rem;
+
+  &:hover:not(:disabled) {
+    background: #1557b0;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+/* ── Thumbnail Grid ────────────────────────────────────────── */
+.capture-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.capture-thumb {
+  position: relative;
+  width: 110px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: #f3f3f3;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+  }
+
+  .capture-img-wrap {
+    position: relative;
+    cursor: pointer;
+    display: block;
+
+    &:hover .capture-download-hint {
+      opacity: 1;
+    }
+  }
+
+  .capture-download-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+
+    i {
+      font-size: 1.3rem;
+      color: #fff;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+    }
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    font-size: 0.7rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(200, 0, 0, 1);
+    }
+  }
+
+  .thumb-info {
+    padding: 4px 6px;
+    background: rgba(0, 0, 0, 0.04);
+
+    .thumb-name {
+      font-size: 0.7rem;
+      color: #555;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+  }
+}
