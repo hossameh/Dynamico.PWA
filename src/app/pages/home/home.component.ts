@@ -65,17 +65,33 @@ export class HomeComponent implements OnInit {
       pageIndex: this.pager.page,
       pageSize: this.pager.pageSize
     }
-    this.http.get('Category/GetUserCategories', params).subscribe(async (res: any) => {
-      res?.list.map((el: any) => {
-        this.items.push(el);
-      });
-      this.pager.total = res?.total;
-      this.pager.pages = res?.pages;
-      this.loaded = true;
-      this.isLoading = false;
-      this.items.map((el: any) => { el.userId = this.userId });
-      cashedList.push(...this.items);
-      await this.storage.set('Categories', cashedList);
+    this.http.get('Category/GetUserCategories', params).subscribe({
+      next: async (res: any) => {
+        res?.list.map((el: any) => {
+          this.items.push(el);
+        });
+        this.pager.total = res?.total;
+        this.pager.pages = res?.pages;
+        this.loaded = true;
+        this.isLoading = false;
+        this.items.map((el: any) => { el.userId = this.userId });
+        cashedList.push(...this.items);
+        await this.storage.set('Categories', cashedList);
+      },
+      error: async () => {
+        // Without this the flags stay latched and the page loader spins forever —
+        // this is what users saw as "stuck on the home loading screen" once their
+        // token expired and every request started coming back 401.
+        this.loaded = true;
+        this.isLoading = false;
+        // Roll the page back so a retry re-requests this page instead of skipping it.
+        if (this.pager.page > 1) {
+          this.pager.page -= 1;
+        }
+        if (this.items.length === 0) {
+          await this.loadFromCache();
+        }
+      }
     });
   }
 
