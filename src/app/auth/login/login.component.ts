@@ -15,6 +15,7 @@ import { AuthType } from 'src/app/core/enums/AuthType';
 import { LocationLoggerService } from '../../services/location-logger/location-logger.service';
 import { FlutterBridgeService } from '../../services/flutter-bridge/flutter-bridge.service';
 import { ThemeService } from '../../services/theme/theme.service';
+import { clearStoredSession, isStoredTokenExpired } from '../../core/utils/token.utils';
 
 @Component({
   selector: 'app-login',
@@ -46,14 +47,25 @@ export class LoginComponent implements OnInit {
     private readonly flutterBridge: FlutterBridgeService) { }
 
   ngOnInit(): void {
-    // Auto-redirect if user already has a valid session
+    // Auto-redirect if user already has a valid session.
+    // The expiry check is essential: a presence-only check bounces the user to
+    // /page/home on a stale token, every request there 401s, and this login form
+    // — the only way back to a working session — becomes unreachable.
     const existingToken = localStorage.getItem('token');
     const existingUserData = localStorage.getItem('userData');
-    if (existingToken && existingToken !== '{}' && existingToken !== 'null'
-        && existingUserData && existingUserData !== '{}') {
+    const hasSession = !!existingToken && existingToken !== '{}' && existingToken !== 'null'
+        && !!existingUserData && existingUserData !== '{}';
+
+    if (hasSession && !isStoredTokenExpired(existingToken)) {
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
       this.routeToHome();
       return;
+    }
+
+    if (hasSession) {
+      // Expired session — drop it so the form below starts from a clean slate
+      // instead of leaving a dead token for the next request to trip over.
+      clearStoredSession();
     }
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';

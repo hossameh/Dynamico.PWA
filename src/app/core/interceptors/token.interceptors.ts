@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { LangEnum } from '../enums/common.enum';
+import { clearStoredSession } from '../utils/token.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,9 @@ import { LangEnum } from '../enums/common.enum';
 export class TokenInterceptor implements HttpInterceptor {
 
   private token: string | null = null;
+
+  /** Stops a burst of parallel 401s from each tearing down and re-navigating. */
+  private sessionTeardownInProgress = false;
 
   constructor(
     private readonly loadingService: LoadingService,
@@ -50,15 +53,12 @@ export class TokenInterceptor implements HttpInterceptor {
         this.loadingService.setLoading(true, request.url);
       return next.handle(request).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error && error.status === 401) {
-            // 401 errors are most likely going to be because we have an expired token that we need to refresh.
-            return throwError(error);
-          }
-          if (error && error.status === 424) {
-            localStorage.clear();
-            sessionStorage.clear();
-            localStorage.setItem("lang", LangEnum.English);
-            this.router.navigate(['/login']);
+          if (error && (error.status === 401 || error.status === 424)) {
+            // The session is gone as far as the server is concerned.
+            // 401 used to just rethrow here, and because most callers subscribe
+            // without an error handler their loading flags stayed latched on —
+            // the user was left staring at a spinner with no route back to login.
+            this.forceReLogin();
             return throwError(error);
           }
           else {
@@ -90,5 +90,18 @@ export class TokenInterceptor implements HttpInterceptor {
     } else {
       return next.handle(request);
     }
+  }
+
+  /** Drops the dead session and sends the user back to the login form. */
+  private forceReLogin(): void {
+    if (this.sessionTeardownInProgress) {
+      return;
+    }
+    this.sessionTeardownInProgress = true;
+
+    clearStoredSession();
+
+    const release = () => { this.sessionTeardownInProgress = false; };
+    this.router.navigate(['/login']).then(release, release);
   }
 }
