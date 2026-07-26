@@ -46,6 +46,16 @@ export class LoginComponent implements OnInit {
     private readonly flutterBridge: FlutterBridgeService) { }
 
   ngOnInit(): void {
+    // Auto-redirect if user already has a valid session
+    const existingToken = localStorage.getItem('token');
+    const existingUserData = localStorage.getItem('userData');
+    if (existingToken && existingToken !== '{}' && existingToken !== 'null'
+        && existingUserData && existingUserData !== '{}') {
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.routeToHome();
+      return;
+    }
+
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.route.queryParams.subscribe((params) => {
       const data = params['data'];

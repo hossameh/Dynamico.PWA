@@ -554,28 +554,48 @@ export class ChecklistComponent implements OnInit {
         if (isOnline) {
           this.http
             .post('ChecklistRecords/SaveFormRecord', this.modelBody)
-            .subscribe((res: any) => {
-              if (res.isPassed) {
-                if (this.userRole == Role.Anonymous) {
-                  this.router.navigateByUrl('/thankyou');
-                } else {
-                  this.alert.success(
-                    this.helper.getTranslation('Form Submitted Successfully')
-                  );
+            .subscribe(
+              (res: any) => {
+                if (res.isPassed) {
+                  if (this.userRole == Role.Anonymous) {
+                    this.router.navigateByUrl('/thankyou');
+                  } else {
+                    this.alert.success(
+                      this.helper.getTranslation('Form Submitted Successfully')
+                    );
 
-                  this.location.back();
+                    this.location.back();
+                  }
+                  this.updateCashedPlanRecords();
+                } else {
+                  this.alert.alertError(
+                    this.helper.getTranslation('Something Went Wrong')
+                  );
+                  this.alert.alertError(this.helper.getTranslation(res?.message));
+                  this.alert.alertError(
+                    this.helper.getTranslation(this.modelBody)
+                  );
                 }
-                this.updateCashedPlanRecords();
-              } else {
-                this.alert.alertError(
-                  this.helper.getTranslation('Something Went Wrong')
-                );
-                this.alert.alertError(this.helper.getTranslation(res?.message));
-                this.alert.alertError(
-                  this.helper.getTranslation(this.modelBody)
-                );
+              },
+              (error) => {
+                if (this.offline.isNetworkFailure(error)) {
+                  if (!this.modelBody.offlineRef) this.modelBody.offlineRef = this.getOfflineRef();
+                  if (!this.modelBody.userId) this.modelBody.userId = this.userId;
+                  if (!this.modelBody.creation_Date) this.modelBody.creation_Date = new Date();
+                  this.offline.enqueueFailedSave(this.modelBody);
+                  if (this.userRole == Role.Anonymous) {
+                    this.router.navigateByUrl('/thankyou');
+                  } else {
+                    this.alert.warning(
+                      this.helper.getTranslation('Network unstable — your record was saved and will be sent automatically.')
+                    );
+                    this.location.back();
+                  }
+                } else {
+                  this.alert.alertError(this.helper.getTranslation('Something Went Wrong'));
+                }
               }
-            });
+            );
         } else {
           this.modelBody.creation_Date = new Date();
           this.modelBody.userId = this.userId;

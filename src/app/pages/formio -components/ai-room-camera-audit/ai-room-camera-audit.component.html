@@ -1,0 +1,278 @@
+<div class="ai-audit-container" [class.disabled]="disabled">
+  <!-- Room Selection Panel (room-driven mode only) -->
+  <div class="rooms-filter-panel" *ngIf="roomDrivenMode">
+    <div class="filter-header">
+      <h4 class="panel-title">Room Selection</h4>
+      <button
+        type="button"
+        class="btn-refresh"
+        (click)="loadRooms()"
+        [disabled]="roomsLoading || roomFiltersLocked"
+        title="Refresh rooms list">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+
+    <div class="filter-grid">
+      <label class="filter-field">
+        <span class="filter-label">Floor</span>
+        <select
+          [(ngModel)]="filters.floor"
+          (change)="onFloorChange()"
+          [disabled]="roomsLoading || roomFiltersLocked">
+          <option [ngValue]="null">— All floors —</option>
+          <option *ngFor="let f of availableFloors" [value]="f">{{ f }}</option>
+        </select>
+      </label>
+
+      <label class="filter-field">
+        <span class="filter-label">Room Type</span>
+        <select
+          [(ngModel)]="filters.roomType"
+          (change)="onRoomTypeChange()"
+          [disabled]="roomsLoading || roomFiltersLocked">
+          <option [ngValue]="null">— All types —</option>
+          <option *ngFor="let t of availableRoomTypes" [value]="t">{{ t }}</option>
+        </select>
+      </label>
+
+      <label class="filter-field">
+        <span class="filter-label">Room Number</span>
+        <select
+          [(ngModel)]="filters.roomNumber"
+          (change)="onRoomNumberChange()"
+          [disabled]="roomsLoading || !availableRoomNumbers.length || roomFiltersLocked">
+          <option [ngValue]="null">— Select room —</option>
+          <option *ngFor="let n of availableRoomNumbers" [value]="n">{{ n }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="rooms-loading" *ngIf="roomsLoading">Loading rooms…</div>
+    <div class="rooms-error" *ngIf="roomsError">
+      <i class="fa fa-exclamation-circle"></i>
+      <span>{{ roomsError }}</span>
+    </div>
+
+    <div class="selected-room-info" *ngIf="selectedRoom">
+      <i class="fa fa-check-circle"></i>
+      <span>Selected room <strong>{{ selectedRoom[roomNumberKey] }}</strong> · {{ selectedRoom[roomTypeKey] }} · Floor {{ selectedRoom[roomFloorKey] }}</span>
+    </div>
+
+    <p class="filters-locked-hint" *ngIf="roomFiltersLocked">Clear all audited objects to change the room.</p>
+  </div>
+
+  <!-- Live Camera View / Stream Panel -->
+  <div class="camera-panel">
+    <div class="video-container" 
+         #videoContainer
+         [style.width]="cameraWidth ? cameraWidth + 'px' : '100%'"
+         [style.height]="cameraHeight ? cameraHeight + 'px' : 'auto'"
+         [style.aspect-ratio]="cameraHeight ? 'auto' : '16/9'"
+         [style.max-width]="'100%'">
+      <!-- The Video stream -->
+      <video
+        #videoElement
+        autoplay
+        playsinline
+        muted
+        class="video-preview"
+        [class.active]="isCameraActive">
+      </video>
+
+      <!-- The Canvas overlay for bounding boxes -->
+      <canvas
+        #canvasOverlay
+        class="canvas-overlay"
+        [class.active]="isCameraActive && showBoundingBoxes">
+      </canvas>
+
+      <!-- Camera Placeholder / Poster when inactive -->
+      <div class="camera-poster" *ngIf="!isCameraActive">
+        <div class="poster-content">
+          <i class="fa fa-video-camera"></i>
+          <h3>AI Room Audit Camera</h3>
+          <p>Scan room areas automatically using local AI object detection.</p>
+        </div>
+      </div>
+
+      <!-- Live status strip on top of camera preview -->
+      <div class="status-overlay" *ngIf="isCameraActive">
+        <div class="status-indicator" [class]="statusClass">
+          <span class="pulse-dot" *ngIf="state === 'Detecting' || state === 'CandidateDetected' || state === 'SendingToAudit'"></span>
+          <span class="status-text">{{ statusText }}</span>
+        </div>
+      </div>
+
+      <!-- Live Audit Overlay result card -->
+      <div class="audit-overlay-card" *ngIf="isCameraActive && showAuditOverlay && activeOverlayResult" [class]="activeOverlayResult.status">
+        <div class="card-header">
+          <span class="area-title">{{ activeOverlayResult.areaDisplayName }} Audit</span>
+          <span class="status-badge">{{ activeOverlayResult.status }}</span>
+        </div>
+        <div class="card-body">
+          <div class="score-display">
+            <span class="score-num">{{ activeOverlayResult.score }}</span>
+            <span class="score-lbl">Score</span>
+          </div>
+          <p class="audit-msg">{{ activeOverlayResult.message }}</p>
+          <div class="findings-list" *ngIf="activeOverlayResult.findings?.length">
+            <div class="finding-item" *ngFor="let f of activeOverlayResult.findings" [class]="f.status">
+              <i class="fa fa-check-circle" *ngIf="f.status === 'Pass'"></i>
+              <i class="fa fa-exclamation-triangle" *ngIf="f.status !== 'Pass'"></i>
+              <span class="finding-txt"><strong>{{ f.code }}:</strong> {{ f.evidence }}</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="close-overlay-btn" (click)="clearActiveOverlay()">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Error view -->
+      <div class="camera-error-overlay" *ngIf="errorMessage">
+        <i class="fa fa-exclamation-circle"></i>
+        <span>{{ errorMessage }}</span>
+        <button type="button" class="btn btn-sm btn-light" (click)="dismissError()">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- Camera Control Buttons -->
+    <div class="control-actions">
+      <button
+        type="button"
+        class="btn-start"
+        *ngIf="!isCameraActive"
+        [disabled]="disabled || isModelLoading || !canStartCamera"
+        (click)="startCamera()">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isModelLoading"></span>
+        <i class="fa fa-play" *ngIf="!isModelLoading"></i>
+        <span>{{ isModelLoading ? 'Loading AI Model...' : 'Start Camera' }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="btn-stop"
+        *ngIf="isCameraActive"
+        (click)="stopCamera()">
+        <i class="fa fa-stop"></i>
+        <span>Stop Camera</span>
+      </button>
+    </div>
+
+    <p class="select-room-hint" *ngIf="roomDrivenMode && !selectedRoom">Select a room to enable the camera.</p>
+  </div>
+
+  <!-- Object chips / audit plan stepper (room-driven mode only) -->
+  <div class="object-chips-panel" *ngIf="roomDrivenMode && auditPlan.length">
+    <div class="chips-row">
+      <button
+        type="button"
+        *ngFor="let item of auditPlan; trackBy: trackPlanItem"
+        class="object-chip"
+        [class.active]="item === activePlanItem"
+        [class.done]="item.status !== 'Pending'"
+        [class.Pass]="item.status === 'Pass'"
+        [class.Fail]="item.status === 'Fail'"
+        [class.NeedsCorrection]="item.status === 'NeedsCorrection'"
+        [disabled]="disabled || item.status !== 'Pending'"
+        (click)="selectPlanItem(item)"
+        [attr.aria-pressed]="item === activePlanItem">
+        <i class="fa fa-check-circle" *ngIf="item.status === 'Pass'"></i>
+        <i class="fa fa-exclamation-triangle" *ngIf="item.status === 'NeedsCorrection' || item.status === 'Fail'"></i>
+        <span class="chip-label">{{ item.displayName }}</span>
+        <span class="chip-score" *ngIf="item.status !== 'Pending' && item.score">{{ item.score }}</span>
+      </button>
+    </div>
+    <p class="chips-hint" *ngIf="!activePlanItem && hasPendingPlanItems()">Select an object above to start auditing it.</p>
+    <p class="chips-hint done-hint" *ngIf="!hasPendingPlanItems()">All objects audited.</p>
+  </div>
+
+  <!-- Dynamic Results Panel (appears below camera) -->
+  <div class="detected-results-panel" *ngIf="auditedObjects.length > 0">
+    <h4 class="panel-title">{{ roomDrivenMode ? 'Audit Sections' : 'Detected & Audited Objects' }}</h4>
+    <p class="panel-desc" *ngIf="!roomDrivenMode">Real-time AI audit records and image proof for room objects.</p>
+
+    <div class="results-list">
+      <div class="result-card"
+           *ngFor="let obj of auditedObjects"
+           [class]="obj.status"
+           (mouseenter)="highlightObject(obj.label)"
+           (mouseleave)="unhighlightObject()">
+
+        <!-- Remove / Reset-for-reaudit button (legacy: deletes; room mode: resets chip) -->
+        <button type="button"
+                class="remove-card-btn"
+                *ngIf="!disabled && (!roomDrivenMode || obj.status !== 'Pending')"
+                (click)="removeAuditedObject(obj.instanceKey)"
+                [title]="roomDrivenMode ? 'Reset for re-audit' : 'Remove result'">
+          <i class="fa fa-trash"></i>
+        </button>
+
+        <div class="result-card-inner">
+          <!-- Image Proof Thumbnail -->
+          <div class="thumbnail-container" (click)="openImagePreview(obj.imageFile?.url)" style="cursor: pointer;">
+            <img *ngIf="obj.imageFile?.url" [src]="obj.imageFile.url" class="result-thumbnail" />
+            <div *ngIf="!obj.imageFile?.url" class="thumbnail-placeholder">
+              <i class="fa fa-picture-o"></i>
+            </div>
+          </div>
+
+          <!-- Result Details -->
+          <div class="result-details">
+            <div class="result-top">
+              <span class="result-name">{{ obj.displayName }}</span>
+              <span class="result-badge" [class]="obj.status">{{ obj.status }}</span>
+            </div>
+
+            <div class="result-score" *ngIf="obj.status !== 'Pending'">
+              Score: <span class="score-val">{{ obj.score }}/100</span>
+            </div>
+            
+            <p class="result-msg" *ngIf="obj.status !== 'Pending'">
+              {{ obj.message }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Findings List -->
+        <div class="result-findings" *ngIf="obj.findings?.length">
+          <div class="finding-item" *ngFor="let f of obj.findings" [class]="f.status">
+            <i class="fa fa-check-circle" *ngIf="f.status === 'Pass'"></i>
+            <i class="fa fa-exclamation-triangle" *ngIf="f.status !== 'Pass'"></i>
+            <span class="finding-text"><strong>{{ f.code }}:</strong> {{ f.evidence }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audit Summary Results display -->
+  <div class="summary-panel" *ngIf="hasAuditedObjects()">
+    <h4 class="panel-title">Audit Results Summary</h4>
+    <div class="summary-stats">
+      <div class="stat-card">
+        <span class="stat-num">{{ getSessionScore() }}</span>
+        <span class="stat-lbl">Overall Score</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">{{ getAuditedCount() }}</span>
+        <span class="stat-lbl">Objects Audited</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" [class]="getSessionStatus()">{{ getSessionStatus() }}</span>
+        <span class="stat-lbl">Status</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Image Preview Modal -->
+  <div class="image-preview-modal" *ngIf="previewImageUrl" (click)="closeImagePreview()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <img [src]="previewImageUrl" class="preview-img" />
+      <button type="button" class="close-modal-btn" (click)="closeImagePreview()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </div>
+</div>

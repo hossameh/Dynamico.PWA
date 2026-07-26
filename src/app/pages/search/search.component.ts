@@ -168,15 +168,27 @@ export class SearchComponent implements OnInit {
   }
   delete() {
     if (this.isOnline) {
-      this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe((res: any) => {
-        if (res.isPassed) {
-          this.closeModal.nativeElement.click();
-          this.resetSearch();
-          this.deleteFromDB(false);
-        } else {
-          this.alert.error("Something Went Wrong !");
+      this.http.post('ChecklistRecords/DeleteFormRecord', null, true, { Record_Id: this.selectedItem.record_Id }).subscribe(
+        (res: any) => {
+          if (res.isPassed) {
+            this.closeModal.nativeElement.click();
+            this.resetSearch();
+            this.deleteFromDB(false);
+          } else {
+            this.alert.error("Something Went Wrong !");
+          }
+        },
+        (error) => {
+          if (this.offline.isNetworkFailure(error)) {
+            this.offline.enqueueFailedDelete(this.selectedItem.record_Id);
+            this.closeModal.nativeElement.click();
+            this.resetSearch();
+            this.alert.warning("Network unstable — delete will complete when the connection is stable.");
+          } else {
+            this.alert.error("Something Went Wrong !");
+          }
         }
-      });
+      );
     } else {
       this.deleteFromDB(true);
     }

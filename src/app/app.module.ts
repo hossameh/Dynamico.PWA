@@ -63,6 +63,8 @@ import { WorkflowControlComponent } from './pages/formio -components/workflow-co
 import { registerWorkflowControlComponent } from './pages/formio -components/workflow-control/workflow-control-wrapper.formio';
 import { CaptureComponent } from './pages/formio -components/capture/capture.component';
 import { registerCaptureComponent } from './pages/formio -components/capture/capture-wrapper.formio';
+import { AiRoomCameraAuditComponent } from './pages/formio -components/ai-room-camera-audit/ai-room-camera-audit.component';
+import { registerAiRoomCameraAuditComponent } from './pages/formio -components/ai-room-camera-audit/ai-room-camera-audit-wrapper.formio';
 import localAr from '@angular/common/locales/ar-EG';
 import { registerLocaleData } from '@angular/common';
 import { ThankYouComponent } from './auth/thank-you/thank-you.component';
@@ -109,6 +111,7 @@ registerLocaleData(localAr);
     AppointmentComponent,
     WorkflowControlComponent,
     CaptureComponent,
+    AiRoomCameraAuditComponent,
     ThankYouComponent
   ],
   imports: [
@@ -162,6 +165,7 @@ export class AppModule {
     registerWorkflowControlComponent(injector);
     registerAppointmentComponent(injector);
     registerCaptureComponent(injector);
+    registerAiRoomCameraAuditComponent(injector);
   }
 }
 export function HttpLoaderFactory(http: HttpClient) {
